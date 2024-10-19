@@ -287,7 +287,7 @@ public class SensorReadoutsNormalizationServiceImplTests extends BaseTest {
     void analyzeAndPrepareResults_whenActualValueAndTimePeriodGradientDayAndDimension1_thenCreatesDatasetWithTimePeriodTodayAndDataStreamHashNot0() {
 		this.table.addColumns(DoubleColumn.create("actual_value", 12.5));
 		this.table.addColumns(DateTimeColumn.create("time_period", LocalDateTime.now(this.utcZone).minus(Period.ofDays(2)).truncatedTo(ChronoUnit.DAYS)));
-		this.table.addColumns(TextColumn.create("grouping_level_1", "US"));
+		this.table.addColumns(StringColumn.create("grouping_level_1", "US"));
         this.tableSpec.getDefaultDataGroupingConfiguration()
                 .setLevel1(DataStreamLevelSpecObjectMother.createColumnMapping("length_string"));
         this.sensorExecutionRunParameters.setTimeSeries(TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForPartitionedCheck(
@@ -312,7 +312,7 @@ public class SensorReadoutsNormalizationServiceImplTests extends BaseTest {
     void analyzeAndPrepareResults_whenActualValueAndTimePeriodGradientDayAndDimension2_thenCreatesDatasetWithTimePeriodTodayAndDataStreamHashNot0() {
 		this.table.addColumns(DoubleColumn.create("actual_value", 12.5));
 		this.table.addColumns(DateTimeColumn.create("time_period", LocalDateTime.now(this.utcZone).minus(Period.ofDays(2)).truncatedTo(ChronoUnit.DAYS)));
-		this.table.addColumns(TextColumn.create("grouping_level_2", "US"));
+		this.table.addColumns(StringColumn.create("grouping_level_2", "US"));
         this.tableSpec.getDefaultDataGroupingConfiguration()
                 .setLevel2(DataStreamLevelSpecObjectMother.createColumnMapping("length_string"));
         this.sensorExecutionRunParameters.setTimeSeries(TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForPartitionedCheck(

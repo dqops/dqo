@@ -101,7 +101,7 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
         normalizedResults.addColumns(normalizedTimePeriodUtcColumn);
 
         // now detect data stream level columns...
-        TextColumn[] dataStreamLevelColumns = this.commonNormalizationService.extractAndNormalizeDataGroupingDimensionColumns(
+        StringColumn[] dataStreamLevelColumns = this.commonNormalizationService.extractAndNormalizeDataGroupingDimensionColumns(
                 resultsTable, sensorRunParameters.getDataGroupings(), resultsRowCount);
 
         for (int streamLevelId = 0; streamLevelId < dataStreamLevelColumns.length; streamLevelId++) {
@@ -109,7 +109,7 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
                 normalizedResults.addColumns(dataStreamLevelColumns[streamLevelId]);
             } else {
                 String dataStreamLevelColumnName = SensorReadoutsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + (streamLevelId + 1);
-                normalizedResults.addColumns(TextColumn.create(dataStreamLevelColumnName, resultsRowCount));
+                normalizedResults.addColumns(StringColumn.create(dataStreamLevelColumnName, resultsRowCount));
             }
         }
 
@@ -117,10 +117,10 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
                 dataStreamLevelColumns, sensorRunParameters.getDataGroupings(), resultsRowCount);
         normalizedResults.addColumns(dataStreamHashColumn);
 
-        TextColumn dataStreamNameColumn = this.commonNormalizationService.createDataGroupingNameColumn(dataStreamLevelColumns, resultsRowCount);
+        StringColumn dataStreamNameColumn = this.commonNormalizationService.createDataGroupingNameColumn(dataStreamLevelColumns, resultsRowCount);
         normalizedResults.addColumns(dataStreamNameColumn);
 
-        TextColumn dataStreamMappingNameColumn = TextColumn.create(SensorReadoutsColumnNames.DATA_GROUPING_CONFIGURATION_COLUMN_NAME, resultsRowCount);
+        StringColumn dataStreamMappingNameColumn = StringColumn.create(SensorReadoutsColumnNames.DATA_GROUPING_CONFIGURATION_COLUMN_NAME, resultsRowCount);
         if (sensorRunParameters.getDataGroupings() != null) {
             dataStreamMappingNameColumn.setMissingTo(sensorRunParameters.getDataGroupings().getDataGroupingConfigurationName());
         } else {
@@ -146,7 +146,7 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
 
         // TODO: add a data stream name to the sorted normalized table (generate it)
 
-        TextColumn timeGradientColumn = TextColumn.create(SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME, resultsRowCount);
+        StringColumn timeGradientColumn = StringColumn.create(SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME, resultsRowCount);
         if (timePeriodGradient != null) {
             timeGradientColumn.setMissingTo(timePeriodGradient.name());
         }
@@ -156,11 +156,11 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
         connectionHashColumn.setMissingTo(sensorRunParameters.getConnection().getHierarchyId().hashCode64());
         sortedNormalizedTable.addColumns(connectionHashColumn);
 
-        TextColumn connectionNameColumn = TextColumn.create(SensorReadoutsColumnNames.CONNECTION_NAME_COLUMN_NAME, resultsRowCount);
+        StringColumn connectionNameColumn = StringColumn.create(SensorReadoutsColumnNames.CONNECTION_NAME_COLUMN_NAME, resultsRowCount);
         connectionNameColumn.setMissingTo(sensorRunParameters.getConnection().getConnectionName());
         sortedNormalizedTable.addColumns(connectionNameColumn);
 
-        TextColumn providerColumn = TextColumn.create(SensorReadoutsColumnNames.PROVIDER_COLUMN_NAME, resultsRowCount);
+        StringColumn providerColumn = StringColumn.create(SensorReadoutsColumnNames.PROVIDER_COLUMN_NAME, resultsRowCount);
         providerColumn.setMissingTo(sensorRunParameters.getConnection().getProviderType().name());
         sortedNormalizedTable.addColumns(providerColumn);
 
@@ -169,19 +169,19 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
         tableHashColumn.setMissingTo(tableHash);
         sortedNormalizedTable.addColumns(tableHashColumn);
 
-        TextColumn schemaNameColumn = TextColumn.create(SensorReadoutsColumnNames.SCHEMA_NAME_COLUMN_NAME, resultsRowCount);
+        StringColumn schemaNameColumn = StringColumn.create(SensorReadoutsColumnNames.SCHEMA_NAME_COLUMN_NAME, resultsRowCount);
         schemaNameColumn.setMissingTo(sensorRunParameters.getTable().getPhysicalTableName().getSchemaName());
         sortedNormalizedTable.addColumns(schemaNameColumn);
 
-        TextColumn tableNameColumn = TextColumn.create(SensorReadoutsColumnNames.TABLE_NAME_COLUMN_NAME, resultsRowCount);
+        StringColumn tableNameColumn = StringColumn.create(SensorReadoutsColumnNames.TABLE_NAME_COLUMN_NAME, resultsRowCount);
         tableNameColumn.setMissingTo(sensorRunParameters.getTable().getPhysicalTableName().getTableName());
         sortedNormalizedTable.addColumns(tableNameColumn);
 
-        TextColumn tableNamePatternColumn = TextColumn.create(SensorReadoutsColumnNames.TABLE_NAME_PATTERN_COLUMN_NAME, resultsRowCount);
+        StringColumn tableNamePatternColumn = StringColumn.create(SensorReadoutsColumnNames.TABLE_NAME_PATTERN_COLUMN_NAME, resultsRowCount);
         tableNamePatternColumn.setMissingTo(sensorRunParameters.getTable().getPhysicalTableName().getTableName());
         sortedNormalizedTable.addColumns(tableNamePatternColumn);
 
-        TextColumn tableStageColumn = TextColumn.create(SensorReadoutsColumnNames.TABLE_STAGE_COLUMN_NAME, resultsRowCount);
+        StringColumn tableStageColumn = StringColumn.create(SensorReadoutsColumnNames.TABLE_STAGE_COLUMN_NAME, resultsRowCount);
         if (sensorRunParameters.getTable().getStage() != null) {
             tableStageColumn.setMissingTo(sensorRunParameters.getTable().getStage());
         }
@@ -201,13 +201,13 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
         }
         sortedNormalizedTable.addColumns(columnHashColumn);
 
-        TextColumn columnNameColumn = TextColumn.create(SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME, resultsRowCount);
+        StringColumn columnNameColumn = StringColumn.create(SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME, resultsRowCount);
         if (sensorRunParameters.getColumn() != null) {
             columnNameColumn.setMissingTo(sensorRunParameters.getColumn().getColumnName());
         }
         sortedNormalizedTable.addColumns(columnNameColumn);
 
-        TextColumn columnNamePatternColumn = TextColumn.create(SensorReadoutsColumnNames.COLUMN_NAME_PATTERN_COLUMN_NAME, resultsRowCount);
+        StringColumn columnNamePatternColumn = StringColumn.create(SensorReadoutsColumnNames.COLUMN_NAME_PATTERN_COLUMN_NAME, resultsRowCount);
         if (sensorRunParameters.getColumn() != null) {
             columnNamePatternColumn.setMissingTo(sensorRunParameters.getColumn().getColumnName());
         }
@@ -218,36 +218,36 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
         checkHashColumn.setMissingTo(checkHash);
         sortedNormalizedTable.addColumns(checkHashColumn);
 
-        TextColumn checkNameColumn = TextColumn.create(SensorReadoutsColumnNames.CHECK_NAME_COLUMN_NAME, resultsRowCount);
+        StringColumn checkNameColumn = StringColumn.create(SensorReadoutsColumnNames.CHECK_NAME_COLUMN_NAME, resultsRowCount);
         String checkName = sensorRunParameters.getCheck().getCheckName();
         checkNameColumn.setMissingTo(checkName);
         sortedNormalizedTable.addColumns(checkNameColumn);
 
-        TextColumn checkDisplayNameColumn = TextColumn.create(SensorReadoutsColumnNames.CHECK_DISPLAY_NAME_COLUMN_NAME, resultsRowCount);
+        StringColumn checkDisplayNameColumn = StringColumn.create(SensorReadoutsColumnNames.CHECK_DISPLAY_NAME_COLUMN_NAME, resultsRowCount);
         String checkDisplayName = sensorRunParameters.getCheck().getDisplayName();
         checkDisplayNameColumn.setMissingTo(checkDisplayName != null ? checkDisplayName : checkName); // we store the check name if there is no display name (a fallback value)
         sortedNormalizedTable.addColumns(checkDisplayNameColumn);
 
-        TextColumn checkTypeColumn = TextColumn.create(SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME, resultsRowCount);
+        StringColumn checkTypeColumn = StringColumn.create(SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME, resultsRowCount);
         if (sensorRunParameters.getCheckType() != null) {
             String checkType = sensorRunParameters.getCheckType().getDisplayName();
             checkTypeColumn.setMissingTo(checkType);
         }
         sortedNormalizedTable.addColumns(checkTypeColumn);
 
-        TextColumn checkCategoryColumn = TextColumn.create(SensorReadoutsColumnNames.CHECK_CATEGORY_COLUMN_NAME, resultsRowCount);
+        StringColumn checkCategoryColumn = StringColumn.create(SensorReadoutsColumnNames.CHECK_CATEGORY_COLUMN_NAME, resultsRowCount);
         String categoryName = sensorRunParameters.getCheck().getCategoryName();
         checkCategoryColumn.setMissingTo(categoryName);
         sortedNormalizedTable.addColumns(checkCategoryColumn);
 
-        TextColumn tableComparisonNameColumn = TextColumn.create(SensorReadoutsColumnNames.TABLE_COMPARISON_NAME_COLUMN_NAME, resultsRowCount);
+        StringColumn tableComparisonNameColumn = StringColumn.create(SensorReadoutsColumnNames.TABLE_COMPARISON_NAME_COLUMN_NAME, resultsRowCount);
         if (sensorRunParameters.getTableComparisonConfiguration() != null) {
             String tableComparisonName = sensorRunParameters.getTableComparisonConfiguration().getComparisonName();
             tableComparisonNameColumn.setMissingTo(tableComparisonName);
         }
         sortedNormalizedTable.addColumns(tableComparisonNameColumn);
 
-        TextColumn qualityDimensionColumn = TextColumn.create(SensorReadoutsColumnNames.QUALITY_DIMENSION_COLUMN_NAME, resultsRowCount);
+        StringColumn qualityDimensionColumn = StringColumn.create(SensorReadoutsColumnNames.QUALITY_DIMENSION_COLUMN_NAME, resultsRowCount);
         String effectiveDataQualityDimension = sensorRunParameters.getCheck().getEffectiveDataQualityDimension();
         if (Strings.isNullOrEmpty(effectiveDataQualityDimension)) {
             effectiveDataQualityDimension = "None";
@@ -255,7 +255,7 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
         qualityDimensionColumn.setMissingTo(effectiveDataQualityDimension);
         sortedNormalizedTable.addColumns(qualityDimensionColumn);
 
-        TextColumn sensorNameColumn = TextColumn.create(SensorReadoutsColumnNames.SENSOR_NAME_COLUMN_NAME, resultsRowCount);
+        StringColumn sensorNameColumn = StringColumn.create(SensorReadoutsColumnNames.SENSOR_NAME_COLUMN_NAME, resultsRowCount);
         if (sensorRunParameters.getEffectiveSensorRuleNames() != null) {
             String sensorDefinitionName = sensorRunParameters.getEffectiveSensorRuleNames().getSensorName();
             sensorNameColumn.setMissingTo(sensorDefinitionName);
@@ -263,7 +263,7 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
         sortedNormalizedTable.addColumns(sensorNameColumn);
 
         LongColumn sortedDataStreamHashColumn = (LongColumn) sortedNormalizedTable.column(SensorReadoutsColumnNames.DATA_GROUP_HASH_COLUMN_NAME);
-        TextColumn timeSeriesUuidColumn = this.commonNormalizationService.createTimeSeriesUuidColumn(sortedDataStreamHashColumn, checkHash, tableHash,
+        StringColumn timeSeriesUuidColumn = this.commonNormalizationService.createTimeSeriesUuidColumn(sortedDataStreamHashColumn, checkHash, tableHash,
                 columnHash != null ? columnHash.longValue() : 0L, resultsRowCount);
         sortedNormalizedTable.addColumns(timeSeriesUuidColumn);
 
@@ -279,13 +279,13 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
         sortedNormalizedTable.addColumns(createdAtColumn);
         InstantColumn updatedAtColumn = InstantColumn.create(SensorReadoutsColumnNames.UPDATED_AT_COLUMN_NAME, resultsRowCount);
         sortedNormalizedTable.addColumns(updatedAtColumn);
-        TextColumn createdByColumn = TextColumn.create(SensorReadoutsColumnNames.CREATED_BY_COLUMN_NAME, resultsRowCount);
+        StringColumn createdByColumn = StringColumn.create(SensorReadoutsColumnNames.CREATED_BY_COLUMN_NAME, resultsRowCount);
         sortedNormalizedTable.addColumns(createdByColumn);
-        TextColumn updatedByColumn = TextColumn.create(SensorReadoutsColumnNames.UPDATED_BY_COLUMN_NAME, resultsRowCount);
+        StringColumn updatedByColumn = StringColumn.create(SensorReadoutsColumnNames.UPDATED_BY_COLUMN_NAME, resultsRowCount);
         sortedNormalizedTable.addColumns(updatedByColumn);
 
         DateTimeColumn sortedTimePeriodColumn = (DateTimeColumn) sortedNormalizedTable.column(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME);
-        TextColumn idColumn = this.commonNormalizationService.createStatisticsRowIdColumn(sortedDataStreamHashColumn, sortedTimePeriodColumn, checkHash, tableHash,
+        StringColumn idColumn = this.commonNormalizationService.createStatisticsRowIdColumn(sortedDataStreamHashColumn, sortedTimePeriodColumn, checkHash, tableHash,
                 columnHash != null ? columnHash.longValue() : 0L, resultsRowCount);
         sortedNormalizedTable.insertColumn(0, idColumn);
 

@@ -59,8 +59,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tech.tablesaw.api.LongColumn;
+import tech.tablesaw.api.StringColumn;
 import tech.tablesaw.api.Table;
-import tech.tablesaw.api.TextColumn;
 import tech.tablesaw.selection.Selection;
 
 import java.time.LocalDate;
@@ -219,10 +219,10 @@ public class TableErrorSamplerExecutionServiceImpl implements TableErrorSamplerE
 
                 if (allOldRows != null) {
                     LongColumn oldResultsCheckHashColumn = allOldRows.longColumn(ErrorSamplesColumnNames.CHECK_HASH_COLUMN_NAME);
-                    TextColumn oldResultsScopeColumn = allOldRows.textColumn(ErrorSamplesColumnNames.SCOPE_COLUMN_NAME);
-                    TextColumn oldResultsIdColumn = allOldRows.textColumn(ErrorSamplesColumnNames.ID_COLUMN_NAME);
+                    StringColumn oldResultsScopeColumn = allOldRows.stringColumn(ErrorSamplesColumnNames.SCOPE_COLUMN_NAME);
+                    StringColumn oldResultsIdColumn = allOldRows.stringColumn(ErrorSamplesColumnNames.ID_COLUMN_NAME);
                     long checkHash = checkSpec.getHierarchyId().hashCode64();
-                    TextColumn newRowsIdColumn = normalizedStatisticsResults.getIdColumn();
+                    StringColumn newRowsIdColumn = normalizedStatisticsResults.getIdColumn();
                     List<String> newIds = newRowsIdColumn.asList();
                     Selection oldRows = oldResultsCheckHashColumn.isIn(checkHash)
                             .and(oldResultsIdColumn.isNotIn(newIds))

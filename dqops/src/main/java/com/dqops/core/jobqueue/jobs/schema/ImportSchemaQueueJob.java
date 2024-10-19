@@ -37,10 +37,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import tech.tablesaw.api.IntColumn;
-import tech.tablesaw.api.Row;
-import tech.tablesaw.api.Table;
-import tech.tablesaw.api.TextColumn;
+import tech.tablesaw.api.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -127,8 +124,8 @@ public class ImportSchemaQueueJob extends DqoQueueJob<ImportSchemaQueueJobResult
      */
     public Table createDatasetTableFromTableSpecs(List<TableSpec> sourceTableSpecs) {
         Table resultTable = Table.create().addColumns(
-                TextColumn.create("Schema name"),
-                TextColumn.create("Table name"),
+                StringColumn.create("Schema name"),
+                StringColumn.create("Table name"),
                 IntColumn.create("Column count"));
 
         for( TableSpec sourceTableSpec : sourceTableSpecs) {

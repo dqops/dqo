@@ -113,15 +113,15 @@ public class StatisticsDeleteServiceImplTests extends BaseTest {
         Table profilingResultsTable = this.statisticsResultsTableFactory.createEmptyStatisticsTable(tableName);
 
         Row row1 = profilingResultsTable.appendRow();
-        profilingResultsTable.textColumn(StatisticsColumnNames.ID_COLUMN_NAME).set(row1.getRowNumber(), id_prefix + "id1");
+        profilingResultsTable.stringColumn(StatisticsColumnNames.ID_COLUMN_NAME).set(row1.getRowNumber(), id_prefix + "id1");
         profilingResultsTable.dateTimeColumn(StatisticsColumnNames.COLLECTED_AT_COLUMN_NAME).set(row1.getRowNumber(), startDate);
 
         Row row2 = profilingResultsTable.appendRow();
-        profilingResultsTable.textColumn(StatisticsColumnNames.ID_COLUMN_NAME).set(row2.getRowNumber(), id_prefix + "id2");
+        profilingResultsTable.stringColumn(StatisticsColumnNames.ID_COLUMN_NAME).set(row2.getRowNumber(), id_prefix + "id2");
         profilingResultsTable.dateTimeColumn(StatisticsColumnNames.COLLECTED_AT_COLUMN_NAME).set(row2.getRowNumber(), startDate.plusDays(1));
 
         Row row3 = profilingResultsTable.appendRow();
-        profilingResultsTable.textColumn(StatisticsColumnNames.ID_COLUMN_NAME).set(row3.getRowNumber(), id_prefix + "id3");
+        profilingResultsTable.stringColumn(StatisticsColumnNames.ID_COLUMN_NAME).set(row3.getRowNumber(), id_prefix + "id3");
         profilingResultsTable.dateTimeColumn(StatisticsColumnNames.COLLECTED_AT_COLUMN_NAME).set(row3.getRowNumber(), startDate.plusDays(2));
 
         return profilingResultsTable;
@@ -166,9 +166,9 @@ public class StatisticsDeleteServiceImplTests extends BaseTest {
                 partitionId1, this.statisticsStorageSettings, null, userIdentity);
 
         Assertions.assertNotNull(partitionAfterDelete.getData());
-        Assertions.assertTrue(partitionAfterDelete.getData().textColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id1"));
-        Assertions.assertFalse(partitionAfterDelete.getData().textColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id2"));
-        Assertions.assertTrue(partitionAfterDelete.getData().textColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id3"));
+        Assertions.assertTrue(partitionAfterDelete.getData().stringColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id1"));
+        Assertions.assertFalse(partitionAfterDelete.getData().stringColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id2"));
+        Assertions.assertTrue(partitionAfterDelete.getData().stringColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id3"));
         Assertions.assertNotEquals(0L, partitionAfterDelete.getLastModified());
     }
 
@@ -274,9 +274,9 @@ public class StatisticsDeleteServiceImplTests extends BaseTest {
         LoadedMonthlyPartition partition2AfterDelete = this.parquetPartitionStorageService.loadPartition(
                 partitionId2, this.statisticsStorageSettings, null, userIdentity);
         Assertions.assertNotNull(partition2AfterDelete.getData());
-        Assertions.assertTrue(partition2AfterDelete.getData().textColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id1"));
-        Assertions.assertTrue(partition2AfterDelete.getData().textColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id2"));
-        Assertions.assertTrue(partition2AfterDelete.getData().textColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id3"));
+        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id1"));
+        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id2"));
+        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id3"));
         Assertions.assertNotEquals(0L, partition2AfterDelete.getLastModified());
     }
 
@@ -340,9 +340,9 @@ public class StatisticsDeleteServiceImplTests extends BaseTest {
         LoadedMonthlyPartition partition2AfterDelete = this.parquetPartitionStorageService.loadPartition(
                 partitionId2, this.statisticsStorageSettings, null, userIdentity);
         Assertions.assertNotNull(partition2AfterDelete.getData());
-        Assertions.assertFalse(partition2AfterDelete.getData().textColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id1"));
-        Assertions.assertTrue(partition2AfterDelete.getData().textColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id2"));
-        Assertions.assertTrue(partition2AfterDelete.getData().textColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id3"));
+        Assertions.assertFalse(partition2AfterDelete.getData().stringColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id1"));
+        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id2"));
+        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id3"));
         Assertions.assertNotEquals(0L, partition2AfterDelete.getLastModified());
     }
 
@@ -400,17 +400,17 @@ public class StatisticsDeleteServiceImplTests extends BaseTest {
         LoadedMonthlyPartition partition1AfterDelete = this.parquetPartitionStorageService.loadPartition(
                 partitionId1, this.statisticsStorageSettings, null, userIdentity);
         Assertions.assertNotNull(partition1AfterDelete.getData());
-        Assertions.assertTrue(partition1AfterDelete.getData().textColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains(id_prefix1 + "id1"));
-        Assertions.assertTrue(partition1AfterDelete.getData().textColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains(id_prefix1 + "id2"));
-        Assertions.assertTrue(partition1AfterDelete.getData().textColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains(id_prefix1 + "id3"));
+        Assertions.assertTrue(partition1AfterDelete.getData().stringColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains(id_prefix1 + "id1"));
+        Assertions.assertTrue(partition1AfterDelete.getData().stringColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains(id_prefix1 + "id2"));
+        Assertions.assertTrue(partition1AfterDelete.getData().stringColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains(id_prefix1 + "id3"));
         Assertions.assertNotEquals(0L, partition1AfterDelete.getLastModified());
 
         LoadedMonthlyPartition partition2AfterDelete = this.parquetPartitionStorageService.loadPartition(
                 partitionId2, this.statisticsStorageSettings, null, userIdentity);
         Assertions.assertNotNull(partition2AfterDelete.getData());
-        Assertions.assertTrue(partition2AfterDelete.getData().textColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id1"));
-        Assertions.assertTrue(partition2AfterDelete.getData().textColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id2"));
-        Assertions.assertTrue(partition2AfterDelete.getData().textColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id3"));
+        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id1"));
+        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id2"));
+        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id3"));
         Assertions.assertNotEquals(0L, partition2AfterDelete.getLastModified());
     }
 
@@ -473,9 +473,9 @@ public class StatisticsDeleteServiceImplTests extends BaseTest {
         LoadedMonthlyPartition partition2AfterDelete = this.parquetPartitionStorageService.loadPartition(
                 partitionId2, this.statisticsStorageSettings, null, userIdentity);
         Assertions.assertNotNull(partition2AfterDelete.getData());
-        Assertions.assertTrue(partition2AfterDelete.getData().textColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id1"));
-        Assertions.assertTrue(partition2AfterDelete.getData().textColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id2"));
-        Assertions.assertTrue(partition2AfterDelete.getData().textColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id3"));
+        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id1"));
+        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id2"));
+        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id3"));
         Assertions.assertNotEquals(0L, partition2AfterDelete.getLastModified());
     }
 
@@ -484,44 +484,44 @@ public class StatisticsDeleteServiceImplTests extends BaseTest {
         Table profilingResultsTable = this.statisticsResultsTableFactory.createEmptyStatisticsTable(tableName);
 
         Row row1 = profilingResultsTable.appendRow();
-        profilingResultsTable.textColumn(StatisticsColumnNames.ID_COLUMN_NAME).set(row1.getRowNumber(), "id1");
+        profilingResultsTable.stringColumn(StatisticsColumnNames.ID_COLUMN_NAME).set(row1.getRowNumber(), "id1");
         profilingResultsTable.dateTimeColumn(StatisticsColumnNames.COLLECTED_AT_COLUMN_NAME).set(row1.getRowNumber(), startDate);
-        profilingResultsTable.textColumn(StatisticsColumnNames.COLLECTOR_CATEGORY_COLUMN_NAME).set(row1.getRowNumber(), "cat1");
-        profilingResultsTable.textColumn(StatisticsColumnNames.COLLECTOR_NAME_COLUMN_NAME).set(row1.getRowNumber(), "profiler1");
-        profilingResultsTable.textColumn(StatisticsColumnNames.COLLECTOR_TARGET_COLUMN_NAME).set(row1.getRowNumber(), "type1");
-        profilingResultsTable.textColumn(StatisticsColumnNames.COLUMN_NAME_COLUMN_NAME).set(row1.getRowNumber(), "col1");
-        profilingResultsTable.textColumn(StatisticsColumnNames.DATA_GROUP_NAME_COLUMN_NAME).set(row1.getRowNumber(), "ds1");
-        profilingResultsTable.textColumn(StatisticsColumnNames.SENSOR_NAME_COLUMN_NAME).set(row1.getRowNumber(), "s1");
+        profilingResultsTable.stringColumn(StatisticsColumnNames.COLLECTOR_CATEGORY_COLUMN_NAME).set(row1.getRowNumber(), "cat1");
+        profilingResultsTable.stringColumn(StatisticsColumnNames.COLLECTOR_NAME_COLUMN_NAME).set(row1.getRowNumber(), "profiler1");
+        profilingResultsTable.stringColumn(StatisticsColumnNames.COLLECTOR_TARGET_COLUMN_NAME).set(row1.getRowNumber(), "type1");
+        profilingResultsTable.stringColumn(StatisticsColumnNames.COLUMN_NAME_COLUMN_NAME).set(row1.getRowNumber(), "col1");
+        profilingResultsTable.stringColumn(StatisticsColumnNames.DATA_GROUP_NAME_COLUMN_NAME).set(row1.getRowNumber(), "ds1");
+        profilingResultsTable.stringColumn(StatisticsColumnNames.SENSOR_NAME_COLUMN_NAME).set(row1.getRowNumber(), "s1");
 
         Row row2 = profilingResultsTable.appendRow();
-        profilingResultsTable.textColumn(StatisticsColumnNames.ID_COLUMN_NAME).set(row2.getRowNumber(), "id2");
+        profilingResultsTable.stringColumn(StatisticsColumnNames.ID_COLUMN_NAME).set(row2.getRowNumber(), "id2");
         profilingResultsTable.dateTimeColumn(StatisticsColumnNames.COLLECTED_AT_COLUMN_NAME).set(row2.getRowNumber(), startDate.plusDays(1));
-        profilingResultsTable.textColumn(StatisticsColumnNames.COLLECTOR_CATEGORY_COLUMN_NAME).set(row2.getRowNumber(), "cat2");
-        profilingResultsTable.textColumn(StatisticsColumnNames.COLLECTOR_TARGET_COLUMN_NAME).set(row2.getRowNumber(), "type1");
-        profilingResultsTable.textColumn(StatisticsColumnNames.COLUMN_NAME_COLUMN_NAME).set(row2.getRowNumber(), "col2");
-        profilingResultsTable.textColumn(StatisticsColumnNames.DATA_GROUP_NAME_COLUMN_NAME).set(row2.getRowNumber(), "ds1");
-        profilingResultsTable.textColumn(StatisticsColumnNames.SENSOR_NAME_COLUMN_NAME).set(row2.getRowNumber(), "s2");
+        profilingResultsTable.stringColumn(StatisticsColumnNames.COLLECTOR_CATEGORY_COLUMN_NAME).set(row2.getRowNumber(), "cat2");
+        profilingResultsTable.stringColumn(StatisticsColumnNames.COLLECTOR_TARGET_COLUMN_NAME).set(row2.getRowNumber(), "type1");
+        profilingResultsTable.stringColumn(StatisticsColumnNames.COLUMN_NAME_COLUMN_NAME).set(row2.getRowNumber(), "col2");
+        profilingResultsTable.stringColumn(StatisticsColumnNames.DATA_GROUP_NAME_COLUMN_NAME).set(row2.getRowNumber(), "ds1");
+        profilingResultsTable.stringColumn(StatisticsColumnNames.SENSOR_NAME_COLUMN_NAME).set(row2.getRowNumber(), "s2");
 
         Row row3 = profilingResultsTable.appendRow();
-        profilingResultsTable.textColumn(StatisticsColumnNames.ID_COLUMN_NAME).set(row3.getRowNumber(), "id3");
+        profilingResultsTable.stringColumn(StatisticsColumnNames.ID_COLUMN_NAME).set(row3.getRowNumber(), "id3");
         profilingResultsTable.dateTimeColumn(StatisticsColumnNames.COLLECTED_AT_COLUMN_NAME).set(row3.getRowNumber(), startDate.plusDays(2));
-        profilingResultsTable.textColumn(StatisticsColumnNames.COLLECTOR_TARGET_COLUMN_NAME).set(row3.getRowNumber(), "type2");
-        profilingResultsTable.textColumn(StatisticsColumnNames.COLUMN_NAME_COLUMN_NAME).set(row3.getRowNumber(), "col1");
-        profilingResultsTable.textColumn(StatisticsColumnNames.DATA_GROUP_NAME_COLUMN_NAME).set(row3.getRowNumber(), "ds2");
+        profilingResultsTable.stringColumn(StatisticsColumnNames.COLLECTOR_TARGET_COLUMN_NAME).set(row3.getRowNumber(), "type2");
+        profilingResultsTable.stringColumn(StatisticsColumnNames.COLUMN_NAME_COLUMN_NAME).set(row3.getRowNumber(), "col1");
+        profilingResultsTable.stringColumn(StatisticsColumnNames.DATA_GROUP_NAME_COLUMN_NAME).set(row3.getRowNumber(), "ds2");
 
         Row row4 = profilingResultsTable.appendRow();
-        profilingResultsTable.textColumn(StatisticsColumnNames.ID_COLUMN_NAME).set(row4.getRowNumber(), "id4");
+        profilingResultsTable.stringColumn(StatisticsColumnNames.ID_COLUMN_NAME).set(row4.getRowNumber(), "id4");
         profilingResultsTable.dateTimeColumn(StatisticsColumnNames.COLLECTED_AT_COLUMN_NAME).set(row4.getRowNumber(), startDate.plusDays(3));
-        profilingResultsTable.textColumn(StatisticsColumnNames.COLLECTOR_NAME_COLUMN_NAME).set(row4.getRowNumber(), "profiler2");
-        profilingResultsTable.textColumn(StatisticsColumnNames.SENSOR_NAME_COLUMN_NAME).set(row4.getRowNumber(), "s1");
+        profilingResultsTable.stringColumn(StatisticsColumnNames.COLLECTOR_NAME_COLUMN_NAME).set(row4.getRowNumber(), "profiler2");
+        profilingResultsTable.stringColumn(StatisticsColumnNames.SENSOR_NAME_COLUMN_NAME).set(row4.getRowNumber(), "s1");
 
         Row row5 = profilingResultsTable.appendRow();
-        profilingResultsTable.textColumn(StatisticsColumnNames.ID_COLUMN_NAME).set(row5.getRowNumber(), "id5");
+        profilingResultsTable.stringColumn(StatisticsColumnNames.ID_COLUMN_NAME).set(row5.getRowNumber(), "id5");
         profilingResultsTable.dateTimeColumn(StatisticsColumnNames.COLLECTED_AT_COLUMN_NAME).set(row5.getRowNumber(), startDate.plusDays(4));
-        profilingResultsTable.textColumn(StatisticsColumnNames.COLLECTOR_CATEGORY_COLUMN_NAME).set(row5.getRowNumber(), "cat1");
-        profilingResultsTable.textColumn(StatisticsColumnNames.COLLECTOR_NAME_COLUMN_NAME).set(row5.getRowNumber(), "profiler1");
-        profilingResultsTable.textColumn(StatisticsColumnNames.DATA_GROUP_NAME_COLUMN_NAME).set(row5.getRowNumber(), "ds2");
-        profilingResultsTable.textColumn(StatisticsColumnNames.SENSOR_NAME_COLUMN_NAME).set(row5.getRowNumber(), "s1");
+        profilingResultsTable.stringColumn(StatisticsColumnNames.COLLECTOR_CATEGORY_COLUMN_NAME).set(row5.getRowNumber(), "cat1");
+        profilingResultsTable.stringColumn(StatisticsColumnNames.COLLECTOR_NAME_COLUMN_NAME).set(row5.getRowNumber(), "profiler1");
+        profilingResultsTable.stringColumn(StatisticsColumnNames.DATA_GROUP_NAME_COLUMN_NAME).set(row5.getRowNumber(), "ds2");
+        profilingResultsTable.stringColumn(StatisticsColumnNames.SENSOR_NAME_COLUMN_NAME).set(row5.getRowNumber(), "s1");
 
         return profilingResultsTable;
     }
@@ -564,11 +564,11 @@ public class StatisticsDeleteServiceImplTests extends BaseTest {
         LoadedMonthlyPartition partitionAfterDelete = this.parquetPartitionStorageService.loadPartition(
                 partitionId, this.statisticsStorageSettings, null, userIdentity);
         Assertions.assertNotNull(partitionAfterDelete.getData());
-        Assertions.assertFalse(partitionAfterDelete.getData().textColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id1"));
-        Assertions.assertTrue(partitionAfterDelete.getData().textColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id2"));
-        Assertions.assertTrue(partitionAfterDelete.getData().textColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id3"));
-        Assertions.assertTrue(partitionAfterDelete.getData().textColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id4"));
-        Assertions.assertFalse(partitionAfterDelete.getData().textColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id5"));
+        Assertions.assertFalse(partitionAfterDelete.getData().stringColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id1"));
+        Assertions.assertTrue(partitionAfterDelete.getData().stringColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id2"));
+        Assertions.assertTrue(partitionAfterDelete.getData().stringColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id3"));
+        Assertions.assertTrue(partitionAfterDelete.getData().stringColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id4"));
+        Assertions.assertFalse(partitionAfterDelete.getData().stringColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id5"));
         Assertions.assertNotEquals(0L, partitionAfterDelete.getLastModified());
     }
 
@@ -611,11 +611,11 @@ public class StatisticsDeleteServiceImplTests extends BaseTest {
         LoadedMonthlyPartition partitionAfterDelete = this.parquetPartitionStorageService.loadPartition(
                 partitionId, this.statisticsStorageSettings, null, userIdentity);
         Assertions.assertNotNull(partitionAfterDelete.getData());
-        Assertions.assertFalse(partitionAfterDelete.getData().textColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id1"));
-        Assertions.assertTrue(partitionAfterDelete.getData().textColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id2"));
-        Assertions.assertTrue(partitionAfterDelete.getData().textColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id3"));
-        Assertions.assertTrue(partitionAfterDelete.getData().textColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id4"));
-        Assertions.assertTrue(partitionAfterDelete.getData().textColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id5"));
+        Assertions.assertFalse(partitionAfterDelete.getData().stringColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id1"));
+        Assertions.assertTrue(partitionAfterDelete.getData().stringColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id2"));
+        Assertions.assertTrue(partitionAfterDelete.getData().stringColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id3"));
+        Assertions.assertTrue(partitionAfterDelete.getData().stringColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id4"));
+        Assertions.assertTrue(partitionAfterDelete.getData().stringColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id5"));
         Assertions.assertNotEquals(0L, partitionAfterDelete.getLastModified());
     }
 
@@ -659,11 +659,11 @@ public class StatisticsDeleteServiceImplTests extends BaseTest {
         LoadedMonthlyPartition partitionAfterDelete = this.parquetPartitionStorageService.loadPartition(
                 partitionId, this.statisticsStorageSettings, null, userIdentity);
         Assertions.assertNotNull(partitionAfterDelete.getData());
-        Assertions.assertTrue(partitionAfterDelete.getData().textColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id1"));
-        Assertions.assertFalse(partitionAfterDelete.getData().textColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id2"));
-        Assertions.assertTrue(partitionAfterDelete.getData().textColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id3"));
-        Assertions.assertTrue(partitionAfterDelete.getData().textColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id4"));
-        Assertions.assertTrue(partitionAfterDelete.getData().textColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id5"));
+        Assertions.assertTrue(partitionAfterDelete.getData().stringColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id1"));
+        Assertions.assertFalse(partitionAfterDelete.getData().stringColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id2"));
+        Assertions.assertTrue(partitionAfterDelete.getData().stringColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id3"));
+        Assertions.assertTrue(partitionAfterDelete.getData().stringColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id4"));
+        Assertions.assertTrue(partitionAfterDelete.getData().stringColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id5"));
         Assertions.assertNotEquals(0L, partitionAfterDelete.getLastModified());
     }
 
@@ -705,11 +705,11 @@ public class StatisticsDeleteServiceImplTests extends BaseTest {
         LoadedMonthlyPartition partitionAfterDelete = this.parquetPartitionStorageService.loadPartition(
                 partitionId, this.statisticsStorageSettings, null, userIdentity);
         Assertions.assertNotNull(partitionAfterDelete.getData());
-        Assertions.assertFalse(partitionAfterDelete.getData().textColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id1"));
-        Assertions.assertTrue(partitionAfterDelete.getData().textColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id2"));
-        Assertions.assertTrue(partitionAfterDelete.getData().textColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id3"));
-        Assertions.assertFalse(partitionAfterDelete.getData().textColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id4"));
-        Assertions.assertTrue(partitionAfterDelete.getData().textColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id5"));
+        Assertions.assertFalse(partitionAfterDelete.getData().stringColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id1"));
+        Assertions.assertTrue(partitionAfterDelete.getData().stringColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id2"));
+        Assertions.assertTrue(partitionAfterDelete.getData().stringColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id3"));
+        Assertions.assertFalse(partitionAfterDelete.getData().stringColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id4"));
+        Assertions.assertTrue(partitionAfterDelete.getData().stringColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id5"));
         Assertions.assertNotEquals(0L, partitionAfterDelete.getLastModified());
     }
 
@@ -749,11 +749,11 @@ public class StatisticsDeleteServiceImplTests extends BaseTest {
         LoadedMonthlyPartition partitionAfterDelete = this.parquetPartitionStorageService.loadPartition(
                 partitionId, this.statisticsStorageSettings, null, userIdentity);
         Assertions.assertNotNull(partitionAfterDelete.getData());
-        Assertions.assertFalse(partitionAfterDelete.getData().textColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id1"));
-        Assertions.assertTrue(partitionAfterDelete.getData().textColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id2"));
-        Assertions.assertTrue(partitionAfterDelete.getData().textColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id3"));
-        Assertions.assertFalse(partitionAfterDelete.getData().textColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id4"));
-        Assertions.assertFalse(partitionAfterDelete.getData().textColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id5"));
+        Assertions.assertFalse(partitionAfterDelete.getData().stringColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id1"));
+        Assertions.assertTrue(partitionAfterDelete.getData().stringColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id2"));
+        Assertions.assertTrue(partitionAfterDelete.getData().stringColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id3"));
+        Assertions.assertFalse(partitionAfterDelete.getData().stringColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id4"));
+        Assertions.assertFalse(partitionAfterDelete.getData().stringColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id5"));
         Assertions.assertNotEquals(0L, partitionAfterDelete.getLastModified());
     }
 }

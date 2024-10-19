@@ -133,11 +133,11 @@ public class ErrorsNormalizationServiceImpl implements ErrorsNormalizationServic
         }
 
         // adding remaining columns
-        TextColumn errorMessageColumn = TextColumn.create(ErrorsColumnNames.ERROR_MESSAGE_COLUMN_NAME, table.rowCount());
+        StringColumn errorMessageColumn = StringColumn.create(ErrorsColumnNames.ERROR_MESSAGE_COLUMN_NAME, table.rowCount());
         errorMessageColumn.setMissingTo(makeErrorMessage(exception));
         table.addColumns(errorMessageColumn);
 
-        TextColumn errorSourceColumn = TextColumn.create(ErrorsColumnNames.ERROR_SOURCE_COLUMN_NAME, table.rowCount());
+        StringColumn errorSourceColumn = StringColumn.create(ErrorsColumnNames.ERROR_SOURCE_COLUMN_NAME, table.rowCount());
         errorSourceColumn.setMissingTo(errorSource.name());
         table.addColumns(errorSourceColumn);
 
@@ -152,7 +152,7 @@ public class ErrorsNormalizationServiceImpl implements ErrorsNormalizationServic
         long columnHash = sensorRunParameters.getColumn() != null ? sensorRunParameters.getColumn().getHierarchyId().hashCode64() : 0L;
 
         LongColumn dataStreamHashColumn = normalizedSensorReadout.getDataGroupHashColumn();
-        TextColumn rowIdColumn = this.commonNormalizationService.createErrorRowIdColumn(dataStreamHashColumn, errorMessageColumn,
+        StringColumn rowIdColumn = this.commonNormalizationService.createErrorRowIdColumn(dataStreamHashColumn, errorMessageColumn,
                 checkHash, tableHash, columnHash, table.rowCount());
         table.addColumns(rowIdColumn);
 
@@ -169,14 +169,14 @@ public class ErrorsNormalizationServiceImpl implements ErrorsNormalizationServic
      * @param rowCount Row count.
      * @return ID column, filled with values.
      */
-    public TextColumn createErrorRowIdColumnAndUpdateIndexes(LongColumn sortedDataGroupingHashColumn,
-                                                             DateTimeColumn sortedTimePeriodColumn,
-                                                             long checkHash,
-                                                             long tableHash,
-                                                             long columnHash,
-                                                             int rowCount,
-                                                             Instant executedAt) {
-        TextColumn idColumn = TextColumn.create(CommonColumnNames.ID_COLUMN_NAME, rowCount);
+    public StringColumn createErrorRowIdColumnAndUpdateIndexes(LongColumn sortedDataGroupingHashColumn,
+                                                               DateTimeColumn sortedTimePeriodColumn,
+                                                               long checkHash,
+                                                               long tableHash,
+                                                               long columnHash,
+                                                               int rowCount,
+                                                               Instant executedAt) {
+        StringColumn idColumn = StringColumn.create(CommonColumnNames.ID_COLUMN_NAME, rowCount);
 
         for (int i = 0; i < rowCount ; i++) {
             Long dataGroupingHash = sortedDataGroupingHashColumn.get(i);

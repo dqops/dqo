@@ -89,23 +89,23 @@ public class IncidentsDeleteServiceImplTest extends BaseTest {
         Table incidentsTable = this.incidentsTableFactory.createEmptyIncidentsTable(tableName);
 
         Row row1 = incidentsTable.appendRow();
-        incidentsTable.textColumn(IncidentsColumnNames.SCHEMA_NAME_COLUMN_NAME).set(row1.getRowNumber(), schemaName);
-        incidentsTable.textColumn(IncidentsColumnNames.TABLE_NAME_COLUMN_NAME).set(row1.getRowNumber(), tableName);
-        incidentsTable.textColumn(IncidentsColumnNames.ID_COLUMN_NAME).set(row1.getRowNumber(), id_prefix + "id1");
+        incidentsTable.stringColumn(IncidentsColumnNames.SCHEMA_NAME_COLUMN_NAME).set(row1.getRowNumber(), schemaName);
+        incidentsTable.stringColumn(IncidentsColumnNames.TABLE_NAME_COLUMN_NAME).set(row1.getRowNumber(), tableName);
+        incidentsTable.stringColumn(IncidentsColumnNames.ID_COLUMN_NAME).set(row1.getRowNumber(), id_prefix + "id1");
         incidentsTable.intColumn(IncidentsColumnNames.FAILED_CHECKS_COUNT_COLUMN_NAME).set(row1.getRowNumber(), 1);
         incidentsTable.instantColumn(IncidentsColumnNames.FIRST_SEEN_COLUMN_NAME).set(row1.getRowNumber(), startDate.toInstant(ZoneOffset.UTC));
 
         Row row2 = incidentsTable.appendRow();
-        incidentsTable.textColumn(IncidentsColumnNames.SCHEMA_NAME_COLUMN_NAME).set(row2.getRowNumber(), schemaName);
-        incidentsTable.textColumn(IncidentsColumnNames.TABLE_NAME_COLUMN_NAME).set(row2.getRowNumber(), tableName);
-        incidentsTable.textColumn(IncidentsColumnNames.ID_COLUMN_NAME).set(row2.getRowNumber(), id_prefix + "id2");
+        incidentsTable.stringColumn(IncidentsColumnNames.SCHEMA_NAME_COLUMN_NAME).set(row2.getRowNumber(), schemaName);
+        incidentsTable.stringColumn(IncidentsColumnNames.TABLE_NAME_COLUMN_NAME).set(row2.getRowNumber(), tableName);
+        incidentsTable.stringColumn(IncidentsColumnNames.ID_COLUMN_NAME).set(row2.getRowNumber(), id_prefix + "id2");
         incidentsTable.intColumn(IncidentsColumnNames.FAILED_CHECKS_COUNT_COLUMN_NAME).set(row2.getRowNumber(), 10);
         incidentsTable.instantColumn(IncidentsColumnNames.FIRST_SEEN_COLUMN_NAME).set(row2.getRowNumber(), startDate.plusDays(1).toInstant(ZoneOffset.UTC));
 
         Row row3 = incidentsTable.appendRow();
-        incidentsTable.textColumn(IncidentsColumnNames.SCHEMA_NAME_COLUMN_NAME).set(row3.getRowNumber(), schemaName);
-        incidentsTable.textColumn(IncidentsColumnNames.TABLE_NAME_COLUMN_NAME).set(row3.getRowNumber(), tableName);
-        incidentsTable.textColumn(IncidentsColumnNames.ID_COLUMN_NAME).set(row3.getRowNumber(), id_prefix + "id3");
+        incidentsTable.stringColumn(IncidentsColumnNames.SCHEMA_NAME_COLUMN_NAME).set(row3.getRowNumber(), schemaName);
+        incidentsTable.stringColumn(IncidentsColumnNames.TABLE_NAME_COLUMN_NAME).set(row3.getRowNumber(), tableName);
+        incidentsTable.stringColumn(IncidentsColumnNames.ID_COLUMN_NAME).set(row3.getRowNumber(), id_prefix + "id3");
         incidentsTable.intColumn(IncidentsColumnNames.FAILED_CHECKS_COUNT_COLUMN_NAME).set(row3.getRowNumber(), 100);
         incidentsTable.instantColumn(IncidentsColumnNames.FIRST_SEEN_COLUMN_NAME).set(row3.getRowNumber(), startDate.plusDays(2).toInstant(ZoneOffset.UTC));
 
@@ -152,9 +152,9 @@ public class IncidentsDeleteServiceImplTest extends BaseTest {
                 partitionId1, this.incidentsStorageSettings, null, userIdentity);
 
         Assertions.assertNotNull(partitionAfterDelete.getData());
-        Assertions.assertTrue(partitionAfterDelete.getData().textColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains("id1"));
-        Assertions.assertFalse(partitionAfterDelete.getData().textColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains("id2"));
-        Assertions.assertTrue(partitionAfterDelete.getData().textColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains("id3"));
+        Assertions.assertTrue(partitionAfterDelete.getData().stringColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains("id1"));
+        Assertions.assertFalse(partitionAfterDelete.getData().stringColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains("id2"));
+        Assertions.assertTrue(partitionAfterDelete.getData().stringColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains("id3"));
         Assertions.assertNotEquals(0L, partitionAfterDelete.getLastModified());
     }
 
@@ -263,9 +263,9 @@ public class IncidentsDeleteServiceImplTest extends BaseTest {
         LoadedMonthlyPartition partition2AfterDelete = this.parquetPartitionStorageService.loadPartition(
                 partitionId2, this.incidentsStorageSettings, null, userIdentity);
         Assertions.assertNotNull(partition2AfterDelete.getData());
-        Assertions.assertTrue(partition2AfterDelete.getData().textColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id1"));
-        Assertions.assertTrue(partition2AfterDelete.getData().textColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id2"));
-        Assertions.assertTrue(partition2AfterDelete.getData().textColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id3"));
+        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id1"));
+        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id2"));
+        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id3"));
         Assertions.assertNotEquals(0L, partition2AfterDelete.getLastModified());
     }
 
@@ -330,9 +330,9 @@ public class IncidentsDeleteServiceImplTest extends BaseTest {
         LoadedMonthlyPartition partition2AfterDelete = this.parquetPartitionStorageService.loadPartition(
                 partitionId2, this.incidentsStorageSettings, null, userIdentity);
         Assertions.assertNotNull(partition2AfterDelete.getData());
-        Assertions.assertFalse(partition2AfterDelete.getData().textColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id1"));
-        Assertions.assertTrue(partition2AfterDelete.getData().textColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id2"));
-        Assertions.assertTrue(partition2AfterDelete.getData().textColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id3"));
+        Assertions.assertFalse(partition2AfterDelete.getData().stringColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id1"));
+        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id2"));
+        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id3"));
         Assertions.assertNotEquals(0L, partition2AfterDelete.getLastModified());
     }
 
@@ -390,17 +390,17 @@ public class IncidentsDeleteServiceImplTest extends BaseTest {
         LoadedMonthlyPartition partition1AfterDelete = this.parquetPartitionStorageService.loadPartition(
                 partitionId1, this.incidentsStorageSettings, null, userIdentity);
         Assertions.assertNotNull(partition1AfterDelete.getData());
-        Assertions.assertTrue(partition1AfterDelete.getData().textColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains(id_prefix1 + "id1"));
-        Assertions.assertTrue(partition1AfterDelete.getData().textColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains(id_prefix1 + "id2"));
-        Assertions.assertTrue(partition1AfterDelete.getData().textColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains(id_prefix1 + "id3"));
+        Assertions.assertTrue(partition1AfterDelete.getData().stringColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains(id_prefix1 + "id1"));
+        Assertions.assertTrue(partition1AfterDelete.getData().stringColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains(id_prefix1 + "id2"));
+        Assertions.assertTrue(partition1AfterDelete.getData().stringColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains(id_prefix1 + "id3"));
         Assertions.assertNotEquals(0L, partition1AfterDelete.getLastModified());
 
         LoadedMonthlyPartition partition2AfterDelete = this.parquetPartitionStorageService.loadPartition(
                 partitionId2, this.incidentsStorageSettings, null, userIdentity);
         Assertions.assertNotNull(partition2AfterDelete.getData());
-        Assertions.assertTrue(partition2AfterDelete.getData().textColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id1"));
-        Assertions.assertTrue(partition2AfterDelete.getData().textColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id2"));
-        Assertions.assertTrue(partition2AfterDelete.getData().textColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id3"));
+        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id1"));
+        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id2"));
+        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id3"));
         Assertions.assertNotEquals(0L, partition2AfterDelete.getLastModified());
     }
 
@@ -464,9 +464,9 @@ public class IncidentsDeleteServiceImplTest extends BaseTest {
         LoadedMonthlyPartition partition2AfterDelete = this.parquetPartitionStorageService.loadPartition(
                 partitionId2, this.incidentsStorageSettings, null, userIdentity);
         Assertions.assertNotNull(partition2AfterDelete.getData());
-        Assertions.assertTrue(partition2AfterDelete.getData().textColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id1"));
-        Assertions.assertTrue(partition2AfterDelete.getData().textColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id2"));
-        Assertions.assertTrue(partition2AfterDelete.getData().textColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id3"));
+        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id1"));
+        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id2"));
+        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id3"));
         Assertions.assertNotEquals(0L, partition2AfterDelete.getLastModified());
     }
 
@@ -476,55 +476,55 @@ public class IncidentsDeleteServiceImplTest extends BaseTest {
         String schemaName = "sch";
 
         Row row1 = incidentsTable.appendRow();
-        incidentsTable.textColumn(IncidentsColumnNames.SCHEMA_NAME_COLUMN_NAME).set(row1.getRowNumber(), schemaName);
-        incidentsTable.textColumn(IncidentsColumnNames.TABLE_NAME_COLUMN_NAME).set(row1.getRowNumber(), tableName);
-        incidentsTable.textColumn(IncidentsColumnNames.ID_COLUMN_NAME).set(row1.getRowNumber(), id_prefix + "id1");
+        incidentsTable.stringColumn(IncidentsColumnNames.SCHEMA_NAME_COLUMN_NAME).set(row1.getRowNumber(), schemaName);
+        incidentsTable.stringColumn(IncidentsColumnNames.TABLE_NAME_COLUMN_NAME).set(row1.getRowNumber(), tableName);
+        incidentsTable.stringColumn(IncidentsColumnNames.ID_COLUMN_NAME).set(row1.getRowNumber(), id_prefix + "id1");
         incidentsTable.intColumn(IncidentsColumnNames.FAILED_CHECKS_COUNT_COLUMN_NAME).set(row1.getRowNumber(), 1);
         incidentsTable.instantColumn(IncidentsColumnNames.FIRST_SEEN_COLUMN_NAME).set(row1.getRowNumber(), startDate.toInstant(ZoneOffset.UTC));
-        incidentsTable.textColumn(IncidentsColumnNames.CHECK_CATEGORY_COLUMN_NAME).set(row1.getRowNumber(), "cat1");
-        incidentsTable.textColumn(IncidentsColumnNames.CHECK_NAME_COLUMN_NAME).set(row1.getRowNumber(), "check1");
-        incidentsTable.textColumn(IncidentsColumnNames.CHECK_TYPE_COLUMN_NAME).set(row1.getRowNumber(), "type1");
-        incidentsTable.textColumn(IncidentsColumnNames.DATA_GROUP_NAME_COLUMN_NAME).set(row1.getRowNumber(), "ds1");
-        incidentsTable.textColumn(IncidentsColumnNames.QUALITY_DIMENSION_COLUMN_NAME).set(row1.getRowNumber(), "qd1");
+        incidentsTable.stringColumn(IncidentsColumnNames.CHECK_CATEGORY_COLUMN_NAME).set(row1.getRowNumber(), "cat1");
+        incidentsTable.stringColumn(IncidentsColumnNames.CHECK_NAME_COLUMN_NAME).set(row1.getRowNumber(), "check1");
+        incidentsTable.stringColumn(IncidentsColumnNames.CHECK_TYPE_COLUMN_NAME).set(row1.getRowNumber(), "type1");
+        incidentsTable.stringColumn(IncidentsColumnNames.DATA_GROUP_NAME_COLUMN_NAME).set(row1.getRowNumber(), "ds1");
+        incidentsTable.stringColumn(IncidentsColumnNames.QUALITY_DIMENSION_COLUMN_NAME).set(row1.getRowNumber(), "qd1");
 
         Row row2 = incidentsTable.appendRow();
-        incidentsTable.textColumn(IncidentsColumnNames.SCHEMA_NAME_COLUMN_NAME).set(row2.getRowNumber(), schemaName);
-        incidentsTable.textColumn(IncidentsColumnNames.TABLE_NAME_COLUMN_NAME).set(row2.getRowNumber(), tableName);
-        incidentsTable.textColumn(IncidentsColumnNames.ID_COLUMN_NAME).set(row2.getRowNumber(), id_prefix + "id2");
+        incidentsTable.stringColumn(IncidentsColumnNames.SCHEMA_NAME_COLUMN_NAME).set(row2.getRowNumber(), schemaName);
+        incidentsTable.stringColumn(IncidentsColumnNames.TABLE_NAME_COLUMN_NAME).set(row2.getRowNumber(), tableName);
+        incidentsTable.stringColumn(IncidentsColumnNames.ID_COLUMN_NAME).set(row2.getRowNumber(), id_prefix + "id2");
         incidentsTable.intColumn(IncidentsColumnNames.FAILED_CHECKS_COUNT_COLUMN_NAME).set(row2.getRowNumber(), 10);
         incidentsTable.instantColumn(IncidentsColumnNames.FIRST_SEEN_COLUMN_NAME).set(row2.getRowNumber(), startDate.plusDays(1).toInstant(ZoneOffset.UTC));
-        incidentsTable.textColumn(IncidentsColumnNames.CHECK_CATEGORY_COLUMN_NAME).set(row2.getRowNumber(), "cat2");
-        incidentsTable.textColumn(IncidentsColumnNames.CHECK_TYPE_COLUMN_NAME).set(row2.getRowNumber(), "type1");
-        incidentsTable.textColumn(IncidentsColumnNames.DATA_GROUP_NAME_COLUMN_NAME).set(row2.getRowNumber(), "ds1");
+        incidentsTable.stringColumn(IncidentsColumnNames.CHECK_CATEGORY_COLUMN_NAME).set(row2.getRowNumber(), "cat2");
+        incidentsTable.stringColumn(IncidentsColumnNames.CHECK_TYPE_COLUMN_NAME).set(row2.getRowNumber(), "type1");
+        incidentsTable.stringColumn(IncidentsColumnNames.DATA_GROUP_NAME_COLUMN_NAME).set(row2.getRowNumber(), "ds1");
 
         Row row3 = incidentsTable.appendRow();
-        incidentsTable.textColumn(IncidentsColumnNames.SCHEMA_NAME_COLUMN_NAME).set(row3.getRowNumber(), schemaName);
-        incidentsTable.textColumn(IncidentsColumnNames.TABLE_NAME_COLUMN_NAME).set(row3.getRowNumber(), tableName);
-        incidentsTable.textColumn(IncidentsColumnNames.ID_COLUMN_NAME).set(row3.getRowNumber(), id_prefix + "id3");
+        incidentsTable.stringColumn(IncidentsColumnNames.SCHEMA_NAME_COLUMN_NAME).set(row3.getRowNumber(), schemaName);
+        incidentsTable.stringColumn(IncidentsColumnNames.TABLE_NAME_COLUMN_NAME).set(row3.getRowNumber(), tableName);
+        incidentsTable.stringColumn(IncidentsColumnNames.ID_COLUMN_NAME).set(row3.getRowNumber(), id_prefix + "id3");
         incidentsTable.intColumn(IncidentsColumnNames.FAILED_CHECKS_COUNT_COLUMN_NAME).set(row3.getRowNumber(), 100);
         incidentsTable.instantColumn(IncidentsColumnNames.FIRST_SEEN_COLUMN_NAME).set(row3.getRowNumber(), startDate.plusDays(2).toInstant(ZoneOffset.UTC));
-        incidentsTable.textColumn(IncidentsColumnNames.CHECK_TYPE_COLUMN_NAME).set(row3.getRowNumber(), "type2");
-        incidentsTable.textColumn(IncidentsColumnNames.DATA_GROUP_NAME_COLUMN_NAME).set(row3.getRowNumber(), "ds2");
-        incidentsTable.textColumn(IncidentsColumnNames.QUALITY_DIMENSION_COLUMN_NAME).set(row3.getRowNumber(), "qd2");
+        incidentsTable.stringColumn(IncidentsColumnNames.CHECK_TYPE_COLUMN_NAME).set(row3.getRowNumber(), "type2");
+        incidentsTable.stringColumn(IncidentsColumnNames.DATA_GROUP_NAME_COLUMN_NAME).set(row3.getRowNumber(), "ds2");
+        incidentsTable.stringColumn(IncidentsColumnNames.QUALITY_DIMENSION_COLUMN_NAME).set(row3.getRowNumber(), "qd2");
 
         Row row4 = incidentsTable.appendRow();
-        incidentsTable.textColumn(IncidentsColumnNames.SCHEMA_NAME_COLUMN_NAME).set(row4.getRowNumber(), schemaName);
-        incidentsTable.textColumn(IncidentsColumnNames.TABLE_NAME_COLUMN_NAME).set(row4.getRowNumber(), tableName);
-        incidentsTable.textColumn(IncidentsColumnNames.ID_COLUMN_NAME).set(row4.getRowNumber(), id_prefix + "id4");
+        incidentsTable.stringColumn(IncidentsColumnNames.SCHEMA_NAME_COLUMN_NAME).set(row4.getRowNumber(), schemaName);
+        incidentsTable.stringColumn(IncidentsColumnNames.TABLE_NAME_COLUMN_NAME).set(row4.getRowNumber(), tableName);
+        incidentsTable.stringColumn(IncidentsColumnNames.ID_COLUMN_NAME).set(row4.getRowNumber(), id_prefix + "id4");
         incidentsTable.intColumn(IncidentsColumnNames.FAILED_CHECKS_COUNT_COLUMN_NAME).set(row4.getRowNumber(), 1000);
         incidentsTable.instantColumn(IncidentsColumnNames.FIRST_SEEN_COLUMN_NAME).set(row4.getRowNumber(), startDate.plusDays(3).toInstant(ZoneOffset.UTC));
-        incidentsTable.textColumn(IncidentsColumnNames.CHECK_NAME_COLUMN_NAME).set(row4.getRowNumber(), "check2");
-        incidentsTable.textColumn(IncidentsColumnNames.QUALITY_DIMENSION_COLUMN_NAME).set(row4.getRowNumber(), "qd2");
+        incidentsTable.stringColumn(IncidentsColumnNames.CHECK_NAME_COLUMN_NAME).set(row4.getRowNumber(), "check2");
+        incidentsTable.stringColumn(IncidentsColumnNames.QUALITY_DIMENSION_COLUMN_NAME).set(row4.getRowNumber(), "qd2");
 
         Row row5 = incidentsTable.appendRow();
-        incidentsTable.textColumn(IncidentsColumnNames.SCHEMA_NAME_COLUMN_NAME).set(row5.getRowNumber(), schemaName);
-        incidentsTable.textColumn(IncidentsColumnNames.TABLE_NAME_COLUMN_NAME).set(row5.getRowNumber(), tableName);
-        incidentsTable.textColumn(IncidentsColumnNames.ID_COLUMN_NAME).set(row5.getRowNumber(), id_prefix + "id5");
+        incidentsTable.stringColumn(IncidentsColumnNames.SCHEMA_NAME_COLUMN_NAME).set(row5.getRowNumber(), schemaName);
+        incidentsTable.stringColumn(IncidentsColumnNames.TABLE_NAME_COLUMN_NAME).set(row5.getRowNumber(), tableName);
+        incidentsTable.stringColumn(IncidentsColumnNames.ID_COLUMN_NAME).set(row5.getRowNumber(), id_prefix + "id5");
         incidentsTable.intColumn(IncidentsColumnNames.FAILED_CHECKS_COUNT_COLUMN_NAME).set(row5.getRowNumber(), 10000);
         incidentsTable.instantColumn(IncidentsColumnNames.FIRST_SEEN_COLUMN_NAME).set(row5.getRowNumber(), startDate.plusDays(4).toInstant(ZoneOffset.UTC));
-        incidentsTable.textColumn(IncidentsColumnNames.CHECK_CATEGORY_COLUMN_NAME).set(row5.getRowNumber(), "cat1");
-        incidentsTable.textColumn(IncidentsColumnNames.CHECK_NAME_COLUMN_NAME).set(row5.getRowNumber(), "check1");
-        incidentsTable.textColumn(IncidentsColumnNames.DATA_GROUP_NAME_COLUMN_NAME).set(row5.getRowNumber(), "ds2");
+        incidentsTable.stringColumn(IncidentsColumnNames.CHECK_CATEGORY_COLUMN_NAME).set(row5.getRowNumber(), "cat1");
+        incidentsTable.stringColumn(IncidentsColumnNames.CHECK_NAME_COLUMN_NAME).set(row5.getRowNumber(), "check1");
+        incidentsTable.stringColumn(IncidentsColumnNames.DATA_GROUP_NAME_COLUMN_NAME).set(row5.getRowNumber(), "ds2");
 
         return incidentsTable;
     }
@@ -567,11 +567,11 @@ public class IncidentsDeleteServiceImplTest extends BaseTest {
         LoadedMonthlyPartition partitionAfterDelete = this.parquetPartitionStorageService.loadPartition(
                 partitionId, this.incidentsStorageSettings, null, userIdentity);
         Assertions.assertNotNull(partitionAfterDelete.getData());
-        Assertions.assertFalse(partitionAfterDelete.getData().textColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains("id1"));
-        Assertions.assertTrue(partitionAfterDelete.getData().textColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains("id2"));
-        Assertions.assertTrue(partitionAfterDelete.getData().textColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains("id3"));
-        Assertions.assertTrue(partitionAfterDelete.getData().textColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains("id4"));
-        Assertions.assertFalse(partitionAfterDelete.getData().textColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains("id5"));
+        Assertions.assertFalse(partitionAfterDelete.getData().stringColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains("id1"));
+        Assertions.assertTrue(partitionAfterDelete.getData().stringColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains("id2"));
+        Assertions.assertTrue(partitionAfterDelete.getData().stringColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains("id3"));
+        Assertions.assertTrue(partitionAfterDelete.getData().stringColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains("id4"));
+        Assertions.assertFalse(partitionAfterDelete.getData().stringColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains("id5"));
         Assertions.assertNotEquals(0L, partitionAfterDelete.getLastModified());
     }
 
@@ -614,11 +614,11 @@ public class IncidentsDeleteServiceImplTest extends BaseTest {
         LoadedMonthlyPartition partitionAfterDelete = this.parquetPartitionStorageService.loadPartition(
                 partitionId, this.incidentsStorageSettings, null, userIdentity);
         Assertions.assertNotNull(partitionAfterDelete.getData());
-        Assertions.assertFalse(partitionAfterDelete.getData().textColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains("id1"));
-        Assertions.assertTrue(partitionAfterDelete.getData().textColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains("id2"));
-        Assertions.assertTrue(partitionAfterDelete.getData().textColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains("id3"));
-        Assertions.assertTrue(partitionAfterDelete.getData().textColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains("id4"));
-        Assertions.assertTrue(partitionAfterDelete.getData().textColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains("id5"));
+        Assertions.assertFalse(partitionAfterDelete.getData().stringColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains("id1"));
+        Assertions.assertTrue(partitionAfterDelete.getData().stringColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains("id2"));
+        Assertions.assertTrue(partitionAfterDelete.getData().stringColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains("id3"));
+        Assertions.assertTrue(partitionAfterDelete.getData().stringColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains("id4"));
+        Assertions.assertTrue(partitionAfterDelete.getData().stringColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains("id5"));
         Assertions.assertNotEquals(0L, partitionAfterDelete.getLastModified());
     }
 
@@ -659,11 +659,11 @@ public class IncidentsDeleteServiceImplTest extends BaseTest {
         LoadedMonthlyPartition partitionAfterDelete = this.parquetPartitionStorageService.loadPartition(
                 partitionId, this.incidentsStorageSettings, null, userIdentity);
         Assertions.assertNotNull(partitionAfterDelete.getData());
-        Assertions.assertFalse(partitionAfterDelete.getData().textColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains("id1"));
-        Assertions.assertFalse(partitionAfterDelete.getData().textColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains("id2"));
-        Assertions.assertFalse(partitionAfterDelete.getData().textColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains("id3"));
-        Assertions.assertFalse(partitionAfterDelete.getData().textColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains("id4"));
-        Assertions.assertTrue(partitionAfterDelete.getData().textColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains("id5"));
+        Assertions.assertFalse(partitionAfterDelete.getData().stringColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains("id1"));
+        Assertions.assertFalse(partitionAfterDelete.getData().stringColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains("id2"));
+        Assertions.assertFalse(partitionAfterDelete.getData().stringColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains("id3"));
+        Assertions.assertFalse(partitionAfterDelete.getData().stringColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains("id4"));
+        Assertions.assertTrue(partitionAfterDelete.getData().stringColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains("id5"));
         Assertions.assertNotEquals(0L, partitionAfterDelete.getLastModified());
     }
 
@@ -703,11 +703,11 @@ public class IncidentsDeleteServiceImplTest extends BaseTest {
         LoadedMonthlyPartition partitionAfterDelete = this.parquetPartitionStorageService.loadPartition(
                 partitionId, this.incidentsStorageSettings, null, userIdentity);
         Assertions.assertNotNull(partitionAfterDelete.getData());
-        Assertions.assertFalse(partitionAfterDelete.getData().textColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains("id1"));
-        Assertions.assertTrue(partitionAfterDelete.getData().textColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains("id2"));
-        Assertions.assertTrue(partitionAfterDelete.getData().textColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains("id3"));
-        Assertions.assertTrue(partitionAfterDelete.getData().textColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains("id4"));
-        Assertions.assertFalse(partitionAfterDelete.getData().textColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains("id5"));
+        Assertions.assertFalse(partitionAfterDelete.getData().stringColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains("id1"));
+        Assertions.assertTrue(partitionAfterDelete.getData().stringColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains("id2"));
+        Assertions.assertTrue(partitionAfterDelete.getData().stringColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains("id3"));
+        Assertions.assertTrue(partitionAfterDelete.getData().stringColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains("id4"));
+        Assertions.assertFalse(partitionAfterDelete.getData().stringColumn(IncidentsColumnNames.ID_COLUMN_NAME).contains("id5"));
         Assertions.assertNotEquals(0L, partitionAfterDelete.getLastModified());
     }
 

@@ -382,8 +382,8 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
         Assertions.assertNotEquals(loadedPartition.getLastModified(), reloadedPartition.getLastModified());
 
         Assertions.assertEquals(2, reloadedPartition.getData().rowCount());
-        Assertions.assertTrue(reloadedPartition.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id1"));
-        Assertions.assertTrue(reloadedPartition.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id2"));
+        Assertions.assertTrue(reloadedPartition.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id1"));
+        Assertions.assertTrue(reloadedPartition.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id2"));
     }
 
     @Test
@@ -421,7 +421,7 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
         Assertions.assertNotEquals(loadedPartition.getLastModified(), reloadedPartition.getLastModified());
 
         Assertions.assertEquals(1, reloadedPartition.getData().rowCount());
-        Assertions.assertTrue(reloadedPartition.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id1"));
+        Assertions.assertTrue(reloadedPartition.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id1"));
         Assertions.assertTrue(reloadedPartition.getData().doubleColumn(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME).contains(20.0));
     }
 
@@ -462,8 +462,8 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
         Assertions.assertNotEquals(loadedPartition.getLastModified(), reloadedPartition.getLastModified());
 
         Assertions.assertEquals(1, reloadedPartition.getData().rowCount());
-        Assertions.assertTrue(reloadedPartition.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id2"));
-        Assertions.assertFalse(reloadedPartition.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id1"));
+        Assertions.assertTrue(reloadedPartition.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id2"));
+        Assertions.assertFalse(reloadedPartition.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id1"));
         Assertions.assertTrue(reloadedPartition.getData().doubleColumn(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME).contains(15.5));
     }
 
@@ -548,9 +548,9 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
         Assertions.assertNotEquals(loadedPartition.getLastModified(), reloadedPartition.getLastModified());
 
         Assertions.assertEquals(3, reloadedPartition.getData().rowCount());
-        Assertions.assertTrue(reloadedPartition.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id1"));
-        Assertions.assertTrue(reloadedPartition.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id2"));
-        Assertions.assertTrue(reloadedPartition.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id3"));
+        Assertions.assertTrue(reloadedPartition.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id1"));
+        Assertions.assertTrue(reloadedPartition.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id2"));
+        Assertions.assertTrue(reloadedPartition.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id3"));
         Assertions.assertTrue(reloadedPartition.getData().doubleColumn(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME).contains(20.0)); // value was not lost
     }
 }

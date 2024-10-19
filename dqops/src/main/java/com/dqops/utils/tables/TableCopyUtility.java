@@ -124,9 +124,9 @@ public final class TableCopyUtility {
                 for (int targetRowIndex = 0; targetRowIndex < indexes.length; targetRowIndex++) {
                     typetTargetColumn.set(targetRowIndex, typedSourceColumn.getInt(indexes[targetRowIndex]));
                 }
-            } else if (sourceColumn instanceof TextColumn) {
-                TextColumn typedSourceColumn = (TextColumn) sourceColumn;
-                TextColumn typetTargetColumn = (TextColumn) targetColumn;
+            } else if (sourceColumn instanceof StringColumn) {
+                StringColumn typedSourceColumn = (StringColumn) sourceColumn;
+                StringColumn typetTargetColumn = (StringColumn) targetColumn;
 
                 for (int targetRowIndex = 0; targetRowIndex < indexes.length; targetRowIndex++) {
                     typetTargetColumn.set(targetRowIndex, typedSourceColumn.getString(indexes[targetRowIndex]));
@@ -145,9 +145,16 @@ public final class TableCopyUtility {
                 for (int targetRowIndex = 0; targetRowIndex < indexes.length; targetRowIndex++) {
                     typetTargetColumn.set(targetRowIndex, typedSourceColumn.getLongInternal(indexes[targetRowIndex]));
                 }
-            } else if (sourceColumn instanceof StringColumn) {
-                StringColumn typedSourceColumn = (StringColumn) sourceColumn;
-                StringColumn typetTargetColumn = (StringColumn) targetColumn;
+            } else if (sourceColumn instanceof TimeColumn) {
+                TimeColumn typedSourceColumn = (TimeColumn) sourceColumn;
+                TimeColumn typetTargetColumn = (TimeColumn) targetColumn;
+
+                for (int targetRowIndex = 0; targetRowIndex < indexes.length; targetRowIndex++) {
+                    typetTargetColumn.set(targetRowIndex, typedSourceColumn.getIntInternal(indexes[targetRowIndex]));
+                }
+            } else if (sourceColumn instanceof TextColumn) {
+                TextColumn typedSourceColumn = (TextColumn) sourceColumn;
+                TextColumn typetTargetColumn = (TextColumn) targetColumn;
 
                 for (int targetRowIndex = 0; targetRowIndex < indexes.length; targetRowIndex++) {
                     typetTargetColumn.set(targetRowIndex, typedSourceColumn.getString(indexes[targetRowIndex]));

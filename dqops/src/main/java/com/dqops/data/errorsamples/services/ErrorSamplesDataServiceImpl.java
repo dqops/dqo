@@ -42,10 +42,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import tech.tablesaw.api.LongColumn;
-import tech.tablesaw.api.Row;
-import tech.tablesaw.api.Table;
-import tech.tablesaw.api.TextColumn;
+import tech.tablesaw.api.*;
 import tech.tablesaw.selection.Selection;
 
 import java.time.Instant;
@@ -107,7 +104,7 @@ public class ErrorSamplesDataServiceImpl implements ErrorSamplesDataService {
 
             Table filteredTableByDataGroup = filteredTable;
             if (!Strings.isNullOrEmpty(loadParameters.getDataGroupName())) {
-                TextColumn dataGroupNameFilteredColumn = filteredTable.textColumn(ErrorSamplesColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+                StringColumn dataGroupNameFilteredColumn = filteredTable.stringColumn(ErrorSamplesColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
                 filteredTableByDataGroup = TableCopyUtility.copyTableFiltered(filteredTable,
                         dataGroupNameFilteredColumn.isEqualTo(loadParameters.getDataGroupName()));
             }
@@ -121,8 +118,8 @@ public class ErrorSamplesDataServiceImpl implements ErrorSamplesDataService {
 
             LongColumn checkHashColumn = sortedTable.longColumn(ErrorSamplesColumnNames.CHECK_HASH_COLUMN_NAME);
             LongColumn checkHashColumnUnsorted = filteredTable.longColumn(ErrorSamplesColumnNames.CHECK_HASH_COLUMN_NAME);
-            TextColumn allDataGroupColumnUnsorted = filteredTable.textColumn(ErrorSamplesColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
-            TextColumn allDataGroupColumn = sortedTable.textColumn(ErrorSamplesColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+            StringColumn allDataGroupColumnUnsorted = filteredTable.stringColumn(ErrorSamplesColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+            StringColumn allDataGroupColumn = sortedTable.stringColumn(ErrorSamplesColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
 
             int rowCount = sortedTable.rowCount();
             for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
@@ -286,15 +283,15 @@ public class ErrorSamplesDataServiceImpl implements ErrorSamplesDataService {
         String checkType = rootChecksContainerSpec.getCheckType().getDisplayName();
         CheckTimeScale timeScale = rootChecksContainerSpec.getCheckTimeScale();
 
-        Selection rowSelection = sourceTable.textColumn(ErrorSamplesColumnNames.CHECK_TYPE_COLUMN_NAME).isEqualTo(checkType);
+        Selection rowSelection = sourceTable.stringColumn(ErrorSamplesColumnNames.CHECK_TYPE_COLUMN_NAME).isEqualTo(checkType);
 
         if (timeScale != null) {
-            TextColumn timeGradientColumn = sourceTable.textColumn(ErrorSamplesColumnNames.TIME_GRADIENT_COLUMN_NAME);
+            StringColumn timeGradientColumn = sourceTable.stringColumn(ErrorSamplesColumnNames.TIME_GRADIENT_COLUMN_NAME);
             TimePeriodGradient timePeriodGradient = timeScale.toTimeSeriesGradient();
             rowSelection = rowSelection.and(timeGradientColumn.isEqualTo(timePeriodGradient.name()));
         }
 
-        TextColumn columnNameColumn = sourceTable.textColumn(ErrorSamplesColumnNames.COLUMN_NAME_COLUMN_NAME);
+        StringColumn columnNameColumn = sourceTable.stringColumn(ErrorSamplesColumnNames.COLUMN_NAME_COLUMN_NAME);
         rowSelection = rowSelection.and((columnName != null) ? columnNameColumn.isEqualTo(columnName) : columnNameColumn.isMissing());
 
         Table filteredTable = TableCopyUtility.copyTableFiltered(sourceTable, rowSelection);
@@ -315,13 +312,18 @@ public class ErrorSamplesDataServiceImpl implements ErrorSamplesDataService {
         String checkType = rootChecksContainerSpec.getCheckType().getDisplayName();
         CheckTimeScale timeScale = rootChecksContainerSpec.getCheckTimeScale();
 
-        Selection rowSelection = sourceTable.textColumn(ErrorSamplesColumnNames.CHECK_TYPE_COLUMN_NAME).isEqualTo(checkType);
+        Selection rowSelection = sourceTable.stringColumn(ErrorSamplesColumnNames.CHECK_TYPE_COLUMN_NAME).isEqualTo(checkType);
+        if (timeScale != null) {
+            TimePeriodGradient timeSeriesGradient = timeScale.toTimeSeriesGradient();
+            StringColumn timeScaleColumn = sourceTable.stringColumn(ErrorSamplesColumnNames.TIME_GRADIENT_COLUMN_NAME);
+            rowSelection = rowSelection.and(timeScaleColumn.isEqualTo(timeSeriesGradient.name()));
+        }
 
-        TextColumn columnNameColumn = sourceTable.textColumn(ErrorSamplesColumnNames.COLUMN_NAME_COLUMN_NAME);
+        StringColumn columnNameColumn = sourceTable.stringColumn(ErrorSamplesColumnNames.COLUMN_NAME_COLUMN_NAME);
         rowSelection = rowSelection.and((columnName != null) ? columnNameColumn.isEqualTo(columnName) : columnNameColumn.isMissing());
 
         if (!Strings.isNullOrEmpty(filterParameters.getCheckName())) {
-            TextColumn checkNameColumn = sourceTable.textColumn(ErrorSamplesColumnNames.CHECK_NAME_COLUMN_NAME);
+            StringColumn checkNameColumn = sourceTable.stringColumn(ErrorSamplesColumnNames.CHECK_NAME_COLUMN_NAME);
             rowSelection = rowSelection.and(checkNameColumn.isEqualTo(filterParameters.getCheckName()));
         }
 
@@ -336,12 +338,12 @@ public class ErrorSamplesDataServiceImpl implements ErrorSamplesDataService {
                 tableComparison = columnCategorySplits[1];
             }
 
-            TextColumn checkCategoryColumn = sourceTable.textColumn(ErrorSamplesColumnNames.CHECK_CATEGORY_COLUMN_NAME);
+            StringColumn checkCategoryColumn = sourceTable.stringColumn(ErrorSamplesColumnNames.CHECK_CATEGORY_COLUMN_NAME);
             rowSelection = rowSelection.and(checkCategoryColumn.isEqualTo(checkCategory));
         }
 
         if (!Strings.isNullOrEmpty(tableComparison)) {
-            TextColumn tableComparisonNameColumn = sourceTable.textColumn(ErrorSamplesColumnNames.TABLE_COMPARISON_NAME_COLUMN_NAME);
+            StringColumn tableComparisonNameColumn = sourceTable.stringColumn(ErrorSamplesColumnNames.TABLE_COMPARISON_NAME_COLUMN_NAME);
             rowSelection = rowSelection.and(tableComparisonNameColumn.isEqualTo(tableComparison));
         }
 

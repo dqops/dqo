@@ -74,33 +74,33 @@ public class StatisticsResultsNormalizationServiceImpl implements StatisticsResu
         collectedAtColumn.setMissingTo(collectedAt);
         normalizedResults.addColumns(collectedAtColumn);
 
-        TextColumn statusColumn = TextColumn.create(StatisticsColumnNames.STATUS_COLUMN_NAME, resultRowCount);
+        StringColumn statusColumn = StringColumn.create(StatisticsColumnNames.STATUS_COLUMN_NAME, resultRowCount);
         statusColumn.setMissingTo(sensorExecutionResult.isSuccess() ? StatisticsCollectorResultStatus.success.name() : StatisticsCollectorResultStatus.error.name());
         normalizedResults.addColumns(statusColumn);
 
         AbstractColumn<?,?> normalizedResultColumn = normalizeCollectorResult(resultsTable, SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME); // we are using the column name from SensorReadoutsColumnNames because we are reusing sensors and the sensor returns its result as an "actual_value" column
 
-        TextColumn resultTypeColumn = TextColumn.create(StatisticsColumnNames.RESULT_TYPE_COLUMN_NAME, resultRowCount);
+        StringColumn resultTypeColumn = StringColumn.create(StatisticsColumnNames.RESULT_TYPE_COLUMN_NAME, resultRowCount);
         normalizedResults.addColumns(resultTypeColumn); // we will set the data type when we detect it...
 
         if (normalizedResultColumn == null) {
             resultTypeColumn.setMissingTo(StatisticsResultDataType.NULL.getName());
         }
 
-        if (normalizedResultColumn instanceof TextColumn) {
+        if (normalizedResultColumn instanceof StringColumn) {
             normalizedResultColumn.setName(StatisticsColumnNames.RESULT_STRING_COLUMN_NAME);
             normalizedResults.addColumns(normalizedResultColumn);
             resultTypeColumn.setMissingTo(StatisticsResultDataType.STRING.getName());
         }
         else {
-            if (normalizedResultColumn instanceof StringColumn) {
-                TextColumn normalizedTextColumn = TableColumnUtility.convertToTextColumn(normalizedResultColumn);
-                normalizedTextColumn.setName(StatisticsColumnNames.RESULT_STRING_COLUMN_NAME);
-                normalizedResults.addColumns(normalizedTextColumn);
+            if (normalizedResultColumn instanceof TextColumn) {
+                StringColumn normalizedStringColumn = TableColumnUtility.convertToStringColumn(normalizedResultColumn);
+                normalizedStringColumn.setName(StatisticsColumnNames.RESULT_STRING_COLUMN_NAME);
+                normalizedResults.addColumns(normalizedStringColumn);
                 resultTypeColumn.setMissingTo(StatisticsResultDataType.STRING.getName());
             }
             else {
-                TextColumn resultStringColumn = TextColumn.create(StatisticsColumnNames.RESULT_STRING_COLUMN_NAME, resultRowCount);
+                StringColumn resultStringColumn = StringColumn.create(StatisticsColumnNames.RESULT_STRING_COLUMN_NAME, resultRowCount);
                 normalizedResults.addColumns(resultStringColumn);
             }
         }
@@ -203,14 +203,14 @@ public class StatisticsResultsNormalizationServiceImpl implements StatisticsResu
         }
         normalizedResults.addColumns(sampleCountColumn);
 
-        TextColumn scopeColumn = TextColumn.create(StatisticsColumnNames.SCOPE_COLUMN_NAME, resultRowCount);
+        StringColumn scopeColumn = StringColumn.create(StatisticsColumnNames.SCOPE_COLUMN_NAME, resultRowCount);
         if (sensorRunParameters.getColumn() != null) {
             scopeColumn.setMissingTo(sensorRunParameters.getDataGroupings() != null ? StatisticsDataScope.data_group.name() : StatisticsDataScope.table.name());
         }
         normalizedResults.addColumns(scopeColumn);
 
         // now detect data stream level columns...
-        TextColumn[] dataStreamLevelColumns = this.commonNormalizationService.extractAndNormalizeDataGroupingDimensionColumns(
+        StringColumn[] dataStreamLevelColumns = this.commonNormalizationService.extractAndNormalizeDataGroupingDimensionColumns(
                 resultsTable, sensorRunParameters.getDataGroupings(), resultRowCount);
 
         for (int streamLevelId = 0; streamLevelId < dataStreamLevelColumns.length; streamLevelId++) {
@@ -218,7 +218,7 @@ public class StatisticsResultsNormalizationServiceImpl implements StatisticsResu
                 normalizedResults.addColumns(dataStreamLevelColumns[streamLevelId]);
             } else {
                 String dataStreamLevelColumnName = StatisticsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + (streamLevelId + 1);
-                normalizedResults.addColumns(TextColumn.create(dataStreamLevelColumnName, resultRowCount));
+                normalizedResults.addColumns(StringColumn.create(dataStreamLevelColumnName, resultRowCount));
             }
         }
 
@@ -226,10 +226,10 @@ public class StatisticsResultsNormalizationServiceImpl implements StatisticsResu
                 dataStreamLevelColumns, sensorRunParameters.getDataGroupings(), resultRowCount);
         normalizedResults.addColumns(dataStreamHashColumn);
 
-        TextColumn dataStreamNameColumn = this.commonNormalizationService.createDataGroupingNameColumn(dataStreamLevelColumns, resultRowCount);
+        StringColumn dataStreamNameColumn = this.commonNormalizationService.createDataGroupingNameColumn(dataStreamLevelColumns, resultRowCount);
         normalizedResults.addColumns(dataStreamNameColumn);
 
-        TextColumn dataStreamMappingNameColumn = TextColumn.create(StatisticsColumnNames.DATA_GROUPING_CONFIGURATION_COLUMN_NAME, resultRowCount);
+        StringColumn dataStreamMappingNameColumn = StringColumn.create(StatisticsColumnNames.DATA_GROUPING_CONFIGURATION_COLUMN_NAME, resultRowCount);
         if (sensorRunParameters.getDataGroupings() != null) {
             dataStreamMappingNameColumn.setMissingTo(sensorRunParameters.getDataGroupings().getDataGroupingConfigurationName());
         }
@@ -239,11 +239,11 @@ public class StatisticsResultsNormalizationServiceImpl implements StatisticsResu
         connectionHashColumn.setMissingTo(sensorRunParameters.getConnection().getHierarchyId().hashCode64());
         normalizedResults.addColumns(connectionHashColumn);
 
-        TextColumn connectionNameColumn = TextColumn.create(StatisticsColumnNames.CONNECTION_NAME_COLUMN_NAME, resultRowCount);
+        StringColumn connectionNameColumn = StringColumn.create(StatisticsColumnNames.CONNECTION_NAME_COLUMN_NAME, resultRowCount);
         connectionNameColumn.setMissingTo(sensorRunParameters.getConnection().getConnectionName());
         normalizedResults.addColumns(connectionNameColumn);
 
-        TextColumn providerColumn = TextColumn.create(StatisticsColumnNames.PROVIDER_COLUMN_NAME, resultRowCount);
+        StringColumn providerColumn = StringColumn.create(StatisticsColumnNames.PROVIDER_COLUMN_NAME, resultRowCount);
         providerColumn.setMissingTo(sensorRunParameters.getConnection().getProviderType().name());
         normalizedResults.addColumns(providerColumn);
 
@@ -252,15 +252,15 @@ public class StatisticsResultsNormalizationServiceImpl implements StatisticsResu
         tableHashColumn.setMissingTo(tableHash);
         normalizedResults.addColumns(tableHashColumn);
 
-        TextColumn schemaNameColumn = TextColumn.create(StatisticsColumnNames.SCHEMA_NAME_COLUMN_NAME, resultRowCount);
+        StringColumn schemaNameColumn = StringColumn.create(StatisticsColumnNames.SCHEMA_NAME_COLUMN_NAME, resultRowCount);
         schemaNameColumn.setMissingTo(sensorRunParameters.getTable().getPhysicalTableName().getSchemaName());
         normalizedResults.addColumns(schemaNameColumn);
 
-        TextColumn tableNameColumn = TextColumn.create(StatisticsColumnNames.TABLE_NAME_COLUMN_NAME, resultRowCount);
+        StringColumn tableNameColumn = StringColumn.create(StatisticsColumnNames.TABLE_NAME_COLUMN_NAME, resultRowCount);
         tableNameColumn.setMissingTo(sensorRunParameters.getTable().getPhysicalTableName().getTableName());
         normalizedResults.addColumns(tableNameColumn);
 
-        TextColumn tableStageColumn = TextColumn.create(StatisticsColumnNames.TABLE_STAGE_COLUMN_NAME, resultRowCount);
+        StringColumn tableStageColumn = StringColumn.create(StatisticsColumnNames.TABLE_STAGE_COLUMN_NAME, resultRowCount);
         if (sensorRunParameters.getTable().getStage() != null) {
             tableStageColumn.setMissingTo(sensorRunParameters.getTable().getStage());
         }
@@ -274,7 +274,7 @@ public class StatisticsResultsNormalizationServiceImpl implements StatisticsResu
         }
         normalizedResults.addColumns(columnHashColumn);
 
-        TextColumn columnNameColumn = TextColumn.create(StatisticsColumnNames.COLUMN_NAME_COLUMN_NAME, resultRowCount);
+        StringColumn columnNameColumn = StringColumn.create(StatisticsColumnNames.COLUMN_NAME_COLUMN_NAME, resultRowCount);
         if (sensorRunParameters.getColumn() != null) {
             columnNameColumn.setMissingTo(sensorRunParameters.getColumn().getColumnName());
         }
@@ -285,27 +285,27 @@ public class StatisticsResultsNormalizationServiceImpl implements StatisticsResu
         collectorHashColumn.setMissingTo(collectorHash);
         normalizedResults.addColumns(collectorHashColumn);
 
-        TextColumn collectorNameColumn = TextColumn.create(StatisticsColumnNames.COLLECTOR_NAME_COLUMN_NAME, resultRowCount);
+        StringColumn collectorNameColumn = StringColumn.create(StatisticsColumnNames.COLLECTOR_NAME_COLUMN_NAME, resultRowCount);
         String collectorName = sensorRunParameters.getProfiler().getProfilerName();
         collectorNameColumn.setMissingTo(collectorName);
         normalizedResults.addColumns(collectorNameColumn);
 
-        TextColumn collectorTargetColumn = TextColumn.create(StatisticsColumnNames.COLLECTOR_TARGET_COLUMN_NAME, resultRowCount);
+        StringColumn collectorTargetColumn = StringColumn.create(StatisticsColumnNames.COLLECTOR_TARGET_COLUMN_NAME, resultRowCount);
         String collectorTargetType = sensorRunParameters.getColumn() != null ? StatisticsCollectorTarget.column.name() : StatisticsCollectorTarget.table.name();
         collectorTargetColumn.setMissingTo(collectorTargetType);
         normalizedResults.addColumns(collectorTargetColumn);
 
-        TextColumn collectorCategoryColumn = TextColumn.create(StatisticsColumnNames.COLLECTOR_CATEGORY_COLUMN_NAME, resultRowCount);
+        StringColumn collectorCategoryColumn = StringColumn.create(StatisticsColumnNames.COLLECTOR_CATEGORY_COLUMN_NAME, resultRowCount);
         String categoryName = sensorRunParameters.getProfiler().getCategoryName();
         collectorCategoryColumn.setMissingTo(categoryName);
         normalizedResults.addColumns(collectorCategoryColumn);
 
-        TextColumn sensorNameColumn = TextColumn.create(StatisticsColumnNames.SENSOR_NAME_COLUMN_NAME, resultRowCount);
+        StringColumn sensorNameColumn = StringColumn.create(StatisticsColumnNames.SENSOR_NAME_COLUMN_NAME, resultRowCount);
         String sensorDefinitionName = sensorRunParameters.getEffectiveSensorRuleNames().getSensorName();
         sensorNameColumn.setMissingTo(sensorDefinitionName);
         normalizedResults.addColumns(sensorNameColumn);
 
-        TextColumn timeSeriesUuidColumn = this.commonNormalizationService.createTimeSeriesUuidColumn(dataStreamHashColumn, collectorHash, tableHash,
+        StringColumn timeSeriesUuidColumn = this.commonNormalizationService.createTimeSeriesUuidColumn(dataStreamHashColumn, collectorHash, tableHash,
                 columnHash != null ? columnHash.longValue() : 0L, resultRowCount);
         normalizedResults.addColumns(timeSeriesUuidColumn);
 
@@ -317,7 +317,7 @@ public class StatisticsResultsNormalizationServiceImpl implements StatisticsResu
         durationMsColumn.setMissingTo(sensorExecutionResult.getSensorDurationMs());
         normalizedResults.addColumns(durationMsColumn);
 
-        TextColumn errorMessageColumn = TextColumn.create(StatisticsColumnNames.ERROR_MESSAGE_COLUMN_NAME, resultRowCount);
+        StringColumn errorMessageColumn = StringColumn.create(StatisticsColumnNames.ERROR_MESSAGE_COLUMN_NAME, resultRowCount);
         if (!sensorExecutionResult.isSuccess() && sensorExecutionResult.getException() != null) {
             errorMessageColumn.setMissingTo(sensorExecutionResult.getException().getMessage());
         }
@@ -327,12 +327,12 @@ public class StatisticsResultsNormalizationServiceImpl implements StatisticsResu
         normalizedResults.addColumns(createdAtColumn);
         InstantColumn updatedAtColumn = InstantColumn.create(StatisticsColumnNames.UPDATED_AT_COLUMN_NAME, resultRowCount);
         normalizedResults.addColumns(updatedAtColumn);
-        TextColumn createdByColumn = TextColumn.create(StatisticsColumnNames.CREATED_BY_COLUMN_NAME, resultRowCount);
+        StringColumn createdByColumn = StringColumn.create(StatisticsColumnNames.CREATED_BY_COLUMN_NAME, resultRowCount);
         normalizedResults.addColumns(createdByColumn);
-        TextColumn updatedByColumn = TextColumn.create(StatisticsColumnNames.UPDATED_BY_COLUMN_NAME, resultRowCount);
+        StringColumn updatedByColumn = StringColumn.create(StatisticsColumnNames.UPDATED_BY_COLUMN_NAME, resultRowCount);
         normalizedResults.addColumns(updatedByColumn);
 
-        TextColumn idColumn = this.commonNormalizationService.createStatisticsRowIdColumn(dataStreamHashColumn, executedAtColumn, sampleIndexColumn,
+        StringColumn idColumn = this.commonNormalizationService.createStatisticsRowIdColumn(dataStreamHashColumn, executedAtColumn, sampleIndexColumn,
                 collectorHash, tableHash, columnHash != null ? columnHash.longValue() : 0L, resultRowCount);
         normalizedResults.insertColumn(0, idColumn);
 
@@ -403,9 +403,9 @@ public class StatisticsResultsNormalizationServiceImpl implements StatisticsResu
             return ((TimeColumn)currentColumn).copy();
         }
 
-        if (currentColumn instanceof AbstractStringColumn) {  // covers StringColumn and TextColumn
+        if (currentColumn instanceof AbstractStringColumn) {  // covers TextColumn and StringColumn
             AbstractStringColumn<?> stringColumn = (AbstractStringColumn<?>) currentColumn;
-            TextColumn truncatedTextColumn = TextColumn.create(columnName, resultsTable.rowCount());
+            StringColumn truncatedStringColumn = StringColumn.create(columnName, resultsTable.rowCount());
             for (int i = 0; i < stringColumn.size(); i++) {
                 String stringValue = stringColumn.get(i);
                 if (!Strings.isNullOrEmpty(stringValue)) {
@@ -413,11 +413,11 @@ public class StatisticsResultsNormalizationServiceImpl implements StatisticsResu
                         stringValue = stringValue.substring(0, this.statisticsCollectorConfigurationProperties.getTruncatedStringsLength());
                     }
 
-                    truncatedTextColumn.set(i, stringValue);
+                    truncatedStringColumn.set(i, stringValue);
                 }
             }
 
-            return truncatedTextColumn;
+            return truncatedStringColumn;
         }
 
 

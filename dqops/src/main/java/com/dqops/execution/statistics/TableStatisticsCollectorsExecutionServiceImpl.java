@@ -56,27 +56,20 @@ import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.userhome.UserHome;
 import com.dqops.sensors.column.sampling.ColumnSamplingColumnSamplesSensorParametersSpec;
-import com.dqops.services.timezone.DefaultTimeZoneProvider;
 import com.dqops.statistics.AbstractStatisticsCollectorSpec;
-import com.dqops.statistics.column.range.ColumnRangeMaxValueStatisticsCollectorSpec;
-import com.dqops.utils.conversion.DateTypesConverter;
 import com.dqops.utils.logging.UserErrorLogger;
 import com.google.common.base.Strings;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tech.tablesaw.api.LongColumn;
+import tech.tablesaw.api.StringColumn;
 import tech.tablesaw.api.Table;
-import tech.tablesaw.api.TextColumn;
 import tech.tablesaw.selection.Selection;
 
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Statistics collectors execution service that collects basic profiling statistics on a single table.
@@ -224,11 +217,11 @@ public class TableStatisticsCollectorsExecutionServiceImpl implements TableStati
 
                 if (allOldRows != null) {
                     LongColumn oldResultsCheckHashColumn = allOldRows.longColumn(StatisticsColumnNames.COLLECTOR_HASH_COLUMN_NAME);
-                    TextColumn oldResultsScopeColumn = allOldRows.textColumn(StatisticsColumnNames.SCOPE_COLUMN_NAME);
-                    TextColumn oldResultsIdColumn = allOldRows.textColumn(StatisticsColumnNames.ID_COLUMN_NAME);
+                    StringColumn oldResultsScopeColumn = allOldRows.stringColumn(StatisticsColumnNames.SCOPE_COLUMN_NAME);
+                    StringColumn oldResultsIdColumn = allOldRows.stringColumn(StatisticsColumnNames.ID_COLUMN_NAME);
                     AbstractStatisticsCollectorSpec<?> collectorSpec = sensorRunParameters.getProfiler();
                     long collectorHash = collectorSpec.getHierarchyId().hashCode64();
-                    TextColumn newRowsIdColumn = normalizedStatisticsResults.getIdColumn();
+                    StringColumn newRowsIdColumn = normalizedStatisticsResults.getIdColumn();
                     List<String> newIds = newRowsIdColumn.asList();
                     Selection oldRows = oldResultsCheckHashColumn.isIn(collectorHash)
                             .and(oldResultsIdColumn.isNotIn(newIds))

@@ -7,8 +7,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.shell.table.TableModel;
+import tech.tablesaw.api.StringColumn;
 import tech.tablesaw.api.Table;
-import tech.tablesaw.api.TextColumn;
 import tech.tablesaw.columns.Column;
 
 import java.util.Arrays;
@@ -35,7 +35,7 @@ class TerminalTableWritterImplTest extends BaseTest {
 
     @Test
     void writeTable_oneRowWithSetNoHeader_returnsOneLine(){
-        Column<String> col1 = TextColumn.create("schema name header");
+        Column<String> col1 = StringColumn.create("schema name header");
         col1.append("value_1");
 
         TableModel tableModel = new RowSelectionTableModel(Table.create(col1));
@@ -50,7 +50,7 @@ class TerminalTableWritterImplTest extends BaseTest {
 
     @Test
     void writeTable_justHeaderInTable_returnsNothing(){
-        Column<String> col1 = TextColumn.create("header");
+        Column<String> col1 = StringColumn.create("header");
 
         TableModel tableModel = new TablesawDatasetTableModel(Table.create(col1));
 
@@ -63,7 +63,7 @@ class TerminalTableWritterImplTest extends BaseTest {
 
     @Test
     void writeTable_twoRowsWithSetNoHeader_returnsTwoLines(){
-        Column<String> col1 = TextColumn.create("schema name");
+        Column<String> col1 = StringColumn.create("schema name");
         col1.append("value_1");
         col1.append("value_2");
 
@@ -80,7 +80,7 @@ class TerminalTableWritterImplTest extends BaseTest {
 
     @Test   // User prompt will appear once, just before the last element
     void writeTable_rowsCountSameAsTerminalHeightWhichIs10_returns12Lines(){
-        Column<String> col1 = TextColumn.create("header");
+        Column<String> col1 = StringColumn.create("header");
         for (int i = 1; i <= terminalWriter.getTerminalHeight(); i++) {
             col1.append("value_" + i);
         }
@@ -110,7 +110,7 @@ class TerminalTableWritterImplTest extends BaseTest {
 
     @Test   // User prompt will appear once, just before the last element
     void writeTable_10RowsWithSetNoHeader_returns10Lines(){
-        Column<String> col1 = TextColumn.create("schema name");
+        Column<String> col1 = StringColumn.create("schema name");
 
         for (int i = 1; i <= terminalWriter.getTerminalHeight(); i++) {
             col1.append("value_" + i);
@@ -139,7 +139,7 @@ class TerminalTableWritterImplTest extends BaseTest {
 
     @Test
     void writeTable_50SchemasWhichPromptsUserTwiceWithSetNoHeader_returns25Lines(){
-        Column<String> col1 = TextColumn.create("schema name");
+        Column<String> col1 = StringColumn.create("schema name");
 
         for (int i = 1; i <= 25; i++) {
             col1.append("value_" + i);

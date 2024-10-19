@@ -41,6 +41,7 @@ import com.dqops.utils.tables.TableCopyUtility;
 import com.dqops.utils.tables.TableMergeUtility;
 import net.tlabs.tablesaw.parquet.TablesawParquetReadOptions;
 import net.tlabs.tablesaw.parquet.TablesawParquetReader;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.ChecksumException;
 import org.jetbrains.annotations.NotNull;
@@ -57,6 +58,7 @@ import java.nio.file.Path;
 import java.time.*;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Service that supports reading and writing parquet file partitions from a local file system.
@@ -129,9 +131,21 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
                     return cachedParquetFile;
                 }
 
-                Set<String> columnNamesHashSet = new LinkedHashSet<>(cachedParquetFile.getData().columnNames());
-                if (Arrays.stream(columnNames).allMatch(columnNamesHashSet::contains)) {
-                    return cachedParquetFile;
+                List<String> columnsInTable = cachedParquetFile.getData().columnNames();
+                Set<String> columnNamesHashSet = new LinkedHashSet<>(columnsInTable);
+                boolean allRequiredColumnsPresent = Arrays.stream(columnNames).allMatch(columnNamesHashSet::contains);
+                if (allRequiredColumnsPresent) {
+                    if (columnNames.length == columnsInTable.size()) {
+                        return cachedParquetFile;
+                    } else {
+                        List<Column<?>> requestedColumns = cachedParquetFile.getData().columns().stream()
+                                .filter(column -> ArrayUtils.contains(columnNames, column.name()))
+                                .collect(Collectors.toList());
+
+                        Table tableWithRequestedColumns = Table.create(cachedParquetFile.getData().name(), requestedColumns);
+                        LoadedMonthlyPartition smallerPartition = new LoadedMonthlyPartition(partitionId, cachedParquetFile.getLastModified(), tableWithRequestedColumns);
+                        return smallerPartition;
+                    }
                 }
             }
 
@@ -150,7 +164,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
 
             try (DqoTablesawParquetReader dqoTablesawParquetReader = new DqoTablesawParquetReader(this.hadoopConfigurationProvider.getHadoopConfiguration())) {
                 Table data = dqoTablesawParquetReader.read(readOptions);
-                TableCompressUtility.internStrings(data);
+//                TableCompressUtility.internStrings(data); // not necessary when using the StringColumn type
 
                 LoadedMonthlyPartition loadedPartition = new LoadedMonthlyPartition(partitionId, targetParquetFile.lastModified(), data);
                 this.localFileSystemCache.storeParquetFile(targetParquetFilePath, loadedPartition);
@@ -437,7 +451,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
                         dataToSave = newOrChangedDataPartitionMonth;
                         InstantColumn createdAtColumn = dataToSave.instantColumn(CommonColumnNames.CREATED_AT_COLUMN_NAME);
                         createdAtColumn.setMissingTo(Instant.now());
-                        TextColumn createdByColumn = dataToSave.textColumn(CommonColumnNames.CREATED_BY_COLUMN_NAME);
+                        StringColumn createdByColumn = dataToSave.stringColumn(CommonColumnNames.CREATED_BY_COLUMN_NAME);
                         createdByColumn.setMissingTo(userIdentity.getUserName());
                     } else {
                         String[] joinColumns = {
@@ -450,7 +464,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
                 }
 
                 if (tableDataChanges.getDeletedIds() != null && tableDataChanges.getDeletedIds().size() > 0 && dataToSave != null) {
-                    Selection rowsToDeleteSelection = dataToSave.textColumn(storageSettings.getIdStringColumnName())
+                    Selection rowsToDeleteSelection = dataToSave.stringColumn(storageSettings.getIdStringColumnName())
                             .isIn(tableDataChanges.getDeletedIds());
                     if (rowsToDeleteSelection.size() > 0) {
                         dataToSave = dataToSave.dropWhere(rowsToDeleteSelection);

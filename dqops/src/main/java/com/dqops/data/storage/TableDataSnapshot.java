@@ -583,14 +583,14 @@ public class TableDataSnapshot {
                             SearchPattern searchPattern = SearchPattern.create(true, colValue);
                             toDelete = toDelete.and(
                                     monthlyPartitionTable
-                                            .textColumn(colName)
+                                            .stringColumn(colName)
                                             .eval(searchPattern::match));
                         }
 
                     } else {
                         toDelete = toDelete.and(
                                 monthlyPartitionTable
-                                        .textColumn(colName)
+                                        .stringColumn(colName)
                                         .isIn(colValues));
                     }
                 }
@@ -600,7 +600,7 @@ public class TableDataSnapshot {
             }
 
             List<String> idsToDeleteInPartition = monthlyPartitionTable
-                    .textColumn(this.storageSettings.getIdStringColumnName())
+                    .stringColumn(this.storageSettings.getIdStringColumnName())
                     .where(toDelete).asList();
             idsToDelete.addAll(idsToDeleteInPartition);
         }
@@ -622,7 +622,7 @@ public class TableDataSnapshot {
             }
 
             int deletedRows = loadedPartitionTable
-                    .textColumn(CommonColumnNames.ID_COLUMN_NAME)
+                    .stringColumn(CommonColumnNames.ID_COLUMN_NAME)
                     .isIn(deletedIds)
                     .size();
             boolean allRowsDeleted = deletedRows == loadedPartitionTable.rowCount();
@@ -712,9 +712,9 @@ public class TableDataSnapshot {
             return;
         }
 
-        TextColumn idColumn = this.getTableDataChanges()
+        StringColumn idColumn = this.getTableDataChanges()
                 .getNewOrChangedRows()
-                .textColumn(this.storageSettings.getIdStringColumnName());
+                .stringColumn(this.storageSettings.getIdStringColumnName());
         Set<String> foundIds = new LinkedHashSet<>();
         IntArrayList duplicateRowIndexesToDrop = null;
 
