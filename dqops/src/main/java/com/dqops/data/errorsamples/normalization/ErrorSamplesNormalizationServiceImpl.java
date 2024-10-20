@@ -449,6 +449,10 @@ public class ErrorSamplesNormalizationServiceImpl implements ErrorSamplesNormali
             return ((TimeColumn)currentColumn).copy();
         }
 
+        if (currentColumn instanceof StringColumn) {
+            return ((StringColumn)currentColumn).copy();
+        }
+
         if (currentColumn instanceof TextColumn) {  // covers TextColumn and StringColumn
             TextColumn textColumn = (TextColumn) currentColumn;
             StringColumn truncatedStringColumn = StringColumn.create(columnName, resultsTable.rowCount());
