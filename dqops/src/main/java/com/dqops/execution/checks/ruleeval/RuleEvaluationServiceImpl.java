@@ -37,6 +37,7 @@ import com.dqops.rules.HistoricDataPointsGrouping;
 import com.dqops.rules.RuleTimeWindowSettingsSpec;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
 import com.dqops.utils.tables.TableColumnUtility;
+import com.dqops.utils.tables.TableRowUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tech.tablesaw.api.*;
@@ -306,8 +307,7 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                     highestSeverity = 0; // pass
                 }
 
-                Row targetRuleResultRow = result.appendRow();
-                int targetRowIndex = targetRuleResultRow.getRowNumber();
+                int targetRowIndex = TableRowUtility.appendRow(result.getRuleResultsTable());
                 result.copyRowFrom(targetRowIndex, sensorResultsTable, allSensorResultsRowIndex);
                 result.getIncludeInKpiColumn().set(targetRowIndex, hasRuleResult && !checkSpec.isExcludeFromKpi());
                 result.getIncludeInSlaColumn().set(targetRowIndex, hasRuleResult && checkSpec.isIncludeInSla());

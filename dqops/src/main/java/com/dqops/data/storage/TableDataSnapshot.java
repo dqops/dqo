@@ -191,6 +191,7 @@ public class TableDataSnapshot {
      * The order of partitions whose data is appended to the result table is not ensured.
      * @return Table with the data from all partitions or null when no partitions were loaded or all loaded partitions were empty.
      */
+    @Deprecated()
     public Table getAllData() {
         if (this.cachedAllData != null) {
             return this.cachedAllData;
