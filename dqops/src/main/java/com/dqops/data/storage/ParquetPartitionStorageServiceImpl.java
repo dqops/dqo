@@ -36,9 +36,11 @@ import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.metadata.storage.localfiles.userhome.LocalUserHomeFileStorageService;
 import com.dqops.utils.datetime.LocalDateTimeTruncateUtility;
 import com.dqops.utils.exceptions.DqoRuntimeException;
+import com.dqops.utils.tables.TableColumnUtility;
 import com.dqops.utils.tables.TableCompressUtility;
 import com.dqops.utils.tables.TableCopyUtility;
 import com.dqops.utils.tables.TableMergeUtility;
+import lombok.extern.slf4j.Slf4j;
 import net.tlabs.tablesaw.parquet.TablesawParquetReadOptions;
 import net.tlabs.tablesaw.parquet.TablesawParquetReader;
 import org.apache.commons.lang3.ArrayUtils;
@@ -64,6 +66,7 @@ import java.util.stream.Collectors;
  * Service that supports reading and writing parquet file partitions from a local file system.
  */
 @Service
+@Slf4j
 public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStorageService {
     /**
      * The number of retries to write a parquet file when another thread was trying to write the same file.
@@ -488,6 +491,29 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
                         return false;
                     }
                 }
+
+                // fix some invalid records
+                Column<?> idColumn = dataToSave.column(storageSettings.getIdStringColumnName());
+                Selection idValueMissing = idColumn.isMissing();
+                if (!idValueMissing.isEmpty()) {
+                    dataToSave = dataToSave.dropWhere(idValueMissing);
+
+                    log.warn("Missing ID column values found when saving a partition, ID column name: " +
+                            storageSettings.getIdStringColumnName() + ". Table: " + storageSettings.getTableType() + ", partition: " + loadedPartition.getPartitionId());
+                }
+
+                // fix some invalid records
+                LongColumn connectionHashColumn = (LongColumn) TableColumnUtility.findColumn(dataToSave, CommonColumnNames.CONNECTION_HASH_COLUMN_NAME);
+                if (connectionHashColumn != null) {
+                    Selection connectionHashMissing = connectionHashColumn.isMissing();
+                    if (!connectionHashMissing.isEmpty()) {
+                        dataToSave = dataToSave.dropWhere(connectionHashMissing);
+
+                        log.warn("Missing connection_hash column values found when saving a partition. Table: " +
+                                storageSettings.getTableType() + ", partition: " + loadedPartition.getPartitionId());
+                    }
+                }
+
 
                 Configuration hadoopConfiguration = this.hadoopConfigurationProvider.getHadoopConfiguration();
                 byte[] parquetFileContent = new DqoTablesawParquetWriter(hadoopConfiguration).writeToByteArray(dataToSave);

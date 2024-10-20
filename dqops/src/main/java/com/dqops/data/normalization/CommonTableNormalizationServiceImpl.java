@@ -255,12 +255,12 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
      * @return ID column, filled with values.
      */
     @Override
-    public StringColumn createStatisticsRowIdColumn(LongColumn sortedDataGroupingHashColumn,
-                                                    DateTimeColumn sortedTimePeriodColumn,
-                                                    long checkHash,
-                                                    long tableHash,
-                                                    long columnHash,
-                                                    int rowCount) {
+    public StringColumn createSensorReadoutRowIdColumn(LongColumn sortedDataGroupingHashColumn,
+                                                       DateTimeColumn sortedTimePeriodColumn,
+                                                       long checkHash,
+                                                       long tableHash,
+                                                       long columnHash,
+                                                       int rowCount) {
         StringColumn idColumn = StringColumn.create(CommonColumnNames.ID_COLUMN_NAME, rowCount);
 
         for (int i = 0; i < rowCount ; i++) {

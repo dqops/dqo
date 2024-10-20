@@ -188,7 +188,11 @@ public class HierarchyId {
         List<HashCode> elementHashes = Arrays.stream(this.elements)
                 .map(element -> Hashing.farmHashFingerprint64().hashString(element.toString(), StandardCharsets.UTF_8))
                 .collect(Collectors.toList());
-        return Math.abs(Hashing.combineOrdered(elementHashes).asLong()); // we return only positive hashes which limits the hash space to 2^63, but positive hashes are easier for users
+        long hash = Math.abs(Hashing.combineOrdered(elementHashes).asLong());
+        if (hash == Long.MAX_VALUE) {
+            hash = Long.MAX_VALUE - 1L;
+        }
+        return hash; // we return only positive hashes which limits the hash space to 2^63, but positive hashes are easier for users
     }
 
     /**

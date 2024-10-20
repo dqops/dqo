@@ -285,7 +285,7 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
         sortedNormalizedTable.addColumns(updatedByColumn);
 
         DateTimeColumn sortedTimePeriodColumn = (DateTimeColumn) sortedNormalizedTable.column(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME);
-        StringColumn idColumn = this.commonNormalizationService.createStatisticsRowIdColumn(sortedDataStreamHashColumn, sortedTimePeriodColumn, checkHash, tableHash,
+        StringColumn idColumn = this.commonNormalizationService.createSensorReadoutRowIdColumn(sortedDataStreamHashColumn, sortedTimePeriodColumn, checkHash, tableHash,
                 columnHash != null ? columnHash.longValue() : 0L, resultsRowCount);
         sortedNormalizedTable.insertColumn(0, idColumn);
 

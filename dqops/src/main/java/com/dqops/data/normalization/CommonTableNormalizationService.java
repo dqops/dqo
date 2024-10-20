@@ -106,12 +106,12 @@ public interface CommonTableNormalizationService {
      * @param rowCount                   Row count.
      * @return ID column, filled with values.
      */
-    StringColumn createStatisticsRowIdColumn(LongColumn sortedDataGroupingHashColumn,
-                                             DateTimeColumn sortedTimePeriodColumn,
-                                             long checkHash,
-                                             long tableHash,
-                                             long columnHash,
-                                             int rowCount);
+    StringColumn createSensorReadoutRowIdColumn(LongColumn sortedDataGroupingHashColumn,
+                                                DateTimeColumn sortedTimePeriodColumn,
+                                                long checkHash,
+                                                long tableHash,
+                                                long columnHash,
+                                                int rowCount);
 
     /**
      * Creates and fills the "id" column by combining hashes for the error table.
