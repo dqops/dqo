@@ -11,12 +11,8 @@ spec:
         daily_sql_condition_passed_percent_on_table:
           parameters:
             sql_condition: upper_ci >=lower_ci
-          warning:
-            min_percent: 100.0
           error:
             min_percent: 99.0
-          fatal:
-            min_percent: 95.0
   columns:
     edition:
       type_snapshot:

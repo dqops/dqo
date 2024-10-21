@@ -45,17 +45,15 @@ We will verify the data of `bigquery-public-data.america_health_rankings.ahr` us
 [sql_condition_passed_percent_on_table](../../checks/table/custom_sql/sql-condition-passed-percent-on-table.md) check.
 Our goal is to verify if the percentage of rows passed a custom SQL condition does not fall below the set thresholds.
 
-In this example, we will set three minimum percentage thresholds levels for the check:
+In this example, we will set the minimum percentage threshold level for the check:
 
-- warning: 100.0%
 - error: 99.0%
-- fatal: 95.0%
 
 If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/definition-of-data-quality-checks/index.md).
 
 **VALUE**
 
-If the percentage of data falls below 100.0%, a warning alert will be triggered.
+If the percentage of data falls below 99.0%, an error alert will be triggered.
 
 
 ### Data structure
@@ -84,7 +82,7 @@ A detailed explanation of [how to start DQOps platform and run the example is de
 
 To navigate to a list of checks prepared in the example using the [user interface](../../dqo-concepts/dqops-user-interface-overview.md):
 
-![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-sql-condition-passed-percent-on-table-checks1.png){ loading=lazy; width="1200px" }
+![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-sql-condition-passed-percent-on-table-checks2.png){ loading=lazy; width="1200px" }
 
 1. Go to the **Monitoring** section.
 
@@ -96,7 +94,7 @@ To navigate to a list of checks prepared in the example using the [user interfac
     On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../data-sources/index.md).
 
 
-3. Select the **Daily checks** tab.
+3. Select the **Data quality checks editor** tab.
 
     This tab displays a list of data quality checks in the check editor. The daily_sql_condition_passed_percent_on_table check
     has additional parameter sql_condition that allows you to input a SQL condition (expression) that returns true or false.
@@ -113,21 +111,22 @@ Run the activated check using the **Run check** button.
 
 You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
 
-![Run check](https://dqops.com/docs/images/examples/daily-sql-condition-passed-percent-on-table-run-checks1.png){ loading=lazy; width="1200px" }
+![Run check](https://dqops.com/docs/images/examples/daily-sql-condition-passed-percent-on-table-run-checks2.png){ loading=lazy; width="1200px" }
 
 ### **View detailed check results**
 
 To access the results, click on the **Results** button.
 
-![sql_condition_passed_percent_on_table check results](https://dqops.com/docs/images/examples/daily-sql-condition-passed-percent-on-table-checks-results1.png){ loading=lazy; width="1200px" }
+![sql_condition_passed_percent_on_table check results](https://dqops.com/docs/images/examples/daily-sql-condition-passed-percent-on-table-checks-results3.png){ loading=lazy; width="1200px" }
 
-Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
+Within the Results window, you will see four categories: **Check results**, **Sensor readouts**, **Execution errors**, and **Error sampling**.
 The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
 The Sensor readouts category displays the values obtained by the sensors from the data source.
 The Execution errors category displays any error that occurred during the check's execution.
+The Error sampling category displays examples of invalid values in the column.
 
-The actual value in this example is 92.6%, which is below the minimum threshold level set in the fatal error (95.0%).
-The check gives a fatal error (notice the red square to the left of the check name).
+The actual value in this example is 92.6%, which is below the minimum threshold level set in the error (99.0%).
+The check gives an error (notice the orange square to the left of the check name).
 
 ### **Synchronize the results with the cloud account**
 
@@ -136,30 +135,6 @@ of the user interface.
 
 Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
 
-### **Review the results on the data quality dashboards**
-
-To review the results on the [data quality dashboards](../../working-with-dqo/review-the-data-quality-results-on-dashboards.md)
-go to the Data Quality Dashboards section and select the dashboard from the tree view on the left.
-
-Below you can see the results displayed on the **Current validity issues on columns** dashboard located in Data Quality Dimension/Validity group.
-This dashboard summarizes results from most recently executed checks categorized to Validity dimension.
-
-This dashboard allows filtering data by:
-    
-* time window (from last 7 days to last 3 months)
-* connection,
-* schema,
-* data group,
-* check category,
-* check name,
-* stages,
-* priorities,
-* table,
-* column,
-* issue severity.
-    
-![sql_condition_passed_percent_on_table results on Current validity issues on columns dashboard](https://dqops.com/docs/images/examples/daily-sql-condition-passed-percent-on-table-checks-results-on-current-validity-issues-dashboard.png){ loading=lazy; width="1200px" }
-
 ## Change a schedule at the connection level
 
 With DQOps, you can easily customize when checks are run by setting schedules. You can set schedules for an entire connection,
@@ -167,7 +142,7 @@ table, or individual check.
 
 After importing new tables, DQOps sets the schedule for 12:00 P.M. (noon) every day. Follow the steps below to change the schedule.
 
-![Change a schedule at the connection level](https://dqops.com/docs/images/examples/change-schedule-for-connection.png){ loading=lazy; width="1200px" }
+![Change a schedule at the connection level](https://dqops.com/docs/images/examples/change-schedule-for-connection2.png){ loading=lazy; width="1200px" }
 
 1. Navigate to the **Data Source** section.
 
@@ -198,7 +173,7 @@ When DQOps detect a new issue, it creates a new incident. An incident aggregates
 categories such as a table, data quality, dimension, check category, or check type. 
 To access a summary of incidents that occur during data quality monitoring, navigate to the **Incidents** section.
 
-![Review incidents](https://dqops.com/docs/images/examples/daily-sql-condition-passed-percent-on-table-incidents.png){ loading=lazy; width="1200px" }
+![Review incidents](https://dqops.com/docs/images/examples/daily-sql-condition-passed-percent-on-table-incidents3.png){ loading=lazy; width="1200px" }
 
 On the left side of this screen, there is a list displaying the connections and the number of incidents that have
 occurred for each one. On the right panel, you can view incidents for the connections you have selected, and you can change the status of the incident, 
@@ -221,157 +196,45 @@ Follow the link to learn more about [configuring Slack notification](../../integ
 
 The YAML configuration file stores both the table details and checks configurations.
 
-In this example, we have set three minimum percentage thresholds levels for the check:
+In this example, we have set the minimum percentage threshold level for the check:
 
-- warning: 100.0%
 - error: 99.0%
-- fatal: 95.0%
 
 The highlighted fragments in the YAML file below represent the segment where the monitoring `daily_sql_condition_passed_percent_on_table` check is configured.
 
 If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/definition-of-data-quality-checks/index.md).
 
-```yaml hl_lines="7-28"
+```yaml hl_lines="7-14"
 apiVersion: dqo/v1
 kind: table
 spec:
-  incremental_time_window:
-    daily_partitioning_recent_days: 7
-    monthly_partitioning_recent_months: 1
-  monitoring_checks:
-    daily:
-      custom_sql:
-        daily_sql_condition_passed_percent_on_table:
-          parameters:
-            sql_condition: upper_ci >= lower_ci
-          warning:
-            min_percent: 100.0
-          error:
-            min_percent: 99.0
-          fatal:
-            min_percent: 95.0
-  columns:
-    edition:
-      type_snapshot:
-        column_type: INT64
-        nullable: true
+   incremental_time_window:
+      daily_partitioning_recent_days: 7
+      monthly_partitioning_recent_months: 1
+   monitoring_checks:
+      daily:
+         custom_sql:
+            daily_sql_condition_passed_percent_on_table:
+               parameters:
+                  sql_condition: upper_ci >=lower_ci
+               error:
+                  min_percent: 99.0
+   columns:
+      edition:
+         type_snapshot:
+            column_type: INT64
+            nullable: true
+      report_type:
+         type_snapshot:
+            column_type: STRING
+            nullable: true
 ```
 
-## Run the checks in the example using the DQOps Shell
 
-A detailed explanation of [how to start DQOps platform and run the example is described here](../index.md#running-the-use-cases).
-
-To execute the check prepared in the example, run the following command in DQOps Shell:
-
-``` 
-check run
-```
-
-Review the results which should be similar to the one below.
-
-```
-Check evaluation summary per table:
-+-----------------------+---------------------------+------+--------------+-------------+--------+------+------------+----------------+
-|Connection             |Table                      |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
-+-----------------------+---------------------------+------+--------------+-------------+--------+------+------------+----------------+
-|america_health_rankings|america_health_rankings.ahr|1     |1             |0            |0       |0     |**1**       |0               |
-+-----------------------+---------------------------+------+--------------+-------------+--------+------+------------+----------------+
-```
-
-As you can see, the table failed the data quality check raising a fatal severity error.
-The percent of passed SQL expressions is below the 95.0% and the check raised the Fatal error.
-
-For a more detailed insight of how the check is run, you can initiate the check in debug mode by executing the
-following command:
-
-```
-check run --mode=debug
-```
-
-In the debug mode you can view the SQL query (sensor) executed in the check.
-
-```
-**************************************************
-Executing SQL on connection america_health_rankings (bigquery)
-SQL to be executed on the connection:
-SELECT
-    CASE
-        WHEN COUNT(*) = 0 THEN 100.0
-        ELSE 100.0 * SUM(
-                         CASE
-                             WHEN (upper_ci >= lower_ci)
-                                  THEN 1
-                             ELSE 0
-                         END) / COUNT(*)
-    END AS actual_value,
-    CURRENT_TIMESTAMP() AS time_period,
-    TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
-FROM `bigquery-public-data`.`america_health_rankings`.`ahr` AS analyzed_table
-GROUP BY time_period, time_period_utc
-ORDER BY time_period, time_period_utc
-**************************************************
-```
-
-You can also see the results returned by the sensor. Now the actual value in this example is 92.6025888185073%, which is below the minimum
-threshold level set in the Fatal error (95.0%).
-
-```
-**************************************************
-Finished executing a sensor for a check sql_condition_passed_percent_on_table on the table america_health_rankings.ahr using a sensor definition table/custom_sql/sql_condition_passed_percent_on_table, sensor result count: 1
-
-Results returned by the sensor:
-+----------------+------------------------+------------------------+
-|actual_value    |time_period             |time_period_utc         |
-+----------------+------------------------+------------------------+
-|92.6025888185073|2023-05-18T08:29:25.667Z|2023-05-18T08:29:25.667Z|
-+----------------+------------------------+------------------------+
-**************************************************
-```
-
-The expression `upper_ci >= lower_ci` was false for almost 7.4% rows probably because the column upper_ci or lower_ci is NULL so the expression was false. 
-
-Let's update the SQL expression and count rows with NULL values as valid.
-
-```yaml hl_lines="7-29"
-apiVersion: dqo/v1
-kind: table
-spec:
-  incremental_time_window:
-    daily_partitioning_recent_days: 7
-    monthly_partitioning_recent_months: 1
-  monitoring_checks:
-    daily:
-      custom_sql:
-        daily_sql_condition_passed_percent_on_table:
-          parameters:
-            sql_condition: upper_ci >= lower_ci or upper_ci is NULL or lower_ci is
-              NULL
-          warning:
-            min_percent: 100.0
-          error:
-            min_percent: 99.0
-          fatal:
-            min_percent: 95.0
-        min_sql_condition_passed_percent_on_table:
-          parameters:
-            sql_condition: upper_ci >= lower_ci or upper_ci is NULL or lower_ci is
-              NULL
-          warning:
-            min_percent: 100.0
-          error:
-            min_percent: 99.0
-          fatal:
-            min_percent: 95.0
-  columns:
-    edition:
-      type_snapshot:
-        column_type: INT64
-        nullable: true
-```
 
 In this example, we have demonstrated how to use DQOps to verify the validity of data in a table.
 By using the [sql_condition_passed_percent_on_table](../../checks/table/custom_sql/sql-condition-passed-percent-on-table.md) check, we can monitor that
-the percentage of rows passed a custom SQL condition does not fall below the set thresholds. If it does, you will get a warning, error or fatal result.
+the percentage of rows passed a custom SQL condition does not fall below the set thresholds. If it does, you will get an error result.
 
 ## Next steps
 
