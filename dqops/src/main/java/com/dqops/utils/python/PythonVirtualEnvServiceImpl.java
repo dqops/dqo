@@ -163,6 +163,7 @@ public class PythonVirtualEnvServiceImpl implements PythonVirtualEnvService {
             installDqoHomePipRequirements(pythonVirtualEnv);
             installDqoHomePipDevelopmentRequirements(pythonVirtualEnv);
             installUserHomePipRequirements(pythonVirtualEnv);
+            installUserHomePaidPipRequirements(pythonVirtualEnv);
         } else {
             String absolutePythonPath = findAbsolutePythonPath();
             if (absolutePythonPath == null) {
@@ -332,6 +333,38 @@ public class PythonVirtualEnvServiceImpl implements PythonVirtualEnvService {
             Path pathToLastInstalledRequirements = pythonVirtualEnv.getVirtualEnvPath().resolve("user_requirements.txt");
             String userHome = this.userConfigurationProperties.getHome();
             Path pathToRequirementsTxt = Path.of(userHome).resolve("rules/requirements.txt");
+
+            if (!Files.exists(pathToRequirementsTxt)) {
+                return; // the user has not configured personal python requirements
+            }
+
+            if (Files.exists(pathToLastInstalledRequirements) &&
+                    Objects.equals(Files.readString(pathToLastInstalledRequirements, StandardCharsets.UTF_8),
+                            Files.readString(pathToRequirementsTxt, StandardCharsets.UTF_8))) {
+                return; // no more requirements to install
+            }
+
+            installPipRequirements(pythonVirtualEnv, pathToRequirementsTxt);
+
+            Files.copy(pathToRequirementsTxt, pathToLastInstalledRequirements, StandardCopyOption.REPLACE_EXISTING);
+        }
+        catch (PythonExecutionException ex) {
+            throw ex;
+        }
+        catch (Exception ex) {
+            throw new PythonExecutionException("Failed to install pip requirements in a virtual environment: " + ex.getMessage(), ex);
+        }
+    }
+
+    /**
+     * Installs python (pip) requirements for the user home (user requirements, if present).
+     * @param pythonVirtualEnv Virtual environment configuration.
+     */
+    public void installUserHomePaidPipRequirements(PythonVirtualEnv pythonVirtualEnv) {
+        try {
+            Path pathToLastInstalledRequirements = pythonVirtualEnv.getVirtualEnvPath().resolve("paid_requirements.txt");
+            String userHome = this.userConfigurationProperties.getHome();
+            Path pathToRequirementsTxt = Path.of(userHome).resolve("rules/dqopspaid/paid_requirements.txt");
 
             if (!Files.exists(pathToRequirementsTxt)) {
                 return; // the user has not configured personal python requirements

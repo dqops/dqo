@@ -16947,6 +16947,12 @@ definitions:
           \ (measure) is an anomaly, because the value is outside the regular range\
           \ of previous readouts. The default time window of 90 time periods (days,\
           \ etc.) is used, but at least 30 readouts must exist to run the calculation."
+      use_ai:
+        type: "boolean"
+        description: "Use an AI model to predict anomalies. WARNING: anomaly detection\
+          \ by AI models is not supported in an open-source distribution of DQOps.\
+          \ Please contact DQOps support to upgrade your instance to a closed-source\
+          \ DQOps distribution."
   AnomalyDifferencingPercentileMovingAverageRuleFatal01PctParametersSpec:
     type: "object"
     properties:
@@ -16957,6 +16963,12 @@ definitions:
           \ (measure) is an anomaly, because the value is outside the regular range\
           \ of previous readouts. The default time window of 90 time periods (days,\
           \ etc.) is used, but at least 30 readouts must exist to run the calculation."
+      use_ai:
+        type: "boolean"
+        description: "Use an AI model to predict anomalies. WARNING: anomaly detection\
+          \ by AI models is not supported in an open-source distribution of DQOps.\
+          \ Please contact DQOps support to upgrade your instance to a closed-source\
+          \ DQOps distribution."
   AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec:
     type: "object"
     properties:
@@ -16967,6 +16979,12 @@ definitions:
           \ (measure) is an anomaly, because the value is outside the regular range\
           \ of previous readouts. The default time window of 90 time periods (days,\
           \ etc.) is used, but at least 30 readouts must exist to run the calculation."
+      use_ai:
+        type: "boolean"
+        description: "Use an AI model to predict anomalies. WARNING: anomaly detection\
+          \ by AI models is not supported in an open-source distribution of DQOps.\
+          \ Please contact DQOps support to upgrade your instance to a closed-source\
+          \ DQOps distribution."
   AnomalyPartitionRowCountRuleError05PctParametersSpec:
     type: "object"
     properties:
@@ -16977,6 +16995,12 @@ definitions:
           \ is an anomaly because the value is outside the regular range of previous\
           \ partition volume measures. The default time window of 90 time periods\
           \ (days, etc.) is used, but at least 30 readouts must exist to run the calculation."
+      use_ai:
+        type: "boolean"
+        description: "Use an AI model to predict anomalies. WARNING: anomaly detection\
+          \ by AI models is not supported in an open-source distribution of DQOps.\
+          \ Please contact DQOps support to upgrade your instance to a closed-source\
+          \ DQOps distribution."
   AnomalyPartitionRowCountRuleFatal01PctParametersSpec:
     type: "object"
     properties:
@@ -16987,6 +17011,12 @@ definitions:
           \ is an anomaly because the value is outside the regular range of previous\
           \ partition volume measures. The default time window of 90 time periods\
           \ (days, etc.) is used, but at least 30 readouts must exist to run the calculation."
+      use_ai:
+        type: "boolean"
+        description: "Use an AI model to predict anomalies. WARNING: anomaly detection\
+          \ by AI models is not supported in an open-source distribution of DQOps.\
+          \ Please contact DQOps support to upgrade your instance to a closed-source\
+          \ DQOps distribution."
   AnomalyPartitionRowCountRuleWarning1PctParametersSpec:
     type: "object"
     properties:
@@ -16997,6 +17027,12 @@ definitions:
           \ is an anomaly because the value is outside the regular range of previous\
           \ partition volume measures. The default time window of 90 time periods\
           \ (days, etc.) is used, but at least 30 readouts must exist to run the calculation."
+      use_ai:
+        type: "boolean"
+        description: "Use an AI model to predict anomalies. WARNING: anomaly detection\
+          \ by AI models is not supported in an open-source distribution of DQOps.\
+          \ Please contact DQOps support to upgrade your instance to a closed-source\
+          \ DQOps distribution."
   AnomalyStationaryCountValuesRuleError05PctParametersSpec:
     type: "object"
     properties:
@@ -17007,6 +17043,12 @@ definitions:
           \ is an anomaly because the value is outside the regular range of counts.\
           \ The default time window of 90 time periods (days, etc.) is used, but at\
           \ least 30 readouts must exist to run the calculation."
+      use_ai:
+        type: "boolean"
+        description: "Use an AI model to predict anomalies. WARNING: anomaly detection\
+          \ by AI models is not supported in an open-source distribution of DQOps.\
+          \ Please contact DQOps support to upgrade your instance to a closed-source\
+          \ DQOps distribution."
   AnomalyStationaryCountValuesRuleFatal01PctParametersSpec:
     type: "object"
     properties:
@@ -17017,6 +17059,12 @@ definitions:
           \ is an anomaly because the value is outside the regular range of counts.\
           \ The default time window of 90 time periods (days, etc.) is used, but at\
           \ least 30 readouts must exist to run the calculation."
+      use_ai:
+        type: "boolean"
+        description: "Use an AI model to predict anomalies. WARNING: anomaly detection\
+          \ by AI models is not supported in an open-source distribution of DQOps.\
+          \ Please contact DQOps support to upgrade your instance to a closed-source\
+          \ DQOps distribution."
   AnomalyStationaryCountValuesRuleWarning1PctParametersSpec:
     type: "object"
     properties:
@@ -17027,6 +17075,12 @@ definitions:
           \ is an anomaly because the value is outside the regular range of counts.\
           \ The default time window of 90 time periods (days, etc.) is used, but at\
           \ least 30 readouts must exist to run the calculation."
+      use_ai:
+        type: "boolean"
+        description: "Use an AI model to predict anomalies. WARNING: anomaly detection\
+          \ by AI models is not supported in an open-source distribution of DQOps.\
+          \ Please contact DQOps support to upgrade your instance to a closed-source\
+          \ DQOps distribution."
   AnomalyStationaryPercentValuesRuleError05PctParametersSpec:
     type: "object"
     properties:
@@ -17037,6 +17091,12 @@ definitions:
           \ is an anomaly because the value is outside the regular range of captured\
           \ percentage measures. The default time window of 90 time periods (days,\
           \ etc.) is used, but at least 30 readouts must exist to run the calculation."
+      use_ai:
+        type: "boolean"
+        description: "Use an AI model to predict anomalies. WARNING: anomaly detection\
+          \ by AI models is not supported in an open-source distribution of DQOps.\
+          \ Please contact DQOps support to upgrade your instance to a closed-source\
+          \ DQOps distribution."
   AnomalyStationaryPercentValuesRuleFatal01PctParametersSpec:
     type: "object"
     properties:
@@ -17047,6 +17107,12 @@ definitions:
           \ is an anomaly because the value is outside the regular range of captured\
           \ percentage measures. The default time window of 90 time periods (days,\
           \ etc.) is used, but at least 30 readouts must exist to run the calculation."
+      use_ai:
+        type: "boolean"
+        description: "Use an AI model to predict anomalies. WARNING: anomaly detection\
+          \ by AI models is not supported in an open-source distribution of DQOps.\
+          \ Please contact DQOps support to upgrade your instance to a closed-source\
+          \ DQOps distribution."
   AnomalyStationaryPercentValuesRuleWarning1PctParametersSpec:
     type: "object"
     properties:
@@ -17057,6 +17123,12 @@ definitions:
           \ is an anomaly because the value is outside the regular range of captured\
           \ percentage measures. The default time window of 90 time periods (days,\
           \ etc.) is used, but at least 30 readouts must exist to run the calculation."
+      use_ai:
+        type: "boolean"
+        description: "Use an AI model to predict anomalies. WARNING: anomaly detection\
+          \ by AI models is not supported in an open-source distribution of DQOps.\
+          \ Please contact DQOps support to upgrade your instance to a closed-source\
+          \ DQOps distribution."
   AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec:
     type: "object"
     properties:
@@ -17067,6 +17139,12 @@ definitions:
           \ (measure) is an anomaly, because the value is outside the regular range\
           \ of previous readouts. The default time window of 90 time periods (days,\
           \ etc.) is used, but at least 30 readouts must exist to run the calculation."
+      use_ai:
+        type: "boolean"
+        description: "Use an AI model to predict anomalies. WARNING: anomaly detection\
+          \ by AI models is not supported in an open-source distribution of DQOps.\
+          \ Please contact DQOps support to upgrade your instance to a closed-source\
+          \ DQOps distribution."
   AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec:
     type: "object"
     properties:
@@ -17077,6 +17155,12 @@ definitions:
           \ (measure) is an anomaly, because the value is outside the regular range\
           \ of previous readouts. The default time window of 90 time periods (days,\
           \ etc.) is used, but at least 30 readouts must exist to run the calculation."
+      use_ai:
+        type: "boolean"
+        description: "Use an AI model to predict anomalies. WARNING: anomaly detection\
+          \ by AI models is not supported in an open-source distribution of DQOps.\
+          \ Please contact DQOps support to upgrade your instance to a closed-source\
+          \ DQOps distribution."
   AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec:
     type: "object"
     properties:
@@ -17087,6 +17171,12 @@ definitions:
           \ (measure) is an anomaly, because the value is outside the regular range\
           \ of previous readouts. The default time window of 90 time periods (days,\
           \ etc.) is used, but at least 30 readouts must exist to run the calculation."
+      use_ai:
+        type: "boolean"
+        description: "Use an AI model to predict anomalies. WARNING: anomaly detection\
+          \ by AI models is not supported in an open-source distribution of DQOps.\
+          \ Please contact DQOps support to upgrade your instance to a closed-source\
+          \ DQOps distribution."
   AnomalyTimelinessDelayRuleError05PctParametersSpec:
     type: "object"
     properties:
@@ -17097,6 +17187,12 @@ definitions:
           \ an anomaly because the value is outside the regular range of previous\
           \ delays. The default time window of 90 time periods (days, etc.) is used,\
           \ but at least 30 readouts must exist to run the calculation."
+      use_ai:
+        type: "boolean"
+        description: "Use an AI model to predict anomalies. WARNING: anomaly detection\
+          \ by AI models is not supported in an open-source distribution of DQOps.\
+          \ Please contact DQOps support to upgrade your instance to a closed-source\
+          \ DQOps distribution."
   AnomalyTimelinessDelayRuleFatal01PctParametersSpec:
     type: "object"
     properties:
@@ -17107,6 +17203,12 @@ definitions:
           \ an anomaly because the value is outside the regular range of previous\
           \ delays. The default time window of 90 time periods (days, etc.) is used,\
           \ but at least 30 readouts must exist to run the calculation."
+      use_ai:
+        type: "boolean"
+        description: "Use an AI model to predict anomalies. WARNING: anomaly detection\
+          \ by AI models is not supported in an open-source distribution of DQOps.\
+          \ Please contact DQOps support to upgrade your instance to a closed-source\
+          \ DQOps distribution."
   AnomalyTimelinessDelayRuleWarning1PctParametersSpec:
     type: "object"
     properties:
@@ -17117,6 +17219,12 @@ definitions:
           \ an anomaly because the value is outside the regular range of previous\
           \ delays. The default time window of 90 time periods (days, etc.) is used,\
           \ but at least 30 readouts must exist to run the calculation."
+      use_ai:
+        type: "boolean"
+        description: "Use an AI model to predict anomalies. WARNING: anomaly detection\
+          \ by AI models is not supported in an open-source distribution of DQOps.\
+          \ Please contact DQOps support to upgrade your instance to a closed-source\
+          \ DQOps distribution."
   AuthenticatedDashboardModel:
     type: "object"
     properties:

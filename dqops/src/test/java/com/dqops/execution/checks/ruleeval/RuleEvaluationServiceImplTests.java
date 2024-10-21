@@ -38,6 +38,7 @@ import com.dqops.execution.checks.progress.CheckExecutionProgressListenerStub;
 import com.dqops.execution.rules.DataQualityRuleRunner;
 import com.dqops.execution.rules.DataQualityRuleRunnerObjectMother;
 import com.dqops.execution.rules.finder.RuleDefinitionFindServiceImpl;
+import com.dqops.execution.rules.training.RuleModelTrainingQueueImpl;
 import com.dqops.execution.sensors.SensorExecutionResult;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.TimeWindowFilterParameters;
@@ -77,7 +78,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
     void setUp() {
         DataQualityRuleRunner ruleRunner = DataQualityRuleRunnerObjectMother.getDefault();
         DefaultTimeZoneProvider defaultTimeZoneProvider = DefaultTimeZoneProviderObjectMother.getDefaultTimeZoneProvider();
-        this.sut = new RuleEvaluationServiceImpl(ruleRunner, new RuleDefinitionFindServiceImpl(), defaultTimeZoneProvider);
+        this.sut = new RuleEvaluationServiceImpl(ruleRunner, new RuleDefinitionFindServiceImpl(), defaultTimeZoneProvider, new RuleModelTrainingQueueImpl());
 		this.normalizeService = new SensorReadoutsNormalizationServiceImpl(new CommonTableNormalizationServiceImpl(), defaultTimeZoneProvider);
 		this.table = Table.create("results");
 		executionContext = CheckExecutionContextObjectMother.createWithInMemoryUserContext();

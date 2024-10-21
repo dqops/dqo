@@ -17,6 +17,7 @@ package com.dqops.execution.checks.ruleeval;
 
 import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.core.filesystem.BuiltInFolderNames;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.readouts.factory.SensorReadoutsColumnNames;
 import com.dqops.data.readouts.normalization.SensorReadoutsNormalizedResult;
 import com.dqops.data.readouts.snapshot.SensorReadoutsSnapshot;
@@ -27,6 +28,7 @@ import com.dqops.execution.checks.progress.CheckExecutionProgressListener;
 import com.dqops.execution.rules.*;
 import com.dqops.execution.rules.finder.RuleDefinitionFindResult;
 import com.dqops.execution.rules.finder.RuleDefinitionFindService;
+import com.dqops.execution.rules.training.RuleModelTrainingQueue;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.metadata.comparisons.TableComparisonConfigurationSpec;
 import com.dqops.metadata.id.HierarchyId;
@@ -62,6 +64,7 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
     private final DataQualityRuleRunner ruleRunner;
     private final RuleDefinitionFindService ruleDefinitionFindService;
     private final DefaultTimeZoneProvider defaultTimeZoneProvider;
+    private final RuleModelTrainingQueue ruleModelTrainingQueue;
 
     /**
      * Creates an instance of the rule evaluation service, given all dependencies.
@@ -71,10 +74,12 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
     @Autowired
     public RuleEvaluationServiceImpl(DataQualityRuleRunner ruleRunner,
                                      RuleDefinitionFindService ruleDefinitionFindService,
-                                     DefaultTimeZoneProvider defaultTimeZoneProvider) {
+                                     DefaultTimeZoneProvider defaultTimeZoneProvider,
+                                     RuleModelTrainingQueue ruleModelTrainingQueue) {
         this.ruleRunner = ruleRunner;
         this.ruleDefinitionFindService = ruleDefinitionFindService;
         this.defaultTimeZoneProvider = defaultTimeZoneProvider;
+        this.ruleModelTrainingQueue = ruleModelTrainingQueue;
     }
 
     /**
@@ -116,6 +121,7 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                 ruleFindResult.getRuleDefinitionSpec().getParameters() : null;
         TableComparisonConfigurationSpec tableComparisonConfiguration = sensorRunParameters.getTableComparisonConfiguration();
         String modelPath = null;
+        boolean modelMustBeRetrained = false;
 
         if (ruleTimeWindowSettings != null) {
             // the rule uses historic data, and can use a persistent model for prediction
@@ -242,6 +248,7 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                     RuleExecutionRunParameters ruleRunParametersFatal = new RuleExecutionRunParameters(actualValue, expectedValueFromSensor,
                             fatalRule, timePeriodLocal, previousDataPoints, ruleTimeWindowSettings, ruleConfigurationParameters, modelPath);
                     ruleExecutionResultFatal = this.ruleRunner.executeRule(executionContext, ruleRunParametersFatal, sensorRunParameters);
+                    modelMustBeRetrained |= ruleExecutionResultFatal.isModelIsOutdated();
 
                     if (ruleExecutionResultFatal.getPassed() != null && !ruleExecutionResultFatal.getPassed()) {
                         highestSeverity = 3;
@@ -262,6 +269,7 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                     RuleExecutionRunParameters ruleRunParametersError = new RuleExecutionRunParameters(actualValue, expectedValueFromSensor,
                             errorRule, timePeriodLocal, previousDataPoints, ruleTimeWindowSettings, ruleConfigurationParameters, modelPath);
                     ruleExecutionResultError = this.ruleRunner.executeRule(executionContext, ruleRunParametersError, sensorRunParameters);
+                    modelMustBeRetrained |= ruleExecutionResultError.isModelIsOutdated();
 
                     if (ruleExecutionResultError.getPassed() != null && highestSeverity == null && !ruleExecutionResultError.getPassed()) {
                         highestSeverity = 2;
@@ -282,6 +290,7 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                     RuleExecutionRunParameters ruleRunParametersWarning = new RuleExecutionRunParameters(actualValue, expectedValueFromSensor,
                             warningRule, timePeriodLocal, previousDataPoints, ruleTimeWindowSettings, ruleConfigurationParameters, modelPath);
                     ruleExecutionResultWarning = this.ruleRunner.executeRule(executionContext, ruleRunParametersWarning, sensorRunParameters);
+                    modelMustBeRetrained |= ruleExecutionResultWarning.isModelIsOutdated();
 
                     if (ruleExecutionResultWarning.getPassed() != null && highestSeverity == null && !ruleExecutionResultWarning.getPassed()) {
                         highestSeverity = 1;
@@ -390,6 +399,11 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                         expectedValueColumn.set(allSensorResultsRowIndex, expectedValue);  // write back an expected value calculated from the sensor, will allow to use prediction better
                     }
                 }
+            }
+            
+            if (modelMustBeRetrained) {
+                UserDomainIdentity userDomainIdentity = executionContext.getUserHomeContext().getUserIdentity();
+                this.ruleModelTrainingQueue.queueModelRetraining(userDomainIdentity, checkSpecHierarchyId);
             }
         }
 

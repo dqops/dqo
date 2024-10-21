@@ -19,6 +19,7 @@ from typing import Sequence, List, TypedDict
 # rule specific parameters object, contains values received from the quality check threshold configuration
 class AnomalyRuleParametersSpec:
     anomaly_percent: float
+    use_ai: bool
 
 
 class HistoricDataPoint:

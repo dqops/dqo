@@ -17,6 +17,13 @@ import scipy
 import scipy.stats
 from .data_types import RuleExecutionRunParameters, HistoricData
 
+try:
+    import rules.dqopspaid.anomaly_detection
+except ModuleNotFoundError:
+    ai_module_present = False
+else:
+    ai_module_present = True
+
 
 t_dist_dict = {}
 
@@ -77,6 +84,9 @@ def test_significance(values: list[float], parameters: RuleExecutionRunParameter
 
 def detect_upper_bound_anomaly(historic_data: HistoricData, median: float, tail: float,
                                parameters: RuleExecutionRunParameters):
+    if hasattr(parameters.parameters, 'use_ai') and parameters.parameters.use_ai and ai_module_present:
+        return rules.dqopspaid.anomaly_detection.detect_upper_bound_anomaly(historic_data, median, tail, parameters)
+
     values = historic_data['converted_values']
     values_above_median = [value for value in values if value is not None and value >= median]
     values_array = np.array(values_above_median, dtype=float)
@@ -96,6 +106,9 @@ def detect_upper_bound_anomaly(historic_data: HistoricData, median: float, tail:
 
 def detect_lower_bound_anomaly(historic_data: HistoricData, median: float, tail: float,
                                parameters: RuleExecutionRunParameters):
+    if hasattr(parameters.parameters, 'use_ai') and parameters.parameters.use_ai and ai_module_present:
+        return rules.dqopspaid.anomaly_detection.detect_lower_bound_anomaly(historic_data, median, tail, parameters)
+
     values = historic_data['converted_values']
     values_below_median = [value for value in values if value is not None and value <= median]
     values_array = np.array(values_below_median, dtype=float)
