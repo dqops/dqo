@@ -1358,7 +1358,8 @@ function TreeProvider(props: any) {
           checkType,
           connectionNode?.label ?? '',
           schemaNode?.label ?? '',
-          tableNode?.label ?? ''
+          tableNode?.label ?? '',
+          'daily'
         );
       } else if (node.level === TREE_LEVEL.TABLE_MONTHLY_CHECKS) {
         url = ROUTES.TABLE_MONITORING(
@@ -1372,7 +1373,8 @@ function TreeProvider(props: any) {
           checkType,
           connectionNode?.label ?? '',
           schemaNode?.label ?? '',
-          tableNode?.label ?? ''
+          tableNode?.label ?? '',
+          'monthly'
         );
       } else if (node.level === TREE_LEVEL.TABLE_PARTITIONED_DAILY_CHECKS) {
         url = ROUTES.TABLE_PARTITIONED(
@@ -1386,7 +1388,8 @@ function TreeProvider(props: any) {
           checkType,
           connectionNode?.label ?? '',
           schemaNode?.label ?? '',
-          tableNode?.label ?? ''
+          tableNode?.label ?? '',
+          'daily'
         );
       } else if (node.level === TREE_LEVEL.TABLE_PARTITIONED_MONTHLY_CHECKS) {
         url = ROUTES.TABLE_PARTITIONED(
@@ -1400,10 +1403,10 @@ function TreeProvider(props: any) {
           checkType,
           connectionNode?.label ?? '',
           schemaNode?.label ?? '',
-          tableNode?.label ?? ''
+          tableNode?.label ?? '',
+          'monthly'
         );
       }
-
       if (firstLevelActiveTab === value) {
         return;
       }
@@ -1462,7 +1465,8 @@ function TreeProvider(props: any) {
           connectionNode?.label ?? '',
           schemaNode?.label ?? '',
           tableNode?.label ?? '',
-          columnNode?.label ?? ''
+          columnNode?.label ?? '',
+          'daily'
         );
       } else if (node.level === TREE_LEVEL.COLUMN_MONTHLY_CHECKS) {
         url = ROUTES.COLUMN_MONITORING(
@@ -1478,7 +1482,8 @@ function TreeProvider(props: any) {
           connectionNode?.label ?? '',
           schemaNode?.label ?? '',
           tableNode?.label ?? '',
-          columnNode?.label ?? ''
+          columnNode?.label ?? '',
+          'monthly'
         );
       } else if (node.level === TREE_LEVEL.COLUMN_PARTITIONED_DAILY_CHECKS) {
         url = ROUTES.COLUMN_PARTITIONED(
@@ -1494,7 +1499,8 @@ function TreeProvider(props: any) {
           connectionNode?.label ?? '',
           schemaNode?.label ?? '',
           tableNode?.label ?? '',
-          columnNode?.label ?? ''
+          columnNode?.label ?? '',
+          'daily'
         );
       } else if (node.level === TREE_LEVEL.COLUMN_PARTITIONED_MONTHLY_CHECKS) {
         url = ROUTES.COLUMN_PARTITIONED(
@@ -1510,7 +1516,8 @@ function TreeProvider(props: any) {
           connectionNode?.label ?? '',
           schemaNode?.label ?? '',
           tableNode?.label ?? '',
-          columnNode?.label ?? ''
+          columnNode?.label ?? '',
+          'monthly'
         );
       }
 
@@ -1724,7 +1731,6 @@ function TreeProvider(props: any) {
         schemaNode?.label ?? '',
         tableNode?.label ?? ''
       );
-
       if (firstLevelActiveTab === value) {
         return;
       }

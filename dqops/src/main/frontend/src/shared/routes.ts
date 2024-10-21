@@ -323,24 +323,26 @@ export const ROUTES = {
     checkTypes: string,
     connection: string,
     schema: string,
-    table: string
+    table: string,
+    timePartition?: string
   ) =>
     `/${checkTypes}/connection/${urlencodeDecoder(
       connection
-    )}/schema/${urlencodeDecoder(schema)}/table/${urlencodeDecoder(
-      table
-    )}/monitoring`,
+    )}/schema/${urlencodeDecoder(schema)}/table/${urlencodeDecoder(table)}/${
+      timePartition || 'monitoring'
+    }`,
   TABLE_PARTITIONED_VALUE: (
     checkTypes: string,
     connection: string,
     schema: string,
-    table: string
+    table: string,
+    timePartition?: string
   ) =>
     `/${checkTypes}/connection/${urlencodeDecoder(
       connection
-    )}/schema/${urlencodeDecoder(schema)}/table/${urlencodeDecoder(
-      table
-    )}/partitioned`,
+    )}/schema/${urlencodeDecoder(schema)}/table/${urlencodeDecoder(table)}/${
+      timePartition || 'partitioned'
+    }`,
   TABLE_COLUMNS_VALUE: (
     checkTypes: string,
     connection: string,
@@ -380,25 +382,27 @@ export const ROUTES = {
     connection: string,
     schema: string,
     table: string,
-    column: string
+    column: string,
+    timePartition?: string
   ) =>
     `/${checkTypes}/connection/${urlencodeDecoder(
       connection
     )}/schema/${urlencodeDecoder(schema)}/table/${urlencodeDecoder(
       table
-    )}/columns/${urlencodeDecoder(column)}/monitoring`,
+    )}/columns/${urlencodeDecoder(column)}/${timePartition || 'monitoring'}`,
   COLUMN_PARTITIONED_VALUE: (
     checkTypes: string,
     connection: string,
     schema: string,
     table: string,
-    column: string
+    column: string,
+    timePartition?: string
   ) =>
     `/${checkTypes}/connection/${urlencodeDecoder(
       connection
     )}/schema/${urlencodeDecoder(schema)}/table/${urlencodeDecoder(
       table
-    )}/columns/${urlencodeDecoder(column)}/partitioned`,
+    )}/columns/${urlencodeDecoder(column)}/${timePartition || 'partitioned'}`,
   COLUMN_LEVEL_VALUE: (
     checkTypes: string,
     connection: string,
