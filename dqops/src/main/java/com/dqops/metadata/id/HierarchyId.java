@@ -15,11 +15,13 @@
  */
 package com.dqops.metadata.id;
 
+import com.dqops.core.filesystem.virtual.FileNameSanitizer;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 
+import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
@@ -307,5 +309,27 @@ public class HierarchyId {
         }
 
         return new HierarchyId(parentHierarchyElements);
+    }
+
+    /**
+     * Creates a path to store the ML model.
+     * @return File system save path inside the .index/models folder to store the check specific model.
+     */
+    public String toModelRelativePath() {
+        StringBuilder pathBuilder = new StringBuilder();
+        String connectionName = FileNameSanitizer.encodeForFileSystem((String) this.elements[1]);
+        pathBuilder.append(connectionName);
+        pathBuilder.append(File.separator);
+
+        String tableName = ((PhysicalTableName) this.elements[3]).toBaseFileName();
+        pathBuilder.append(tableName);
+
+        for (int i = 5; i < this.elements.length; i++) {
+            pathBuilder.append(File.separator);
+            Object element = this.elements[i];
+            pathBuilder.append(FileNameSanitizer.encodeForFileSystem(element.toString()));
+        }
+
+        return pathBuilder.toString();
     }
 }

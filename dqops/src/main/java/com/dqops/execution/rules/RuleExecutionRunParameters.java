@@ -40,6 +40,7 @@ public class RuleExecutionRunParameters {
     private HistoricDataPoint[] previousReadouts;
     private RuleTimeWindowSettingsSpec timeWindow;
     private Map<String, String> configurationParameters;
+    private String modelPath;
 
     /**
      * Default empty constructor.
@@ -56,6 +57,7 @@ public class RuleExecutionRunParameters {
      * @param previousReadouts Array of previous sensor readouts (may have a null value).
      * @param timeWindow Rule threshold time window configuration.
      * @param configurationParameters Optional configuration parameters that are configured in the rule configuration.
+     * @param modelPath A path to a folder where the rule can store its model.
      */
     public RuleExecutionRunParameters(Double actualValue,
                                       Double expectedValue,
@@ -63,7 +65,8 @@ public class RuleExecutionRunParameters {
 									  LocalDateTime timePeriodLocal,
 									  HistoricDataPoint[] previousReadouts,
 									  RuleTimeWindowSettingsSpec timeWindow,
-                                      Map<String, String> configurationParameters) {
+                                      Map<String, String> configurationParameters,
+                                      String modelPath) {
         this.actualValue = actualValue;
         this.expectedValue = expectedValue;
         this.parameters = parameters;
@@ -71,6 +74,7 @@ public class RuleExecutionRunParameters {
         this.previousReadouts = previousReadouts;
         this.timeWindow = timeWindow;
         this.configurationParameters = configurationParameters;
+        this.modelPath = modelPath;
     }
 
     /**
@@ -183,5 +187,21 @@ public class RuleExecutionRunParameters {
      */
     public void setConfigurationParameters(Map<String, String> configurationParameters) {
         this.configurationParameters = configurationParameters;
+    }
+
+    /**
+     * Returns a path to a folder to store the ML model.
+     * @return Path to a folder where the model is stored.
+     */
+    public String getModelPath() {
+        return modelPath;
+    }
+
+    /**
+     * Sets a folder where the model is stored.
+     * @param modelPath Path to the model's folder.
+     */
+    public void setModelPath(String modelPath) {
+        this.modelPath = modelPath;
     }
 }

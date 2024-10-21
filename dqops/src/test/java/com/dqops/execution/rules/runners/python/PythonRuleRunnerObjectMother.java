@@ -55,9 +55,9 @@ public class PythonRuleRunnerObjectMother {
         PythonRuleRunner ruleRunner = getDefault();
         ExecutionContext executionContext = CheckExecutionContextObjectMother.createWithInMemoryUserContext();
         LocalDateTime today = LocalDateTimeTruncateUtility.truncateTimePeriod(LocalDateTime.now(), TimePeriodGradient.day);
-        RuleExecutionRunParameters ruleRunParameters = new RuleExecutionRunParameters(actualValue, expectedValue,
-                ruleParameters, today, null, new RuleTimeWindowSettingsSpec(), ruleParameters.getRuleParametersTemplate());
         RuleDefinitionFindResult ruleDefinitionFindResult = RuleDefinitionFindResultObjectMother.findDqoHomeRuleDefinition(ruleParameters.getRuleDefinitionName());
+        RuleExecutionRunParameters ruleRunParameters = new RuleExecutionRunParameters(actualValue, expectedValue,
+                ruleParameters, today, null, new RuleTimeWindowSettingsSpec(), ruleParameters.getRuleParametersTemplate(), null);
 
         RuleExecutionResult ruleExecutionResult = ruleRunner.executeRule(executionContext, ruleRunParameters, ruleDefinitionFindResult);
 
@@ -92,9 +92,9 @@ public class PythonRuleRunnerObjectMother {
 														 RuleTimeWindowSettingsSpec timeWindowSettingsSpec) {
         PythonRuleRunner ruleRunner = getDefault();
         ExecutionContext executionContext = CheckExecutionContextObjectMother.createWithInMemoryUserContext();
-        RuleExecutionRunParameters ruleRunParameters = new RuleExecutionRunParameters(actualValue, expectedValue,
-                ruleParameters, readoutTimestamp, previousReadouts, timeWindowSettingsSpec, ruleParameters.getRuleParametersTemplate());
         RuleDefinitionFindResult ruleDefinitionFindResult = RuleDefinitionFindResultObjectMother.findDqoHomeRuleDefinition(ruleParameters.getRuleDefinitionName());
+        RuleExecutionRunParameters ruleRunParameters = new RuleExecutionRunParameters(actualValue, expectedValue,
+                ruleParameters, readoutTimestamp, previousReadouts, timeWindowSettingsSpec, ruleParameters.getRuleParametersTemplate(), null);
 
         RuleExecutionResult ruleExecutionResult = ruleRunner.executeRule(executionContext, ruleRunParameters, ruleDefinitionFindResult);
 
