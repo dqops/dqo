@@ -1,6 +1,6 @@
 {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
 SELECT
-    CCOALESCE(100.0 * SUM(
+    COALESCE(100.0 * SUM(
             CASE
                 WHEN {{lib.render_target_column('analyzed_table')}} IS NOT NULL AND
                     {{ lib.render_target_column('analyzed_table') }} ~

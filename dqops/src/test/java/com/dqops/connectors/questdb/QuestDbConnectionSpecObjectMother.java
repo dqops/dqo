@@ -40,7 +40,7 @@ public class QuestDbConnectionSpecObjectMother {
         if (sharedContainer == null) {
             //noinspection resource
             sharedContainer = new QuestDBContainer(IMAGE_NAME)
-                    .withExposedPorts(PORT)
+                    .withExposedPorts(PORT, 9000)
                     .withReuse(TestContainersObjectMother.shouldUseReusableTestContainers());
             sharedContainer.start();
         }

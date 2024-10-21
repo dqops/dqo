@@ -183,7 +183,7 @@ public class QuestDbColumnDatetimeDateValuesInFuturePercentSensorParametersSpecI
                 .stream().map(val -> String.valueOf(val))
                 .collect(Collectors.toList());
 
-        Assertions.assertTrue(sampleValues.contains("2999-02-01"));
+        Assertions.assertTrue(sampleValues.contains("2999-02-01T00:00:00.000Z"));
     }
 
     @Test
@@ -205,7 +205,7 @@ public class QuestDbColumnDatetimeDateValuesInFuturePercentSensorParametersSpecI
         List<String> sampleValues = List.of(resultTable.column("actual_value").asObjectArray())
                 .stream().map(val -> String.valueOf(val))
                 .collect(Collectors.toList());
-        Assertions.assertTrue(sampleValues.contains("2999-02-01"));
+        Assertions.assertTrue(sampleValues.contains("2999-02-01T00:00:00.000Z"));
 
         List<Integer> rowId1Values = List.of(resultTable.column("row_id_1").asObjectArray())
                 .stream().map(val -> ValueConverter.toInteger(val))
@@ -241,7 +241,7 @@ public class QuestDbColumnDatetimeDateValuesInFuturePercentSensorParametersSpecI
         List<String> sampleValues = List.of(resultTable.column("actual_value").asObjectArray())
                 .stream().map(val -> String.valueOf(val))
                 .collect(Collectors.toList());
-        Assertions.assertTrue(sampleValues.contains("2999-02-01"));
+        Assertions.assertTrue(sampleValues.contains("2999-02-01T00:00:00.000Z"));
 
         List<Integer> groupingLevel1Values = new ArrayList<>(
                 Stream.of(resultTable.column("grouping_level_1").asObjectArray())
