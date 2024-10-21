@@ -15,7 +15,7 @@ SELECT
     {{- lib.render_data_grouping_projections_reference('grouping_table') }}
     {{- lib.render_time_dimension_projection_reference('grouping_table') }}
 FROM (
-    SELECT COUNT(*) AS duplicated_count
+    SELECT COUNT() AS duplicated_count
     {{- lib.render_data_grouping_projections('analyzed_table', indentation='        ') }}
     {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table

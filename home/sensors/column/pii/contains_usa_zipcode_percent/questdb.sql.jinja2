@@ -2,8 +2,9 @@
 SELECT
     CCOALESCE(100.0 * SUM(
             CASE
-                WHEN SUBSTRING({{ lib.render_target_column('analyzed_table') }} from
-                     '(^|[ \t.,:;"''`|\n\r])[0-9]{5}(?:-[0-9]{4})?([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
+                WHEN {{lib.render_target_column('analyzed_table')}} IS NOT NULL AND
+                    {{ lib.render_target_column('analyzed_table') }} ~
+                     '(^|[ \t.,:;"''`|\n\r])[0-9]{5}(?:-[0-9]{4})?([ \t.,:;"''`|\n\r]|$)' = TRUE
                     THEN 1
                 ELSE 0
             END

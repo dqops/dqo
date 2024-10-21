@@ -1,5 +1,6 @@
 {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
 {%- call lib.render_error_sampler() -%}
-    SUBSTRING({{ lib.render_target_column('analyzed_table') }} from
-                         '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
+    {{lib.render_target_column('analyzed_table')}} IS NOT NULL AND
+    {{ lib.render_target_column('analyzed_table') }} ~
+                         '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)' = TRUE
 {%- endcall -%}

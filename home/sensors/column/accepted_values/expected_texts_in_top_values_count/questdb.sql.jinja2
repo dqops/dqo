@@ -25,7 +25,7 @@ FROM
     (
         SELECT
             {{ lib.render_target_column('analyzed_table') }} AS top_value,
-            COUNT(*) AS total_values
+            COUNT() AS total_values
             {{- lib.render_data_grouping_projections('analyzed_table', indentation = '            ') }}
             {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
         FROM

@@ -1,8 +1,7 @@
 {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
 
 SELECT
-    PERCENTILE_CONT({{ parameters.percentile_value }})
-    WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
+    APPROX_PERCENTILE({{ lib.render_target_column('analyzed_table')}} * 1.0, {{ parameters.percentile_value }}, 2) AS actual_value
     {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
     {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
 FROM(

@@ -5,7 +5,7 @@ SELECT
                 THEN 1
                 ELSE 0
             END
-        ) / COUNT(CASE WHEN {{ lib.render_target_column('analyzed_table') }} = true THEN 1 ELSE 0 END), 100.0)
+        ) / COUNT(CASE WHEN {{ lib.render_target_column('analyzed_table') }} = TRUE THEN 1 ELSE 0 END), 100.0)
         AS actual_value
     {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
     {{- lib.render_time_dimension_projection_reference('analyzed_table') }}

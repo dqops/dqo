@@ -8,7 +8,7 @@ WITH column_samples AS (
     (
         SELECT
             {{ lib.render_target_column('analyzed_table') }} AS sample_value,
-            COUNT(*) AS sample_count
+            COUNT() AS sample_count
         FROM
             {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause(table_alias_prefix = 'analyzed_table', indentation = '        ') }}

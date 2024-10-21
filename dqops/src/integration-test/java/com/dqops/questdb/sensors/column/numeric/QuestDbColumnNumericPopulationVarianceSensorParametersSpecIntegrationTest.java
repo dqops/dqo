@@ -91,7 +91,7 @@ public class QuestDbColumnNumericPopulationVarianceSensorParametersSpecIntegrati
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(11416.0896, resultTable.column(0).get(0));
+        Assertions.assertEquals(11416.089, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
@@ -104,7 +104,7 @@ public class QuestDbColumnNumericPopulationVarianceSensorParametersSpecIntegrati
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(11416.0896, resultTable.column(0).get(0));
+        Assertions.assertEquals(11416.089, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
@@ -117,7 +117,7 @@ public class QuestDbColumnNumericPopulationVarianceSensorParametersSpecIntegrati
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(11416.0896, resultTable.column(0).get(0));
+        Assertions.assertEquals(11416.089, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
@@ -143,7 +143,7 @@ public class QuestDbColumnNumericPopulationVarianceSensorParametersSpecIntegrati
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(11416.0896, resultTable.column(0).get(0));
+        Assertions.assertEquals(11416.089, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
