@@ -19,6 +19,7 @@ from typing import Sequence
 import numpy as np
 import scipy
 import scipy.stats
+from lib.anomalies.data_preparation import convert_historic_data_stationary
 from lib.anomalies.anomaly_detection import detect_upper_bound_anomaly, detect_lower_bound_anomaly
 
 
@@ -105,34 +106,33 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
                                    filtered_median_float if 100.0 not in all_extracted else 100.0)
 
     tail = rule_parameters.parameters.anomaly_percent / 100.0 / 2.0
+    passed = True
 
     if 100.0 in all_extracted:
         threshold_upper = 100.0
     else:
-        upper_median_multiples_array = [1.0 / (1.0 - readout / 100.0) for readout in extracted]
-        threshold_upper_multiple = detect_upper_bound_anomaly(values=upper_median_multiples_array,
+        anomaly_data_upper = convert_historic_data_stationary(rule_parameters.previous_readouts,
+                                                              lambda readout: 1.0 / (1.0 - readout / 100.0))
+        threshold_upper_multiple = detect_upper_bound_anomaly(historic_data=anomaly_data_upper,
                                                               median=1.0 / (1.0 - filtered_median_float / 100.0),
                                                               tail=tail, parameters=rule_parameters)
 
         if threshold_upper_multiple is not None:
             threshold_upper = 100.0 - 100.0 * (1.0 / threshold_upper_multiple)
-        else:
-            threshold_upper = rule_parameters.actual_value
+            passed = rule_parameters.actual_value <= threshold_upper
 
     if 0.0 in all_extracted:
         threshold_lower = 0.0
     else:
-        lower_median_multiples_array = [(-1.0 / (readout / filtered_median_float)) for readout in extracted]
-        threshold_lower_multiple = detect_lower_bound_anomaly(values=lower_median_multiples_array,
+        anomaly_data_lower = convert_historic_data_stationary(rule_parameters.previous_readouts,
+                                                              lambda readout: (-1.0 / (readout / filtered_median_float)))
+        threshold_lower_multiple = detect_lower_bound_anomaly(historic_data=anomaly_data_lower,
                                                               median=-1.0,
                                                               tail=tail, parameters=rule_parameters)
 
         if threshold_lower_multiple is not None:
             threshold_lower = filtered_median_float * (-1.0 / threshold_lower_multiple)
-        else:
-            threshold_lower = rule_parameters.actual_value
-
-    passed = threshold_lower <= rule_parameters.actual_value <= threshold_upper
+            passed = passed and threshold_lower <= rule_parameters.actual_value
 
     expected_value = filtered_median_float
     lower_bound = threshold_lower

@@ -492,27 +492,27 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
                     }
                 }
 
-                // fix some invalid records
-                Column<?> idColumn = dataToSave.column(storageSettings.getIdStringColumnName());
-                Selection idValueMissing = idColumn.isMissing();
-                if (!idValueMissing.isEmpty()) {
-                    dataToSave = dataToSave.dropWhere(idValueMissing);
-
-                    log.warn("Missing ID column values found when saving a partition, ID column name: " +
-                            storageSettings.getIdStringColumnName() + ". Table: " + storageSettings.getTableType() + ", partition: " + loadedPartition.getPartitionId());
-                }
-
-                // fix some invalid records
-                LongColumn connectionHashColumn = (LongColumn) TableColumnUtility.findColumn(dataToSave, CommonColumnNames.CONNECTION_HASH_COLUMN_NAME);
-                if (connectionHashColumn != null) {
-                    Selection connectionHashMissing = connectionHashColumn.isMissing();
-                    if (!connectionHashMissing.isEmpty()) {
-                        dataToSave = dataToSave.dropWhere(connectionHashMissing);
-
-                        log.warn("Missing connection_hash column values found when saving a partition. Table: " +
-                                storageSettings.getTableType() + ", partition: " + loadedPartition.getPartitionId());
-                    }
-                }
+//                // fix some invalid records
+//                Column<?> idColumn = dataToSave.column(storageSettings.getIdStringColumnName());
+//                Selection idValueMissing = idColumn.isMissing();
+//                if (!idValueMissing.isEmpty()) {
+//                    dataToSave = dataToSave.dropWhere(idValueMissing);
+//
+//                    log.warn("Missing ID column values found when saving a partition, ID column name: " +
+//                            storageSettings.getIdStringColumnName() + ". Table: " + storageSettings.getTableType() + ", partition: " + loadedPartition.getPartitionId());
+//                }
+//
+//                // fix some invalid records
+//                LongColumn connectionHashColumn = (LongColumn) TableColumnUtility.findColumn(dataToSave, CommonColumnNames.CONNECTION_HASH_COLUMN_NAME);
+//                if (connectionHashColumn != null) {
+//                    Selection connectionHashMissing = connectionHashColumn.isMissing();
+//                    if (!connectionHashMissing.isEmpty()) {
+//                        dataToSave = dataToSave.dropWhere(connectionHashMissing);
+//
+//                        log.warn("Missing connection_hash column values found when saving a partition. Table: " +
+//                                storageSettings.getTableType() + ", partition: " + loadedPartition.getPartitionId());
+//                    }
+//                }
 
 
                 Configuration hadoopConfiguration = this.hadoopConfigurationProvider.getHadoopConfiguration();

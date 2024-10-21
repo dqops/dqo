@@ -13,7 +13,7 @@
 #  limitations under the License.
 
 from datetime import datetime
-from typing import Sequence
+from typing import Sequence, List, TypedDict
 
 
 # rule specific parameters object, contains values received from the quality check threshold configuration
@@ -22,8 +22,8 @@ class AnomalyRuleParametersSpec:
 
 
 class HistoricDataPoint:
-    timestamp_utc: datetime
-    local_datetime: datetime
+    timestamp_utc_epoch: int
+    local_datetime_epoch: int
     back_periods_index: int
     sensor_readout: float
     expected_value: float
@@ -44,7 +44,14 @@ class AnomalyConfigurationParameters:
 class RuleExecutionRunParameters:
     actual_value: float
     parameters: AnomalyRuleParametersSpec
-    time_period_local: datetime
+    time_period_local_epoch: int
     previous_readouts: Sequence[HistoricDataPoint]
     time_window: RuleTimeWindowSettingsSpec
     configuration_parameters: AnomalyConfigurationParameters
+
+
+class HistoricData(TypedDict):
+    time_period_epochs: List[int]
+    sensor_values: List[float]
+    converted_values: List[float]
+

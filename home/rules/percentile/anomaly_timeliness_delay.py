@@ -19,6 +19,7 @@ from typing import Sequence
 import numpy as np
 import scipy
 import scipy.stats
+from lib.anomalies.data_preparation import convert_historic_data_stationary
 from lib.anomalies.anomaly_detection import detect_upper_bound_anomaly, detect_lower_bound_anomaly
 
 
@@ -101,7 +102,8 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 
     tail = rule_parameters.parameters.anomaly_percent / 100.0
 
-    threshold_upper_multiple = detect_upper_bound_anomaly(values=extracted, median=filtered_median_float,
+    anomaly_data = convert_historic_data_stationary(rule_parameters.previous_readouts, lambda readout: readout)
+    threshold_upper_multiple = detect_upper_bound_anomaly(historic_data=anomaly_data, median=filtered_median_float,
                                                           tail=tail, parameters=rule_parameters)
 
     passed = True

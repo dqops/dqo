@@ -15,7 +15,7 @@
 import numpy as np
 import scipy
 import scipy.stats
-from .data_types import RuleExecutionRunParameters
+from .data_types import RuleExecutionRunParameters, HistoricData
 
 
 t_dist_dict = {}
@@ -75,9 +75,10 @@ def test_significance(values: list[float], parameters: RuleExecutionRunParameter
     return True
 
 
-def detect_upper_bound_anomaly(values: list[float], median: float, tail: float,
+def detect_upper_bound_anomaly(historic_data: HistoricData, median: float, tail: float,
                                parameters: RuleExecutionRunParameters):
-    values_above_median = [value for value in values if value >= median]
+    values = historic_data['converted_values']
+    values_above_median = [value for value in values if value is not None and value >= median]
     values_array = np.array(values_above_median, dtype=float)
     values_median = np.median(values_array)
     values_std = scipy.stats.tstd(values_array)
@@ -93,9 +94,10 @@ def detect_upper_bound_anomaly(values: list[float], median: float, tail: float,
         return find_tail(df, values_median, values_std, 1 - tail)
 
 
-def detect_lower_bound_anomaly(values: list[float], median: float, tail: float,
+def detect_lower_bound_anomaly(historic_data: HistoricData, median: float, tail: float,
                                parameters: RuleExecutionRunParameters):
-    values_below_median = [value for value in values if value <= median]
+    values = historic_data['converted_values']
+    values_below_median = [value for value in values if value is not None and value <= median]
     values_array = np.array(values_below_median, dtype=float)
     values_median = np.median(values_array)
     values_std = scipy.stats.tstd(values_array)

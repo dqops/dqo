@@ -19,6 +19,7 @@ from typing import Sequence, Dict
 import numpy as np
 import scipy
 import scipy.stats
+from lib.anomalies.data_preparation import convert_historic_data_differencing
 from lib.anomalies.anomaly_detection import detect_upper_bound_anomaly, detect_lower_bound_anomaly
 
 
@@ -107,10 +108,10 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 
     if all(difference > 0 for difference in differences_list):
         # using a 0-based calculation (scale from 0)
-        scaled_multiples_array = [(readout / differences_median_float - 1.0 if readout >= differences_median_float else
-                                   (-1.0 / (readout / differences_median_float)) + 1.0) for readout in differences_list]
-
-        threshold_upper_multiple = detect_upper_bound_anomaly(values=scaled_multiples_array, median=0.0,
+        anomaly_data = convert_historic_data_differencing(rule_parameters.previous_readouts,
+                                             lambda readout: (readout / differences_median_float - 1.0 if readout >= differences_median_float else
+                                                              (-1.0 / (readout / differences_median_float)) + 1.0))
+        threshold_upper_multiple = detect_upper_bound_anomaly(historic_data=anomaly_data, median=0.0,
                                                               tail=tail, parameters=rule_parameters)
 
         passed = True
@@ -120,7 +121,7 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
         else:
             threshold_upper = None
 
-        threshold_lower_multiple = detect_lower_bound_anomaly(values=scaled_multiples_array, median=0.0,
+        threshold_lower_multiple = detect_lower_bound_anomaly(historic_data=anomaly_data, median=0.0,
                                                               tail=tail, parameters=rule_parameters)
 
         if threshold_lower_multiple is not None:
@@ -144,7 +145,9 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 
     else:
         # using unrestricted method for both positive and negative values
-        threshold_upper_result = detect_upper_bound_anomaly(values=differences_list, median=differences_median_float,
+        anomaly_data = convert_historic_data_differencing(rule_parameters.previous_readouts,
+                                                          lambda readout: readout)
+        threshold_upper_result = detect_upper_bound_anomaly(historic_data=anomaly_data, median=differences_median_float,
                                                             tail=tail, parameters=rule_parameters)
 
         passed = True
@@ -154,7 +157,7 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
         else:
             threshold_upper = None
 
-        threshold_lower_result = detect_lower_bound_anomaly(values=differences_list, median=differences_median_float,
+        threshold_lower_result = detect_lower_bound_anomaly(historic_data=anomaly_data, median=differences_median_float,
                                                             tail=tail, parameters=rule_parameters)
         if threshold_lower_result is not None:
             threshold_lower = threshold_lower_result
