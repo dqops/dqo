@@ -317,7 +317,8 @@ const CheckListItem = ({
   useEffect(() => {
     if (
       job?.status === DqoJobHistoryEntryModelStatusEnum.finished ||
-      job?.status === DqoJobHistoryEntryModelStatusEnum.failed
+      job?.status === DqoJobHistoryEntryModelStatusEnum.failed ||
+      job?.status === DqoJobHistoryEntryModelStatusEnum.cancelled
     ) {
       getCheckOverview();
     }
