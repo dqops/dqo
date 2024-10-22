@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import Select from '../../Select';
+import SelectTailwind from '../../Select/SelectTailwind';
 import CheckRuleItem from '../CheckRuleItem';
 import ConfirmDialogRuleConfiguration from './ConfirmDialogRuleConfiguration';
 
@@ -250,12 +250,12 @@ export default function RuleConfiguration({
       {!ruleParamenterConfigured && (
         <td className="text-center whitespace-nowrap text-gray-700 py-1.5 px-4 !w-40">
           <div className="flex items-center justify-center !w-40">
-            <Select
+            <SelectTailwind
               value={configurationType}
               onChange={onChangeConfigurationType}
               options={options}
               className="w-40 mr-2 my-1 text-sm "
-              menuClassName="!top-9"
+              menuClassName="mt-[-5px]"
               disabled={isDisabled}
             />
           </div>
