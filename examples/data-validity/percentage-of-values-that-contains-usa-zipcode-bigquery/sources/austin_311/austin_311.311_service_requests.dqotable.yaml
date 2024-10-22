@@ -62,12 +62,8 @@ spec:
         daily:
           pii:
             daily_contains_usa_zipcode_percent:
-              warning:
-                max_percent: 10.0
               error:
                 max_percent: 25.0
-              fatal:
-                max_percent: 35.0
     county:
       type_snapshot:
         column_type: STRING
