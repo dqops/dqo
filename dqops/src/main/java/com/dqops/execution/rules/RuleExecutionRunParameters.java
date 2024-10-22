@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Map;
 
 /**
@@ -35,10 +36,12 @@ public class RuleExecutionRunParameters {
     private Double actualValue;
     private Double expectedValue;
     private AbstractRuleParametersSpec parameters;
-    private LocalDateTime timePeriodLocal;
+    private long timePeriodLocalEpoch;
+    private String dataGroup;
     private HistoricDataPoint[] previousReadouts;
     private RuleTimeWindowSettingsSpec timeWindow;
     private Map<String, String> configurationParameters;
+    private String modelPath;
 
     /**
      * Default empty constructor.
@@ -52,24 +55,30 @@ public class RuleExecutionRunParameters {
      * @param expectedValue Optional expected value returned by the sensor.
      * @param parameters Rule parameters.
      * @param timePeriodLocal Time period of the readouts as a local date time.
+     * @param dataGroup Data group name.
      * @param previousReadouts Array of previous sensor readouts (may have a null value).
      * @param timeWindow Rule threshold time window configuration.
      * @param configurationParameters Optional configuration parameters that are configured in the rule configuration.
+     * @param modelPath A path to a folder where the rule can store its model.
      */
     public RuleExecutionRunParameters(Double actualValue,
                                       Double expectedValue,
 									  AbstractRuleParametersSpec parameters,
 									  LocalDateTime timePeriodLocal,
+                                      String dataGroup,
 									  HistoricDataPoint[] previousReadouts,
 									  RuleTimeWindowSettingsSpec timeWindow,
-                                      Map<String, String> configurationParameters) {
+                                      Map<String, String> configurationParameters,
+                                      String modelPath) {
         this.actualValue = actualValue;
         this.expectedValue = expectedValue;
         this.parameters = parameters;
-        this.timePeriodLocal = timePeriodLocal;
+        this.timePeriodLocalEpoch = timePeriodLocal != null ? timePeriodLocal.toEpochSecond(ZoneOffset.UTC) : 0L;
+        this.dataGroup = dataGroup;
         this.previousReadouts = previousReadouts;
         this.timeWindow = timeWindow;
         this.configurationParameters = configurationParameters;
+        this.modelPath = modelPath;
     }
 
     /**
@@ -124,16 +133,32 @@ public class RuleExecutionRunParameters {
      * Returns the time period of the readout.
      * @return Timestamp (in the local time zone) of the readout.
      */
-    public LocalDateTime getTimePeriodLocal() {
-        return timePeriodLocal;
+    public long getTimePeriodLocalEpoch() {
+        return timePeriodLocalEpoch;
     }
 
     /**
      * Sets the local date time of the readout (without the time zone).
-     * @param timePeriodLocal Local date time of the readout.
+     * @param timePeriodLocalEpoch Local date time of the readout.
      */
-    public void setTimePeriodLocal(LocalDateTime timePeriodLocal) {
-        this.timePeriodLocal = timePeriodLocal;
+    public void setTimePeriodLocalEpoch(long timePeriodLocalEpoch) {
+        this.timePeriodLocalEpoch = timePeriodLocalEpoch;
+    }
+
+    /**
+     * Return the data group name.
+     * @return Data group name.
+     */
+    public String getDataGroup() {
+        return dataGroup;
+    }
+
+    /**
+     * Sets the data group name.
+     * @param dataGroup Data group name.
+     */
+    public void setDataGroup(String dataGroup) {
+        this.dataGroup = dataGroup;
     }
 
     /**
@@ -182,5 +207,21 @@ public class RuleExecutionRunParameters {
      */
     public void setConfigurationParameters(Map<String, String> configurationParameters) {
         this.configurationParameters = configurationParameters;
+    }
+
+    /**
+     * Returns a path to a folder to store the ML model.
+     * @return Path to a folder where the model is stored.
+     */
+    public String getModelPath() {
+        return modelPath;
+    }
+
+    /**
+     * Sets a folder where the model is stored.
+     * @param modelPath Path to the model's folder.
+     */
+    public void setModelPath(String modelPath) {
+        this.modelPath = modelPath;
     }
 }

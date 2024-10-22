@@ -131,6 +131,8 @@ from .check_target_model import CheckTargetModel
 from .check_template import CheckTemplate
 from .check_time_scale import CheckTimeScale
 from .check_type import CheckType
+from .click_house_parameters_spec import ClickHouseParametersSpec
+from .click_house_parameters_spec_properties import ClickHouseParametersSpecProperties
 from .cloud_synchronization_folders_status_model import (
     CloudSynchronizationFoldersStatusModel,
 )
@@ -1610,6 +1612,7 @@ from .parameter_definition_spec import ParameterDefinitionSpec
 from .parquet_file_format_spec import ParquetFileFormatSpec
 from .partition_incremental_time_window_spec import PartitionIncrementalTimeWindowSpec
 from .physical_table_name import PhysicalTableName
+from .postgresql_engine_type import PostgresqlEngineType
 from .postgresql_parameters_spec import PostgresqlParametersSpec
 from .postgresql_parameters_spec_properties import PostgresqlParametersSpecProperties
 from .postgresql_ssl_mode import PostgresqlSslMode
@@ -1645,6 +1648,7 @@ from .run_checks_on_table_parameters import RunChecksOnTableParameters
 from .run_checks_parameters import RunChecksParameters
 from .run_checks_queue_job_result import RunChecksQueueJobResult
 from .run_checks_result import RunChecksResult
+from .run_checks_target import RunChecksTarget
 from .schedule_enabled_status_model import ScheduleEnabledStatusModel
 from .schema_model import SchemaModel
 from .schema_remote_model import SchemaRemoteModel
@@ -2183,6 +2187,8 @@ __all__ = (
     "CheckTemplate",
     "CheckTimeScale",
     "CheckType",
+    "ClickHouseParametersSpec",
+    "ClickHouseParametersSpecProperties",
     "CloudSynchronizationFoldersStatusModel",
     "CollectErrorSamplesOnTableParameters",
     "CollectErrorSamplesParameters",
@@ -2844,6 +2850,7 @@ __all__ = (
     "ParquetFileFormatSpec",
     "PartitionIncrementalTimeWindowSpec",
     "PhysicalTableName",
+    "PostgresqlEngineType",
     "PostgresqlParametersSpec",
     "PostgresqlParametersSpecProperties",
     "PostgresqlSslMode",
@@ -2877,6 +2884,7 @@ __all__ = (
     "RunChecksParameters",
     "RunChecksQueueJobResult",
     "RunChecksResult",
+    "RunChecksTarget",
     "ScheduleEnabledStatusModel",
     "SchemaModel",
     "SchemaRemoteModel",

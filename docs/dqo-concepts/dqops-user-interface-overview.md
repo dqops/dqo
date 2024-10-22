@@ -426,8 +426,8 @@ technical check name, and in brackets, the data quality dimension category to wh
 
 The buttons and icons located on the left side of each check name allow you to perform various actions:
 
-- **Activate/Deactivate checks:** A Toggle button (light green for activated default checks and darker green for manually
-    activated checks) enables activating or deactivating checks. You can learn more about [monitoring data quality with default check here](../working-with-dqo/daily-monitoring-of-data-quality.md). 
+- **Activate/Deactivate checks:** A Toggle button (light green for checks activated with data quality policies and darker green for checks activatad manually
+    or with rule miner) enables activating or deactivating checks. You can learn more about [configuring check policies](../dqo-concepts/data-observability.md#configuring-check-policies-in-ui). 
 - **Disable checks:** Use the Disable button to disable checks.
 - **Check Settings:** Access check settings to configure custom data groupings, modify inclusion/exclusion in KPI and SLA, 
     rename data quality dimension, add SQL WHERE conditions, modify scheduling settings, or add labels.

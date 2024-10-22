@@ -16,6 +16,8 @@
 package com.dqops.utils.tables;
 
 import tech.tablesaw.api.Row;
+import tech.tablesaw.api.Table;
+import tech.tablesaw.columns.Column;
 
 /**
  * Helper class used to operate on rows (eg. retrieve sanitized values).
@@ -45,5 +47,18 @@ public class TableRowUtility {
             return null;
         }
         return row.getDouble(columnName);
+    }
+
+    /**
+     * Appends a row to a table without constructing a {@link Row} object.
+     * @param table Table to append a record.
+     * @return Index of the new record.
+     */
+    public static int appendRow(Table table) {
+        for (final Column<?> column : table.columns()) {
+            column.appendMissing();
+        }
+
+        return table.rowCount() - 1;
     }
 }

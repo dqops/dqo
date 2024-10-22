@@ -66,6 +66,7 @@ import com.dqops.execution.checks.scheduled.ScheduledTargetChecksFindServiceImpl
 import com.dqops.execution.errorsampling.TableErrorSamplerExecutionServiceImpl;
 import com.dqops.execution.rules.DataQualityRuleRunnerObjectMother;
 import com.dqops.execution.rules.finder.RuleDefinitionFindServiceObjectMother;
+import com.dqops.execution.rules.training.RuleModelTrainingQueueImpl;
 import com.dqops.execution.sensors.DataQualitySensorRunnerImpl;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionRunParametersFactory;
@@ -147,7 +148,7 @@ public class CheckExecutionServiceImplTests extends BaseTest {
         RuleEvaluationService ruleEvaluationService = new RuleEvaluationServiceImpl(
                 DataQualityRuleRunnerObjectMother.getDefault(),
                 RuleDefinitionFindServiceObjectMother.getRuleDefinitionFindService(),
-                defaultTimeZoneProvider);
+                defaultTimeZoneProvider, new RuleModelTrainingQueueImpl());
 
         CommonTableNormalizationService commonTableNormalizationService = new CommonTableNormalizationServiceImpl();
         ErrorsNormalizationService errorsNormalizationService = new ErrorsNormalizationServiceImpl(

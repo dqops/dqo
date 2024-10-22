@@ -140,6 +140,24 @@ spec:
             FROM custom_data_quality_results as logs
             WHERE logs.analyzed_schema_name = '<target_schema>' AND logs.analyzed_table_name = '<target_table>'
             ```
+    ??? example "ClickHouse"
+
+        === "Sensor template for ClickHouse"
+
+            ```sql+jinja
+            {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+            {{ parameters.sql_query | replace('{table_name}', target_table.table_name) | replace('{schema_name}', target_table.schema_name) }}
+            ```
+        === "Rendered SQL for ClickHouse"
+
+            ```sql
+            SELECT
+              logs.my_actual_value as actual_value,
+              logs.my_expected_value as expected_value,
+              logs.error_severity as severity
+            FROM custom_data_quality_results as logs
+            WHERE logs.analyzed_schema_name = '<target_schema>' AND logs.analyzed_table_name = '<target_table>'
+            ```
     ??? example "Databricks"
 
         === "Sensor template for Databricks"
@@ -523,6 +541,24 @@ spec:
             FROM custom_data_quality_results as logs
             WHERE logs.analyzed_schema_name = '<target_schema>' AND logs.analyzed_table_name = '<target_table>'
             ```
+    ??? example "ClickHouse"
+
+        === "Sensor template for ClickHouse"
+
+            ```sql+jinja
+            {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+            {{ parameters.sql_query | replace('{table_name}', target_table.table_name) | replace('{schema_name}', target_table.schema_name) }}
+            ```
+        === "Rendered SQL for ClickHouse"
+
+            ```sql
+            SELECT
+              logs.my_actual_value as actual_value,
+              logs.my_expected_value as expected_value,
+              logs.error_severity as severity
+            FROM custom_data_quality_results as logs
+            WHERE logs.analyzed_schema_name = '<target_schema>' AND logs.analyzed_table_name = '<target_table>'
+            ```
     ??? example "Databricks"
 
         === "Sensor template for Databricks"
@@ -897,6 +933,24 @@ spec:
             {{ parameters.sql_query | replace('{table_name}', target_table.table_name) | replace('{schema_name}', target_table.schema_name) }}
             ```
         === "Rendered SQL for BigQuery"
+
+            ```sql
+            SELECT
+              logs.my_actual_value as actual_value,
+              logs.my_expected_value as expected_value,
+              logs.error_severity as severity
+            FROM custom_data_quality_results as logs
+            WHERE logs.analyzed_schema_name = '<target_schema>' AND logs.analyzed_table_name = '<target_table>'
+            ```
+    ??? example "ClickHouse"
+
+        === "Sensor template for ClickHouse"
+
+            ```sql+jinja
+            {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+            {{ parameters.sql_query | replace('{table_name}', target_table.table_name) | replace('{schema_name}', target_table.schema_name) }}
+            ```
+        === "Rendered SQL for ClickHouse"
 
             ```sql
             SELECT

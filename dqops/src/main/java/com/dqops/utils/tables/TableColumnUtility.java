@@ -114,6 +114,50 @@ public final class TableColumnUtility {
     }
 
     /**
+     * Creates (or casts) a given column to a {@link StringColumn}.
+     * @param sourceColumn Source column.
+     * @return TextColumn. It is a copy of the original column (with casting to a string) or the original column object instance if it is a TextColumn.
+     */
+    public static StringColumn convertToStringColumn(Column<?> sourceColumn) {
+        if (sourceColumn instanceof StringColumn) {
+            return (StringColumn) sourceColumn;
+        }
+
+        int size = sourceColumn.size();
+        StringColumn targetColumn = StringColumn.create(sourceColumn.name(), size);
+
+        if (sourceColumn instanceof TextColumn) {
+            TextColumn textColumn = (TextColumn) sourceColumn;
+            for (int i = 0; i < size; i++) {
+                if (!textColumn.isMissing(i)) {
+                    targetColumn.set(i, textColumn.get(i));
+                }
+            }
+        }
+        else {
+            UniqueStringSet uniqueStringSet = new UniqueStringSet();
+
+            if (sourceColumn instanceof NumberColumn<?,?>) {
+                NumberColumn<?,?> numberColumn = (NumberColumn<?,?>) sourceColumn;
+                for (int i = 0; i < size; i++) {
+                    if (!numberColumn.isMissing(i)) {
+                        double doubleValue = numberColumn.getDouble(i);
+                        targetColumn.set(i, uniqueStringSet.deduplicate(Double.toString(doubleValue)));
+                    }
+                }
+            } else {
+                for (int i = 0; i < size; i++) {
+                    if (!sourceColumn.isMissing(i)) {
+                        targetColumn.set(i, uniqueStringSet.deduplicate(sourceColumn.get(i).toString()));
+                    }
+                }
+            }
+        }
+
+        return targetColumn;
+    }
+
+    /**
      * Creates (or casts) a given column to a {@link DoubleColumn}.
      * @param sourceColumn Source column.
      * @return DoubleColumn. It is a copy of the original column (with casting to a double) or the original column object instance if it is a DoubleColumn.
@@ -234,16 +278,16 @@ public final class TableColumnUtility {
      * @param addColumWhenMissing Add a column if it is missing.
      * @return Existing column or just added column.
      */
-    public static TextColumn getOrAddTextColumn(Table table, String columnName, boolean addColumWhenMissing) {
+    public static StringColumn getOrAddStringColumn(Table table, String columnName, boolean addColumWhenMissing) {
         if (table.containsColumn(columnName)) {
-            return (TextColumn) table.column(columnName);
+            return (StringColumn) table.column(columnName);
         }
 
         if (!addColumWhenMissing) {
             return null;
         }
 
-        TextColumn newColumn = TextColumn.create(columnName);
+        StringColumn newColumn = StringColumn.create(columnName);
         table.addColumns(newColumn);
         return newColumn;
     }
@@ -418,10 +462,10 @@ public final class TableColumnUtility {
 
     /**
      * Indexes text values from a text column in a hashmap that converts string values found in the column to their respective row indexes in the column.
-     * @param textColumn Source text column.
+     * @param textColumn Source string column.
      * @return Hashmap of row indexes, keyed by the values from the column.
      */
-    public static Object2IntMap<String> mapStringValuesToRowIndexes(TextColumn textColumn) {
+    public static Object2IntMap<String> mapStringValuesToRowIndexes(StringColumn textColumn) {
         Object2IntOpenHashMap<String> resultHashMap = new Object2IntOpenHashMap<>();
         int size = textColumn.size();
 

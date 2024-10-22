@@ -151,10 +151,10 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
             ColumnSpecMap columnSpecMap = tableSpec.getColumns();
 
             Table resultTable = Table.create().addColumns(
-                    TextColumn.create("Source column name"),
-                    TextColumn.create("Source column type"),
-                    TextColumn.create("Imported column name"),
-                    TextColumn.create("Imported column type"));
+                    StringColumn.create("Source column name"),
+                    StringColumn.create("Source column type"),
+                    StringColumn.create("Imported column name"),
+                    StringColumn.create("Imported column type"));
 
             for (Map.Entry<String, ColumnSpec> entry : columnSpecMap.entrySet()) {
                 String columnName = entry.getKey();
@@ -243,8 +243,8 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
             Collection<TableWrapper> tableWrappers = hierarchyNodeTreeSearcher.findTables(userHome, tableSearchFilters);
 
             Table resultTable = Table.create().addColumns(
-                    TextColumn.create("Source table name"),
-                    TextColumn.create("Is imported"),
+                    StringColumn.create("Source table name"),
+                    StringColumn.create("Is imported"),
                     IntColumn.create("Imported columns count"),
                     IntColumn.create("Table hash"));
 
@@ -332,8 +332,8 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
             Collection<TableWrapper> tableWrappers = hierarchyNodeTreeSearcher.findTables(userHome, tableSearchFilters);
 
             Table resultTable = Table.create().addColumns(
-                    TextColumn.create("Source schema name"),
-                    TextColumn.create("Is imported"),
+                    StringColumn.create("Source schema name"),
+                    StringColumn.create("Is imported"),
                     IntColumn.create("Imported tables count"));
 
             for( SourceSchemaModel sourceSchemaModel : schemaModels) {

@@ -178,7 +178,8 @@ const TableHeader = ({
         CheckTypes.MONITORING,
         connection,
         schema,
-        table
+        table,
+        timeScale
       );
     }
 
@@ -243,7 +244,8 @@ const TableHeader = ({
         connection,
         schema,
         table,
-        column
+        column,
+        timeScale
       );
     } else {
       await TableApiClient.updateTablePartitionedChecksModel(
@@ -265,7 +267,8 @@ const TableHeader = ({
         CheckTypes.PARTITIONED,
         connection,
         schema,
-        table
+        table,
+        timeScale
       );
     }
 

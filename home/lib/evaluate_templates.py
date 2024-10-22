@@ -89,7 +89,7 @@ class TemplateRunner:
                 "rendering_millis": rendering_millis
             }
         except Exception as ex:
-            return {"template": template_id, "parameters": template_parameters, "error": traceback.format_exc()}
+            return {"template": template_id, "parameters": template_parameters, "error": str(traceback.format_exception(ex))}
 
 
 def main():
@@ -104,8 +104,8 @@ def main():
             sys.stdout.write("\n")
             sys.stdout.flush()
     except Exception as ex:
-        print('Error rendering a sensor, exiting: ' + traceback.format_exc(), file=sys.stderr)
-        sys.stdout.write(json.dumps({"error": traceback.format_exc()}))
+        # print('Error rendering a sensor, exiting: ' + str(traceback.format_exc()), file=sys.stderr)
+        sys.stdout.write(json.dumps({"error": str(traceback.format_exception(ex))}))
         sys.stdout.write("\n")
         sys.stdout.flush()
 

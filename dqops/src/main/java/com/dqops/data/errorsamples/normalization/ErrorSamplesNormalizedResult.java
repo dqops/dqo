@@ -15,9 +15,7 @@
  */
 package com.dqops.data.errorsamples.normalization;
 
-import com.dqops.data.checkresults.factory.CheckResultsColumnNames;
 import com.dqops.data.errorsamples.factory.ErrorSamplesColumnNames;
-import com.dqops.data.readouts.factory.SensorReadoutsColumnNames;
 import com.dqops.data.statistics.factory.StatisticsDataScope;
 import com.dqops.metadata.timeseries.TimePeriodGradient;
 import com.dqops.utils.tables.TableColumnUtility;
@@ -28,43 +26,43 @@ import tech.tablesaw.api.*;
  */
 public class ErrorSamplesNormalizedResult {
     private final Table table;
-    private final TextColumn idColumn;
+    private final StringColumn idColumn;
     private final DateTimeColumn collectedAtColumn;
-    private final TextColumn scopeColumn;
-    private final TextColumn dataGroupingLevel1Column;
-    private final TextColumn dataGroupingLevel2Column;
-    private final TextColumn dataGroupingLevel3Column;
-    private final TextColumn dataGroupingLevel4Column;
-    private final TextColumn dataGroupingLevel5Column;
-    private final TextColumn dataGroupingLevel6Column;
-    private final TextColumn dataGroupingLevel7Column;
-    private final TextColumn dataGroupingLevel8Column;
-    private final TextColumn dataGroupingLevel9Column;
+    private final StringColumn scopeColumn;
+    private final StringColumn dataGroupingLevel1Column;
+    private final StringColumn dataGroupingLevel2Column;
+    private final StringColumn dataGroupingLevel3Column;
+    private final StringColumn dataGroupingLevel4Column;
+    private final StringColumn dataGroupingLevel5Column;
+    private final StringColumn dataGroupingLevel6Column;
+    private final StringColumn dataGroupingLevel7Column;
+    private final StringColumn dataGroupingLevel8Column;
+    private final StringColumn dataGroupingLevel9Column;
     private final LongColumn dataGroupHashColumn;
-    private final TextColumn dataGroupNameColumn;
-    private final TextColumn dataGroupingConfigurationColumn;
+    private final StringColumn dataGroupNameColumn;
+    private final StringColumn dataGroupingConfigurationColumn;
     private final LongColumn connectionHashColumn;
-    private final TextColumn connectionNameColumn;
-    private final TextColumn providerColumn;
+    private final StringColumn connectionNameColumn;
+    private final StringColumn providerColumn;
     private final LongColumn tableHashColumn;
-    private final TextColumn schemaNameColumn;
-    private final TextColumn tableNameColumn;
-    private final TextColumn tableStageColumn;
+    private final StringColumn schemaNameColumn;
+    private final StringColumn tableNameColumn;
+    private final StringColumn tableStageColumn;
     private final IntColumn tablePriorityColumn;
     private final LongColumn columnHashColumn;
-    private final TextColumn columnNameColumn;
+    private final StringColumn columnNameColumn;
     private final LongColumn checkHashColumn;
-    private final TextColumn checkNameColumn;
-    private final TextColumn checkDisplayNameColumn;
-    private final TextColumn checkTypeColumn;
-    private final TextColumn timeGradientColumn;
-    private final TextColumn checkCategoryColumn;
-    private final TextColumn tableComparisonNameColumn;
-    private final TextColumn qualityDimensionColumn;
-    private final TextColumn sensorNameColumn;
-    private final TextColumn timeSeriesIdColumn;
-    private final TextColumn resultTypeColumn;
-    private final TextColumn resultStringColumn;
+    private final StringColumn checkNameColumn;
+    private final StringColumn checkDisplayNameColumn;
+    private final StringColumn checkTypeColumn;
+    private final StringColumn timeGradientColumn;
+    private final StringColumn checkCategoryColumn;
+    private final StringColumn tableComparisonNameColumn;
+    private final StringColumn qualityDimensionColumn;
+    private final StringColumn sensorNameColumn;
+    private final StringColumn timeSeriesIdColumn;
+    private final StringColumn resultTypeColumn;
+    private final StringColumn resultStringColumn;
     private final LongColumn resultIntegerColumn;
     private final DoubleColumn resultFloatColumn;
     private final BooleanColumn resultBooleanColumn;
@@ -73,18 +71,18 @@ public class ErrorSamplesNormalizedResult {
     private final InstantColumn resultInstantColumn;
     private final TimeColumn resultTimeColumn;
     private final IntColumn sampleIndex;
-    private final TextColumn sampleFilterColumn;
-    private final TextColumn sampleRowId1Column;
-    private final TextColumn sampleRowId2Column;
-    private final TextColumn sampleRowId3Column;
-    private final TextColumn sampleRowId4Column;
-    private final TextColumn sampleRowId5Column;
+    private final StringColumn sampleFilterColumn;
+    private final StringColumn sampleRowId1Column;
+    private final StringColumn sampleRowId2Column;
+    private final StringColumn sampleRowId3Column;
+    private final StringColumn sampleRowId4Column;
+    private final StringColumn sampleRowId5Column;
     private final InstantColumn executedAtColumn;
     private final IntColumn durationMsColumn;
     private final InstantColumn createdAtColumn;
     private final InstantColumn updatedAtColumn;
-    private final TextColumn createdByColumn;
-    private final TextColumn updatedByColumn;
+    private final StringColumn createdByColumn;
+    private final StringColumn updatedByColumn;
 
     /**
      * Creates an error samples result dataset, extracting key columns.
@@ -102,10 +100,10 @@ public class ErrorSamplesNormalizedResult {
      */
     public ErrorSamplesNormalizedResult(Table table, boolean addColumWhenMissing) {
         this.table = table;
-        this.idColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.ID_COLUMN_NAME, addColumWhenMissing);
+        this.idColumn = TableColumnUtility.getOrAddStringColumn(table, ErrorSamplesColumnNames.ID_COLUMN_NAME, addColumWhenMissing);
         this.collectedAtColumn = TableColumnUtility.getOrAddDateTimeColumn(table, ErrorSamplesColumnNames.COLLECTED_AT_COLUMN_NAME, addColumWhenMissing);
-        this.resultTypeColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.RESULT_TYPE_COLUMN_NAME, addColumWhenMissing);
-        this.resultStringColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.RESULT_STRING_COLUMN_NAME, addColumWhenMissing);
+        this.resultTypeColumn = TableColumnUtility.getOrAddStringColumn(table, ErrorSamplesColumnNames.RESULT_TYPE_COLUMN_NAME, addColumWhenMissing);
+        this.resultStringColumn = TableColumnUtility.getOrAddStringColumn(table, ErrorSamplesColumnNames.RESULT_STRING_COLUMN_NAME, addColumWhenMissing);
         this.resultIntegerColumn = TableColumnUtility.getOrAddLongColumn(table, ErrorSamplesColumnNames.RESULT_INTEGER_COLUMN_NAME, addColumWhenMissing);
         this.resultFloatColumn = TableColumnUtility.getOrAddDoubleColumn(table, ErrorSamplesColumnNames.RESULT_FLOAT_COLUMN_NAME, addColumWhenMissing);
         this.resultBooleanColumn = TableColumnUtility.getOrAddBooleanColumn(table, ErrorSamplesColumnNames.RESULT_BOOLEAN_COLUMN_NAME, addColumWhenMissing);
@@ -114,51 +112,51 @@ public class ErrorSamplesNormalizedResult {
         this.resultInstantColumn = TableColumnUtility.getOrAddInstantColumn(table, ErrorSamplesColumnNames.RESULT_INSTANT_COLUMN_NAME, addColumWhenMissing);
         this.resultTimeColumn = TableColumnUtility.getOrAddTimeColumn(table, ErrorSamplesColumnNames.RESULT_TIME_COLUMN_NAME, addColumWhenMissing);
         this.sampleIndex = TableColumnUtility.getOrAddIntColumn(table, ErrorSamplesColumnNames.SAMPLE_INDEX_COLUMN_NAME, addColumWhenMissing);
-        this.scopeColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.SCOPE_COLUMN_NAME, addColumWhenMissing);
-        this.dataGroupingLevel1Column = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "1", addColumWhenMissing);
-        this.dataGroupingLevel2Column = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "2", addColumWhenMissing);
-        this.dataGroupingLevel3Column = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "3", addColumWhenMissing);
-        this.dataGroupingLevel4Column = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "4", addColumWhenMissing);
-        this.dataGroupingLevel5Column = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "5", addColumWhenMissing);
-        this.dataGroupingLevel6Column = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "6", addColumWhenMissing);
-        this.dataGroupingLevel7Column = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "7", addColumWhenMissing);
-        this.dataGroupingLevel8Column = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "8", addColumWhenMissing);
-        this.dataGroupingLevel9Column = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "9", addColumWhenMissing);
+        this.scopeColumn = TableColumnUtility.getOrAddStringColumn(table, ErrorSamplesColumnNames.SCOPE_COLUMN_NAME, addColumWhenMissing);
+        this.dataGroupingLevel1Column = TableColumnUtility.getOrAddStringColumn(table, ErrorSamplesColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "1", addColumWhenMissing);
+        this.dataGroupingLevel2Column = TableColumnUtility.getOrAddStringColumn(table, ErrorSamplesColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "2", addColumWhenMissing);
+        this.dataGroupingLevel3Column = TableColumnUtility.getOrAddStringColumn(table, ErrorSamplesColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "3", addColumWhenMissing);
+        this.dataGroupingLevel4Column = TableColumnUtility.getOrAddStringColumn(table, ErrorSamplesColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "4", addColumWhenMissing);
+        this.dataGroupingLevel5Column = TableColumnUtility.getOrAddStringColumn(table, ErrorSamplesColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "5", addColumWhenMissing);
+        this.dataGroupingLevel6Column = TableColumnUtility.getOrAddStringColumn(table, ErrorSamplesColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "6", addColumWhenMissing);
+        this.dataGroupingLevel7Column = TableColumnUtility.getOrAddStringColumn(table, ErrorSamplesColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "7", addColumWhenMissing);
+        this.dataGroupingLevel8Column = TableColumnUtility.getOrAddStringColumn(table, ErrorSamplesColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "8", addColumWhenMissing);
+        this.dataGroupingLevel9Column = TableColumnUtility.getOrAddStringColumn(table, ErrorSamplesColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "9", addColumWhenMissing);
         this.dataGroupHashColumn = TableColumnUtility.getOrAddLongColumn(table, ErrorSamplesColumnNames.DATA_GROUP_HASH_COLUMN_NAME, addColumWhenMissing);
-        this.dataGroupNameColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.DATA_GROUP_NAME_COLUMN_NAME, addColumWhenMissing);
-        this.dataGroupingConfigurationColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.DATA_GROUPING_CONFIGURATION_COLUMN_NAME, addColumWhenMissing);
+        this.dataGroupNameColumn = TableColumnUtility.getOrAddStringColumn(table, ErrorSamplesColumnNames.DATA_GROUP_NAME_COLUMN_NAME, addColumWhenMissing);
+        this.dataGroupingConfigurationColumn = TableColumnUtility.getOrAddStringColumn(table, ErrorSamplesColumnNames.DATA_GROUPING_CONFIGURATION_COLUMN_NAME, addColumWhenMissing);
         this.connectionHashColumn = TableColumnUtility.getOrAddLongColumn(table, ErrorSamplesColumnNames.CONNECTION_HASH_COLUMN_NAME, addColumWhenMissing);
-        this.connectionNameColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.CONNECTION_NAME_COLUMN_NAME, addColumWhenMissing);
-        this.providerColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.PROVIDER_COLUMN_NAME, addColumWhenMissing);
+        this.connectionNameColumn = TableColumnUtility.getOrAddStringColumn(table, ErrorSamplesColumnNames.CONNECTION_NAME_COLUMN_NAME, addColumWhenMissing);
+        this.providerColumn = TableColumnUtility.getOrAddStringColumn(table, ErrorSamplesColumnNames.PROVIDER_COLUMN_NAME, addColumWhenMissing);
         this.tableHashColumn = TableColumnUtility.getOrAddLongColumn(table, ErrorSamplesColumnNames.TABLE_HASH_COLUMN_NAME, addColumWhenMissing);
-        this.schemaNameColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.SCHEMA_NAME_COLUMN_NAME, addColumWhenMissing);
-        this.tableNameColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.TABLE_NAME_COLUMN_NAME, addColumWhenMissing);
-        this.tableStageColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.TABLE_STAGE_COLUMN_NAME, addColumWhenMissing);
+        this.schemaNameColumn = TableColumnUtility.getOrAddStringColumn(table, ErrorSamplesColumnNames.SCHEMA_NAME_COLUMN_NAME, addColumWhenMissing);
+        this.tableNameColumn = TableColumnUtility.getOrAddStringColumn(table, ErrorSamplesColumnNames.TABLE_NAME_COLUMN_NAME, addColumWhenMissing);
+        this.tableStageColumn = TableColumnUtility.getOrAddStringColumn(table, ErrorSamplesColumnNames.TABLE_STAGE_COLUMN_NAME, addColumWhenMissing);
         this.tablePriorityColumn = TableColumnUtility.getOrAddIntColumn(table, ErrorSamplesColumnNames.TABLE_PRIORITY_COLUMN_NAME, addColumWhenMissing);
         this.columnHashColumn = TableColumnUtility.getOrAddLongColumn(table, ErrorSamplesColumnNames.COLUMN_HASH_COLUMN_NAME, addColumWhenMissing);
-        this.columnNameColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.COLUMN_NAME_COLUMN_NAME, addColumWhenMissing);
+        this.columnNameColumn = TableColumnUtility.getOrAddStringColumn(table, ErrorSamplesColumnNames.COLUMN_NAME_COLUMN_NAME, addColumWhenMissing);
         this.checkHashColumn = TableColumnUtility.getOrAddLongColumn(table, ErrorSamplesColumnNames.CHECK_HASH_COLUMN_NAME, addColumWhenMissing);
-        this.checkNameColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.CHECK_NAME_COLUMN_NAME, addColumWhenMissing);
-        this.checkDisplayNameColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.CHECK_DISPLAY_NAME_COLUMN_NAME, addColumWhenMissing);
-        this.checkTypeColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.CHECK_TYPE_COLUMN_NAME, addColumWhenMissing);
-        this.timeGradientColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.TIME_GRADIENT_COLUMN_NAME, addColumWhenMissing);
-        this.checkCategoryColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.CHECK_CATEGORY_COLUMN_NAME, addColumWhenMissing);
-        this.tableComparisonNameColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.TABLE_COMPARISON_NAME_COLUMN_NAME, addColumWhenMissing);
-        this.qualityDimensionColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.QUALITY_DIMENSION_COLUMN_NAME, addColumWhenMissing);
-        this.sensorNameColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.SENSOR_NAME_COLUMN_NAME, addColumWhenMissing);
-        this.sampleFilterColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.SAMPLE_FILTER_COLUMN_NAME, addColumWhenMissing);
-        this.timeSeriesIdColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.TIME_SERIES_ID_COLUMN_NAME, addColumWhenMissing);
-        this.sampleRowId1Column = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.ROW_ID_COLUMN_NAME_PREFIX + "1", addColumWhenMissing);
-        this.sampleRowId2Column = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.ROW_ID_COLUMN_NAME_PREFIX + "2", addColumWhenMissing);
-        this.sampleRowId3Column = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.ROW_ID_COLUMN_NAME_PREFIX + "3", addColumWhenMissing);
-        this.sampleRowId4Column = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.ROW_ID_COLUMN_NAME_PREFIX + "4", addColumWhenMissing);
-        this.sampleRowId5Column = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.ROW_ID_COLUMN_NAME_PREFIX + "5", addColumWhenMissing);
+        this.checkNameColumn = TableColumnUtility.getOrAddStringColumn(table, ErrorSamplesColumnNames.CHECK_NAME_COLUMN_NAME, addColumWhenMissing);
+        this.checkDisplayNameColumn = TableColumnUtility.getOrAddStringColumn(table, ErrorSamplesColumnNames.CHECK_DISPLAY_NAME_COLUMN_NAME, addColumWhenMissing);
+        this.checkTypeColumn = TableColumnUtility.getOrAddStringColumn(table, ErrorSamplesColumnNames.CHECK_TYPE_COLUMN_NAME, addColumWhenMissing);
+        this.timeGradientColumn = TableColumnUtility.getOrAddStringColumn(table, ErrorSamplesColumnNames.TIME_GRADIENT_COLUMN_NAME, addColumWhenMissing);
+        this.checkCategoryColumn = TableColumnUtility.getOrAddStringColumn(table, ErrorSamplesColumnNames.CHECK_CATEGORY_COLUMN_NAME, addColumWhenMissing);
+        this.tableComparisonNameColumn = TableColumnUtility.getOrAddStringColumn(table, ErrorSamplesColumnNames.TABLE_COMPARISON_NAME_COLUMN_NAME, addColumWhenMissing);
+        this.qualityDimensionColumn = TableColumnUtility.getOrAddStringColumn(table, ErrorSamplesColumnNames.QUALITY_DIMENSION_COLUMN_NAME, addColumWhenMissing);
+        this.sensorNameColumn = TableColumnUtility.getOrAddStringColumn(table, ErrorSamplesColumnNames.SENSOR_NAME_COLUMN_NAME, addColumWhenMissing);
+        this.sampleFilterColumn = TableColumnUtility.getOrAddStringColumn(table, ErrorSamplesColumnNames.SAMPLE_FILTER_COLUMN_NAME, addColumWhenMissing);
+        this.timeSeriesIdColumn = TableColumnUtility.getOrAddStringColumn(table, ErrorSamplesColumnNames.TIME_SERIES_ID_COLUMN_NAME, addColumWhenMissing);
+        this.sampleRowId1Column = TableColumnUtility.getOrAddStringColumn(table, ErrorSamplesColumnNames.ROW_ID_COLUMN_NAME_PREFIX + "1", addColumWhenMissing);
+        this.sampleRowId2Column = TableColumnUtility.getOrAddStringColumn(table, ErrorSamplesColumnNames.ROW_ID_COLUMN_NAME_PREFIX + "2", addColumWhenMissing);
+        this.sampleRowId3Column = TableColumnUtility.getOrAddStringColumn(table, ErrorSamplesColumnNames.ROW_ID_COLUMN_NAME_PREFIX + "3", addColumWhenMissing);
+        this.sampleRowId4Column = TableColumnUtility.getOrAddStringColumn(table, ErrorSamplesColumnNames.ROW_ID_COLUMN_NAME_PREFIX + "4", addColumWhenMissing);
+        this.sampleRowId5Column = TableColumnUtility.getOrAddStringColumn(table, ErrorSamplesColumnNames.ROW_ID_COLUMN_NAME_PREFIX + "5", addColumWhenMissing);
         this.executedAtColumn = TableColumnUtility.getOrAddInstantColumn(table, ErrorSamplesColumnNames.EXECUTED_AT_COLUMN_NAME, addColumWhenMissing);
         this.durationMsColumn = TableColumnUtility.getOrAddIntColumn(table, ErrorSamplesColumnNames.DURATION_MS_COLUMN_NAME, addColumWhenMissing);
         this.createdAtColumn = TableColumnUtility.getOrAddInstantColumn(table, ErrorSamplesColumnNames.CREATED_AT_COLUMN_NAME, addColumWhenMissing);
         this.updatedAtColumn = TableColumnUtility.getOrAddInstantColumn(table, ErrorSamplesColumnNames.UPDATED_AT_COLUMN_NAME, addColumWhenMissing);
-        this.createdByColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.CREATED_BY_COLUMN_NAME, addColumWhenMissing);
-        this.updatedByColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.UPDATED_BY_COLUMN_NAME, addColumWhenMissing);
+        this.createdByColumn = TableColumnUtility.getOrAddStringColumn(table, ErrorSamplesColumnNames.CREATED_BY_COLUMN_NAME, addColumWhenMissing);
+        this.updatedByColumn = TableColumnUtility.getOrAddStringColumn(table, ErrorSamplesColumnNames.UPDATED_BY_COLUMN_NAME, addColumWhenMissing);
     }
 
 
@@ -174,7 +172,7 @@ public class ErrorSamplesNormalizedResult {
      * id column that is a primary for both the sensor_readouts and rule_results tables.
      * @return Check result id (primary key) column.
      */
-    public TextColumn getIdColumn() {
+    public StringColumn getIdColumn() {
         return idColumn;
     }
 
@@ -191,7 +189,7 @@ public class ErrorSamplesNormalizedResult {
      * Returns the column that identifies the result data type retrieved from the collector.
      * @return result data type.
      */
-    public TextColumn getResultTypeColumn() {
+    public StringColumn getResultTypeColumn() {
         return resultTypeColumn;
     }
 
@@ -199,7 +197,7 @@ public class ErrorSamplesNormalizedResult {
      * Returns the column that contains the collector results that are strings.
      * @return Column with the string results.
      */
-    public TextColumn getResultStringColumn() {
+    public StringColumn getResultStringColumn() {
         return resultStringColumn;
     }
 
@@ -271,7 +269,7 @@ public class ErrorSamplesNormalizedResult {
      * Returns the column that contains a statistics scope. Values are from the {@link StatisticsDataScope} ("table" or "data_streams").
      * @return Statistics scope column (contains "table" or "data_streams").
      */
-    public TextColumn getScopeColumn() {
+    public StringColumn getScopeColumn() {
         return scopeColumn;
     }
 
@@ -279,7 +277,7 @@ public class ErrorSamplesNormalizedResult {
      * Returns the column that contains the value of the data stream at the level 1.
      * @return Data stream value for the grouping_level_1.
      */
-    public TextColumn getDataGroupingLevel1Column() {
+    public StringColumn getDataGroupingLevel1Column() {
         return dataGroupingLevel1Column;
     }
 
@@ -287,7 +285,7 @@ public class ErrorSamplesNormalizedResult {
      * Returns the column that contains the value of the data stream at the level 2.
      * @return Data stream value for the grouping_level_2.
      */
-    public TextColumn getDataGroupingLevel2Column() {
+    public StringColumn getDataGroupingLevel2Column() {
         return dataGroupingLevel2Column;
     }
 
@@ -295,7 +293,7 @@ public class ErrorSamplesNormalizedResult {
      * Returns the column that contains the value of the data stream at the level 3.
      * @return Data stream value for the grouping_level_3.
      */
-    public TextColumn getDataGroupingLevel3Column() {
+    public StringColumn getDataGroupingLevel3Column() {
         return dataGroupingLevel3Column;
     }
 
@@ -303,7 +301,7 @@ public class ErrorSamplesNormalizedResult {
      * Returns the column that contains the value of the data stream at the level 4.
      * @return Data stream value for the grouping_level_4.
      */
-    public TextColumn getDataGroupingLevel4Column() {
+    public StringColumn getDataGroupingLevel4Column() {
         return dataGroupingLevel4Column;
     }
 
@@ -311,7 +309,7 @@ public class ErrorSamplesNormalizedResult {
      * Returns the column that contains the value of the data stream at the level 5.
      * @return Data stream value for the grouping_level_5.
      */
-    public TextColumn getDataGroupingLevel5Column() {
+    public StringColumn getDataGroupingLevel5Column() {
         return dataGroupingLevel5Column;
     }
 
@@ -319,7 +317,7 @@ public class ErrorSamplesNormalizedResult {
      * Returns the column that contains the value of the data stream at the level 6.
      * @return Data stream value for the grouping_level_6.
      */
-    public TextColumn getDataGroupingLevel6Column() {
+    public StringColumn getDataGroupingLevel6Column() {
         return dataGroupingLevel6Column;
     }
 
@@ -327,7 +325,7 @@ public class ErrorSamplesNormalizedResult {
      * Returns the column that contains the value of the data stream at the level 7.
      * @return Data stream value for the grouping_level_7.
      */
-    public TextColumn getDataGroupingLevel7Column() {
+    public StringColumn getDataGroupingLevel7Column() {
         return dataGroupingLevel7Column;
     }
 
@@ -335,7 +333,7 @@ public class ErrorSamplesNormalizedResult {
      * Returns the column that contains the value of the data stream at the level 8.
      * @return Data stream value for the grouping_level_8.
      */
-    public TextColumn getDataGroupingLevel8Column() {
+    public StringColumn getDataGroupingLevel8Column() {
         return dataGroupingLevel8Column;
     }
 
@@ -343,7 +341,7 @@ public class ErrorSamplesNormalizedResult {
      * Returns the column that contains the value of the data stream at the level 9.
      * @return Data stream value for the grouping_level_9.
      */
-    public TextColumn getDataGroupingLevel9Column() {
+    public StringColumn getDataGroupingLevel9Column() {
         return dataGroupingLevel9Column;
     }
 
@@ -359,7 +357,7 @@ public class ErrorSamplesNormalizedResult {
      * Data stream name column. The data stream name is concatenated from data stream levels and is a user friendly value.
      * @return Data stream name column.
      */
-    public TextColumn getDataGroupNameColumn() {
+    public StringColumn getDataGroupNameColumn() {
         return dataGroupNameColumn;
     }
 
@@ -367,7 +365,7 @@ public class ErrorSamplesNormalizedResult {
      * Returns the data stream mapping name column. It contains the name of the selected data stream mapping that was used.
      * @return Data stream mapping name column.
      */
-    public TextColumn getDataGroupingConfigurationColumn() {
+    public StringColumn getDataGroupingConfigurationColumn() {
         return dataGroupingConfigurationColumn;
     }
 
@@ -383,7 +381,7 @@ public class ErrorSamplesNormalizedResult {
      * Returns a connection name column. The column contains the source connection name.
      * @return Connection name column.
      */
-    public TextColumn getConnectionNameColumn() {
+    public StringColumn getConnectionNameColumn() {
         return connectionNameColumn;
     }
 
@@ -391,7 +389,7 @@ public class ErrorSamplesNormalizedResult {
      * Returns a provider name column. The column contains the provider name.
      * @return Provider name column.
      */
-    public TextColumn getProviderColumn() {
+    public StringColumn getProviderColumn() {
         return providerColumn;
     }
 
@@ -407,7 +405,7 @@ public class ErrorSamplesNormalizedResult {
      * Returns a tablesaw column with the schema name of a table.
      * @return Schema name column.
      */
-    public TextColumn getSchemaNameColumn() {
+    public StringColumn getSchemaNameColumn() {
         return schemaNameColumn;
     }
 
@@ -415,7 +413,7 @@ public class ErrorSamplesNormalizedResult {
      * Returns a tablesaw column with the table name.
      * @return Column with the table name.
      */
-    public TextColumn getTableNameColumn() {
+    public StringColumn getTableNameColumn() {
         return tableNameColumn;
     }
 
@@ -423,7 +421,7 @@ public class ErrorSamplesNormalizedResult {
      * Returns a tablesaw column with the table's stage.
      * @return Table's stage column.
      */
-    public TextColumn getTableStageColumn() {
+    public StringColumn getTableStageColumn() {
         return tableStageColumn;
     }
 
@@ -447,7 +445,7 @@ public class ErrorSamplesNormalizedResult {
      * Returns a tablesaw column that stores the column name. The column with "column names" may contain nulls when checks are defined for the entire table level.
      * @return Column name tablesaw column.
      */
-    public TextColumn getColumnNameColumn() {
+    public StringColumn getColumnNameColumn() {
         return columnNameColumn;
     }
 
@@ -463,7 +461,7 @@ public class ErrorSamplesNormalizedResult {
      * Returns a tablesaw column with the check name.
      * @return Check name column.
      */
-    public TextColumn getCheckNameColumn() {
+    public StringColumn getCheckNameColumn() {
         return checkNameColumn;
     }
 
@@ -471,7 +469,7 @@ public class ErrorSamplesNormalizedResult {
      * Returns a tablesaw column with the check display name.
      * @return Check display name column.
      */
-    public TextColumn getCheckDisplayNameColumn() {
+    public StringColumn getCheckDisplayNameColumn() {
         return checkDisplayNameColumn;
     }
 
@@ -479,7 +477,7 @@ public class ErrorSamplesNormalizedResult {
      * Returns a column that stores the check type (profiling, monitoring, partitioned).
      * @return Check type column.
      */
-    public TextColumn getCheckTypeColumn() {
+    public StringColumn getCheckTypeColumn() {
         return checkTypeColumn;
     }
 
@@ -488,7 +486,7 @@ public class ErrorSamplesNormalizedResult {
      * a time gradient from {@link TimePeriodGradient} enumeration.
      * @return Time gradient name, e.q. "day", "week", "month".
      */
-    public TextColumn getTimeGradientColumn() {
+    public StringColumn getTimeGradientColumn() {
         return timeGradientColumn;
     }
 
@@ -496,7 +494,7 @@ public class ErrorSamplesNormalizedResult {
      * Returns the column that stores the check category (the node in YAML that is a parent of the group of checks).
      * @return Quality check category name column.
      */
-    public TextColumn getCheckCategoryColumn() {
+    public StringColumn getCheckCategoryColumn() {
         return checkCategoryColumn;
     }
 
@@ -504,7 +502,7 @@ public class ErrorSamplesNormalizedResult {
      * Returns the column that contains the table comparison name for data comparison checks.
      * @return Table comparison name column.
      */
-    public TextColumn getTableComparisonNameColumn() {
+    public StringColumn getTableComparisonNameColumn() {
         return tableComparisonNameColumn;
     }
 
@@ -512,7 +510,7 @@ public class ErrorSamplesNormalizedResult {
      * Returns a tablesaw column with the parent quality dimension of a check.
      * @return Quality dimension of a check.
      */
-    public TextColumn getQualityDimensionColumn() {
+    public StringColumn getQualityDimensionColumn() {
         return qualityDimensionColumn;
     }
 
@@ -520,7 +518,7 @@ public class ErrorSamplesNormalizedResult {
      * Returns a column with the sensor name.
      * @return Sensor name column.
      */
-    public TextColumn getSensorNameColumn() {
+    public StringColumn getSensorNameColumn() {
         return sensorNameColumn;
     }
 
@@ -528,7 +526,7 @@ public class ErrorSamplesNormalizedResult {
      * Returns a time series id column.
      * @return Column that stores a time series id.
      */
-    public TextColumn getTimeSeriesIdColumn() {
+    public StringColumn getTimeSeriesIdColumn() {
         return timeSeriesIdColumn;
     }
 
@@ -536,7 +534,7 @@ public class ErrorSamplesNormalizedResult {
      * Returns a tablesaw's column that stores the table filter that was used to capture the sample.
      * @return Table filter column.
      */
-    public TextColumn getSampleFilterColumn() {
+    public StringColumn getSampleFilterColumn() {
         return sampleFilterColumn;
     }
 
@@ -544,7 +542,7 @@ public class ErrorSamplesNormalizedResult {
      * Returns a tablesaw column that stores an ID retrieved from the analyzed table for the 1st ID column.
      * @return ID 1 column.
      */
-    public TextColumn getSampleRowId1Column() {
+    public StringColumn getSampleRowId1Column() {
         return sampleRowId1Column;
     }
 
@@ -552,7 +550,7 @@ public class ErrorSamplesNormalizedResult {
      * Returns a tablesaw column that stores an ID retrieved from the analyzed table for the 2nd ID column.
      * @return ID 2 column.
      */
-    public TextColumn getSampleRowId2Column() {
+    public StringColumn getSampleRowId2Column() {
         return sampleRowId2Column;
     }
 
@@ -560,7 +558,7 @@ public class ErrorSamplesNormalizedResult {
      * Returns a tablesaw column that stores an ID retrieved from the analyzed table for the 3rd ID column.
      * @return ID 3 column.
      */
-    public TextColumn getSampleRowId3Column() {
+    public StringColumn getSampleRowId3Column() {
         return sampleRowId3Column;
     }
 
@@ -568,7 +566,7 @@ public class ErrorSamplesNormalizedResult {
      * Returns a tablesaw column that stores an ID retrieved from the analyzed table for the 4th ID column.
      * @return ID 4 column.
      */
-    public TextColumn getSampleRowId4Column() {
+    public StringColumn getSampleRowId4Column() {
         return sampleRowId4Column;
     }
 
@@ -576,7 +574,7 @@ public class ErrorSamplesNormalizedResult {
      * Returns a tablesaw column that stores an ID retrieved from the analyzed table for the 5th ID column.
      * @return ID 5 column.
      */
-    public TextColumn getSampleRowId5Column() {
+    public StringColumn getSampleRowId5Column() {
         return sampleRowId5Column;
     }
 
@@ -616,7 +614,7 @@ public class ErrorSamplesNormalizedResult {
      * Returns the created by column.
      * @return Created by column.
      */
-    public TextColumn getCreatedByColumn() {
+    public StringColumn getCreatedByColumn() {
         return createdByColumn;
     }
 
@@ -624,7 +622,7 @@ public class ErrorSamplesNormalizedResult {
      * Returns the updated by column.
      * @return Updated by column.
      */
-    public TextColumn getUpdatedByColumn() {
+    public StringColumn getUpdatedByColumn() {
         return updatedByColumn;
     }
 }

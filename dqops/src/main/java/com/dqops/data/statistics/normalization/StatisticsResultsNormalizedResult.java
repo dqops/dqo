@@ -26,11 +26,11 @@ import tech.tablesaw.api.*;
  */
 public class StatisticsResultsNormalizedResult {
     private final Table table;
-    private final TextColumn idColumn;
-    private final TextColumn statusColumn;
+    private final StringColumn idColumn;
+    private final StringColumn statusColumn;
     private final DateTimeColumn collectedAtColumn;
-    private final TextColumn resultTypeColumn;
-    private final TextColumn resultStringColumn;
+    private final StringColumn resultTypeColumn;
+    private final StringColumn resultStringColumn;
     private final LongColumn resultIntegerColumn;
     private final DoubleColumn resultFloatColumn;
     private final BooleanColumn resultBooleanColumn;
@@ -40,41 +40,41 @@ public class StatisticsResultsNormalizedResult {
     private final TimeColumn resultTimeColumn;
     private final IntColumn sampleIndex;
     private final LongColumn sampleCount;
-    private final TextColumn scopeColumn;
-    private final TextColumn dataGroupingLevel1Column;
-    private final TextColumn dataGroupingLevel2Column;
-    private final TextColumn dataGroupingLevel3Column;
-    private final TextColumn dataGroupingLevel4Column;
-    private final TextColumn dataGroupingLevel5Column;
-    private final TextColumn dataGroupingLevel6Column;
-    private final TextColumn dataGroupingLevel7Column;
-    private final TextColumn dataGroupingLevel8Column;
-    private final TextColumn dataGroupingLevel9Column;
+    private final StringColumn scopeColumn;
+    private final StringColumn dataGroupingLevel1Column;
+    private final StringColumn dataGroupingLevel2Column;
+    private final StringColumn dataGroupingLevel3Column;
+    private final StringColumn dataGroupingLevel4Column;
+    private final StringColumn dataGroupingLevel5Column;
+    private final StringColumn dataGroupingLevel6Column;
+    private final StringColumn dataGroupingLevel7Column;
+    private final StringColumn dataGroupingLevel8Column;
+    private final StringColumn dataGroupingLevel9Column;
     private final LongColumn dataGroupHashColumn;
-    private final TextColumn dataGroupNameColumn;
-    private final TextColumn dataGroupingConfigurationColumn;
+    private final StringColumn dataGroupNameColumn;
+    private final StringColumn dataGroupingConfigurationColumn;
     private final LongColumn connectionHashColumn;
-    private final TextColumn connectionNameColumn;
-    private final TextColumn providerColumn;
+    private final StringColumn connectionNameColumn;
+    private final StringColumn providerColumn;
     private final LongColumn tableHashColumn;
-    private final TextColumn schemaNameColumn;
-    private final TextColumn tableNameColumn;
-    private final TextColumn tableStageColumn;
+    private final StringColumn schemaNameColumn;
+    private final StringColumn tableNameColumn;
+    private final StringColumn tableStageColumn;
     private final LongColumn columnHashColumn;
-    private final TextColumn columnNameColumn;
+    private final StringColumn columnNameColumn;
     private final LongColumn collectorHashColumn;
-    private final TextColumn collectorNameColumn;
-    private final TextColumn collectorTargetColumn;
-    private final TextColumn collectorCategoryColumn;
-    private final TextColumn sensorNameColumn;
-    private final TextColumn timeSeriesIdColumn;
+    private final StringColumn collectorNameColumn;
+    private final StringColumn collectorTargetColumn;
+    private final StringColumn collectorCategoryColumn;
+    private final StringColumn sensorNameColumn;
+    private final StringColumn timeSeriesIdColumn;
     private final InstantColumn executedAtColumn;
     private final IntColumn durationMsColumn;
-    private final TextColumn errorMessageColumn;
+    private final StringColumn errorMessageColumn;
     private final InstantColumn createdAtColumn;
     private final InstantColumn updatedAtColumn;
-    private final TextColumn createdByColumn;
-    private final TextColumn updatedByColumn;
+    private final StringColumn createdByColumn;
+    private final StringColumn updatedByColumn;
 
     /**
      * Creates a statistics result dataset, extracting key columns.
@@ -92,11 +92,11 @@ public class StatisticsResultsNormalizedResult {
      */
     public StatisticsResultsNormalizedResult(Table table, boolean addColumWhenMissing) {
         this.table = table;
-        this.idColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.ID_COLUMN_NAME, addColumWhenMissing);
+        this.idColumn = TableColumnUtility.getOrAddStringColumn(table, StatisticsColumnNames.ID_COLUMN_NAME, addColumWhenMissing);
         this.collectedAtColumn = TableColumnUtility.getOrAddDateTimeColumn(table, StatisticsColumnNames.COLLECTED_AT_COLUMN_NAME, addColumWhenMissing);
-        this.statusColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.STATUS_COLUMN_NAME, addColumWhenMissing);
-        this.resultTypeColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.RESULT_TYPE_COLUMN_NAME, addColumWhenMissing);
-        this.resultStringColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.RESULT_STRING_COLUMN_NAME, addColumWhenMissing);
+        this.statusColumn = TableColumnUtility.getOrAddStringColumn(table, StatisticsColumnNames.STATUS_COLUMN_NAME, addColumWhenMissing);
+        this.resultTypeColumn = TableColumnUtility.getOrAddStringColumn(table, StatisticsColumnNames.RESULT_TYPE_COLUMN_NAME, addColumWhenMissing);
+        this.resultStringColumn = TableColumnUtility.getOrAddStringColumn(table, StatisticsColumnNames.RESULT_STRING_COLUMN_NAME, addColumWhenMissing);
         this.resultIntegerColumn = TableColumnUtility.getOrAddLongColumn(table, StatisticsColumnNames.RESULT_INTEGER_COLUMN_NAME, addColumWhenMissing);
         this.resultFloatColumn = TableColumnUtility.getOrAddDoubleColumn(table, StatisticsColumnNames.RESULT_FLOAT_COLUMN_NAME, addColumWhenMissing);
         this.resultBooleanColumn = TableColumnUtility.getOrAddBooleanColumn(table, StatisticsColumnNames.RESULT_BOOLEAN_COLUMN_NAME, addColumWhenMissing);
@@ -106,41 +106,41 @@ public class StatisticsResultsNormalizedResult {
         this.resultTimeColumn = TableColumnUtility.getOrAddTimeColumn(table, StatisticsColumnNames.RESULT_TIME_COLUMN_NAME, addColumWhenMissing);
         this.sampleIndex = TableColumnUtility.getOrAddIntColumn(table, StatisticsColumnNames.SAMPLE_INDEX_COLUMN_NAME, addColumWhenMissing);
         this.sampleCount = TableColumnUtility.getOrAddLongColumn(table, StatisticsColumnNames.SAMPLE_COUNT_COLUMN_NAME, addColumWhenMissing);
-        this.scopeColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.SCOPE_COLUMN_NAME, addColumWhenMissing);
-        this.dataGroupingLevel1Column = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "1", addColumWhenMissing);
-        this.dataGroupingLevel2Column = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "2", addColumWhenMissing);
-        this.dataGroupingLevel3Column = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "3", addColumWhenMissing);
-        this.dataGroupingLevel4Column = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "4", addColumWhenMissing);
-        this.dataGroupingLevel5Column = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "5", addColumWhenMissing);
-        this.dataGroupingLevel6Column = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "6", addColumWhenMissing);
-        this.dataGroupingLevel7Column = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "7", addColumWhenMissing);
-        this.dataGroupingLevel8Column = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "8", addColumWhenMissing);
-        this.dataGroupingLevel9Column = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "9", addColumWhenMissing);
+        this.scopeColumn = TableColumnUtility.getOrAddStringColumn(table, StatisticsColumnNames.SCOPE_COLUMN_NAME, addColumWhenMissing);
+        this.dataGroupingLevel1Column = TableColumnUtility.getOrAddStringColumn(table, StatisticsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "1", addColumWhenMissing);
+        this.dataGroupingLevel2Column = TableColumnUtility.getOrAddStringColumn(table, StatisticsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "2", addColumWhenMissing);
+        this.dataGroupingLevel3Column = TableColumnUtility.getOrAddStringColumn(table, StatisticsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "3", addColumWhenMissing);
+        this.dataGroupingLevel4Column = TableColumnUtility.getOrAddStringColumn(table, StatisticsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "4", addColumWhenMissing);
+        this.dataGroupingLevel5Column = TableColumnUtility.getOrAddStringColumn(table, StatisticsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "5", addColumWhenMissing);
+        this.dataGroupingLevel6Column = TableColumnUtility.getOrAddStringColumn(table, StatisticsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "6", addColumWhenMissing);
+        this.dataGroupingLevel7Column = TableColumnUtility.getOrAddStringColumn(table, StatisticsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "7", addColumWhenMissing);
+        this.dataGroupingLevel8Column = TableColumnUtility.getOrAddStringColumn(table, StatisticsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "8", addColumWhenMissing);
+        this.dataGroupingLevel9Column = TableColumnUtility.getOrAddStringColumn(table, StatisticsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "9", addColumWhenMissing);
         this.dataGroupHashColumn = TableColumnUtility.getOrAddLongColumn(table, StatisticsColumnNames.DATA_GROUP_HASH_COLUMN_NAME, addColumWhenMissing);
-        this.dataGroupNameColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_GROUP_NAME_COLUMN_NAME, addColumWhenMissing);
-        this.dataGroupingConfigurationColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_GROUPING_CONFIGURATION_COLUMN_NAME, addColumWhenMissing);
+        this.dataGroupNameColumn = TableColumnUtility.getOrAddStringColumn(table, StatisticsColumnNames.DATA_GROUP_NAME_COLUMN_NAME, addColumWhenMissing);
+        this.dataGroupingConfigurationColumn = TableColumnUtility.getOrAddStringColumn(table, StatisticsColumnNames.DATA_GROUPING_CONFIGURATION_COLUMN_NAME, addColumWhenMissing);
         this.connectionHashColumn = TableColumnUtility.getOrAddLongColumn(table, StatisticsColumnNames.CONNECTION_HASH_COLUMN_NAME, addColumWhenMissing);
-        this.connectionNameColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.CONNECTION_NAME_COLUMN_NAME, addColumWhenMissing);
-        this.providerColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.PROVIDER_COLUMN_NAME, addColumWhenMissing);
+        this.connectionNameColumn = TableColumnUtility.getOrAddStringColumn(table, StatisticsColumnNames.CONNECTION_NAME_COLUMN_NAME, addColumWhenMissing);
+        this.providerColumn = TableColumnUtility.getOrAddStringColumn(table, StatisticsColumnNames.PROVIDER_COLUMN_NAME, addColumWhenMissing);
         this.tableHashColumn = TableColumnUtility.getOrAddLongColumn(table, StatisticsColumnNames.TABLE_HASH_COLUMN_NAME, addColumWhenMissing);
-        this.schemaNameColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.SCHEMA_NAME_COLUMN_NAME, addColumWhenMissing);
-        this.tableNameColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.TABLE_NAME_COLUMN_NAME, addColumWhenMissing);
-        this.tableStageColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.TABLE_STAGE_COLUMN_NAME, addColumWhenMissing);
+        this.schemaNameColumn = TableColumnUtility.getOrAddStringColumn(table, StatisticsColumnNames.SCHEMA_NAME_COLUMN_NAME, addColumWhenMissing);
+        this.tableNameColumn = TableColumnUtility.getOrAddStringColumn(table, StatisticsColumnNames.TABLE_NAME_COLUMN_NAME, addColumWhenMissing);
+        this.tableStageColumn = TableColumnUtility.getOrAddStringColumn(table, StatisticsColumnNames.TABLE_STAGE_COLUMN_NAME, addColumWhenMissing);
         this.columnHashColumn = TableColumnUtility.getOrAddLongColumn(table, StatisticsColumnNames.COLUMN_HASH_COLUMN_NAME, addColumWhenMissing);
-        this.columnNameColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.COLUMN_NAME_COLUMN_NAME, addColumWhenMissing);
+        this.columnNameColumn = TableColumnUtility.getOrAddStringColumn(table, StatisticsColumnNames.COLUMN_NAME_COLUMN_NAME, addColumWhenMissing);
         this.collectorHashColumn = TableColumnUtility.getOrAddLongColumn(table, StatisticsColumnNames.COLLECTOR_HASH_COLUMN_NAME, addColumWhenMissing);
-        this.collectorNameColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.COLLECTOR_NAME_COLUMN_NAME, addColumWhenMissing);
-        this.collectorTargetColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.COLLECTOR_TARGET_COLUMN_NAME, addColumWhenMissing);
-        this.collectorCategoryColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.COLLECTOR_CATEGORY_COLUMN_NAME, addColumWhenMissing);
-        this.sensorNameColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.SENSOR_NAME_COLUMN_NAME, addColumWhenMissing);
-        this.timeSeriesIdColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.TIME_SERIES_ID_COLUMN_NAME, addColumWhenMissing);
+        this.collectorNameColumn = TableColumnUtility.getOrAddStringColumn(table, StatisticsColumnNames.COLLECTOR_NAME_COLUMN_NAME, addColumWhenMissing);
+        this.collectorTargetColumn = TableColumnUtility.getOrAddStringColumn(table, StatisticsColumnNames.COLLECTOR_TARGET_COLUMN_NAME, addColumWhenMissing);
+        this.collectorCategoryColumn = TableColumnUtility.getOrAddStringColumn(table, StatisticsColumnNames.COLLECTOR_CATEGORY_COLUMN_NAME, addColumWhenMissing);
+        this.sensorNameColumn = TableColumnUtility.getOrAddStringColumn(table, StatisticsColumnNames.SENSOR_NAME_COLUMN_NAME, addColumWhenMissing);
+        this.timeSeriesIdColumn = TableColumnUtility.getOrAddStringColumn(table, StatisticsColumnNames.TIME_SERIES_ID_COLUMN_NAME, addColumWhenMissing);
         this.executedAtColumn = TableColumnUtility.getOrAddInstantColumn(table, StatisticsColumnNames.EXECUTED_AT_COLUMN_NAME, addColumWhenMissing);
         this.durationMsColumn = TableColumnUtility.getOrAddIntColumn(table, StatisticsColumnNames.DURATION_MS_COLUMN_NAME, addColumWhenMissing);
-        this.errorMessageColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.ERROR_MESSAGE_COLUMN_NAME, addColumWhenMissing);
+        this.errorMessageColumn = TableColumnUtility.getOrAddStringColumn(table, StatisticsColumnNames.ERROR_MESSAGE_COLUMN_NAME, addColumWhenMissing);
         this.createdAtColumn = TableColumnUtility.getOrAddInstantColumn(table, StatisticsColumnNames.CREATED_AT_COLUMN_NAME, addColumWhenMissing);
         this.updatedAtColumn = TableColumnUtility.getOrAddInstantColumn(table, StatisticsColumnNames.UPDATED_AT_COLUMN_NAME, addColumWhenMissing);
-        this.createdByColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.CREATED_BY_COLUMN_NAME, addColumWhenMissing);
-        this.updatedByColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.UPDATED_BY_COLUMN_NAME, addColumWhenMissing);
+        this.createdByColumn = TableColumnUtility.getOrAddStringColumn(table, StatisticsColumnNames.CREATED_BY_COLUMN_NAME, addColumWhenMissing);
+        this.updatedByColumn = TableColumnUtility.getOrAddStringColumn(table, StatisticsColumnNames.UPDATED_BY_COLUMN_NAME, addColumWhenMissing);
     }
 
 
@@ -156,7 +156,7 @@ public class StatisticsResultsNormalizedResult {
      * id column that is a primary for both the sensor_readouts and rule_results tables.
      * @return Check result id (primary key) column.
      */
-    public TextColumn getIdColumn() {
+    public StringColumn getIdColumn() {
         return idColumn;
     }
 
@@ -173,7 +173,7 @@ public class StatisticsResultsNormalizedResult {
      * Returns the column name that holds the status code. Status codes are defined in {@link StatisticsCollectorResultStatus}.
      * @return Status column.
      */
-    public TextColumn getStatusColumn() {
+    public StringColumn getStatusColumn() {
         return statusColumn;
     }
 
@@ -181,7 +181,7 @@ public class StatisticsResultsNormalizedResult {
      * Returns the column that identifies the result data type retrieved from the collector.
      * @return result data type.
      */
-    public TextColumn getResultTypeColumn() {
+    public StringColumn getResultTypeColumn() {
         return resultTypeColumn;
     }
 
@@ -189,7 +189,7 @@ public class StatisticsResultsNormalizedResult {
      * Returns the column that contains the collector results that are strings.
      * @return Column with the string results.
      */
-    public TextColumn getResultStringColumn() {
+    public StringColumn getResultStringColumn() {
         return resultStringColumn;
     }
 
@@ -269,7 +269,7 @@ public class StatisticsResultsNormalizedResult {
      * Returns the column that contains a statistics scope. Values are from the {@link StatisticsDataScope} ("table" or "data_streams").
      * @return Statistics scope column (contains "table" or "data_streams").
      */
-    public TextColumn getScopeColumn() {
+    public StringColumn getScopeColumn() {
         return scopeColumn;
     }
 
@@ -277,7 +277,7 @@ public class StatisticsResultsNormalizedResult {
      * Returns the column that contains the value of the data stream at the level 1.
      * @return Data stream value for the grouping_level_1.
      */
-    public TextColumn getDataGroupingLevel1Column() {
+    public StringColumn getDataGroupingLevel1Column() {
         return dataGroupingLevel1Column;
     }
 
@@ -285,7 +285,7 @@ public class StatisticsResultsNormalizedResult {
      * Returns the column that contains the value of the data stream at the level 2.
      * @return Data stream value for the grouping_level_2.
      */
-    public TextColumn getDataGroupingLevel2Column() {
+    public StringColumn getDataGroupingLevel2Column() {
         return dataGroupingLevel2Column;
     }
 
@@ -293,7 +293,7 @@ public class StatisticsResultsNormalizedResult {
      * Returns the column that contains the value of the data stream at the level 3.
      * @return Data stream value for the grouping_level_3.
      */
-    public TextColumn getDataGroupingLevel3Column() {
+    public StringColumn getDataGroupingLevel3Column() {
         return dataGroupingLevel3Column;
     }
 
@@ -301,7 +301,7 @@ public class StatisticsResultsNormalizedResult {
      * Returns the column that contains the value of the data stream at the level 4.
      * @return Data stream value for the grouping_level_4.
      */
-    public TextColumn getDataGroupingLevel4Column() {
+    public StringColumn getDataGroupingLevel4Column() {
         return dataGroupingLevel4Column;
     }
 
@@ -309,7 +309,7 @@ public class StatisticsResultsNormalizedResult {
      * Returns the column that contains the value of the data stream at the level 5.
      * @return Data stream value for the grouping_level_5.
      */
-    public TextColumn getDataGroupingLevel5Column() {
+    public StringColumn getDataGroupingLevel5Column() {
         return dataGroupingLevel5Column;
     }
 
@@ -317,7 +317,7 @@ public class StatisticsResultsNormalizedResult {
      * Returns the column that contains the value of the data stream at the level 6.
      * @return Data stream value for the grouping_level_6.
      */
-    public TextColumn getDataGroupingLevel6Column() {
+    public StringColumn getDataGroupingLevel6Column() {
         return dataGroupingLevel6Column;
     }
 
@@ -325,7 +325,7 @@ public class StatisticsResultsNormalizedResult {
      * Returns the column that contains the value of the data stream at the level 7.
      * @return Data stream value for the grouping_level_7.
      */
-    public TextColumn getDataGroupingLevel7Column() {
+    public StringColumn getDataGroupingLevel7Column() {
         return dataGroupingLevel7Column;
     }
 
@@ -333,7 +333,7 @@ public class StatisticsResultsNormalizedResult {
      * Returns the column that contains the value of the data stream at the level 8.
      * @return Data stream value for the grouping_level_8.
      */
-    public TextColumn getDataGroupingLevel8Column() {
+    public StringColumn getDataGroupingLevel8Column() {
         return dataGroupingLevel8Column;
     }
 
@@ -341,7 +341,7 @@ public class StatisticsResultsNormalizedResult {
      * Returns the column that contains the value of the data stream at the level 9.
      * @return Data stream value for the grouping_level_9.
      */
-    public TextColumn getDataGroupingLevel9Column() {
+    public StringColumn getDataGroupingLevel9Column() {
         return dataGroupingLevel9Column;
     }
 
@@ -357,7 +357,7 @@ public class StatisticsResultsNormalizedResult {
      * Data stream name column. The data stream name is concatenated from data stream levels and is a user friendly value.
      * @return Data stream name column.
      */
-    public TextColumn getDataGroupNameColumn() {
+    public StringColumn getDataGroupNameColumn() {
         return dataGroupNameColumn;
     }
 
@@ -365,7 +365,7 @@ public class StatisticsResultsNormalizedResult {
      * Returns the data stream mapping name column. It contains the name of the selected data stream mapping that was used.
      * @return Data stream mapping name column.
      */
-    public TextColumn getDataGroupingConfigurationColumn() {
+    public StringColumn getDataGroupingConfigurationColumn() {
         return dataGroupingConfigurationColumn;
     }
 
@@ -381,7 +381,7 @@ public class StatisticsResultsNormalizedResult {
      * Returns a connection name column. The column contains the source connection name.
      * @return Connection name column.
      */
-    public TextColumn getConnectionNameColumn() {
+    public StringColumn getConnectionNameColumn() {
         return connectionNameColumn;
     }
 
@@ -389,7 +389,7 @@ public class StatisticsResultsNormalizedResult {
      * Returns a provider name column. The column contains the provider name.
      * @return Provider name column.
      */
-    public TextColumn getProviderColumn() {
+    public StringColumn getProviderColumn() {
         return providerColumn;
     }
 
@@ -405,7 +405,7 @@ public class StatisticsResultsNormalizedResult {
      * Returns a tablesaw column with the schema name of a table.
      * @return Schema name column.
      */
-    public TextColumn getSchemaNameColumn() {
+    public StringColumn getSchemaNameColumn() {
         return schemaNameColumn;
     }
 
@@ -413,7 +413,7 @@ public class StatisticsResultsNormalizedResult {
      * Returns a tablesaw column with the table name.
      * @return Column with the table name.
      */
-    public TextColumn getTableNameColumn() {
+    public StringColumn getTableNameColumn() {
         return tableNameColumn;
     }
 
@@ -421,7 +421,7 @@ public class StatisticsResultsNormalizedResult {
      * Returns a tablesaw column with the table's stage.
      * @return Table's stage column.
      */
-    public TextColumn getTableStageColumn() {
+    public StringColumn getTableStageColumn() {
         return tableStageColumn;
     }
 
@@ -437,7 +437,7 @@ public class StatisticsResultsNormalizedResult {
      * Returns a tablesaw column that stores the column name. The column with "column names" may contain nulls when checks are defined for the entire table level.
      * @return Column name tablesaw column.
      */
-    public TextColumn getColumnNameColumn() {
+    public StringColumn getColumnNameColumn() {
         return columnNameColumn;
     }
 
@@ -453,7 +453,7 @@ public class StatisticsResultsNormalizedResult {
      * Returns a tablesaw column with the collector name.
      * @return Collector name column.
      */
-    public TextColumn getCollectorNameColumn() {
+    public StringColumn getCollectorNameColumn() {
         return collectorNameColumn;
     }
 
@@ -461,7 +461,7 @@ public class StatisticsResultsNormalizedResult {
      * Returns a column that stores the collector target (table, column).
      * @return Collector target column.
      */
-    public TextColumn getCollectorTargetColumn() {
+    public StringColumn getCollectorTargetColumn() {
         return collectorTargetColumn;
     }
 
@@ -470,7 +470,7 @@ public class StatisticsResultsNormalizedResult {
      * @return Statistics collector category name column.
      * @return Statistics collector category name column.
      */
-    public TextColumn getCollectorCategoryColumn() {
+    public StringColumn getCollectorCategoryColumn() {
         return collectorCategoryColumn;
     }
 
@@ -478,7 +478,7 @@ public class StatisticsResultsNormalizedResult {
      * Returns a column with the sensor name.
      * @return Sensor name column.
      */
-    public TextColumn getSensorNameColumn() {
+    public StringColumn getSensorNameColumn() {
         return sensorNameColumn;
     }
 
@@ -486,7 +486,7 @@ public class StatisticsResultsNormalizedResult {
      * Returns a time series id column.
      * @return Column that stores a time series id.
      */
-    public TextColumn getTimeSeriesIdColumn() {
+    public StringColumn getTimeSeriesIdColumn() {
         return timeSeriesIdColumn;
     }
 
@@ -510,7 +510,7 @@ public class StatisticsResultsNormalizedResult {
      * Returns the column that stores an error message when the collector failed to execute.
      * @return Error message column.
      */
-    public TextColumn getErrorMessageColumn() {
+    public StringColumn getErrorMessageColumn() {
         return errorMessageColumn;
     }
 
@@ -534,7 +534,7 @@ public class StatisticsResultsNormalizedResult {
      * Returns the created by column.
      * @return Created by column.
      */
-    public TextColumn getCreatedByColumn() {
+    public StringColumn getCreatedByColumn() {
         return createdByColumn;
     }
 
@@ -542,7 +542,7 @@ public class StatisticsResultsNormalizedResult {
      * Returns the updated by column.
      * @return Updated by column.
      */
-    public TextColumn getUpdatedByColumn() {
+    public StringColumn getUpdatedByColumn() {
         return updatedByColumn;
     }
 }

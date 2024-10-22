@@ -90,6 +90,7 @@ import org.springframework.stereotype.Service;
 import tech.tablesaw.api.*;
 import tech.tablesaw.columns.Column;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
@@ -224,8 +225,12 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
         PhysicalTableName physicalTableName = tableSpec.getPhysicalTableName();
         UserDomainIdentity userDomainIdentity = userHome.getUserIdentity();
 
-        SensorReadoutsSnapshot sensorReadoutsSnapshot = this.sensorReadoutsSnapshotFactory.createSnapshot(connectionName, physicalTableName, userDomainIdentity);
-        Table allNormalizedSensorResultsTable = sensorReadoutsSnapshot.getTableDataChanges().getNewOrChangedRows();
+        SensorReadoutsSnapshot outputSensorReadoutsSnapshot = this.sensorReadoutsSnapshotFactory.createSnapshot(connectionName, physicalTableName, userDomainIdentity);
+        outputSensorReadoutsSnapshot.ensureMonthsAreLoaded(LocalDate.now(), LocalDate.now()); // just load the current month, so the historic cache will not make another call
+//        SensorReadoutsSnapshot historicReadoutsSnapshot = this.sensorReadoutsSnapshotFactory.createReadOnlySnapshot(connectionName, physicalTableName,
+//                SensorReadoutsColumnNames.SENSOR_READOUT_COLUMN_NAMES_HISTORIC_DATA, userDomainIdentity);
+
+        Table allNormalizedSensorResultsTable = outputSensorReadoutsSnapshot.getTableDataChanges().getNewOrChangedRows();
         IntColumn severityColumnTemporary = IntColumn.create(CheckResultsColumnNames.SEVERITY_COLUMN_NAME);
         allNormalizedSensorResultsTable.addColumns(severityColumnTemporary); // temporary column to allow importing custom severity from custom SQL checks, bypassing rule evaluation, this column is removed before saving
         jobCancellationToken.throwIfCancelled();
@@ -243,19 +248,19 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
         List<AbstractCheckSpec<?, ?, ?, ?>> singleTableChecks = checks.stream().filter(c -> !c.isTableComparisonCheck())
                 .collect(Collectors.toList());
         executeSingleTableChecks(executionContext, userHome, userTimeWindowFilters, progressListener, dummySensorExecution, executionTarget, jobCancellationToken,
-                checkExecutionSummary, singleTableChecks, tableSpec, sensorReadoutsSnapshot, allNormalizedSensorResultsTable, checkResultsSnapshot,
+                checkExecutionSummary, singleTableChecks, tableSpec, outputSensorReadoutsSnapshot, allNormalizedSensorResultsTable, checkResultsSnapshot,
                 allRuleEvaluationResultsTable, allErrorsTable, executionStatistics, checksForErrorSampling, collectErrorSamples);
 
         List<AbstractCheckSpec<?, ?, ?, ?>> tableComparisonChecks = checks.stream().filter(c -> c.isTableComparisonCheck())
                 .collect(Collectors.toList());
         executeTableComparisonChecks(executionContext, userHome, userTimeWindowFilters, progressListener, dummySensorExecution, executionTarget, jobCancellationToken,
-                checkExecutionSummary, tableComparisonChecks, tableSpec, sensorReadoutsSnapshot, allNormalizedSensorResultsTable, checkResultsSnapshot,
+                checkExecutionSummary, tableComparisonChecks, tableSpec, outputSensorReadoutsSnapshot, allNormalizedSensorResultsTable, checkResultsSnapshot,
                 allRuleEvaluationResultsTable, allErrorsTable, executionStatistics);
 
-        if (sensorReadoutsSnapshot.getTableDataChanges().hasChanges() && !dummySensorExecution) {
+        if (outputSensorReadoutsSnapshot.getTableDataChanges().hasChanges() && !dummySensorExecution) {
             allNormalizedSensorResultsTable.removeColumns(severityColumnTemporary); // removed, it was temporary
-            progressListener.onSavingSensorResults(new SavingSensorResultsEvent(tableSpec, sensorReadoutsSnapshot));
-            sensorReadoutsSnapshot.save();
+            progressListener.onSavingSensorResults(new SavingSensorResultsEvent(tableSpec, outputSensorReadoutsSnapshot));
+            outputSensorReadoutsSnapshot.save();
         }
 
         if (checkResultsSnapshot.getTableDataChanges().hasChanges() && !dummySensorExecution) {
@@ -314,8 +319,8 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
             CheckExecutionSummary checkExecutionSummary,
             Collection<AbstractCheckSpec<?, ?, ?, ?>> checks,
             TableSpec tableSpec,
-            SensorReadoutsSnapshot sensorReadoutsSnapshot,
-            Table allNormalizedSensorResultsTable,
+            SensorReadoutsSnapshot historicSensorReadoutsSnapshot,
+            Table allNormalizedSensorResultsOutputTable,
             CheckResultsSnapshot checkResultsSnapshot,
             Table allRuleEvaluationResultsTable,
             Table allErrorsTable,
@@ -358,13 +363,13 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                     LocalDateTime timePeriodEnd = effectiveTimeWindowFilter.calculateTimePeriodEnd(sensorRunParameters.getCheckType(), sensorRunParameters.getTimePeriodGradient(), defaultTimeZoneId);
                     long checkHash = sensorRunParameters.getCheck().getHierarchyId().hashCode64();
 
-                    sensorReadoutsSnapshot.ensureMonthsAreLoaded(timePeriodStart.toLocalDate(), timePeriodEnd.toLocalDate());
-                    Table allOldSensorReadouts = sensorReadoutsSnapshot.getAllData();
+                    historicSensorReadoutsSnapshot.ensureMonthsAreLoaded(timePeriodStart.toLocalDate(), timePeriodEnd.toLocalDate());
+                    Table allOldSensorReadouts = historicSensorReadoutsSnapshot.getAllData();
                     Table sensorReadoutColumns = TableCopyUtility.extractColumns(allOldSensorReadouts, SensorReadoutsColumnNames.SENSOR_READOUT_COLUMN_NAMES_RETURNED_BY_SENSORS);
 
                     LongColumn checkHashColumn = sensorReadoutColumns.longColumn(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME);
                     DateTimeColumn timePeriodColumn = sensorReadoutColumns.dateTimeColumn(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME);
-                    Table filteredResults = sensorReadoutColumns.where(checkHashColumn.isIn(checkHash).and(
+                    Table filteredResults = TableCopyUtility.copyTableFiltered(sensorReadoutColumns, checkHashColumn.isIn(checkHash).and(
                             timePeriodColumn.isBetweenIncluding(timePeriodStart, timePeriodEnd)));
                     if (filteredResults.rowCount() == 0) {
                         continue; // no past data
@@ -389,7 +394,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                         tableSpec, sensorRunParameters, sensorExecutionResult, normalizedSensorResults));
 
                 if (executionTarget != RunChecksTarget.only_rules) {
-                    allNormalizedSensorResultsTable.append(normalizedSensorResults.getTable());
+                    allNormalizedSensorResultsOutputTable.append(normalizedSensorResults.getTable());
                 }
 
                 if (executionTarget == RunChecksTarget.only_sensors) {
@@ -403,7 +408,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
 
                 if (ruleDefinitionName == null) {
                     // no rule to run, just the sensor...
-                    sensorReadoutsSnapshot.ensureMonthsAreLoaded(minTimePeriod.toLocalDate(), maxTimePeriod.toLocalDate()); // preload required historic results for merging
+                    historicSensorReadoutsSnapshot.ensureMonthsAreLoaded(minTimePeriod.toLocalDate(), maxTimePeriod.toLocalDate()); // preload required historic results for merging
                 }
                 else {
                     RuleDefinitionFindResult ruleDefinitionFindResult = this.ruleDefinitionFindService.findRule(executionContext, ruleDefinitionName);
@@ -417,14 +422,14 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                             LocalDateTimePeriodUtility.calculateLocalDateTimeMinusTimePeriods(
                                     minTimePeriod, ruleTimeWindowSettings.getPredictionTimeWindow(), timeGradientForRuleScope);
 
-                    sensorReadoutsSnapshot.ensureMonthsAreLoaded(earliestRequiredReadout.toLocalDate(), maxTimePeriod.toLocalDate()); // preload required historic sensor readouts
+                    historicSensorReadoutsSnapshot.ensureMonthsAreLoaded(earliestRequiredReadout.toLocalDate(), maxTimePeriod.toLocalDate()); // preload required historic sensor readouts
                     checkResultsSnapshot.ensureMonthsAreLoaded(earliestRequiredReadout.toLocalDate(), maxTimePeriod.toLocalDate()); // will be used for notifications
                 }
 
                 try {
                     RuleEvaluationResult ruleEvaluationResult = this.ruleEvaluationService.evaluateRules(
                             executionContext, sensorExecutionResult.getSensorRunParameters().getCheck(), sensorRunParameters,
-                            normalizedSensorResults, sensorReadoutsSnapshot, progressListener);
+                            normalizedSensorResults, historicSensorReadoutsSnapshot, progressListener);
                     progressListener.onRuleExecuted(new RuleExecutedEvent(tableSpec, sensorRunParameters, normalizedSensorResults, ruleEvaluationResult));
 
                     allRuleEvaluationResultsTable.append(ruleEvaluationResult.getRuleResultsTable());
@@ -477,7 +482,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
             CheckExecutionSummary checkExecutionSummary,
             Collection<AbstractCheckSpec<?, ?, ?, ?>> checks,
             TableSpec tableSpec,
-            SensorReadoutsSnapshot sensorReadoutsSnapshot,
+            SensorReadoutsSnapshot historicSensorReadoutsSnapshot,
             Table allNormalizedSensorResultsTable,
             CheckResultsSnapshot checkResultsSnapshot,
             Table allRuleEvaluationResultsTable,
@@ -579,14 +584,14 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
 
                 if (ruleDefinitionName == null) {
                     // no rule to run, just the sensor...
-                    sensorReadoutsSnapshot.ensureMonthsAreLoaded(minTimePeriod.toLocalDate(), maxTimePeriod.toLocalDate()); // preload required historic results for merging
+                    historicSensorReadoutsSnapshot.ensureMonthsAreLoaded(minTimePeriod.toLocalDate(), maxTimePeriod.toLocalDate()); // preload required historic results for merging
                     checkResultsSnapshot.ensureMonthsAreLoaded(minTimePeriod.toLocalDate(), maxTimePeriod.toLocalDate()); // will be used for notifications
                 }
                 else {
                     try {
                         RuleEvaluationResult ruleEvaluationResult = this.ruleEvaluationService.evaluateRules(
                                 executionContext, sensorExecutionResultComparedTable.getSensorRunParameters().getCheck(), sensorRunParametersComparedTable,
-                                normalizedSensorResultsComparedTable, sensorReadoutsSnapshot, progressListener);
+                                normalizedSensorResultsComparedTable, historicSensorReadoutsSnapshot, progressListener);
                         progressListener.onRuleExecuted(new RuleExecutedEvent(tableSpec, sensorRunParametersComparedTable, normalizedSensorResultsComparedTable, ruleEvaluationResult));
 
                         allRuleEvaluationResultsTable.append(ruleEvaluationResult.getRuleResultsTable());

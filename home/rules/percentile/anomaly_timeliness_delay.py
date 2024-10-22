@@ -19,6 +19,7 @@ from typing import Sequence
 import numpy as np
 import scipy
 import scipy.stats
+from lib.anomalies.data_preparation import convert_historic_data_stationary
 from lib.anomalies.anomaly_detection import detect_upper_bound_anomaly, detect_lower_bound_anomaly
 
 
@@ -28,8 +29,8 @@ class AnomalyTimelinessDelayRuleParametersSpec:
 
 
 class HistoricDataPoint:
-    timestamp_utc: datetime
-    local_datetime: datetime
+    timestamp_utc_epoch: int
+    local_datetime_epoch: int
     back_periods_index: int
     sensor_readout: float
     expected_value: float
@@ -48,7 +49,7 @@ class AnomalyConfigurationParameters:
 class RuleExecutionRunParameters:
     actual_value: float
     parameters: AnomalyTimelinessDelayRuleParametersSpec
-    time_period_local: datetime
+    time_period_local_epoch: int
     previous_readouts: Sequence[HistoricDataPoint]
     time_window: RuleTimeWindowSettingsSpec
     configuration_parameters: AnomalyConfigurationParameters
@@ -101,7 +102,8 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 
     tail = rule_parameters.parameters.anomaly_percent / 100.0
 
-    threshold_upper_multiple = detect_upper_bound_anomaly(values=extracted, median=filtered_median_float,
+    anomaly_data = convert_historic_data_stationary(rule_parameters.previous_readouts, lambda readout: readout)
+    threshold_upper_multiple = detect_upper_bound_anomaly(historic_data=anomaly_data, median=filtered_median_float,
                                                           tail=tail, parameters=rule_parameters)
 
     passed = True

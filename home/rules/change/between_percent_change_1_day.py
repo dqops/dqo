@@ -26,8 +26,8 @@ class BetweenPercentChange1DayRuleParametersSpec:
 
 
 class HistoricDataPoint:
-    timestamp_utc: datetime
-    local_datetime: datetime
+    timestamp_utc_epoch: int
+    local_datetime_epoch: int
     back_periods_index: int
     sensor_readout: float
     expected_value: float
@@ -42,7 +42,7 @@ class RuleTimeWindowSettingsSpec:
 class RuleExecutionRunParameters:
     actual_value: float
     parameters: BetweenPercentChange1DayRuleParametersSpec
-    time_period_local: datetime
+    time_period_local_epoch: int
     previous_readouts: Sequence[HistoricDataPoint]
     time_window: RuleTimeWindowSettingsSpec
 

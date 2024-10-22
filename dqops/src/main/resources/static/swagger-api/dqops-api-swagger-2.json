@@ -20090,6 +20090,10 @@
           "type" : "number",
           "format" : "double",
           "description" : "The probability (in percent) that the current sensor readout (measure) is an anomaly, because the value is outside the regular range of previous readouts. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation."
+        },
+        "use_ai" : {
+          "type" : "boolean",
+          "description" : "Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution."
         }
       }
     },
@@ -20100,6 +20104,10 @@
           "type" : "number",
           "format" : "double",
           "description" : "The probability (in percent) that the current sensor readout (measure) is an anomaly, because the value is outside the regular range of previous readouts. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation."
+        },
+        "use_ai" : {
+          "type" : "boolean",
+          "description" : "Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution."
         }
       }
     },
@@ -20110,6 +20118,10 @@
           "type" : "number",
           "format" : "double",
           "description" : "The probability (in percent) that the current sensor readout (measure) is an anomaly, because the value is outside the regular range of previous readouts. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation."
+        },
+        "use_ai" : {
+          "type" : "boolean",
+          "description" : "Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution."
         }
       }
     },
@@ -20120,6 +20132,10 @@
           "type" : "number",
           "format" : "double",
           "description" : "The probability (in percent) that the current daily row count is an anomaly because the value is outside the regular range of previous partition volume measures. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation."
+        },
+        "use_ai" : {
+          "type" : "boolean",
+          "description" : "Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution."
         }
       }
     },
@@ -20130,6 +20146,10 @@
           "type" : "number",
           "format" : "double",
           "description" : "The probability (in percent) that the current daily row count is an anomaly because the value is outside the regular range of previous partition volume measures. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation."
+        },
+        "use_ai" : {
+          "type" : "boolean",
+          "description" : "Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution."
         }
       }
     },
@@ -20140,6 +20160,10 @@
           "type" : "number",
           "format" : "double",
           "description" : "The probability (in percent) that the current daily row count is an anomaly because the value is outside the regular range of previous partition volume measures. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation."
+        },
+        "use_ai" : {
+          "type" : "boolean",
+          "description" : "Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution."
         }
       }
     },
@@ -20150,6 +20174,10 @@
           "type" : "number",
           "format" : "double",
           "description" : "The probability (in percent) that the count of values (records) is an anomaly because the value is outside the regular range of counts. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation."
+        },
+        "use_ai" : {
+          "type" : "boolean",
+          "description" : "Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution."
         }
       }
     },
@@ -20160,6 +20188,10 @@
           "type" : "number",
           "format" : "double",
           "description" : "The probability (in percent) that the count of values (records) is an anomaly because the value is outside the regular range of counts. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation."
+        },
+        "use_ai" : {
+          "type" : "boolean",
+          "description" : "Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution."
         }
       }
     },
@@ -20170,6 +20202,10 @@
           "type" : "number",
           "format" : "double",
           "description" : "The probability (in percent) that the count of values (records) is an anomaly because the value is outside the regular range of counts. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation."
+        },
+        "use_ai" : {
+          "type" : "boolean",
+          "description" : "Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution."
         }
       }
     },
@@ -20180,6 +20216,10 @@
           "type" : "number",
           "format" : "double",
           "description" : "The probability (in percent) that the current percentage value is an anomaly because the value is outside the regular range of captured percentage measures. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation."
+        },
+        "use_ai" : {
+          "type" : "boolean",
+          "description" : "Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution."
         }
       }
     },
@@ -20190,6 +20230,10 @@
           "type" : "number",
           "format" : "double",
           "description" : "The probability (in percent) that the current percentage value is an anomaly because the value is outside the regular range of captured percentage measures. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation."
+        },
+        "use_ai" : {
+          "type" : "boolean",
+          "description" : "Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution."
         }
       }
     },
@@ -20200,6 +20244,10 @@
           "type" : "number",
           "format" : "double",
           "description" : "The probability (in percent) that the current percentage value is an anomaly because the value is outside the regular range of captured percentage measures. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation."
+        },
+        "use_ai" : {
+          "type" : "boolean",
+          "description" : "Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution."
         }
       }
     },
@@ -20210,6 +20258,10 @@
           "type" : "number",
           "format" : "double",
           "description" : "The probability (in percent) that the current sensor readout (measure) is an anomaly, because the value is outside the regular range of previous readouts. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation."
+        },
+        "use_ai" : {
+          "type" : "boolean",
+          "description" : "Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution."
         }
       }
     },
@@ -20220,6 +20272,10 @@
           "type" : "number",
           "format" : "double",
           "description" : "The probability (in percent) that the current sensor readout (measure) is an anomaly, because the value is outside the regular range of previous readouts. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation."
+        },
+        "use_ai" : {
+          "type" : "boolean",
+          "description" : "Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution."
         }
       }
     },
@@ -20230,6 +20286,10 @@
           "type" : "number",
           "format" : "double",
           "description" : "The probability (in percent) that the current sensor readout (measure) is an anomaly, because the value is outside the regular range of previous readouts. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation."
+        },
+        "use_ai" : {
+          "type" : "boolean",
+          "description" : "Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution."
         }
       }
     },
@@ -20240,6 +20300,10 @@
           "type" : "number",
           "format" : "double",
           "description" : "The probability (in percent) that the current data delay is an anomaly because the value is outside the regular range of previous delays. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation."
+        },
+        "use_ai" : {
+          "type" : "boolean",
+          "description" : "Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution."
         }
       }
     },
@@ -20250,6 +20314,10 @@
           "type" : "number",
           "format" : "double",
           "description" : "The probability (in percent) that the current data delay is an anomaly because the value is outside the regular range of previous delays. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation."
+        },
+        "use_ai" : {
+          "type" : "boolean",
+          "description" : "Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution."
         }
       }
     },
@@ -20260,6 +20328,10 @@
           "type" : "number",
           "format" : "double",
           "description" : "The probability (in percent) that the current data delay is an anomaly because the value is outside the regular range of previous delays. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation."
+        },
+        "use_ai" : {
+          "type" : "boolean",
+          "description" : "Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution."
         }
       }
     },
@@ -40974,6 +41046,11 @@
           "type" : "string",
           "description" : "Sslmode PostgreSQL connection parameter. The default value is disabled.",
           "enum" : [ "disable", "allow", "prefer", "require", "verify-ca", "verify-full" ]
+        },
+        "postgresql_engine_type" : {
+          "type" : "string",
+          "description" : "Postgresql engine type. Supports also a ${POSTGRESQL_ENGINE} configuration with a custom environment variable.",
+          "enum" : [ "postgresql", "timescale" ]
         },
         "properties" : {
           "type" : "object",

@@ -32,6 +32,7 @@ import com.dqops.cli.commands.table.TableCliCommand;
 import com.dqops.cli.commands.utility.ClearScreenCliCommand;
 import com.dqops.cli.terminal.TerminalWriter;
 import com.dqops.core.configuration.DqoRuleMiningConfigurationProperties;
+import com.dqops.execution.rules.runners.python.PythonRuleDebugMode;
 import com.dqops.rest.server.authentication.DqoAuthenticationMethod;
 import com.dqops.utils.logging.DqoConsoleLoggingMode;
 import com.dqops.core.configuration.DqoLoggingConfigurationProperties;
@@ -216,6 +217,14 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
             description = "Disable creating a python virtual environment by DQOps on startup. Instead, use the system python interpreter. " +
                     "DQOps will not install any required python packages on startup and use packages from the user's python installation.", defaultValue = "false")
     private String dqoPythonUseHostPython;
+
+    @CommandLine.Option(names = {"--dqo.python.debug-mode"},
+            description = "Configures the debugging (logging) mode used when running Python rules. Under the default configuration ('silent' mode),  " +
+                    "the data quality rules implemented in Python evaluate silently, without generating any log entries. " +
+                    "This parameter changes the logging mode and instructs the rule runner to write the parameters passed to rules. " +
+                    "The data is written as JSON files in the DQOps user home, in the .index/models folder for each rule evaluation. " +
+                    "These files can be used to debug rules by running them externally.", defaultValue = "silent")
+    private PythonRuleDebugMode dqoPythonDebugMode = PythonRuleDebugMode.silent;
 
     @CommandLine.Option(names = {"--dqo.user.home"},
             description = "Overrides the path to the DQOps user home. The default user home is created in the current folder (.).", defaultValue = ".")

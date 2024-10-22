@@ -43,6 +43,7 @@ import com.dqops.execution.rules.DataQualityRuleRunnerImpl;
 import com.dqops.execution.rules.finder.RuleDefinitionFindService;
 import com.dqops.execution.rules.finder.RuleDefinitionFindServiceObjectMother;
 import com.dqops.execution.rules.runners.RuleRunnerFactoryObjectMother;
+import com.dqops.execution.rules.training.RuleModelTrainingQueueImpl;
 import com.dqops.execution.sensors.DataQualitySensorRunnerImpl;
 import com.dqops.execution.sensors.SensorExecutionRunParametersFactoryImpl;
 import com.dqops.execution.sensors.finder.SensorDefinitionFindService;
@@ -83,7 +84,8 @@ public class TableCheckExecutionServiceObjectMother {
 
         RuleDefinitionFindService ruleDefinitionFindService = RuleDefinitionFindServiceObjectMother.getRuleDefinitionFindService();
         DataQualityRuleRunnerImpl ruleRunner = new DataQualityRuleRunnerImpl(ruleDefinitionFindService, RuleRunnerFactoryObjectMother.createDefault());
-        RuleEvaluationServiceImpl ruleEvaluationService = new RuleEvaluationServiceImpl(ruleRunner, ruleDefinitionFindService, defaultTimeZoneProvider);
+        RuleEvaluationServiceImpl ruleEvaluationService = new RuleEvaluationServiceImpl(ruleRunner, ruleDefinitionFindService, defaultTimeZoneProvider,
+                new RuleModelTrainingQueueImpl());
 
         ParquetPartitionStorageServiceImpl parquetPartitionStorageService =
                 ParquetPartitionStorageServiceObjectMother.create(userHomeContext);

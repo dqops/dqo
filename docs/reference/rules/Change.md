@@ -105,8 +105,8 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
     
     class HistoricDataPoint:
-        timestamp_utc: datetime
-        local_datetime: datetime
+        timestamp_utc_epoch: int
+        local_datetime_epoch: int
         back_periods_index: int
         sensor_readout: float
         expected_value: float
@@ -121,7 +121,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     class RuleExecutionRunParameters:
         actual_value: float
         parameters: BetweenChangeRuleParametersSpec
-        time_period_local: datetime
+        time_period_local_epoch: int
         previous_readouts: Sequence[HistoricDataPoint]
         time_window: RuleTimeWindowSettingsSpec
     
@@ -276,8 +276,8 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
     
     class HistoricDataPoint:
-        timestamp_utc: datetime
-        local_datetime: datetime
+        timestamp_utc_epoch: int
+        local_datetime_epoch: int
         back_periods_index: int
         sensor_readout: float
         expected_value: float
@@ -292,7 +292,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     class RuleExecutionRunParameters:
         actual_value: float
         parameters: BetweenChange1DayRuleParametersSpec
-        time_period_local: datetime
+        time_period_local_epoch: int
         previous_readouts: Sequence[HistoricDataPoint]
         time_window: RuleTimeWindowSettingsSpec
     
@@ -454,8 +454,8 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
     
     class HistoricDataPoint:
-        timestamp_utc: datetime
-        local_datetime: datetime
+        timestamp_utc_epoch: int
+        local_datetime_epoch: int
         back_periods_index: int
         sensor_readout: float
         expected_value: float
@@ -470,7 +470,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     class RuleExecutionRunParameters:
         actual_value: float
         parameters: BetweenChange30DaysRuleParametersSpec
-        time_period_local: datetime
+        time_period_local_epoch: int
         previous_readouts: Sequence[HistoricDataPoint]
         time_window: RuleTimeWindowSettingsSpec
     
@@ -632,8 +632,8 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
     
     class HistoricDataPoint:
-        timestamp_utc: datetime
-        local_datetime: datetime
+        timestamp_utc_epoch: int
+        local_datetime_epoch: int
         back_periods_index: int
         sensor_readout: float
         expected_value: float
@@ -648,7 +648,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     class RuleExecutionRunParameters:
         actual_value: float
         parameters: BetweenChange7DaysRuleParametersSpec
-        time_period_local: datetime
+        time_period_local_epoch: int
         previous_readouts: Sequence[HistoricDataPoint]
         time_window: RuleTimeWindowSettingsSpec
     
@@ -793,8 +793,8 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
     
     class HistoricDataPoint:
-        timestamp_utc: datetime
-        local_datetime: datetime
+        timestamp_utc_epoch: int
+        local_datetime_epoch: int
         back_periods_index: int
         sensor_readout: float
         expected_value: float
@@ -809,7 +809,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     class RuleExecutionRunParameters:
         actual_value: float
         parameters: BetweenPercentChangeRuleParametersSpec
-        time_period_local: datetime
+        time_period_local_epoch: int
         previous_readouts: Sequence[HistoricDataPoint]
         time_window: RuleTimeWindowSettingsSpec
     
@@ -958,8 +958,8 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
     
     class HistoricDataPoint:
-        timestamp_utc: datetime
-        local_datetime: datetime
+        timestamp_utc_epoch: int
+        local_datetime_epoch: int
         back_periods_index: int
         sensor_readout: float
         expected_value: float
@@ -974,7 +974,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     class RuleExecutionRunParameters:
         actual_value: float
         parameters: BetweenPercentChange1DayRuleParametersSpec
-        time_period_local: datetime
+        time_period_local_epoch: int
         previous_readouts: Sequence[HistoricDataPoint]
         time_window: RuleTimeWindowSettingsSpec
     
@@ -1130,8 +1130,8 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
     
     class HistoricDataPoint:
-        timestamp_utc: datetime
-        local_datetime: datetime
+        timestamp_utc_epoch: int
+        local_datetime_epoch: int
         back_periods_index: int
         sensor_readout: float
         expected_value: float
@@ -1146,7 +1146,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     class RuleExecutionRunParameters:
         actual_value: float
         parameters: BetweenPercentChange30DaysRuleParametersSpec
-        time_period_local: datetime
+        time_period_local_epoch: int
         previous_readouts: Sequence[HistoricDataPoint]
         time_window: RuleTimeWindowSettingsSpec
     
@@ -1302,8 +1302,8 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
     
     class HistoricDataPoint:
-        timestamp_utc: datetime
-        local_datetime: datetime
+        timestamp_utc_epoch: int
+        local_datetime_epoch: int
         back_periods_index: int
         sensor_readout: float
         expected_value: float
@@ -1318,7 +1318,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     class RuleExecutionRunParameters:
         actual_value: float
         parameters: BetweenPercentChange7DaysRuleParametersSpec
-        time_period_local: datetime
+        time_period_local_epoch: int
         previous_readouts: Sequence[HistoricDataPoint]
         time_window: RuleTimeWindowSettingsSpec
     
@@ -1458,8 +1458,8 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
     
     class HistoricDataPoint:
-        timestamp_utc: datetime
-        local_datetime: datetime
+        timestamp_utc_epoch: int
+        local_datetime_epoch: int
         back_periods_index: int
         sensor_readout: float
         expected_value: float
@@ -1474,7 +1474,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     class RuleExecutionRunParameters:
         actual_value: float
         parameters: WithinChangeRuleParametersSpec
-        time_period_local: datetime
+        time_period_local_epoch: int
         previous_readouts: Sequence[HistoricDataPoint]
         time_window: RuleTimeWindowSettingsSpec
     
@@ -1619,8 +1619,8 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
     
     class HistoricDataPoint:
-        timestamp_utc: datetime
-        local_datetime: datetime
+        timestamp_utc_epoch: int
+        local_datetime_epoch: int
         back_periods_index: int
         sensor_readout: float
         expected_value: float
@@ -1635,7 +1635,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     class RuleExecutionRunParameters:
         actual_value: float
         parameters: WithinChange1DayRuleParametersSpec
-        time_period_local: datetime
+        time_period_local_epoch: int
         previous_readouts: Sequence[HistoricDataPoint]
         time_window: RuleTimeWindowSettingsSpec
     
@@ -1787,8 +1787,8 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
     
     class HistoricDataPoint:
-        timestamp_utc: datetime
-        local_datetime: datetime
+        timestamp_utc_epoch: int
+        local_datetime_epoch: int
         back_periods_index: int
         sensor_readout: float
         expected_value: float
@@ -1803,7 +1803,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     class RuleExecutionRunParameters:
         actual_value: float
         parameters: WithinChange30DaysRuleParametersSpec
-        time_period_local: datetime
+        time_period_local_epoch: int
         previous_readouts: Sequence[HistoricDataPoint]
         time_window: RuleTimeWindowSettingsSpec
     
@@ -1955,8 +1955,8 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
     
     class HistoricDataPoint:
-        timestamp_utc: datetime
-        local_datetime: datetime
+        timestamp_utc_epoch: int
+        local_datetime_epoch: int
         back_periods_index: int
         sensor_readout: float
         expected_value: float
@@ -1971,7 +1971,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     class RuleExecutionRunParameters:
         actual_value: float
         parameters: WithinChange7DaysRuleParametersSpec
-        time_period_local: datetime
+        time_period_local_epoch: int
         previous_readouts: Sequence[HistoricDataPoint]
         time_window: RuleTimeWindowSettingsSpec
     
@@ -2113,8 +2113,8 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
     
     class HistoricDataPoint:
-        timestamp_utc: datetime
-        local_datetime: datetime
+        timestamp_utc_epoch: int
+        local_datetime_epoch: int
         back_periods_index: int
         sensor_readout: float
         expected_value: float
@@ -2129,7 +2129,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     class RuleExecutionRunParameters:
         actual_value: float
         parameters: WithinPercentChangeRuleParametersSpec
-        time_period_local: datetime
+        time_period_local_epoch: int
         previous_readouts: Sequence[HistoricDataPoint]
         time_window: RuleTimeWindowSettingsSpec
     
@@ -2275,8 +2275,8 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
     
     class HistoricDataPoint:
-        timestamp_utc: datetime
-        local_datetime: datetime
+        timestamp_utc_epoch: int
+        local_datetime_epoch: int
         back_periods_index: int
         sensor_readout: float
         expected_value: float
@@ -2291,7 +2291,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     class RuleExecutionRunParameters:
         actual_value: float
         parameters: WithinPercentChange1DayRuleParametersSpec
-        time_period_local: datetime
+        time_period_local_epoch: int
         previous_readouts: Sequence[HistoricDataPoint]
         time_window: RuleTimeWindowSettingsSpec
     
@@ -2444,8 +2444,8 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
     
     class HistoricDataPoint:
-        timestamp_utc: datetime
-        local_datetime: datetime
+        timestamp_utc_epoch: int
+        local_datetime_epoch: int
         back_periods_index: int
         sensor_readout: float
         expected_value: float
@@ -2460,7 +2460,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     class RuleExecutionRunParameters:
         actual_value: float
         parameters: WithinPercentChange30DaysRuleParametersSpec
-        time_period_local: datetime
+        time_period_local_epoch: int
         previous_readouts: Sequence[HistoricDataPoint]
         time_window: RuleTimeWindowSettingsSpec
     
@@ -2613,8 +2613,8 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
     
     class HistoricDataPoint:
-        timestamp_utc: datetime
-        local_datetime: datetime
+        timestamp_utc_epoch: int
+        local_datetime_epoch: int
         back_periods_index: int
         sensor_readout: float
         expected_value: float
@@ -2629,7 +2629,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     class RuleExecutionRunParameters:
         actual_value: float
         parameters: WithinPercentChange7DaysRuleParametersSpec
-        time_period_local: datetime
+        time_period_local_epoch: int
         previous_readouts: Sequence[HistoricDataPoint]
         time_window: RuleTimeWindowSettingsSpec
     

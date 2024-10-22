@@ -52,6 +52,7 @@ import org.apache.parquet.hadoop.util.HadoopInputFile;
 import tech.tablesaw.api.Row;
 import tech.tablesaw.api.StringColumn;
 import tech.tablesaw.api.Table;
+import tech.tablesaw.api.TextColumn;
 import tech.tablesaw.columns.Column;
 import tech.tablesaw.io.RuntimeIOException;
 import tech.tablesaw.io.Source;
@@ -94,15 +95,15 @@ public class DqoTablesawParquetReader extends TablesawParquetReader implements A
             Table loadedTable = readInternal(reader, readSupport, options.getSanitizedinputPath());
 
             Column<?>[] columns = loadedTable.columnArray();
-            boolean stringColumnConvertedToText = false;
+            boolean textColumnConvertedToStringColumn = false;
             for (int i = 0; i < columns.length; i++) {
-                if (columns[i] instanceof StringColumn) {
-                    columns[i] = TableColumnUtility.convertToTextColumn(columns[i]);
-                    stringColumnConvertedToText = true;
+                if (columns[i] instanceof TextColumn) {
+                    columns[i] = TableColumnUtility.convertToStringColumn(columns[i]);
+                    textColumnConvertedToStringColumn = true;
                 }
             }
 
-            if (stringColumnConvertedToText) {
+            if (textColumnConvertedToStringColumn) {
                 return Table.create(columns);
             }
 

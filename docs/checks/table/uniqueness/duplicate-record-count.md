@@ -178,6 +178,53 @@ spec:
                 GROUP BY `id`, `created_at`
             ) grouping_table
             ```
+    ??? example "ClickHouse"
+
+        === "Sensor template for ClickHouse"
+
+            ```sql+jinja
+            {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+                {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
+                {%- for item in column_names -%}
+                    {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
+                {%- endfor -%}
+            {% endmacro -%}
+            
+            SELECT
+                CASE
+                    WHEN sumOrNull(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value
+                {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+                {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+            FROM (
+                SELECT COUNT(*) AS duplicated_count
+                {{- lib.render_data_grouping_projections('analyzed_table', indentation='        ') }}
+                {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{- lib.render_where_clause(indentation='    ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='toString(', column_suffix=')') ~ ') IS NOT NULL') }}
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+            ) grouping_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for ClickHouse"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN sumOrNull(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value
+            FROM (
+                SELECT COUNT(*) AS duplicated_count
+                FROM "<target_schema>"."<target_table>" AS analyzed_table
+                WHERE (COALESCE(toString("id"), toString("created_at")) IS NOT NULL)
+                GROUP BY "id", "created_at"
+            ) grouping_table
+            ```
     ??? example "Databricks"
 
         === "Sensor template for Databricks"
@@ -1024,6 +1071,57 @@ Expand the *Configure with data grouping* section to see additional examples for
                 FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
                 WHERE (COALESCE(CAST(`id` AS STRING), CAST(`created_at` AS STRING)) IS NOT NULL)
                 GROUP BY `id`, `created_at`, grouping_level_1, grouping_level_2
+            ) grouping_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
+            ```
+    ??? example "ClickHouse"
+
+        === "Sensor template for ClickHouse"
+            ```sql+jinja
+            {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+                {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
+                {%- for item in column_names -%}
+                    {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
+                {%- endfor -%}
+            {% endmacro -%}
+            
+            SELECT
+                CASE
+                    WHEN sumOrNull(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value
+                {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+                {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+            FROM (
+                SELECT COUNT(*) AS duplicated_count
+                {{- lib.render_data_grouping_projections('analyzed_table', indentation='        ') }}
+                {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{- lib.render_where_clause(indentation='    ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='toString(', column_suffix=')') ~ ') IS NOT NULL') }}
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+            ) grouping_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for ClickHouse"
+            ```sql
+            SELECT
+                CASE
+                    WHEN sumOrNull(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value,
+                grouping_table.grouping_level_1,
+                grouping_table.grouping_level_2
+            FROM (
+                SELECT COUNT(*) AS duplicated_count,
+                    analyzed_table."country" AS grouping_level_1,
+                    analyzed_table."state" AS grouping_level_2
+                FROM "<target_schema>"."<target_table>" AS analyzed_table
+                WHERE (COALESCE(toString("id"), toString("created_at")) IS NOT NULL)
+                GROUP BY "id", "created_at", grouping_level_1, grouping_level_2
             ) grouping_table
             GROUP BY grouping_level_1, grouping_level_2
             ORDER BY grouping_level_1, grouping_level_2
@@ -2060,6 +2158,53 @@ spec:
                 GROUP BY `id`, `created_at`
             ) grouping_table
             ```
+    ??? example "ClickHouse"
+
+        === "Sensor template for ClickHouse"
+
+            ```sql+jinja
+            {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+                {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
+                {%- for item in column_names -%}
+                    {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
+                {%- endfor -%}
+            {% endmacro -%}
+            
+            SELECT
+                CASE
+                    WHEN sumOrNull(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value
+                {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+                {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+            FROM (
+                SELECT COUNT(*) AS duplicated_count
+                {{- lib.render_data_grouping_projections('analyzed_table', indentation='        ') }}
+                {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{- lib.render_where_clause(indentation='    ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='toString(', column_suffix=')') ~ ') IS NOT NULL') }}
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+            ) grouping_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for ClickHouse"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN sumOrNull(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value
+            FROM (
+                SELECT COUNT(*) AS duplicated_count
+                FROM "<target_schema>"."<target_table>" AS analyzed_table
+                WHERE (COALESCE(toString("id"), toString("created_at")) IS NOT NULL)
+                GROUP BY "id", "created_at"
+            ) grouping_table
+            ```
     ??? example "Databricks"
 
         === "Sensor template for Databricks"
@@ -2907,6 +3052,57 @@ Expand the *Configure with data grouping* section to see additional examples for
                 FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
                 WHERE (COALESCE(CAST(`id` AS STRING), CAST(`created_at` AS STRING)) IS NOT NULL)
                 GROUP BY `id`, `created_at`, grouping_level_1, grouping_level_2
+            ) grouping_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
+            ```
+    ??? example "ClickHouse"
+
+        === "Sensor template for ClickHouse"
+            ```sql+jinja
+            {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+                {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
+                {%- for item in column_names -%}
+                    {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
+                {%- endfor -%}
+            {% endmacro -%}
+            
+            SELECT
+                CASE
+                    WHEN sumOrNull(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value
+                {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+                {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+            FROM (
+                SELECT COUNT(*) AS duplicated_count
+                {{- lib.render_data_grouping_projections('analyzed_table', indentation='        ') }}
+                {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{- lib.render_where_clause(indentation='    ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='toString(', column_suffix=')') ~ ') IS NOT NULL') }}
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+            ) grouping_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for ClickHouse"
+            ```sql
+            SELECT
+                CASE
+                    WHEN sumOrNull(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value,
+                grouping_table.grouping_level_1,
+                grouping_table.grouping_level_2
+            FROM (
+                SELECT COUNT(*) AS duplicated_count,
+                    analyzed_table."country" AS grouping_level_1,
+                    analyzed_table."state" AS grouping_level_2
+                FROM "<target_schema>"."<target_table>" AS analyzed_table
+                WHERE (COALESCE(toString("id"), toString("created_at")) IS NOT NULL)
+                GROUP BY "id", "created_at", grouping_level_1, grouping_level_2
             ) grouping_table
             GROUP BY grouping_level_1, grouping_level_2
             ORDER BY grouping_level_1, grouping_level_2
@@ -3943,6 +4139,53 @@ spec:
                 GROUP BY `id`, `created_at`
             ) grouping_table
             ```
+    ??? example "ClickHouse"
+
+        === "Sensor template for ClickHouse"
+
+            ```sql+jinja
+            {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+                {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
+                {%- for item in column_names -%}
+                    {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
+                {%- endfor -%}
+            {% endmacro -%}
+            
+            SELECT
+                CASE
+                    WHEN sumOrNull(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value
+                {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+                {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+            FROM (
+                SELECT COUNT(*) AS duplicated_count
+                {{- lib.render_data_grouping_projections('analyzed_table', indentation='        ') }}
+                {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{- lib.render_where_clause(indentation='    ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='toString(', column_suffix=')') ~ ') IS NOT NULL') }}
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+            ) grouping_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for ClickHouse"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN sumOrNull(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value
+            FROM (
+                SELECT COUNT(*) AS duplicated_count
+                FROM "<target_schema>"."<target_table>" AS analyzed_table
+                WHERE (COALESCE(toString("id"), toString("created_at")) IS NOT NULL)
+                GROUP BY "id", "created_at"
+            ) grouping_table
+            ```
     ??? example "Databricks"
 
         === "Sensor template for Databricks"
@@ -4790,6 +5033,57 @@ Expand the *Configure with data grouping* section to see additional examples for
                 FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
                 WHERE (COALESCE(CAST(`id` AS STRING), CAST(`created_at` AS STRING)) IS NOT NULL)
                 GROUP BY `id`, `created_at`, grouping_level_1, grouping_level_2
+            ) grouping_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
+            ```
+    ??? example "ClickHouse"
+
+        === "Sensor template for ClickHouse"
+            ```sql+jinja
+            {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+                {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
+                {%- for item in column_names -%}
+                    {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
+                {%- endfor -%}
+            {% endmacro -%}
+            
+            SELECT
+                CASE
+                    WHEN sumOrNull(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value
+                {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+                {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+            FROM (
+                SELECT COUNT(*) AS duplicated_count
+                {{- lib.render_data_grouping_projections('analyzed_table', indentation='        ') }}
+                {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{- lib.render_where_clause(indentation='    ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='toString(', column_suffix=')') ~ ') IS NOT NULL') }}
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+            ) grouping_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for ClickHouse"
+            ```sql
+            SELECT
+                CASE
+                    WHEN sumOrNull(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value,
+                grouping_table.grouping_level_1,
+                grouping_table.grouping_level_2
+            FROM (
+                SELECT COUNT(*) AS duplicated_count,
+                    analyzed_table."country" AS grouping_level_1,
+                    analyzed_table."state" AS grouping_level_2
+                FROM "<target_schema>"."<target_table>" AS analyzed_table
+                WHERE (COALESCE(toString("id"), toString("created_at")) IS NOT NULL)
+                GROUP BY "id", "created_at", grouping_level_1, grouping_level_2
             ) grouping_table
             GROUP BY grouping_level_1, grouping_level_2
             ORDER BY grouping_level_1, grouping_level_2
@@ -5842,6 +6136,59 @@ spec:
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
+    ??? example "ClickHouse"
+
+        === "Sensor template for ClickHouse"
+
+            ```sql+jinja
+            {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+                {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
+                {%- for item in column_names -%}
+                    {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
+                {%- endfor -%}
+            {% endmacro -%}
+            
+            SELECT
+                CASE
+                    WHEN sumOrNull(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value
+                {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+                {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+            FROM (
+                SELECT COUNT(*) AS duplicated_count
+                {{- lib.render_data_grouping_projections('analyzed_table', indentation='        ') }}
+                {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{- lib.render_where_clause(indentation='    ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='toString(', column_suffix=')') ~ ') IS NOT NULL') }}
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+            ) grouping_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for ClickHouse"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN sumOrNull(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT COUNT(*) AS duplicated_count,
+                    CAST(analyzed_table."date_column" AS DATE) AS time_period,
+                    toDateTime64(CAST(analyzed_table."date_column" AS DATE), 3) AS time_period_utc
+                FROM "<target_schema>"."<target_table>" AS analyzed_table
+                WHERE (COALESCE(toString("id"), toString("created_at")) IS NOT NULL)
+                GROUP BY "id", "created_at", time_period, time_period_utc
+            ) grouping_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "Databricks"
 
         === "Sensor template for Databricks"
@@ -6798,6 +7145,61 @@ Expand the *Configure with data grouping* section to see additional examples for
                 FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
                 WHERE (COALESCE(CAST(`id` AS STRING), CAST(`created_at` AS STRING)) IS NOT NULL)
                 GROUP BY `id`, `created_at`, grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ) grouping_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "ClickHouse"
+
+        === "Sensor template for ClickHouse"
+            ```sql+jinja
+            {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+                {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
+                {%- for item in column_names -%}
+                    {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
+                {%- endfor -%}
+            {% endmacro -%}
+            
+            SELECT
+                CASE
+                    WHEN sumOrNull(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value
+                {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+                {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+            FROM (
+                SELECT COUNT(*) AS duplicated_count
+                {{- lib.render_data_grouping_projections('analyzed_table', indentation='        ') }}
+                {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{- lib.render_where_clause(indentation='    ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='toString(', column_suffix=')') ~ ') IS NOT NULL') }}
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+            ) grouping_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for ClickHouse"
+            ```sql
+            SELECT
+                CASE
+                    WHEN sumOrNull(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value,
+                grouping_table.grouping_level_1,
+                grouping_table.grouping_level_2,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT COUNT(*) AS duplicated_count,
+                    analyzed_table."country" AS grouping_level_1,
+                    analyzed_table."state" AS grouping_level_2,
+                    CAST(analyzed_table."date_column" AS DATE) AS time_period,
+                    toDateTime64(CAST(analyzed_table."date_column" AS DATE), 3) AS time_period_utc
+                FROM "<target_schema>"."<target_table>" AS analyzed_table
+                WHERE (COALESCE(toString("id"), toString("created_at")) IS NOT NULL)
+                GROUP BY "id", "created_at", grouping_level_1, grouping_level_2, time_period, time_period_utc
             ) grouping_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -7918,6 +8320,59 @@ spec:
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
+    ??? example "ClickHouse"
+
+        === "Sensor template for ClickHouse"
+
+            ```sql+jinja
+            {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+                {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
+                {%- for item in column_names -%}
+                    {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
+                {%- endfor -%}
+            {% endmacro -%}
+            
+            SELECT
+                CASE
+                    WHEN sumOrNull(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value
+                {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+                {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+            FROM (
+                SELECT COUNT(*) AS duplicated_count
+                {{- lib.render_data_grouping_projections('analyzed_table', indentation='        ') }}
+                {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{- lib.render_where_clause(indentation='    ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='toString(', column_suffix=')') ~ ') IS NOT NULL') }}
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+            ) grouping_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for ClickHouse"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN sumOrNull(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT COUNT(*) AS duplicated_count,
+                    DATE_TRUNC('month', CAST(analyzed_table."date_column" AS DATE)) AS time_period,
+                    toDateTime64(DATE_TRUNC('month', CAST(analyzed_table."date_column" AS DATE)), 3) AS time_period_utc
+                FROM "<target_schema>"."<target_table>" AS analyzed_table
+                WHERE (COALESCE(toString("id"), toString("created_at")) IS NOT NULL)
+                GROUP BY "id", "created_at", time_period, time_period_utc
+            ) grouping_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "Databricks"
 
         === "Sensor template for Databricks"
@@ -8874,6 +9329,61 @@ Expand the *Configure with data grouping* section to see additional examples for
                 FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
                 WHERE (COALESCE(CAST(`id` AS STRING), CAST(`created_at` AS STRING)) IS NOT NULL)
                 GROUP BY `id`, `created_at`, grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ) grouping_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "ClickHouse"
+
+        === "Sensor template for ClickHouse"
+            ```sql+jinja
+            {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+                {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
+                {%- for item in column_names -%}
+                    {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
+                {%- endfor -%}
+            {% endmacro -%}
+            
+            SELECT
+                CASE
+                    WHEN sumOrNull(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value
+                {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+                {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+            FROM (
+                SELECT COUNT(*) AS duplicated_count
+                {{- lib.render_data_grouping_projections('analyzed_table', indentation='        ') }}
+                {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{- lib.render_where_clause(indentation='    ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='toString(', column_suffix=')') ~ ') IS NOT NULL') }}
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+            ) grouping_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for ClickHouse"
+            ```sql
+            SELECT
+                CASE
+                    WHEN sumOrNull(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value,
+                grouping_table.grouping_level_1,
+                grouping_table.grouping_level_2,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT COUNT(*) AS duplicated_count,
+                    analyzed_table."country" AS grouping_level_1,
+                    analyzed_table."state" AS grouping_level_2,
+                    DATE_TRUNC('month', CAST(analyzed_table."date_column" AS DATE)) AS time_period,
+                    toDateTime64(DATE_TRUNC('month', CAST(analyzed_table."date_column" AS DATE)), 3) AS time_period_utc
+                FROM "<target_schema>"."<target_table>" AS analyzed_table
+                WHERE (COALESCE(toString("id"), toString("created_at")) IS NOT NULL)
+                GROUP BY "id", "created_at", grouping_level_1, grouping_level_2, time_period, time_period_utc
             ) grouping_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc

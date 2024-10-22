@@ -82,27 +82,27 @@ public class ErrorSamplesNormalizationServiceImpl implements ErrorSamplesNormali
 
         AbstractColumn<?,?> normalizedResultColumn = normalizeErrorSamplerResult(resultsTable, SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME); // we are using the column name from SensorReadoutsColumnNames because we are reusing sensors and the sensor returns its result as an "actual_value" column
 
-        TextColumn resultTypeColumn = TextColumn.create(ErrorSamplesColumnNames.RESULT_TYPE_COLUMN_NAME, resultRowCount);
+        StringColumn resultTypeColumn = StringColumn.create(ErrorSamplesColumnNames.RESULT_TYPE_COLUMN_NAME, resultRowCount);
         normalizedResults.addColumns(resultTypeColumn); // we will set the data type when we detect it...
 
         if (normalizedResultColumn == null) {
             resultTypeColumn.setMissingTo(ErrorSampleResultDataType.NULL.getName());
         }
 
-        if (normalizedResultColumn instanceof TextColumn) {
+        if (normalizedResultColumn instanceof StringColumn) {
             normalizedResultColumn.setName(ErrorSamplesColumnNames.RESULT_STRING_COLUMN_NAME);
             normalizedResults.addColumns(normalizedResultColumn);
             resultTypeColumn.setMissingTo(ErrorSampleResultDataType.STRING.getName());
         }
         else {
-            if (normalizedResultColumn instanceof StringColumn) {
-                TextColumn normalizedTextColumn = TableColumnUtility.convertToTextColumn(normalizedResultColumn);
-                normalizedTextColumn.setName(ErrorSamplesColumnNames.RESULT_STRING_COLUMN_NAME);
-                normalizedResults.addColumns(normalizedTextColumn);
+            if (normalizedResultColumn instanceof TextColumn) {
+                StringColumn normalizedStringColumn = TableColumnUtility.convertToStringColumn(normalizedResultColumn);
+                normalizedStringColumn.setName(ErrorSamplesColumnNames.RESULT_STRING_COLUMN_NAME);
+                normalizedResults.addColumns(normalizedStringColumn);
                 resultTypeColumn.setMissingTo(ErrorSampleResultDataType.STRING.getName());
             }
             else {
-                TextColumn resultStringColumn = TextColumn.create(ErrorSamplesColumnNames.RESULT_STRING_COLUMN_NAME, resultRowCount);
+                StringColumn resultStringColumn = StringColumn.create(ErrorSamplesColumnNames.RESULT_STRING_COLUMN_NAME, resultRowCount);
                 normalizedResults.addColumns(resultStringColumn);
             }
         }
@@ -199,14 +199,14 @@ public class ErrorSamplesNormalizationServiceImpl implements ErrorSamplesNormali
         }
         normalizedResults.addColumns(sampleIndexColumn);
 
-        TextColumn scopeColumn = TextColumn.create(ErrorSamplesColumnNames.SCOPE_COLUMN_NAME, resultRowCount);
+        StringColumn scopeColumn = StringColumn.create(ErrorSamplesColumnNames.SCOPE_COLUMN_NAME, resultRowCount);
         if (sensorRunParameters.getColumn() != null) {
             scopeColumn.setMissingTo(sensorRunParameters.getDataGroupings() != null ? ErrorSamplesDataScope.data_group.name() : ErrorSamplesDataScope.table.name());
         }
         normalizedResults.addColumns(scopeColumn);
 
         // now detect data stream level columns...
-        TextColumn[] dataStreamLevelColumns = this.commonNormalizationService.extractAndNormalizeDataGroupingDimensionColumns(
+        StringColumn[] dataStreamLevelColumns = this.commonNormalizationService.extractAndNormalizeDataGroupingDimensionColumns(
                 resultsTable, sensorRunParameters.getDataGroupings(), resultRowCount);
 
         for (int streamLevelId = 0; streamLevelId < dataStreamLevelColumns.length; streamLevelId++) {
@@ -214,7 +214,7 @@ public class ErrorSamplesNormalizationServiceImpl implements ErrorSamplesNormali
                 normalizedResults.addColumns(dataStreamLevelColumns[streamLevelId]);
             } else {
                 String dataStreamLevelColumnName = ErrorSamplesColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + (streamLevelId + 1);
-                normalizedResults.addColumns(TextColumn.create(dataStreamLevelColumnName, resultRowCount));
+                normalizedResults.addColumns(StringColumn.create(dataStreamLevelColumnName, resultRowCount));
             }
         }
 
@@ -222,10 +222,10 @@ public class ErrorSamplesNormalizationServiceImpl implements ErrorSamplesNormali
                 dataStreamLevelColumns, sensorRunParameters.getDataGroupings(), resultRowCount);
         normalizedResults.addColumns(dataGroupingHashColumn);
 
-        TextColumn dataGroupingNameColumn = this.commonNormalizationService.createDataGroupingNameColumn(dataStreamLevelColumns, resultRowCount);
+        StringColumn dataGroupingNameColumn = this.commonNormalizationService.createDataGroupingNameColumn(dataStreamLevelColumns, resultRowCount);
         normalizedResults.addColumns(dataGroupingNameColumn);
 
-        TextColumn dataStreamMappingNameColumn = TextColumn.create(ErrorSamplesColumnNames.DATA_GROUPING_CONFIGURATION_COLUMN_NAME, resultRowCount);
+        StringColumn dataStreamMappingNameColumn = StringColumn.create(ErrorSamplesColumnNames.DATA_GROUPING_CONFIGURATION_COLUMN_NAME, resultRowCount);
         if (sensorRunParameters.getDataGroupings() != null) {
             dataStreamMappingNameColumn.setMissingTo(sensorRunParameters.getDataGroupings().getDataGroupingConfigurationName());
         }
@@ -235,11 +235,11 @@ public class ErrorSamplesNormalizationServiceImpl implements ErrorSamplesNormali
         connectionHashColumn.setMissingTo(sensorRunParameters.getConnection().getHierarchyId().hashCode64());
         normalizedResults.addColumns(connectionHashColumn);
 
-        TextColumn connectionNameColumn = TextColumn.create(ErrorSamplesColumnNames.CONNECTION_NAME_COLUMN_NAME, resultRowCount);
+        StringColumn connectionNameColumn = StringColumn.create(ErrorSamplesColumnNames.CONNECTION_NAME_COLUMN_NAME, resultRowCount);
         connectionNameColumn.setMissingTo(sensorRunParameters.getConnection().getConnectionName());
         normalizedResults.addColumns(connectionNameColumn);
 
-        TextColumn providerColumn = TextColumn.create(ErrorSamplesColumnNames.PROVIDER_COLUMN_NAME, resultRowCount);
+        StringColumn providerColumn = StringColumn.create(ErrorSamplesColumnNames.PROVIDER_COLUMN_NAME, resultRowCount);
         providerColumn.setMissingTo(sensorRunParameters.getConnection().getProviderType().name());
         normalizedResults.addColumns(providerColumn);
 
@@ -248,15 +248,15 @@ public class ErrorSamplesNormalizationServiceImpl implements ErrorSamplesNormali
         tableHashColumn.setMissingTo(tableHash);
         normalizedResults.addColumns(tableHashColumn);
 
-        TextColumn schemaNameColumn = TextColumn.create(ErrorSamplesColumnNames.SCHEMA_NAME_COLUMN_NAME, resultRowCount);
+        StringColumn schemaNameColumn = StringColumn.create(ErrorSamplesColumnNames.SCHEMA_NAME_COLUMN_NAME, resultRowCount);
         schemaNameColumn.setMissingTo(sensorRunParameters.getTable().getPhysicalTableName().getSchemaName());
         normalizedResults.addColumns(schemaNameColumn);
 
-        TextColumn tableNameColumn = TextColumn.create(ErrorSamplesColumnNames.TABLE_NAME_COLUMN_NAME, resultRowCount);
+        StringColumn tableNameColumn = StringColumn.create(ErrorSamplesColumnNames.TABLE_NAME_COLUMN_NAME, resultRowCount);
         tableNameColumn.setMissingTo(sensorRunParameters.getTable().getPhysicalTableName().getTableName());
         normalizedResults.addColumns(tableNameColumn);
 
-        TextColumn tableStageColumn = TextColumn.create(ErrorSamplesColumnNames.TABLE_STAGE_COLUMN_NAME, resultRowCount);
+        StringColumn tableStageColumn = StringColumn.create(ErrorSamplesColumnNames.TABLE_STAGE_COLUMN_NAME, resultRowCount);
         if (sensorRunParameters.getTable().getStage() != null) {
             tableStageColumn.setMissingTo(sensorRunParameters.getTable().getStage());
         }
@@ -276,7 +276,7 @@ public class ErrorSamplesNormalizationServiceImpl implements ErrorSamplesNormali
         }
         normalizedResults.addColumns(columnHashColumn);
 
-        TextColumn columnNameColumn = TextColumn.create(ErrorSamplesColumnNames.COLUMN_NAME_COLUMN_NAME, resultRowCount);
+        StringColumn columnNameColumn = StringColumn.create(ErrorSamplesColumnNames.COLUMN_NAME_COLUMN_NAME, resultRowCount);
         if (sensorRunParameters.getColumn() != null) {
             columnNameColumn.setMissingTo(sensorRunParameters.getColumn().getColumnName());
         }
@@ -287,17 +287,17 @@ public class ErrorSamplesNormalizationServiceImpl implements ErrorSamplesNormali
         checkHashColumn.setMissingTo(checkHash);
         normalizedResults.addColumns(checkHashColumn);
 
-        TextColumn checkNameColumn = TextColumn.create(ErrorSamplesColumnNames.CHECK_NAME_COLUMN_NAME, resultRowCount);
+        StringColumn checkNameColumn = StringColumn.create(ErrorSamplesColumnNames.CHECK_NAME_COLUMN_NAME, resultRowCount);
         String checkName = sensorRunParameters.getCheck().getCheckName();
         checkNameColumn.setMissingTo(checkName);
         normalizedResults.addColumns(checkNameColumn);
 
-        TextColumn checkDisplayNameColumn = TextColumn.create(ErrorSamplesColumnNames.CHECK_DISPLAY_NAME_COLUMN_NAME, resultRowCount);
+        StringColumn checkDisplayNameColumn = StringColumn.create(ErrorSamplesColumnNames.CHECK_DISPLAY_NAME_COLUMN_NAME, resultRowCount);
         String checkDisplayName = sensorRunParameters.getCheck().getDisplayName();
         checkDisplayNameColumn.setMissingTo(checkDisplayName != null ? checkDisplayName : checkName); // we store the check name if there is no display name (a fallback value)
         normalizedResults.addColumns(checkDisplayNameColumn);
 
-        TextColumn checkTypeColumn = TextColumn.create(ErrorSamplesColumnNames.CHECK_TYPE_COLUMN_NAME, resultRowCount);
+        StringColumn checkTypeColumn = StringColumn.create(ErrorSamplesColumnNames.CHECK_TYPE_COLUMN_NAME, resultRowCount);
         if (sensorRunParameters.getCheckType() != null) {
             String checkType = sensorRunParameters.getCheckType().getDisplayName();
             checkTypeColumn.setMissingTo(checkType);
@@ -305,35 +305,35 @@ public class ErrorSamplesNormalizationServiceImpl implements ErrorSamplesNormali
         normalizedResults.addColumns(checkTypeColumn);
 
         TimePeriodGradient timePeriodGradient = sensorRunParameters.getTimePeriodGradient();
-        TextColumn timeGradientColumn = TextColumn.create(ErrorSamplesColumnNames.TIME_GRADIENT_COLUMN_NAME, resultRowCount);
+        StringColumn timeGradientColumn = StringColumn.create(ErrorSamplesColumnNames.TIME_GRADIENT_COLUMN_NAME, resultRowCount);
         if (timePeriodGradient != null) {
             timeGradientColumn.setMissingTo(timePeriodGradient.name());
         }
         normalizedResults.addColumns(timeGradientColumn);
 
-        TextColumn checkCategoryColumn = TextColumn.create(ErrorSamplesColumnNames.CHECK_CATEGORY_COLUMN_NAME, resultRowCount);
+        StringColumn checkCategoryColumn = StringColumn.create(ErrorSamplesColumnNames.CHECK_CATEGORY_COLUMN_NAME, resultRowCount);
         String categoryName = sensorRunParameters.getCheck().getCategoryName();
         checkCategoryColumn.setMissingTo(categoryName);
         normalizedResults.addColumns(checkCategoryColumn);
 
-        TextColumn tableComparisonNameColumn = TextColumn.create(ErrorSamplesColumnNames.TABLE_COMPARISON_NAME_COLUMN_NAME, resultRowCount);
+        StringColumn tableComparisonNameColumn = StringColumn.create(ErrorSamplesColumnNames.TABLE_COMPARISON_NAME_COLUMN_NAME, resultRowCount);
         if (sensorRunParameters.getTableComparisonConfiguration() != null) {
             String tableComparisonName = sensorRunParameters.getTableComparisonConfiguration().getComparisonName();
             tableComparisonNameColumn.setMissingTo(tableComparisonName);
         }
         normalizedResults.addColumns(tableComparisonNameColumn);
 
-        TextColumn qualityDimensionColumn = TextColumn.create(ErrorSamplesColumnNames.QUALITY_DIMENSION_COLUMN_NAME, resultRowCount);
+        StringColumn qualityDimensionColumn = StringColumn.create(ErrorSamplesColumnNames.QUALITY_DIMENSION_COLUMN_NAME, resultRowCount);
         String effectiveDataQualityDimension = sensorRunParameters.getCheck().getEffectiveDataQualityDimension();
         qualityDimensionColumn.setMissingTo(effectiveDataQualityDimension);
         normalizedResults.addColumns(qualityDimensionColumn);
 
-        TextColumn sensorNameColumn = TextColumn.create(ErrorSamplesColumnNames.SENSOR_NAME_COLUMN_NAME, resultRowCount);
+        StringColumn sensorNameColumn = StringColumn.create(ErrorSamplesColumnNames.SENSOR_NAME_COLUMN_NAME, resultRowCount);
         String sensorDefinitionName = sensorRunParameters.getEffectiveSensorRuleNames().getSensorName();
         sensorNameColumn.setMissingTo(sensorDefinitionName);
         normalizedResults.addColumns(sensorNameColumn);
 
-        TextColumn timeSeriesUuidColumn = this.commonNormalizationService.createTimeSeriesUuidColumn(dataGroupingHashColumn, checkHash, tableHash,
+        StringColumn timeSeriesUuidColumn = this.commonNormalizationService.createTimeSeriesUuidColumn(dataGroupingHashColumn, checkHash, tableHash,
                 columnHash != null ? columnHash.longValue() : 0L, resultRowCount);
         normalizedResults.addColumns(timeSeriesUuidColumn);
 
@@ -345,7 +345,7 @@ public class ErrorSamplesNormalizationServiceImpl implements ErrorSamplesNormali
         durationMsColumn.setMissingTo(sensorExecutionResult.getSensorDurationMs());
         normalizedResults.addColumns(durationMsColumn);
 
-        TextColumn sampleFilterColumn = TextColumn.create(ErrorSamplesColumnNames.SAMPLE_FILTER_COLUMN_NAME, resultRowCount);
+        StringColumn sampleFilterColumn = StringColumn.create(ErrorSamplesColumnNames.SAMPLE_FILTER_COLUMN_NAME, resultRowCount);
         List<String> allFilters = new ArrayList<>();
         if (!Strings.isNullOrEmpty(sensorRunParameters.getTable().getFilter())) {
             allFilters.add(sensorRunParameters.getTable().getFilter());
@@ -359,27 +359,27 @@ public class ErrorSamplesNormalizationServiceImpl implements ErrorSamplesNormali
         }
         normalizedResults.addColumns(sampleFilterColumn);
 
-        TextColumn id1Column = normalizeSourceIdColumn(resultsTable, ErrorSamplesColumnNames.ROW_ID_COLUMN_NAME_PREFIX + "1");
+        StringColumn id1Column = normalizeSourceIdColumn(resultsTable, ErrorSamplesColumnNames.ROW_ID_COLUMN_NAME_PREFIX + "1");
         normalizedResults.addColumns(id1Column);
-        TextColumn id2Column = normalizeSourceIdColumn(resultsTable, ErrorSamplesColumnNames.ROW_ID_COLUMN_NAME_PREFIX + "2");
+        StringColumn id2Column = normalizeSourceIdColumn(resultsTable, ErrorSamplesColumnNames.ROW_ID_COLUMN_NAME_PREFIX + "2");
         normalizedResults.addColumns(id2Column);
-        TextColumn id3Column = normalizeSourceIdColumn(resultsTable, ErrorSamplesColumnNames.ROW_ID_COLUMN_NAME_PREFIX + "3");
+        StringColumn id3Column = normalizeSourceIdColumn(resultsTable, ErrorSamplesColumnNames.ROW_ID_COLUMN_NAME_PREFIX + "3");
         normalizedResults.addColumns(id3Column);
-        TextColumn id4Column = normalizeSourceIdColumn(resultsTable, ErrorSamplesColumnNames.ROW_ID_COLUMN_NAME_PREFIX + "4");
+        StringColumn id4Column = normalizeSourceIdColumn(resultsTable, ErrorSamplesColumnNames.ROW_ID_COLUMN_NAME_PREFIX + "4");
         normalizedResults.addColumns(id4Column);
-        TextColumn id5Column = normalizeSourceIdColumn(resultsTable, ErrorSamplesColumnNames.ROW_ID_COLUMN_NAME_PREFIX + "5");
+        StringColumn id5Column = normalizeSourceIdColumn(resultsTable, ErrorSamplesColumnNames.ROW_ID_COLUMN_NAME_PREFIX + "5");
         normalizedResults.addColumns(id5Column);
 
         InstantColumn createdAtColumn = InstantColumn.create(ErrorSamplesColumnNames.CREATED_AT_COLUMN_NAME, resultRowCount);
         normalizedResults.addColumns(createdAtColumn);
         InstantColumn updatedAtColumn = InstantColumn.create(ErrorSamplesColumnNames.UPDATED_AT_COLUMN_NAME, resultRowCount);
         normalizedResults.addColumns(updatedAtColumn);
-        TextColumn createdByColumn = TextColumn.create(ErrorSamplesColumnNames.CREATED_BY_COLUMN_NAME, resultRowCount);
+        StringColumn createdByColumn = StringColumn.create(ErrorSamplesColumnNames.CREATED_BY_COLUMN_NAME, resultRowCount);
         normalizedResults.addColumns(createdByColumn);
-        TextColumn updatedByColumn = TextColumn.create(ErrorSamplesColumnNames.UPDATED_BY_COLUMN_NAME, resultRowCount);
+        StringColumn updatedByColumn = StringColumn.create(ErrorSamplesColumnNames.UPDATED_BY_COLUMN_NAME, resultRowCount);
         normalizedResults.addColumns(updatedByColumn);
 
-        TextColumn idColumn = this.commonNormalizationService.createErrorSampleRowIdColumn(dataGroupingHashColumn, collectedAtColumn, sampleIndexColumn,
+        StringColumn idColumn = this.commonNormalizationService.createErrorSampleRowIdColumn(dataGroupingHashColumn, collectedAtColumn, sampleIndexColumn,
                 checkHash, tableHash, columnHash != null ? columnHash.longValue() : 0L, resultRowCount);
         normalizedResults.insertColumn(0, idColumn);
 
@@ -449,21 +449,25 @@ public class ErrorSamplesNormalizationServiceImpl implements ErrorSamplesNormali
             return ((TimeColumn)currentColumn).copy();
         }
 
-        if (currentColumn instanceof AbstractStringColumn) {  // covers StringColumn and TextColumn
-            AbstractStringColumn<?> stringColumn = (AbstractStringColumn<?>) currentColumn;
-            TextColumn truncatedTextColumn = TextColumn.create(columnName, resultsTable.rowCount());
-            for (int i = 0; i < stringColumn.size(); i++) {
-                String stringValue = stringColumn.get(i);
+        if (currentColumn instanceof StringColumn) {
+            return ((StringColumn)currentColumn).copy();
+        }
+
+        if (currentColumn instanceof TextColumn) {  // covers TextColumn and StringColumn
+            TextColumn textColumn = (TextColumn) currentColumn;
+            StringColumn truncatedStringColumn = StringColumn.create(columnName, resultsTable.rowCount());
+            for (int i = 0; i < textColumn.size(); i++) {
+                String stringValue = textColumn.get(i);
                 if (!Strings.isNullOrEmpty(stringValue)) {
                     if (stringValue.length() > this.errorSamplingConfigurationProperties.getTruncatedStringsLength()) {
                         stringValue = stringValue.substring(0, this.errorSamplingConfigurationProperties.getTruncatedStringsLength());
                     }
 
-                    truncatedTextColumn.set(i, stringValue);
+                    truncatedStringColumn.set(i, stringValue);
                 }
             }
 
-            return truncatedTextColumn;
+            return truncatedStringColumn;
         }
 
 
@@ -504,7 +508,7 @@ public class ErrorSamplesNormalizationServiceImpl implements ErrorSamplesNormali
      * @param columnName Column name to find.
      * @return A normalized id column or an empty column when the column was not found.
      */
-    public TextColumn normalizeSourceIdColumn(Table resultsTable, String columnName) {
+    public StringColumn normalizeSourceIdColumn(Table resultsTable, String columnName) {
         if (resultsTable == null) {
             // the collector returned with an error, we don't have a result column
             return null;
@@ -512,10 +516,10 @@ public class ErrorSamplesNormalizationServiceImpl implements ErrorSamplesNormali
 
         Column<?> currentColumn = TableColumnUtility.findColumn(resultsTable, columnName);
         if (currentColumn == null) {
-            return TextColumn.create(columnName, resultsTable.rowCount());
+            return StringColumn.create(columnName, resultsTable.rowCount());
         }
 
-        TextColumn resultColumn = TableColumnUtility.convertToTextColumn(currentColumn);
+        StringColumn resultColumn = TableColumnUtility.convertToStringColumn(currentColumn);
         if (resultColumn == currentColumn) {
             resultColumn = resultColumn.copy();
         }

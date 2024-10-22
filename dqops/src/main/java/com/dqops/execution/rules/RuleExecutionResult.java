@@ -29,6 +29,7 @@ public class RuleExecutionResult {
     private Double expectedValue;
     private Double lowerBound;
     private Double upperBound;
+    private boolean modelIsOutdated;
 
     /**
      * Returns the status if the rule has passed.
@@ -108,5 +109,21 @@ public class RuleExecutionResult {
      */
     public void setUpperBound(Double upperBound) {
         this.upperBound = upperBound;
+    }
+
+    /**
+     * Returns a boolean flag which says that the ML model that the rule uses is outdated and should be refreshed.
+     * @return True when the model is outdated.
+     */
+    public boolean isModelIsOutdated() {
+        return modelIsOutdated;
+    }
+
+    /**
+     * Sets a flag which informs the DQOps engine that the ML model should be refreshed.
+     * @param modelIsOutdated The model is outdated and should be refreshed.
+     */
+    public void setModelIsOutdated(boolean modelIsOutdated) {
+        this.modelIsOutdated = modelIsOutdated;
     }
 }

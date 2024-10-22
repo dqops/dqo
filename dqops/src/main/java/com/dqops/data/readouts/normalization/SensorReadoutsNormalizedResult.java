@@ -22,7 +22,6 @@ import com.dqops.metadata.timeseries.TimePeriodGradient;
 import com.dqops.utils.tables.TableColumnUtility;
 import com.google.common.base.Strings;
 import tech.tablesaw.api.*;
-import tech.tablesaw.columns.Column;
 import tech.tablesaw.selection.Selection;
 
 import java.time.Instant;
@@ -33,51 +32,51 @@ import java.time.Instant;
  */
 public class SensorReadoutsNormalizedResult {
     private final Table table;
-    private final TextColumn idColumn;
+    private final StringColumn idColumn;
     private final DoubleColumn actualValueColumn;
     private final DoubleColumn expectedValueColumn;
     private final DateTimeColumn timePeriodColumn;
     private final InstantColumn timePeriodUtcColumn;
-    private final TextColumn timeGradientColumn;
-    private final TextColumn dataGroupingLevel1Column;
-    private final TextColumn dataGroupingLevel2Column;
-    private final TextColumn dataGroupingLevel3Column;
-    private final TextColumn dataGroupingLevel4Column;
-    private final TextColumn dataGroupingLevel5Column;
-    private final TextColumn dataGroupingLevel6Column;
-    private final TextColumn dataGroupingLevel7Column;
-    private final TextColumn dataGroupingLevel8Column;
-    private final TextColumn dataGroupingLevel9Column;
+    private final StringColumn timeGradientColumn;
+    private final StringColumn dataGroupingLevel1Column;
+    private final StringColumn dataGroupingLevel2Column;
+    private final StringColumn dataGroupingLevel3Column;
+    private final StringColumn dataGroupingLevel4Column;
+    private final StringColumn dataGroupingLevel5Column;
+    private final StringColumn dataGroupingLevel6Column;
+    private final StringColumn dataGroupingLevel7Column;
+    private final StringColumn dataGroupingLevel8Column;
+    private final StringColumn dataGroupingLevel9Column;
     private final LongColumn dataGroupHashColumn;
-    private final TextColumn dataGroupNameColumn;
-    private final TextColumn dataGroupingConfigurationColumn;
+    private final StringColumn dataGroupNameColumn;
+    private final StringColumn dataGroupingConfigurationColumn;
     private final LongColumn connectionHashColumn;
-    private final TextColumn connectionNameColumn;
-    private final TextColumn providerColumn;
+    private final StringColumn connectionNameColumn;
+    private final StringColumn providerColumn;
     private final LongColumn tableHashColumn;
-    private final TextColumn schemaNameColumn;
-    private final TextColumn tableNameColumn;
-    private final TextColumn tableNamePatternColumn;
-    private final TextColumn tableStageColumn;
+    private final StringColumn schemaNameColumn;
+    private final StringColumn tableNameColumn;
+    private final StringColumn tableNamePatternColumn;
+    private final StringColumn tableStageColumn;
     private final IntColumn tablePriorityColumn;
     private final LongColumn columnHashColumn;
-    private final TextColumn columnNameColumn;
-    private final TextColumn columnNamePatternColumn;
+    private final StringColumn columnNameColumn;
+    private final StringColumn columnNamePatternColumn;
     private final LongColumn checkHashColumn;
-    private final TextColumn checkNameColumn;
-    private final TextColumn checkDisplayNameColumn;
-    private final TextColumn checkTypeColumn;
-    private final TextColumn checkCategoryColumn;
-    private final TextColumn tableComparisonNameColumn;
-    private final TextColumn qualityDimensionColumn;
-    private final TextColumn sensorNameColumn;
-    private final TextColumn timeSeriesIdColumn;
+    private final StringColumn checkNameColumn;
+    private final StringColumn checkDisplayNameColumn;
+    private final StringColumn checkTypeColumn;
+    private final StringColumn checkCategoryColumn;
+    private final StringColumn tableComparisonNameColumn;
+    private final StringColumn qualityDimensionColumn;
+    private final StringColumn sensorNameColumn;
+    private final StringColumn timeSeriesIdColumn;
     private final InstantColumn executedAtColumn;
     private final IntColumn durationMsColumn;
     private final InstantColumn createdAtColumn;
     private final InstantColumn updatedAtColumn;
-    private final TextColumn createdByColumn;
-    private final TextColumn updatedByColumn;
+    private final StringColumn createdByColumn;
+    private final StringColumn updatedByColumn;
 
     private final IntColumn severityColumn;
 
@@ -97,51 +96,51 @@ public class SensorReadoutsNormalizedResult {
      */
     public SensorReadoutsNormalizedResult(Table table, boolean addColumWhenMissing) {
         this.table = table;
-        this.idColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.ID_COLUMN_NAME, addColumWhenMissing);
+        this.idColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.ID_COLUMN_NAME, addColumWhenMissing);
         this.actualValueColumn = TableColumnUtility.getOrAddDoubleColumn (table, SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME, addColumWhenMissing);
         this.expectedValueColumn = TableColumnUtility.getOrAddDoubleColumn(table, SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME, addColumWhenMissing);
         this.timePeriodColumn = TableColumnUtility.getOrAddDateTimeColumn(table, SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME, addColumWhenMissing);
         this.timePeriodUtcColumn = TableColumnUtility.getOrAddInstantColumn(table, SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME, addColumWhenMissing);
-        this.timeGradientColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME, addColumWhenMissing);
-        this.dataGroupingLevel1Column = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "1", addColumWhenMissing);
-        this.dataGroupingLevel2Column = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "2", addColumWhenMissing);
-        this.dataGroupingLevel3Column = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "3", addColumWhenMissing);
-        this.dataGroupingLevel4Column = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "4", addColumWhenMissing);
-        this.dataGroupingLevel5Column = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "5", addColumWhenMissing);
-        this.dataGroupingLevel6Column = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "6", addColumWhenMissing);
-        this.dataGroupingLevel7Column = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "7", addColumWhenMissing);
-        this.dataGroupingLevel8Column = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "8", addColumWhenMissing);
-        this.dataGroupingLevel9Column = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "9", addColumWhenMissing);
+        this.timeGradientColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME, addColumWhenMissing);
+        this.dataGroupingLevel1Column = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "1", addColumWhenMissing);
+        this.dataGroupingLevel2Column = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "2", addColumWhenMissing);
+        this.dataGroupingLevel3Column = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "3", addColumWhenMissing);
+        this.dataGroupingLevel4Column = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "4", addColumWhenMissing);
+        this.dataGroupingLevel5Column = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "5", addColumWhenMissing);
+        this.dataGroupingLevel6Column = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "6", addColumWhenMissing);
+        this.dataGroupingLevel7Column = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "7", addColumWhenMissing);
+        this.dataGroupingLevel8Column = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "8", addColumWhenMissing);
+        this.dataGroupingLevel9Column = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "9", addColumWhenMissing);
         this.dataGroupHashColumn = TableColumnUtility.getOrAddLongColumn(table, SensorReadoutsColumnNames.DATA_GROUP_HASH_COLUMN_NAME, addColumWhenMissing);
-        this.dataGroupNameColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.DATA_GROUP_NAME_COLUMN_NAME, addColumWhenMissing);
-        this.dataGroupingConfigurationColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.DATA_GROUPING_CONFIGURATION_COLUMN_NAME, addColumWhenMissing);
+        this.dataGroupNameColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.DATA_GROUP_NAME_COLUMN_NAME, addColumWhenMissing);
+        this.dataGroupingConfigurationColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.DATA_GROUPING_CONFIGURATION_COLUMN_NAME, addColumWhenMissing);
         this.connectionHashColumn = TableColumnUtility.getOrAddLongColumn(table, SensorReadoutsColumnNames.CONNECTION_HASH_COLUMN_NAME, addColumWhenMissing);
-        this.connectionNameColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.CONNECTION_NAME_COLUMN_NAME, addColumWhenMissing);
-        this.providerColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.PROVIDER_COLUMN_NAME, addColumWhenMissing);
+        this.connectionNameColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.CONNECTION_NAME_COLUMN_NAME, addColumWhenMissing);
+        this.providerColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.PROVIDER_COLUMN_NAME, addColumWhenMissing);
         this.tableHashColumn = TableColumnUtility.getOrAddLongColumn(table, SensorReadoutsColumnNames.TABLE_HASH_COLUMN_NAME, addColumWhenMissing);
-        this.schemaNameColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.SCHEMA_NAME_COLUMN_NAME, addColumWhenMissing);
-        this.tableNameColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.TABLE_NAME_COLUMN_NAME, addColumWhenMissing);
-        this.tableNamePatternColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.TABLE_NAME_PATTERN_COLUMN_NAME, addColumWhenMissing);
-        this.tableStageColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.TABLE_STAGE_COLUMN_NAME, addColumWhenMissing);
+        this.schemaNameColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.SCHEMA_NAME_COLUMN_NAME, addColumWhenMissing);
+        this.tableNameColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.TABLE_NAME_COLUMN_NAME, addColumWhenMissing);
+        this.tableNamePatternColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.TABLE_NAME_PATTERN_COLUMN_NAME, addColumWhenMissing);
+        this.tableStageColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.TABLE_STAGE_COLUMN_NAME, addColumWhenMissing);
         this.tablePriorityColumn = TableColumnUtility.getOrAddIntColumn(table, SensorReadoutsColumnNames.TABLE_PRIORITY_COLUMN_NAME, addColumWhenMissing);
         this.columnHashColumn = TableColumnUtility.getOrAddLongColumn(table, SensorReadoutsColumnNames.COLUMN_HASH_COLUMN_NAME, addColumWhenMissing);
-        this.columnNameColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME, addColumWhenMissing);
-        this.columnNamePatternColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.COLUMN_NAME_PATTERN_COLUMN_NAME, addColumWhenMissing);
+        this.columnNameColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME, addColumWhenMissing);
+        this.columnNamePatternColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.COLUMN_NAME_PATTERN_COLUMN_NAME, addColumWhenMissing);
         this.checkHashColumn = TableColumnUtility.getOrAddLongColumn(table, SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME, addColumWhenMissing);
-        this.checkNameColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.CHECK_NAME_COLUMN_NAME, addColumWhenMissing);
-        this.checkDisplayNameColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.CHECK_DISPLAY_NAME_COLUMN_NAME, addColumWhenMissing);
-        this.checkTypeColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME, addColumWhenMissing);
-        this.checkCategoryColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.CHECK_CATEGORY_COLUMN_NAME, addColumWhenMissing);
-        this.tableComparisonNameColumn = TableColumnUtility.getOrAddTextColumn(table, CheckResultsColumnNames.TABLE_COMPARISON_NAME_COLUMN_NAME, addColumWhenMissing);
-        this.qualityDimensionColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.QUALITY_DIMENSION_COLUMN_NAME, addColumWhenMissing);
-        this.sensorNameColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.SENSOR_NAME_COLUMN_NAME, addColumWhenMissing);
-        this.timeSeriesIdColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.TIME_SERIES_ID_COLUMN_NAME, addColumWhenMissing);
+        this.checkNameColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.CHECK_NAME_COLUMN_NAME, addColumWhenMissing);
+        this.checkDisplayNameColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.CHECK_DISPLAY_NAME_COLUMN_NAME, addColumWhenMissing);
+        this.checkTypeColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME, addColumWhenMissing);
+        this.checkCategoryColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.CHECK_CATEGORY_COLUMN_NAME, addColumWhenMissing);
+        this.tableComparisonNameColumn = TableColumnUtility.getOrAddStringColumn(table, CheckResultsColumnNames.TABLE_COMPARISON_NAME_COLUMN_NAME, addColumWhenMissing);
+        this.qualityDimensionColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.QUALITY_DIMENSION_COLUMN_NAME, addColumWhenMissing);
+        this.sensorNameColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.SENSOR_NAME_COLUMN_NAME, addColumWhenMissing);
+        this.timeSeriesIdColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.TIME_SERIES_ID_COLUMN_NAME, addColumWhenMissing);
         this.executedAtColumn = TableColumnUtility.getOrAddInstantColumn(table, SensorReadoutsColumnNames.EXECUTED_AT_COLUMN_NAME, addColumWhenMissing);
         this.durationMsColumn = TableColumnUtility.getOrAddIntColumn(table, SensorReadoutsColumnNames.DURATION_MS_COLUMN_NAME, addColumWhenMissing);
         this.createdAtColumn = TableColumnUtility.getOrAddInstantColumn(table, SensorReadoutsColumnNames.CREATED_AT_COLUMN_NAME, addColumWhenMissing);
         this.updatedAtColumn = TableColumnUtility.getOrAddInstantColumn(table, SensorReadoutsColumnNames.UPDATED_AT_COLUMN_NAME, addColumWhenMissing);
-        this.createdByColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.CREATED_BY_COLUMN_NAME, addColumWhenMissing);
-        this.updatedByColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.UPDATED_BY_COLUMN_NAME, addColumWhenMissing);
+        this.createdByColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.CREATED_BY_COLUMN_NAME, addColumWhenMissing);
+        this.updatedByColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.UPDATED_BY_COLUMN_NAME, addColumWhenMissing);
 
         // this is a special condition, we are storing a severity column only when receiving results from custom data quality checks using custom queries
         // that return a 'severity' column, to bypass calling the rules
@@ -160,7 +159,7 @@ public class SensorReadoutsNormalizedResult {
      * id column that is a primary for both the sensor_readouts and rule_results tables.
      * @return Check result id (primary key) column.
      */
-    public TextColumn getIdColumn() {
+    public StringColumn getIdColumn() {
         return idColumn;
     }
 
@@ -201,7 +200,7 @@ public class SensorReadoutsNormalizedResult {
      * a time gradient from {@link TimePeriodGradient} enumeration.
      * @return Time gradient name, e.q. "day", "week", "month".
      */
-    public TextColumn getTimeGradientColumn() {
+    public StringColumn getTimeGradientColumn() {
         return timeGradientColumn;
     }
 
@@ -209,7 +208,7 @@ public class SensorReadoutsNormalizedResult {
      * Returns the column that contains the value of the data stream at the level 1.
      * @return Data stream value for the grouping_level_1.
      */
-    public TextColumn getDataGroupingLevel1Column() {
+    public StringColumn getDataGroupingLevel1Column() {
         return dataGroupingLevel1Column;
     }
 
@@ -217,7 +216,7 @@ public class SensorReadoutsNormalizedResult {
      * Returns the column that contains the value of the data stream at the level 2.
      * @return Data stream value for the grouping_level_2.
      */
-    public TextColumn getDataGroupingLevel2Column() {
+    public StringColumn getDataGroupingLevel2Column() {
         return dataGroupingLevel2Column;
     }
 
@@ -225,7 +224,7 @@ public class SensorReadoutsNormalizedResult {
      * Returns the column that contains the value of the data stream at the level 3.
      * @return Data stream value for the grouping_level_3.
      */
-    public TextColumn getDataGroupingLevel3Column() {
+    public StringColumn getDataGroupingLevel3Column() {
         return dataGroupingLevel3Column;
     }
 
@@ -233,7 +232,7 @@ public class SensorReadoutsNormalizedResult {
      * Returns the column that contains the value of the data stream at the level 4.
      * @return Data stream value for the grouping_level_4.
      */
-    public TextColumn getDataGroupingLevel4Column() {
+    public StringColumn getDataGroupingLevel4Column() {
         return dataGroupingLevel4Column;
     }
 
@@ -241,7 +240,7 @@ public class SensorReadoutsNormalizedResult {
      * Returns the column that contains the value of the data stream at the level 5.
      * @return Data stream value for the grouping_level_5.
      */
-    public TextColumn getDataGroupingLevel5Column() {
+    public StringColumn getDataGroupingLevel5Column() {
         return dataGroupingLevel5Column;
     }
 
@@ -249,7 +248,7 @@ public class SensorReadoutsNormalizedResult {
      * Returns the column that contains the value of the data stream at the level 6.
      * @return Data stream value for the grouping_level_6.
      */
-    public TextColumn getDataGroupingLevel6Column() {
+    public StringColumn getDataGroupingLevel6Column() {
         return dataGroupingLevel6Column;
     }
 
@@ -257,7 +256,7 @@ public class SensorReadoutsNormalizedResult {
      * Returns the column that contains the value of the data stream at the level 7.
      * @return Data stream value for the grouping_level_7.
      */
-    public TextColumn getDataGroupingLevel7Column() {
+    public StringColumn getDataGroupingLevel7Column() {
         return dataGroupingLevel7Column;
     }
 
@@ -265,7 +264,7 @@ public class SensorReadoutsNormalizedResult {
      * Returns the column that contains the value of the data stream at the level 8.
      * @return Data stream value for the grouping_level_8.
      */
-    public TextColumn getDataGroupingLevel8Column() {
+    public StringColumn getDataGroupingLevel8Column() {
         return dataGroupingLevel8Column;
     }
 
@@ -273,7 +272,7 @@ public class SensorReadoutsNormalizedResult {
      * Returns the column that contains the value of the data stream at the level 9.
      * @return Data stream value for the grouping_level_9.
      */
-    public TextColumn getDataGroupingLevel9Column() {
+    public StringColumn getDataGroupingLevel9Column() {
         return dataGroupingLevel9Column;
     }
 
@@ -289,7 +288,7 @@ public class SensorReadoutsNormalizedResult {
      * Data stream name column. The data stream name is concatenated from data stream levels and is a user friendly value.
      * @return Data stream name column.
      */
-    public TextColumn getDataGroupNameColumn() {
+    public StringColumn getDataGroupNameColumn() {
         return dataGroupNameColumn;
     }
 
@@ -297,7 +296,7 @@ public class SensorReadoutsNormalizedResult {
      * Returns the data stream mapping name column. It contains the name of the selected data stream mapping that was used.
      * @return Data stream mapping name column.
      */
-    public TextColumn getDataGroupingConfigurationColumn() {
+    public StringColumn getDataGroupingConfigurationColumn() {
         return dataGroupingConfigurationColumn;
     }
 
@@ -313,7 +312,7 @@ public class SensorReadoutsNormalizedResult {
      * Returns a connection name column. The column contains the source connection name.
      * @return Connection name column.
      */
-    public TextColumn getConnectionNameColumn() {
+    public StringColumn getConnectionNameColumn() {
         return connectionNameColumn;
     }
 
@@ -321,7 +320,7 @@ public class SensorReadoutsNormalizedResult {
      * Returns a provider name column. The column contains the provider name.
      * @return Provider name column.
      */
-    public TextColumn getProviderColumn() {
+    public StringColumn getProviderColumn() {
         return providerColumn;
     }
 
@@ -337,7 +336,7 @@ public class SensorReadoutsNormalizedResult {
      * Returns a tablesaw column with the schema name of a table.
      * @return Schema name column.
      */
-    public TextColumn getSchemaNameColumn() {
+    public StringColumn getSchemaNameColumn() {
         return schemaNameColumn;
     }
 
@@ -345,7 +344,7 @@ public class SensorReadoutsNormalizedResult {
      * Returns a tablesaw column with the table name.
      * @return Column with the table name.
      */
-    public TextColumn getTableNameColumn() {
+    public StringColumn getTableNameColumn() {
         return tableNameColumn;
     }
 
@@ -353,7 +352,7 @@ public class SensorReadoutsNormalizedResult {
      * Returns a tablesaw column with the table name pattern.
      * @return Column with the table name pattern.
      */
-    public TextColumn getTableNamePatternColumn() {
+    public StringColumn getTableNamePatternColumn() {
         return tableNamePatternColumn;
     }
 
@@ -361,7 +360,7 @@ public class SensorReadoutsNormalizedResult {
      * Returns a tablesaw column with the table's stage.
      * @return Table's stage column.
      */
-    public TextColumn getTableStageColumn() {
+    public StringColumn getTableStageColumn() {
         return tableStageColumn;
     }
 
@@ -385,7 +384,7 @@ public class SensorReadoutsNormalizedResult {
      * Returns a tablesaw column that stores the column name. The column with "column names" may contain nulls when checks are defined for the entire table level.
      * @return Column name tablesaw column.
      */
-    public TextColumn getColumnNameColumn() {
+    public StringColumn getColumnNameColumn() {
         return columnNameColumn;
     }
 
@@ -393,7 +392,7 @@ public class SensorReadoutsNormalizedResult {
      * Returns a tablesaw column that stores the column name pattern. The column with "column names" may contain nulls when checks are defined for the entire table level.
      * @return Column name pattern tablesaw column.
      */
-    public TextColumn getColumnNamePatternColumn() {
+    public StringColumn getColumnNamePatternColumn() {
         return columnNamePatternColumn;
     }
 
@@ -409,7 +408,7 @@ public class SensorReadoutsNormalizedResult {
      * Returns a tablesaw column with the check name.
      * @return Check name column.
      */
-    public TextColumn getCheckNameColumn() {
+    public StringColumn getCheckNameColumn() {
         return checkNameColumn;
     }
 
@@ -417,7 +416,7 @@ public class SensorReadoutsNormalizedResult {
      * Returns a tablesaw column with the check display name.
      * @return Check display name column.
      */
-    public TextColumn getCheckDisplayNameColumn() {
+    public StringColumn getCheckDisplayNameColumn() {
         return checkDisplayNameColumn;
     }
 
@@ -425,7 +424,7 @@ public class SensorReadoutsNormalizedResult {
      * Returns a column that stores the check type (profiling, monitoring, partitioned).
      * @return Check type column.
      */
-    public TextColumn getCheckTypeColumn() {
+    public StringColumn getCheckTypeColumn() {
         return checkTypeColumn;
     }
 
@@ -433,7 +432,7 @@ public class SensorReadoutsNormalizedResult {
      * Returns the column that stores the check category (the node in YAML that is a parent of the group of checks).
      * @return Quality check category name column.
      */
-    public TextColumn getCheckCategoryColumn() {
+    public StringColumn getCheckCategoryColumn() {
         return checkCategoryColumn;
     }
 
@@ -441,7 +440,7 @@ public class SensorReadoutsNormalizedResult {
      * Returns the column that contains the table comparison name for data comparison checks.
      * @return Table comparison name column.
      */
-    public TextColumn getTableComparisonNameColumn() {
+    public StringColumn getTableComparisonNameColumn() {
         return tableComparisonNameColumn;
     }
 
@@ -449,7 +448,7 @@ public class SensorReadoutsNormalizedResult {
      * Returns a tablesaw column with the parent quality dimension of a check.
      * @return Quality dimension of a check.
      */
-    public TextColumn getQualityDimensionColumn() {
+    public StringColumn getQualityDimensionColumn() {
         return qualityDimensionColumn;
     }
 
@@ -457,7 +456,7 @@ public class SensorReadoutsNormalizedResult {
      * Returns a column with the sensor name.
      * @return Sensor name column.
      */
-    public TextColumn getSensorNameColumn() {
+    public StringColumn getSensorNameColumn() {
         return sensorNameColumn;
     }
 
@@ -465,7 +464,7 @@ public class SensorReadoutsNormalizedResult {
      * Returns a time series id column.
      * @return Column that stores a time series id.
      */
-    public TextColumn getTimeSeriesIdColumn() {
+    public StringColumn getTimeSeriesIdColumn() {
         return timeSeriesIdColumn;
     }
 
@@ -505,7 +504,7 @@ public class SensorReadoutsNormalizedResult {
      * Returns the created by column.
      * @return Created by column.
      */
-    public TextColumn getCreatedByColumn() {
+    public StringColumn getCreatedByColumn() {
         return createdByColumn;
     }
 
@@ -513,7 +512,7 @@ public class SensorReadoutsNormalizedResult {
      * Returns the updated by column.
      * @return Updated by column.
      */
-    public TextColumn getUpdatedByColumn() {
+    public StringColumn getUpdatedByColumn() {
         return updatedByColumn;
     }
 

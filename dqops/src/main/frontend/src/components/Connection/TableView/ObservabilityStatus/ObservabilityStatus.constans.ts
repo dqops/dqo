@@ -18,9 +18,11 @@ export const checkNameDictionary = {
   daily_column_list_changed: 'Detect if columns were added or removed',
   daily_column_list_or_order_changed:
     'Detect if the column list or order has changed',
-  daily_column_types_changed: 'Detect if the column list or data type has changed',
+  daily_column_types_changed:
+    'Detect if the column list or data type has changed',
   daily_detected_datatype_in_text_changed:
     'Detect a change of the data type of all values in a text column',
   daily_column_exists: 'Verify if the column exists',
-  daily_column_type_changed: 'Verify if the column data type has changed'
+  daily_column_type_changed: 'Verify if the column data type has changed',
+  daily_nulls_percent_change: 'Detect a change in the null percentage'
 };

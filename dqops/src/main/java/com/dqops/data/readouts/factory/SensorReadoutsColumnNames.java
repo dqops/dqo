@@ -227,6 +227,7 @@ public class SensorReadoutsColumnNames {
 
             COLUMN_NAME_COLUMN_NAME,
             DATA_GROUP_NAME_COLUMN_NAME,
+            DATA_GROUP_HASH_COLUMN_NAME,
             TABLE_COMPARISON_NAME_COLUMN_NAME,
 
             DURATION_MS_COLUMN_NAME,
@@ -258,5 +259,17 @@ public class SensorReadoutsColumnNames {
             DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "7",
             DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "8",
             DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "9"
+    };
+
+    /**
+     * A list of a minimum set of columns from sensor readouts that are used to feed time series sensors with historical data.
+     */
+    public static final String[] SENSOR_READOUT_COLUMN_NAMES_HISTORIC_DATA = new String[] {
+            TIME_PERIOD_COLUMN_NAME,
+            TIME_PERIOD_UTC_COLUMN_NAME,
+            CHECK_HASH_COLUMN_NAME,
+            DATA_GROUP_HASH_COLUMN_NAME,
+            ACTUAL_VALUE_COLUMN_NAME,
+            EXPECTED_VALUE_COLUMN_NAME
     };
 }
