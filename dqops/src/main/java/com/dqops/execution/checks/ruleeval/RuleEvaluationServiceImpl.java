@@ -135,9 +135,11 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
 
         for (TableSlice dimensionTableSlice : dimensionTimeSeriesSlices) {
             Table dimensionSensorResults = dimensionTableSlice.asTable();  // results for a single dimension, the rows should be already sorted by the time period, ascending
-            LongColumn dimensionColumn = (LongColumn) TableColumnUtility.findColumn(dimensionSensorResults,
+            LongColumn dataGroupHashColumn = (LongColumn) TableColumnUtility.findColumn(dimensionSensorResults,
                     SensorReadoutsColumnNames.DATA_GROUP_HASH_COLUMN_NAME, "data_stream_hash");
-            Long timeSeriesDimensionId = dimensionColumn.get(0);
+            StringColumn dataGroupNameColumn = dimensionSensorResults.stringColumn(SensorReadoutsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+            Long timeSeriesDimensionId = dataGroupHashColumn.get(0);
+            String dataGroupName = dataGroupNameColumn.getString(0);
             SensorReadoutsTimeSeriesData historicTimeSeriesData = historicReadoutsTimeSeries.findTimeSeriesData(checkHashId, timeSeriesDimensionId);
             HistoricDataPointsGrouping historicDataPointGrouping = ruleTimeWindowSettings != null ? ruleTimeWindowSettings.getHistoricDataPointGrouping() : null;
             TimePeriodGradient timeGradient = historicDataPointGrouping != null ? historicDataPointGrouping.toTimePeriodGradient() : TimePeriodGradient.day;
@@ -246,7 +248,7 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
 
                 if (customSeverity == null && fatalRule != null) {
                     RuleExecutionRunParameters ruleRunParametersFatal = new RuleExecutionRunParameters(actualValue, expectedValueFromSensor,
-                            fatalRule, timePeriodLocal, previousDataPoints, ruleTimeWindowSettings, ruleConfigurationParameters, modelPath);
+                            fatalRule, timePeriodLocal, dataGroupName, previousDataPoints, ruleTimeWindowSettings, ruleConfigurationParameters, modelPath);
                     ruleExecutionResultFatal = this.ruleRunner.executeRule(executionContext, ruleRunParametersFatal, sensorRunParameters);
                     modelMustBeRetrained |= ruleExecutionResultFatal.isModelIsOutdated();
 
@@ -267,7 +269,7 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
 
                 if (customSeverity == null && errorRule != null) {
                     RuleExecutionRunParameters ruleRunParametersError = new RuleExecutionRunParameters(actualValue, expectedValueFromSensor,
-                            errorRule, timePeriodLocal, previousDataPoints, ruleTimeWindowSettings, ruleConfigurationParameters, modelPath);
+                            errorRule, timePeriodLocal, dataGroupName, previousDataPoints, ruleTimeWindowSettings, ruleConfigurationParameters, modelPath);
                     ruleExecutionResultError = this.ruleRunner.executeRule(executionContext, ruleRunParametersError, sensorRunParameters);
                     modelMustBeRetrained |= ruleExecutionResultError.isModelIsOutdated();
 
@@ -288,7 +290,7 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
 
                 if (customSeverity == null && warningRule != null) {
                     RuleExecutionRunParameters ruleRunParametersWarning = new RuleExecutionRunParameters(actualValue, expectedValueFromSensor,
-                            warningRule, timePeriodLocal, previousDataPoints, ruleTimeWindowSettings, ruleConfigurationParameters, modelPath);
+                            warningRule, timePeriodLocal, dataGroupName, previousDataPoints, ruleTimeWindowSettings, ruleConfigurationParameters, modelPath);
                     ruleExecutionResultWarning = this.ruleRunner.executeRule(executionContext, ruleRunParametersWarning, sensorRunParameters);
                     modelMustBeRetrained |= ruleExecutionResultWarning.isModelIsOutdated();
 

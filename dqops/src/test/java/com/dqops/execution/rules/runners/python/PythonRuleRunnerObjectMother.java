@@ -15,6 +15,7 @@
  */
 package com.dqops.execution.rules.runners.python;
 
+import com.dqops.data.normalization.CommonTableNormalizationService;
 import com.dqops.execution.CheckExecutionContextObjectMother;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.rules.HistoricDataPoint;
@@ -57,7 +58,8 @@ public class PythonRuleRunnerObjectMother {
         LocalDateTime today = LocalDateTimeTruncateUtility.truncateTimePeriod(LocalDateTime.now(), TimePeriodGradient.day);
         RuleDefinitionFindResult ruleDefinitionFindResult = RuleDefinitionFindResultObjectMother.findDqoHomeRuleDefinition(ruleParameters.getRuleDefinitionName());
         RuleExecutionRunParameters ruleRunParameters = new RuleExecutionRunParameters(actualValue, expectedValue,
-                ruleParameters, today, null, new RuleTimeWindowSettingsSpec(), ruleParameters.getRuleParametersTemplate(), null);
+                ruleParameters, today, CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME,
+                null, new RuleTimeWindowSettingsSpec(), ruleParameters.getRuleParametersTemplate(), null);
 
         RuleExecutionResult ruleExecutionResult = ruleRunner.executeRule(executionContext, ruleRunParameters, ruleDefinitionFindResult);
 
@@ -94,7 +96,8 @@ public class PythonRuleRunnerObjectMother {
         ExecutionContext executionContext = CheckExecutionContextObjectMother.createWithInMemoryUserContext();
         RuleDefinitionFindResult ruleDefinitionFindResult = RuleDefinitionFindResultObjectMother.findDqoHomeRuleDefinition(ruleParameters.getRuleDefinitionName());
         RuleExecutionRunParameters ruleRunParameters = new RuleExecutionRunParameters(actualValue, expectedValue,
-                ruleParameters, readoutTimestamp, previousReadouts, timeWindowSettingsSpec, ruleParameters.getRuleParametersTemplate(), null);
+                ruleParameters, readoutTimestamp, CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME,
+                previousReadouts, timeWindowSettingsSpec, ruleParameters.getRuleParametersTemplate(), null);
 
         RuleExecutionResult ruleExecutionResult = ruleRunner.executeRule(executionContext, ruleRunParameters, ruleDefinitionFindResult);
 

@@ -21,8 +21,6 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
-import java.time.Instant;
-
 /**
  * Object passed to the python rule evaluation module. Specifies the path to the python file with the rule implementation and the parameters.
  */
@@ -37,6 +35,7 @@ public class PythonRuleCallInput {
     private String dqoRootUserHomePath;
     private long ruleModuleLastModifiedEpoch;
     private RuleExecutionRunParameters ruleParameters;
+    private PythonRuleDebugMode debugMode = PythonRuleDebugMode.silent;
 
     /**
      * Returns the data domain name.
@@ -148,5 +147,21 @@ public class PythonRuleCallInput {
      */
     public void setRuleParameters(RuleExecutionRunParameters ruleParameters) {
         this.ruleParameters = ruleParameters;
+    }
+
+    /**
+     * Returns the debug mode used for debugging rules (capturing their parameters).
+     * @return Debug mode.
+     */
+    public PythonRuleDebugMode getDebugMode() {
+        return debugMode;
+    }
+
+    /**
+     * Sets the debug mode for Python rules.
+     * @param debugMode Debug mode.
+     */
+    public void setDebugMode(PythonRuleDebugMode debugMode) {
+        this.debugMode = debugMode;
     }
 }

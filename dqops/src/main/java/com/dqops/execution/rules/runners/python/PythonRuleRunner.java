@@ -88,6 +88,7 @@ public class PythonRuleRunner extends AbstractRuleRunner {
         ruleInput.setHomePath(pathToHome);
         ruleInput.setDqoHomePath(this.homeLocationFindService.getDqoHomePath());
         ruleInput.setDqoRootUserHomePath(this.homeLocationFindService.getRootUserHomePath());
+        ruleInput.setDebugMode(this.pythonConfigurationProperties.getDebugMode());
         ruleInput.setRuleModuleLastModifiedEpoch(ruleDefinitionFindResult.getRulePythonFileLastModified() != null ?
                 ruleDefinitionFindResult.getRulePythonFileLastModified().toEpochMilli() : 0L);
 

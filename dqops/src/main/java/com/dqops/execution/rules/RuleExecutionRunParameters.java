@@ -37,6 +37,7 @@ public class RuleExecutionRunParameters {
     private Double expectedValue;
     private AbstractRuleParametersSpec parameters;
     private long timePeriodLocalEpoch;
+    private String dataGroup;
     private HistoricDataPoint[] previousReadouts;
     private RuleTimeWindowSettingsSpec timeWindow;
     private Map<String, String> configurationParameters;
@@ -54,6 +55,7 @@ public class RuleExecutionRunParameters {
      * @param expectedValue Optional expected value returned by the sensor.
      * @param parameters Rule parameters.
      * @param timePeriodLocal Time period of the readouts as a local date time.
+     * @param dataGroup Data group name.
      * @param previousReadouts Array of previous sensor readouts (may have a null value).
      * @param timeWindow Rule threshold time window configuration.
      * @param configurationParameters Optional configuration parameters that are configured in the rule configuration.
@@ -63,6 +65,7 @@ public class RuleExecutionRunParameters {
                                       Double expectedValue,
 									  AbstractRuleParametersSpec parameters,
 									  LocalDateTime timePeriodLocal,
+                                      String dataGroup,
 									  HistoricDataPoint[] previousReadouts,
 									  RuleTimeWindowSettingsSpec timeWindow,
                                       Map<String, String> configurationParameters,
@@ -71,6 +74,7 @@ public class RuleExecutionRunParameters {
         this.expectedValue = expectedValue;
         this.parameters = parameters;
         this.timePeriodLocalEpoch = timePeriodLocal != null ? timePeriodLocal.toEpochSecond(ZoneOffset.UTC) : 0L;
+        this.dataGroup = dataGroup;
         this.previousReadouts = previousReadouts;
         this.timeWindow = timeWindow;
         this.configurationParameters = configurationParameters;
@@ -139,6 +143,22 @@ public class RuleExecutionRunParameters {
      */
     public void setTimePeriodLocalEpoch(long timePeriodLocalEpoch) {
         this.timePeriodLocalEpoch = timePeriodLocalEpoch;
+    }
+
+    /**
+     * Return the data group name.
+     * @return Data group name.
+     */
+    public String getDataGroup() {
+        return dataGroup;
+    }
+
+    /**
+     * Sets the data group name.
+     * @param dataGroup Data group name.
+     */
+    public void setDataGroup(String dataGroup) {
+        this.dataGroup = dataGroup;
     }
 
     /**

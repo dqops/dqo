@@ -15,6 +15,7 @@
  */
 package com.dqops.core.configuration;
 
+import com.dqops.execution.rules.runners.python.PythonRuleDebugMode;
 import lombok.EqualsAndHashCode;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -36,6 +37,7 @@ public class DqoPythonConfigurationProperties implements Cloneable {
     private int pipTimeoutSeconds = 120;
     private int pythonScriptTimeoutSeconds = 120;
     private boolean enableDebugging;
+    private PythonRuleDebugMode debugMode = PythonRuleDebugMode.silent;
 
     /**
      * Python runtime file name (python, python3, python.exe, python3.exe, etc.)
@@ -195,6 +197,22 @@ public class DqoPythonConfigurationProperties implements Cloneable {
      */
     public void setEnableDebugging(boolean enableDebugging) {
         this.enableDebugging = enableDebugging;
+    }
+
+    /**
+     * Returns the debug mode used when running Python rules.
+     * @return Debug mode.
+     */
+    public PythonRuleDebugMode getDebugMode() {
+        return debugMode;
+    }
+
+    /**
+     * Sets the debug mode used when running Python rules.
+     * @param debugMode Debug mode.
+     */
+    public void setDebugMode(PythonRuleDebugMode debugMode) {
+        this.debugMode = debugMode;
     }
 
     /**

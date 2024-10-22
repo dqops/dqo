@@ -75,6 +75,7 @@ dqo:
     python-script-timeout-seconds: 120
     use-host-python: false
     enable-debugging: false
+    debug-mode: failed
   user:
     home: .
     has-local-home: true
