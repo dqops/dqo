@@ -136,7 +136,8 @@ def main():
                 home_paths_configured = True
 
             response = rule_runner.process_rule_request(request)
-            write_log = request.debug_mode == 'all' or (request.debug_mode == 'failed' and (response.result.passed == False or response.error is not None)) or \
+            write_log = request.debug_mode == 'all' or (request.debug_mode == 'failed' and response.result is not None and \
+                                                       (response.result.passed == False or response.error is not None)) or \
                         (request.debug_mode == 'exception' and response.error is not None)
             if write_log:
                 time_period_local = datetime.fromtimestamp(request.rule_parameters.time_period_local_epoch)
