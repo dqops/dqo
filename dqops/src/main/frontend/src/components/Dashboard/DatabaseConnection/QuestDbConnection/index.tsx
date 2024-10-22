@@ -50,13 +50,6 @@ const QuestDbConnection = ({
         data={sharedCredentials}
       />
       <FieldTypeInput
-        label="Database"
-        className="mb-4"
-        value={questdb?.database}
-        onChange={(value) => handleChange({ database: value })}
-        data={sharedCredentials}
-      />
-      <FieldTypeInput
         label="User name"
         className="mb-4"
         value={questdb?.user}

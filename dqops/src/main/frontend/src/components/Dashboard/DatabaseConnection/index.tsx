@@ -35,6 +35,7 @@ import SparkLogo from '../../SvgIcon/svg/spark.svg';
 import TrinoLogo from '../../SvgIcon/svg/trino.svg';
 import MariaDbLogo from '../../SvgIcon/svg/maria-db.svg';
 import ClickHouseLogo from '../../SvgIcon/svg/clickhouse.svg';
+import QuestDbLogo from '../../SvgIcon/svg/questdb.svg';
 import SectionWrapper from '../SectionWrapper';
 import BigqueryConnection from './BigqueryConnection';
 import ConfirmErrorModal from './ConfirmErrorModal';
@@ -383,6 +384,8 @@ const DatabaseConnection = ({
         return MariaDbLogo;
       case ConnectionModelProviderTypeEnum.clickhouse:
         return ClickHouseLogo;
+      case ConnectionModelProviderTypeEnum.questdb:
+        return QuestDbLogo;
       default:
         return '';
     }

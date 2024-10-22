@@ -1,54 +1,44 @@
 ---
-title: How to activate data observability for PostgreSQL
+title: How to activate data observability for QuestDB
 ---
-# How to activate data observability for PostgreSQL
-Read this guide to learn how to connect DQOps to PostgreSQL from the UI, command-line interface, or directly in YAML files, and activate monitoring.
+# How to activate data observability for QuestDB
+Read this guide to learn how to connect DQOps to QuestDB from the UI, command-line interface, or directly in YAML files, and activate monitoring.
 
 ## Overview
 
-PostgreSQL is a powerful, open source object-relational database system that uses and extends the SQL language combined 
-with many features that safely store and scale the most complicated data workloads.
+QuestDB is the world's fastest growing open-source time-series database. 
+It offers massive ingestion throughput, millisecond queries, powerful time-series SQL extensions, and scales well with minimal and maximal hardware. 
+Save costs with better performance and efficiency.
 
-## Prerequisite credentials
-
-To add PostgreSQL data source connection to DQOps you need a PostgreSQL account. 
-
-By default, PostgreSQL restricts connections to hosts and networks included in the 
-pg_hba.conf file. In case of restrictions you need to add the IP address used by DQOps to
-[Allowed IP Addresses in PostgreSQL Network Policies](https://www.postgresql.org/docs/9.1/auth-pg-hba-conf.html).
-
-## Add a PostgreSQL connection using the user interface
+## Add a QuestDB connection using the user interface
 
 ### **Navigate to the connection settings**
 
-To navigate to the PostgreSQL connection settings:
+To navigate to the QuestDB connection settings:
 
 1. Go to the Data Sources section and click the **+ Add connection** button in the upper left corner.
 
     ![Adding connection](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection2.png){ loading=lazy; width="1200px" }
 
-2. Select PostgreSQL database type.
+2. Select QuestDB database type.
 
-    ![Selecting PostgreSQL database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-postgresql.png){ loading=lazy; width="1200px" }
+    ![Selecting QuestDB database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-questdb.png){ loading=lazy; width="1200px" }
 
 
 ### **Fill in the connection settings**
 
-After navigating to the PostgreSQL connection settings, you will need to fill in its details.
+After navigating to the QuestDB connection settings, you will need to fill in its details.
 
-![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-postgresql.png){ loading=lazy; width="1200px" }
+![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-questdb.png){ loading=lazy; width="1200px" }
 
-| PostgreSQL connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                               |
+| QuestDB connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                               |
 |--------------------------------|------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Connection name                |                                          | The name of the connection that will be created in DQOps. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters. |
-| Engine Type                    | `postgresql_engine_type`                 | PostgreSQL engine type. Supports also a ${POSTGRESQL_ENGINE} configuration with a custom environment variable.                                                                                                                            |
-| Host                           | `host`                                   | PostgreSQL host name. Supports also a ${POSTGRESQL_HOST} configuration with a custom environment variable.                                                                                                                                |
-| Port                           | `port`                                   | PostgreSQL port name. The default port is 5432. Supports also a ${POSTGRESQL_PORT} configuration with a custom environment variable.                                                                                                      |
-| Database                       | `database`                               | PostgreSQL database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                        |
-| User name                      | `username`                               | PostgreSQL user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                            |
-| Password                       | `password`                               | PostgreSQL database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                    |
-| SSL mode                       | `sslmode`                                | PostgreSQL sslmode parameter. The default value is disabled. [See the PostgreSQL documentation for more information about using SSL.](https://jdbc.postgresql.org/documentation/ssl/)                                                     |  
-| JDBC connection property       |                                          | Optional setting. DQOps supports using JDBC driver to access PostgreSQL. [See the PostgreSQL documentation for JDBC connection parameter references.](https://jdbc.postgresql.org/documentation/use/)                                     |
+| Host                           | `host`                                   | QuestDB host name. Supports also a ${QUESTDB_HOST} configuration with a custom environment variable.                                                                                                                                      |
+| Port                           | `port`                                   | QuestDB port name. The default port is 5432. Supports also a ${QUESTDB_PORT} configuration with a custom environment variable.                                                                                                         |
+| User name                      | `username`                               | QuestDB user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                               |
+| Password                       | `password`                               | QuestDB database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                       |
+| JDBC connection property       |                                          | Optional setting. DQOps supports using JDBC driver to access QuestDB. [See the PostgreSQL documentation for JDBC connection parameter references.](https://jdbc.postgresql.org/documentation/use/)                                     |
     
 DQOps allows you to dynamically replace properties in connection settings with environment variables. To use it, simply
 change "clear text" to ${ENV_VAR} using the drop-down menu at the end of the variable entry field and type your variable.
@@ -101,7 +91,7 @@ and profiling data by running default data profiling checks. Simply click on the
     standard checks that monitor the data quality of a table or column. They can also be referred to as **Data Observability** checks.
     These checks capture a single data quality result for the entire table or column.
 
-## Add a PostgreSQL connection using DQOps Shell
+## Add a QuestDB connection using DQOps Shell
 
 To add a connection run the following command in DQOps Shell.
 
@@ -126,16 +116,16 @@ Database provider type (--provider):
  [10] spark
  [11] sqlserver
  [12] trino
-Please enter one of the [] values: 5
-PostgreSQL engine type (--postgresql-engine):
- [ 1] postgresql
- [ 2] timescale
-Please enter one of the [] values: 1
-PostgreSQL host (--postgresql-host)[${POSTGRESQL_HOST}]: localhost
-PostgreSQL port (--postgresql-port) [${POSTGRESQL_PORT}]: 65234
-PostgreSQL database(--postgresql-database) [${POSTGRESQL_DATABASE}]: testing
-PostgreSQL user (--postgresql-user) [${POSTGRESQL_USER}]: testing
-PostgreSQL password (--postgresql-password) [${POSTGRESQL_PASSWORD}]: xxx
+ [13] hana
+ [14] db2
+ [15] mariadb
+ [16] clickhouse
+ [17] questdb
+Please enter one of the [] values: 17
+QuestDB host (--questdb-host)[${QUESTDB_HOST}]: localhost
+QuestDB port (--questdb-port) [${QUESTDB_PORT}]: 8812
+QuestDB user (--questdb-user) [${QUESTDB_USER}]: testing
+QuestDB password (--questdb-password) [${QUESTDB_PASSWORD}]: xxx
 Connection connecton1 was successfully added.
 Run 'table import -c=connection1' to import tables.
 ```
@@ -144,13 +134,11 @@ You can also run the command with parameters to add a connection in just a singl
 
 ```
 dqo> connection add --name=connection1
---provider=postgresql
---postgresql-engine=postgresql
---postgresql-host=localhost
---postgresql-port=65234
---postgresql-database=testing
---postgresql-user=testing
---postgresql-password=xxx
+--provider=questdb
+--questdb-host=localhost
+--questdb-port=8812
+--questdb-user=testing
+--questdb-password=xxx
 ```
 
 After adding connection run `table import -c=connection1` to select schemas and import tables.
@@ -174,23 +162,18 @@ character can be used at the beginning, middle, or end of the name.
 Connection configurations are stored in the YAML files in the `./sources` folder. The name of the connection is also
 the name of the folder where the configuration file is stored.
 
-Below is a sample YAML file showing an example configuration of the PostgreSQL data source connection.
+Below is a sample YAML file showing an example configuration of the QuestDB data source connection.
 
 ``` yaml
 apiVersion: dqo/v1
 kind: source
 spec:
-  provider_type: postgresql
-  postgresql:
+  provider_type: questdb
+  questdb:
     host: localhost
-    port: 65234
-    database: testing
+    port: 8812
     user: testing
     password: xxx
-    sslmode: disable
-    postgresql_engine_type: postgresql
-    properties:
-      'connectTimeout ': 12
   incident_grouping:
     grouping_level: table_dimension_category
     minimum_severity: warning
@@ -199,8 +182,8 @@ spec:
 ```
 
 ### **Reference of all connection parameters**
-Complete documentation of all connection parameters used in the `spec.postgresql` node is
-described in the reference section of the [PostgresqlParametersSpec](../reference/yaml/ConnectionYaml.md#postgresqlparametersspec)
+Complete documentation of all connection parameters used in the `spec.questdb` node is
+described in the reference section of the [QuestDBParametersSpec](../reference/yaml/ConnectionYaml.md#questdbparametersspec)
 YAML file format.
 
 ## Next steps
