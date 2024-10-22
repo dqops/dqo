@@ -52,7 +52,7 @@ public class QuestDbColumnNullsNotNullsCountSensorParametersSpecOnJsonIntegratio
         this.connectionSpec = QuestDbConnectionSpecObjectMother.create();
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.json_fields_test, this.connectionSpec);
         ColumnSpec jsonNullsColumn = sampleTableMetadata.getTableSpec().getColumns().get("json_nulls");
-        jsonNullsColumn.setSqlExpression("{column}::json->'address'->'zip'");
+        jsonNullsColumn.setSqlExpression("json_extract({column}, '$.address.zip')::varchar");
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.sut = new ColumnNullsNotNullsCountSensorParametersSpec();

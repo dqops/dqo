@@ -82,7 +82,7 @@ FROM(
     FROM {{ lib.render_target_table() }} original_table
 ) analyzed_table
 {%- else %}
-    COUNT(DISTINCT
+    COUNT_DISTINCT(
         CASE
             WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
             ELSE NULL

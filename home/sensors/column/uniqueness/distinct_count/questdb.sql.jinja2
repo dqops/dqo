@@ -1,7 +1,7 @@
 {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
 SELECT
-    COUNT(
-        DISTINCT({{ lib.render_target_column('analyzed_table')}})
+    COUNT_DISTINCT(
+        {{ lib.render_target_column('analyzed_table')}}
     ) AS actual_value
     {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
     {{- lib.render_time_dimension_projection_reference('analyzed_table') }}

@@ -122,25 +122,21 @@
 
 {% macro date_trunc(value, part='day', datatype=none) %}
     {%- if part == 'year' -%}
-        DATE_TRUNC('year', CAST({{value}} AS date))
+        CAST(DATE_TRUNC('year', {{value}}) AS DATE)
     {%- elif part == 'quarter' -%}
-        DATE_TRUNC('quarter', CAST({{value}} AS date))
+        CAST(DATE_TRUNC('quarter', {{value}}) AS DATE)
     {%- elif part == 'month' -%}
-        DATE_TRUNC('month', CAST({{value}} AS date))
+        CAST(DATE_TRUNC('month', {{value}}) AS DATE)
     {%- elif part == 'week' -%}
-        DATE_TRUNC('week', CAST({{value}} AS date))
+        CAST(DATE_TRUNC('week', {{value}}) AS DATE)
     {%- elif part == 'day' -%}
-        {%- if datatype | upper == 'DATE' -%}
-            {{value}}
-        {%- else -%}
-            CAST({{value}} AS date)
-        {%- endif -%}
+        CAST(DATE_TRUNC('day', {{value}}) AS DATE)
     {%- elif part == 'hour' -%}
-        DATE_TRUNC('hour', CAST({{value}} AS datetime))
+        CAST(DATE_TRUNC('hour', {{value}}) AS DATE)
     {%- elif part == 'millisecond' -%}
-        CAST({{value}} AS datetime)
+        CAST({{value}} AS DATE)
     {%- else -%}
-        CAST({{value}} AS date)
+        CAST(DATE_TRUNC('day', {{value}}) AS DATE)
     {%- endif -%}
 {% endmacro %}
 
@@ -255,13 +251,13 @@
                 {{ date_trunc_utc('NOW()', 'day', table.columns[time_series.timestamp_column].type_snapshot.column_type) }}
             {%- elif is_local_date(timestamp_column_data_type) == 'true' -%}
                 {{ render_column(time_series.timestamp_column, table_alias_prefix) -}}{{- ' < ' -}}
-                CAST(NOW() AS DATE)
+                CAST(DATE_TRUNC('day', NOW()) AS DATE)
             {%- elif is_local_date_time(timestamp_column_data_type) == 'true' -%}
                 {{ render_column(time_series.timestamp_column, table_alias_prefix) -}}{{- ' < ' -}}
                 CAST(NOW() AS TIMESTAMP)
             {%- else -%}
-                CAST({{ render_column(time_series.timestamp_column, table_alias_prefix) }} AS DATE){{- ' < ' -}}
-                CAST(NOW() AS DATE)
+                CAST(DATE_TRUNC('day', {{ render_column(time_series.timestamp_column, table_alias_prefix) }}) AS DATE){{- ' < ' -}}
+                CAST(DATE_TRUNC('day', NOW()) AS DATE)
             {%- endif -%}
         {%- elif time_window_filter.monthly_partitioning_include_current_month is false -%}
             {{ prefix_to_render -}}
@@ -397,9 +393,9 @@
     {%- if is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
     {{ render_target_column('analyzed_table') }}
     {%- elif is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or is_instant(table.columns[column_name].type_snapshot.column_type) == 'true'-%}
-    CAST({{ render_target_column('analyzed_table') }} AS DATE)
+    CAST(DATE_TRUNC('day', {{ render_target_column('analyzed_table') }}) AS DATE)
     {%- else -%}
-    CAST({{ render_target_column('analyzed_table') }} AS DATE)
+    CAST(DATE_TRUNC('day', {{ render_target_column('analyzed_table') }}) AS DATE)
     {%- endif -%}
 {% endmacro %}
 

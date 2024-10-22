@@ -14,7 +14,7 @@
     {%- if parameters.expected_values|length == 0 -%}
     0
     {%- else -%}
-    COUNT(DISTINCT
+    COUNT_DISTINCT(
         CASE
             WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
                 THEN {{ lib.render_target_column('analyzed_table') }}
@@ -23,6 +23,35 @@
     )
     {%- endif -%}
 {% endmacro -%}
+
+WITH aggregation_table AS (
+  SELECT COUNT() as count_value
+  FROM {{ lib.render_target_table() }} original_table
+)
+, values_table AS (
+  SELECT DISTINCT original_table."strings_with_numbers"
+  {{- lib.render_data_grouping_projections('original_table') }}
+  {{- lib.render_time_dimension_projection('original_table') }}
+  FROM {{ lib.render_target_table() }} original_table
+  {{- lib.render_where_clause() -}}
+)
+, calculated_table AS (
+  SELECT COUNT(CASE
+       WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+           THEN {{ lib.render_target_column('analyzed_table') }}
+        ELSE NULL
+    END) as actual_value
+    FROM values_table
+)
+SELECT
+    CASE
+        WHEN aggregation_table.count_value = 0 THEN NULL
+        ELSE calculated_table.actual_value
+    END AS actual_value,
+    MAX(6) AS expected_value
+FROM calculated_table
+CROSS JOIN aggregation_table
+
 
 SELECT
     CASE

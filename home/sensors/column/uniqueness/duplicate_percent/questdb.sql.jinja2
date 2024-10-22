@@ -1,7 +1,7 @@
 {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
 SELECT
     COALESCE(100.0 * (
-            COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
+            COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT_DISTINCT( {{ lib.render_target_column('analyzed_table') }})
         ) / COUNT({{ lib.render_target_column('analyzed_table') }}), 0.0)
     AS actual_value
     {{- lib.render_data_grouping_projections_reference('analyzed_table') }}

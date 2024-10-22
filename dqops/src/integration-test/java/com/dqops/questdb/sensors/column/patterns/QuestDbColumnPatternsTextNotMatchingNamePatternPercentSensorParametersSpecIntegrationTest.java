@@ -96,7 +96,7 @@ public class QuestDbColumnPatternsTextNotMatchingNamePatternPercentSensorParamet
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(15.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(25.0, resultTable.column(0).get(0));
     }
 
     @Test
@@ -109,7 +109,7 @@ public class QuestDbColumnPatternsTextNotMatchingNamePatternPercentSensorParamet
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(15.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(25.0, resultTable.column(0).get(0));
     }
 
     @Test
@@ -122,7 +122,7 @@ public class QuestDbColumnPatternsTextNotMatchingNamePatternPercentSensorParamet
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(15.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(25.0, resultTable.column(0).get(0));
     }
 
     @Test
@@ -159,7 +159,7 @@ public class QuestDbColumnPatternsTextNotMatchingNamePatternPercentSensorParamet
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(3, resultTable.rowCount());
+        Assertions.assertEquals(5, resultTable.rowCount());
         Assertions.assertEquals(1, resultTable.columnCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         List<String> sampleValues = List.of(resultTable.column("actual_value").asObjectArray())
@@ -180,7 +180,7 @@ public class QuestDbColumnPatternsTextNotMatchingNamePatternPercentSensorParamet
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(3, resultTable.rowCount());
+        Assertions.assertEquals(5, resultTable.rowCount());
         Assertions.assertEquals(3, resultTable.columnCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         Assertions.assertEquals("row_id_1", resultTable.column(1).name());
@@ -214,7 +214,7 @@ public class QuestDbColumnPatternsTextNotMatchingNamePatternPercentSensorParamet
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(3, resultTable.rowCount());
+        Assertions.assertEquals(5, resultTable.rowCount());
         Assertions.assertEquals(5, resultTable.columnCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         Assertions.assertEquals("sample_index", resultTable.column(1).name());

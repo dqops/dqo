@@ -8,7 +8,7 @@
     {%- if parameters.expected_values|length == 0 -%}
     0
     {%- else -%}
-    COUNT(DISTINCT
+    COUNT_DISTINCT(
         CASE
             WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
                 THEN {{ lib.render_target_column('analyzed_table') }}
