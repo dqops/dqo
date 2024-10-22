@@ -28,6 +28,7 @@ import com.dqops.connectors.mysql.MysqlParametersSpec;
 import com.dqops.connectors.oracle.OracleParametersSpec;
 import com.dqops.connectors.postgresql.PostgresqlParametersSpec;
 import com.dqops.connectors.presto.PrestoParametersSpec;
+import com.dqops.connectors.questdb.QuestDbParametersSpec;
 import com.dqops.connectors.redshift.RedshiftParametersSpec;
 import com.dqops.connectors.snowflake.SnowflakeParametersSpec;
 import com.dqops.connectors.spark.SparkParametersSpec;
@@ -173,12 +174,17 @@ public class ConnectionModel {
     @JsonPropertyDescription("MariaDB connection parameters.")
     private MariaDbParametersSpec mariadb;
 
-
     /**
      * ClickHouse connection parameters.
      */
     @JsonPropertyDescription("ClickHouse connection parameters.")
     private ClickHouseParametersSpec clickhouse;
+
+    /**
+     * QuestDB connection parameters.
+     */
+    @JsonPropertyDescription("QuestDB connection parameters.")
+    private QuestDbParametersSpec questdb;
 
     /**
      * Configured parameters for the "check run" job that should be pushed to the job queue in order to run all checks within this connection.
@@ -289,6 +295,7 @@ public class ConnectionModel {
             setDb2(connectionSpec.getDb2());
             setMariadb(connectionSpec.getMariadb());
             setClickhouse(connectionSpec.getClickhouse());
+            setQuestdb(connectionSpec.getQuestdb());
             setCanEdit(isEditor);
             setCanRunChecks(isOperator);
             setCanCollectStatistics(isOperator);
@@ -364,6 +371,7 @@ public class ConnectionModel {
         targetConnectionSpec.setDb2(this.getDb2());
         targetConnectionSpec.setMariadb(this.getMariadb());
         targetConnectionSpec.setClickhouse(this.getClickhouse());
+        targetConnectionSpec.setQuestdb(this.getQuestdb());
         targetConnectionSpec.setAdvancedProperties(this.getAdvancedProperties());
     }
 

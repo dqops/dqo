@@ -141,16 +141,12 @@ public class QuestDbSourceConnection extends AbstractJdbcSourceConnection {
      */
     @Override
     public List<SourceSchemaModel> listSchemas() {
-        StringBuilder sqlBuilder = new StringBuilder();
-        sqlBuilder.append("SELECT CATALOG_NAME AS catalog_name, SCHEMA_NAME as schema_name FROM ");
-        sqlBuilder.append(getInformationSchemaName());
-        sqlBuilder.append(".SCHEMATA WHERE SCHEMA_NAME NOT IN ('information_schema', 'timescaledb_information', '_timescaledb_config', '_timescaledb_internal', '_timescaledb_catalog', '_timescaledb_cache', 'pg_catalog', 'pg_toast_temp_1', 'pg_temp_1', 'pg_toast')");
-        String listSchemataSql = sqlBuilder.toString();
+        String listSchemataSql = "SELECT current_schema();";
         Table schemaRows = this.executeQuery(listSchemataSql, JobCancellationToken.createDummyJobCancellationToken(), null, false);
 
         List<SourceSchemaModel> results = new ArrayList<>();
         for (int rowIndex = 0; rowIndex < schemaRows.rowCount(); rowIndex++) {
-            String schemaName = schemaRows.getString(rowIndex, "schema_name");
+            String schemaName = schemaRows.getString(rowIndex, "current_schema");
             SourceSchemaModel schemaModel = new SourceSchemaModel(schemaName);
             results.add(schemaModel);
         }

@@ -55,6 +55,7 @@ import SparkConnection from './SparkConnection';
 import SqlServerConnection from './SqlServerConnection';
 import TrinoConnection from './TrinoConnection';
 import ClickHouseConnection from './ClickHouseConnection';
+import QuestDbConnection from './QuestDbConnection';
 
 interface IDatabaseConnectionProps {
   onNext: () => void;
@@ -340,6 +341,13 @@ const DatabaseConnection = ({
       <ClickHouseConnection
         clickhouse={database.clickhouse}
         onChange={(clickhouse) => onChange({ ...database, clickhouse })}
+        sharedCredentials={sharedCredentials}
+      />
+    ),
+    [ConnectionModelProviderTypeEnum.questdb]: (
+      <QuestDbConnection
+        questdb={database.questdb}
+        onChange={(questdb) => onChange({ ...database, questdb })}
         sharedCredentials={sharedCredentials}
       />
     )
