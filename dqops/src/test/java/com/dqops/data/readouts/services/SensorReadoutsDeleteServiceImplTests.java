@@ -30,6 +30,7 @@ import com.dqops.core.synchronization.status.SynchronizationStatusTrackerStub;
 import com.dqops.core.locks.UserHomeLockManager;
 import com.dqops.core.locks.UserHomeLockManagerObjectMother;
 import com.dqops.data.errors.factory.ErrorsColumnNames;
+import com.dqops.data.errorsamples.factory.ErrorSamplesColumnNames;
 import com.dqops.data.local.LocalDqoUserHomePathProvider;
 import com.dqops.data.local.LocalDqoUserHomePathProviderObjectMother;
 import com.dqops.data.models.DeleteStoredDataResult;
@@ -112,16 +113,19 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).set(row1.getRowNumber(), id_prefix + "id1");
         sensorReadoutsTable.doubleColumn(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME).set(row1.getRowNumber(), 1);
         sensorReadoutsTable.dateTimeColumn(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME).set(row1.getRowNumber(), startDate);
+        sensorReadoutsTable.longColumn(SensorReadoutsColumnNames.CONNECTION_HASH_COLUMN_NAME).set(row1.getRowNumber(), 1L);
 
         Row row2 = sensorReadoutsTable.appendRow();
         sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).set(row2.getRowNumber(), id_prefix + "id2");
         sensorReadoutsTable.doubleColumn(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME).set(row2.getRowNumber(), 10);
         sensorReadoutsTable.dateTimeColumn(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME).set(row2.getRowNumber(), startDate.plusDays(1));
+        sensorReadoutsTable.longColumn(SensorReadoutsColumnNames.CONNECTION_HASH_COLUMN_NAME).set(row2.getRowNumber(), 1L);
 
         Row row3 = sensorReadoutsTable.appendRow();
         sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).set(row3.getRowNumber(), id_prefix + "id3");
         sensorReadoutsTable.doubleColumn(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME).set(row3.getRowNumber(), 100);
         sensorReadoutsTable.dateTimeColumn(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME).set(row3.getRowNumber(), startDate.plusDays(2));
+        sensorReadoutsTable.longColumn(SensorReadoutsColumnNames.CONNECTION_HASH_COLUMN_NAME).set(row3.getRowNumber(), 1L);
 
         return sensorReadoutsTable;
     }
@@ -494,6 +498,7 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.SENSOR_NAME_COLUMN_NAME).set(row1.getRowNumber(), "s1");
         sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.QUALITY_DIMENSION_COLUMN_NAME).set(row1.getRowNumber(), "qd1");
         sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME).set(row1.getRowNumber(), "tg1");
+        sensorReadoutsTable.longColumn(SensorReadoutsColumnNames.CONNECTION_HASH_COLUMN_NAME).set(row1.getRowNumber(), 1L);
 
         Row row2 = sensorReadoutsTable.appendRow();
         sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).set(row2.getRowNumber(), id_prefix + "id2");
@@ -505,6 +510,7 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.DATA_GROUP_NAME_COLUMN_NAME).set(row2.getRowNumber(), "ds1");
         sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.SENSOR_NAME_COLUMN_NAME).set(row2.getRowNumber(), "s2");
         sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME).set(row2.getRowNumber(), "tg1");
+        sensorReadoutsTable.longColumn(SensorReadoutsColumnNames.CONNECTION_HASH_COLUMN_NAME).set(row2.getRowNumber(), 1L);
 
         Row row3 = sensorReadoutsTable.appendRow();
         sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).set(row3.getRowNumber(), id_prefix + "id3");
@@ -514,6 +520,7 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME).set(row3.getRowNumber(), "col1");
         sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.DATA_GROUP_NAME_COLUMN_NAME).set(row3.getRowNumber(), "ds2");
         sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.QUALITY_DIMENSION_COLUMN_NAME).set(row3.getRowNumber(), "qd2");
+        sensorReadoutsTable.longColumn(SensorReadoutsColumnNames.CONNECTION_HASH_COLUMN_NAME).set(row3.getRowNumber(), 1L);
 
         Row row4 = sensorReadoutsTable.appendRow();
         sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).set(row4.getRowNumber(), id_prefix + "id4");
@@ -523,6 +530,7 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.SENSOR_NAME_COLUMN_NAME).set(row4.getRowNumber(), "s1");
         sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.QUALITY_DIMENSION_COLUMN_NAME).set(row4.getRowNumber(), "qd2");
         sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME).set(row4.getRowNumber(), "tg1");
+        sensorReadoutsTable.longColumn(SensorReadoutsColumnNames.CONNECTION_HASH_COLUMN_NAME).set(row4.getRowNumber(), 1L);
 
         Row row5 = sensorReadoutsTable.appendRow();
         sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).set(row5.getRowNumber(), id_prefix + "id5");
@@ -532,6 +540,7 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.CHECK_NAME_COLUMN_NAME).set(row5.getRowNumber(), "check1");
         sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.DATA_GROUP_NAME_COLUMN_NAME).set(row5.getRowNumber(), "ds2");
         sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.SENSOR_NAME_COLUMN_NAME).set(row5.getRowNumber(), "s1");
+        sensorReadoutsTable.longColumn(SensorReadoutsColumnNames.CONNECTION_HASH_COLUMN_NAME).set(row5.getRowNumber(), 1L);
 
         return sensorReadoutsTable;
     }

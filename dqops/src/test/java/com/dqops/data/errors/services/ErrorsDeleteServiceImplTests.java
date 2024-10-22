@@ -36,6 +36,7 @@ import com.dqops.data.errors.models.ErrorsFragmentFilter;
 import com.dqops.data.errors.snapshot.ErrorsSnapshot;
 import com.dqops.data.errors.snapshot.ErrorsSnapshotFactory;
 import com.dqops.data.errors.snapshot.ErrorsSnapshotFactoryImpl;
+import com.dqops.data.errorsamples.factory.ErrorSamplesColumnNames;
 import com.dqops.data.local.LocalDqoUserHomePathProvider;
 import com.dqops.data.local.LocalDqoUserHomePathProviderObjectMother;
 import com.dqops.data.models.DeleteStoredDataResult;
@@ -118,18 +119,21 @@ public class ErrorsDeleteServiceImplTests extends BaseTest {
         errorsTable.doubleColumn(ErrorsColumnNames.ACTUAL_VALUE_COLUMN_NAME).set(row1.getRowNumber(), 1);
         errorsTable.dateTimeColumn(ErrorsColumnNames.TIME_PERIOD_COLUMN_NAME).set(row1.getRowNumber(), startDate);
         errorsTable.dateTimeColumn(ErrorsColumnNames.ERROR_TIMESTAMP_COLUMN_NAME).set(row1.getRowNumber(), startDate);
+        errorsTable.longColumn(ErrorsColumnNames.CONNECTION_HASH_COLUMN_NAME).set(row1.getRowNumber(), 1L);
 
         Row row2 = errorsTable.appendRow();
         errorsTable.stringColumn(ErrorsColumnNames.ID_COLUMN_NAME).set(row2.getRowNumber(), id_prefix + "id2");
         errorsTable.doubleColumn(ErrorsColumnNames.ACTUAL_VALUE_COLUMN_NAME).set(row2.getRowNumber(), 10);
         errorsTable.dateTimeColumn(ErrorsColumnNames.TIME_PERIOD_COLUMN_NAME).set(row2.getRowNumber(), startDate.plusDays(1));
         errorsTable.dateTimeColumn(ErrorsColumnNames.ERROR_TIMESTAMP_COLUMN_NAME).set(row2.getRowNumber(), startDate.plusDays(1));
+        errorsTable.longColumn(ErrorsColumnNames.CONNECTION_HASH_COLUMN_NAME).set(row2.getRowNumber(), 1L);
 
         Row row3 = errorsTable.appendRow();
         errorsTable.stringColumn(ErrorsColumnNames.ID_COLUMN_NAME).set(row3.getRowNumber(), id_prefix + "id3");
         errorsTable.doubleColumn(ErrorsColumnNames.ACTUAL_VALUE_COLUMN_NAME).set(row3.getRowNumber(), 100);
         errorsTable.dateTimeColumn(ErrorsColumnNames.TIME_PERIOD_COLUMN_NAME).set(row3.getRowNumber(), startDate.plusDays(2));
         errorsTable.dateTimeColumn(ErrorsColumnNames.ERROR_TIMESTAMP_COLUMN_NAME).set(row3.getRowNumber(), startDate.plusDays(2));
+        errorsTable.longColumn(ErrorsColumnNames.CONNECTION_HASH_COLUMN_NAME).set(row3.getRowNumber(), 1L);
 
         return errorsTable;
     }
@@ -497,6 +501,7 @@ public class ErrorsDeleteServiceImplTests extends BaseTest {
         errorsTable.stringColumn(ErrorsColumnNames.SENSOR_NAME_COLUMN_NAME).set(row1.getRowNumber(), "s1");
         errorsTable.stringColumn(ErrorsColumnNames.QUALITY_DIMENSION_COLUMN_NAME).set(row1.getRowNumber(), "qd1");
         errorsTable.stringColumn(ErrorsColumnNames.TIME_GRADIENT_COLUMN_NAME).set(row1.getRowNumber(), "tg1");
+        errorsTable.longColumn(ErrorsColumnNames.CONNECTION_HASH_COLUMN_NAME).set(row1.getRowNumber(), 1L);
 
         Row row2 = errorsTable.appendRow();
         errorsTable.stringColumn(ErrorsColumnNames.ID_COLUMN_NAME).set(row2.getRowNumber(), "id2");
@@ -508,6 +513,7 @@ public class ErrorsDeleteServiceImplTests extends BaseTest {
         errorsTable.stringColumn(ErrorsColumnNames.COLUMN_NAME_COLUMN_NAME).set(row2.getRowNumber(), "col2");
         errorsTable.stringColumn(ErrorsColumnNames.SENSOR_NAME_COLUMN_NAME).set(row2.getRowNumber(), "s2");
         errorsTable.stringColumn(ErrorsColumnNames.TIME_GRADIENT_COLUMN_NAME).set(row2.getRowNumber(), "tg1");
+        errorsTable.longColumn(ErrorsColumnNames.CONNECTION_HASH_COLUMN_NAME).set(row2.getRowNumber(), 1L);
 
         Row row3 = errorsTable.appendRow();
         errorsTable.stringColumn(ErrorsColumnNames.ID_COLUMN_NAME).set(row3.getRowNumber(), "id3");
@@ -517,6 +523,7 @@ public class ErrorsDeleteServiceImplTests extends BaseTest {
         errorsTable.stringColumn(ErrorsColumnNames.CHECK_TYPE_COLUMN_NAME).set(row3.getRowNumber(), "type2");
         errorsTable.stringColumn(ErrorsColumnNames.COLUMN_NAME_COLUMN_NAME).set(row3.getRowNumber(), "col1");
         errorsTable.stringColumn(ErrorsColumnNames.QUALITY_DIMENSION_COLUMN_NAME).set(row3.getRowNumber(), "qd2");
+        errorsTable.longColumn(ErrorsColumnNames.CONNECTION_HASH_COLUMN_NAME).set(row3.getRowNumber(), 1L);
 
         Row row4 = errorsTable.appendRow();
         errorsTable.stringColumn(ErrorsColumnNames.ID_COLUMN_NAME).set(row4.getRowNumber(), "id4");
@@ -527,6 +534,7 @@ public class ErrorsDeleteServiceImplTests extends BaseTest {
         errorsTable.stringColumn(ErrorsColumnNames.SENSOR_NAME_COLUMN_NAME).set(row4.getRowNumber(), "s1");
         errorsTable.stringColumn(ErrorsColumnNames.QUALITY_DIMENSION_COLUMN_NAME).set(row4.getRowNumber(), "qd2");
         errorsTable.stringColumn(ErrorsColumnNames.TIME_GRADIENT_COLUMN_NAME).set(row4.getRowNumber(), "tg1");
+        errorsTable.longColumn(ErrorsColumnNames.CONNECTION_HASH_COLUMN_NAME).set(row4.getRowNumber(), 1L);
 
         Row row5 = errorsTable.appendRow();
         errorsTable.stringColumn(ErrorsColumnNames.ID_COLUMN_NAME).set(row5.getRowNumber(), "id5");
@@ -536,6 +544,7 @@ public class ErrorsDeleteServiceImplTests extends BaseTest {
         errorsTable.stringColumn(ErrorsColumnNames.CHECK_CATEGORY_COLUMN_NAME).set(row5.getRowNumber(), "cat1");
         errorsTable.stringColumn(ErrorsColumnNames.CHECK_NAME_COLUMN_NAME).set(row5.getRowNumber(), "check1");
         errorsTable.stringColumn(ErrorsColumnNames.SENSOR_NAME_COLUMN_NAME).set(row5.getRowNumber(), "s1");
+        errorsTable.longColumn(ErrorsColumnNames.CONNECTION_HASH_COLUMN_NAME).set(row5.getRowNumber(), 1L);
 
         return errorsTable;
     }

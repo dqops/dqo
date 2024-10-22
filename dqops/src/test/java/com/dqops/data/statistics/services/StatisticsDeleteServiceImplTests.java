@@ -33,6 +33,7 @@ import com.dqops.data.errors.factory.ErrorsColumnNames;
 import com.dqops.data.local.LocalDqoUserHomePathProvider;
 import com.dqops.data.local.LocalDqoUserHomePathProviderObjectMother;
 import com.dqops.data.models.DeleteStoredDataResult;
+import com.dqops.data.readouts.factory.SensorReadoutsColumnNames;
 import com.dqops.data.statistics.factory.StatisticsColumnNames;
 import com.dqops.data.statistics.factory.StatisticsResultsTableFactory;
 import com.dqops.data.statistics.factory.StatisticsResultsTableFactoryImpl;
@@ -115,14 +116,17 @@ public class StatisticsDeleteServiceImplTests extends BaseTest {
         Row row1 = profilingResultsTable.appendRow();
         profilingResultsTable.stringColumn(StatisticsColumnNames.ID_COLUMN_NAME).set(row1.getRowNumber(), id_prefix + "id1");
         profilingResultsTable.dateTimeColumn(StatisticsColumnNames.COLLECTED_AT_COLUMN_NAME).set(row1.getRowNumber(), startDate);
+        profilingResultsTable.longColumn(StatisticsColumnNames.CONNECTION_HASH_COLUMN_NAME).set(row1.getRowNumber(), 1L);
 
         Row row2 = profilingResultsTable.appendRow();
         profilingResultsTable.stringColumn(StatisticsColumnNames.ID_COLUMN_NAME).set(row2.getRowNumber(), id_prefix + "id2");
         profilingResultsTable.dateTimeColumn(StatisticsColumnNames.COLLECTED_AT_COLUMN_NAME).set(row2.getRowNumber(), startDate.plusDays(1));
+        profilingResultsTable.longColumn(StatisticsColumnNames.CONNECTION_HASH_COLUMN_NAME).set(row2.getRowNumber(), 1L);
 
         Row row3 = profilingResultsTable.appendRow();
         profilingResultsTable.stringColumn(StatisticsColumnNames.ID_COLUMN_NAME).set(row3.getRowNumber(), id_prefix + "id3");
         profilingResultsTable.dateTimeColumn(StatisticsColumnNames.COLLECTED_AT_COLUMN_NAME).set(row3.getRowNumber(), startDate.plusDays(2));
+        profilingResultsTable.longColumn(StatisticsColumnNames.CONNECTION_HASH_COLUMN_NAME).set(row3.getRowNumber(), 1L);
 
         return profilingResultsTable;
     }
@@ -492,6 +496,7 @@ public class StatisticsDeleteServiceImplTests extends BaseTest {
         profilingResultsTable.stringColumn(StatisticsColumnNames.COLUMN_NAME_COLUMN_NAME).set(row1.getRowNumber(), "col1");
         profilingResultsTable.stringColumn(StatisticsColumnNames.DATA_GROUP_NAME_COLUMN_NAME).set(row1.getRowNumber(), "ds1");
         profilingResultsTable.stringColumn(StatisticsColumnNames.SENSOR_NAME_COLUMN_NAME).set(row1.getRowNumber(), "s1");
+        profilingResultsTable.longColumn(StatisticsColumnNames.CONNECTION_HASH_COLUMN_NAME).set(row1.getRowNumber(), 1L);
 
         Row row2 = profilingResultsTable.appendRow();
         profilingResultsTable.stringColumn(StatisticsColumnNames.ID_COLUMN_NAME).set(row2.getRowNumber(), "id2");
@@ -501,6 +506,7 @@ public class StatisticsDeleteServiceImplTests extends BaseTest {
         profilingResultsTable.stringColumn(StatisticsColumnNames.COLUMN_NAME_COLUMN_NAME).set(row2.getRowNumber(), "col2");
         profilingResultsTable.stringColumn(StatisticsColumnNames.DATA_GROUP_NAME_COLUMN_NAME).set(row2.getRowNumber(), "ds1");
         profilingResultsTable.stringColumn(StatisticsColumnNames.SENSOR_NAME_COLUMN_NAME).set(row2.getRowNumber(), "s2");
+        profilingResultsTable.longColumn(StatisticsColumnNames.CONNECTION_HASH_COLUMN_NAME).set(row2.getRowNumber(), 1L);
 
         Row row3 = profilingResultsTable.appendRow();
         profilingResultsTable.stringColumn(StatisticsColumnNames.ID_COLUMN_NAME).set(row3.getRowNumber(), "id3");
@@ -508,12 +514,14 @@ public class StatisticsDeleteServiceImplTests extends BaseTest {
         profilingResultsTable.stringColumn(StatisticsColumnNames.COLLECTOR_TARGET_COLUMN_NAME).set(row3.getRowNumber(), "type2");
         profilingResultsTable.stringColumn(StatisticsColumnNames.COLUMN_NAME_COLUMN_NAME).set(row3.getRowNumber(), "col1");
         profilingResultsTable.stringColumn(StatisticsColumnNames.DATA_GROUP_NAME_COLUMN_NAME).set(row3.getRowNumber(), "ds2");
+        profilingResultsTable.longColumn(StatisticsColumnNames.CONNECTION_HASH_COLUMN_NAME).set(row3.getRowNumber(), 1L);
 
         Row row4 = profilingResultsTable.appendRow();
         profilingResultsTable.stringColumn(StatisticsColumnNames.ID_COLUMN_NAME).set(row4.getRowNumber(), "id4");
         profilingResultsTable.dateTimeColumn(StatisticsColumnNames.COLLECTED_AT_COLUMN_NAME).set(row4.getRowNumber(), startDate.plusDays(3));
         profilingResultsTable.stringColumn(StatisticsColumnNames.COLLECTOR_NAME_COLUMN_NAME).set(row4.getRowNumber(), "profiler2");
         profilingResultsTable.stringColumn(StatisticsColumnNames.SENSOR_NAME_COLUMN_NAME).set(row4.getRowNumber(), "s1");
+        profilingResultsTable.longColumn(StatisticsColumnNames.CONNECTION_HASH_COLUMN_NAME).set(row4.getRowNumber(), 1L);
 
         Row row5 = profilingResultsTable.appendRow();
         profilingResultsTable.stringColumn(StatisticsColumnNames.ID_COLUMN_NAME).set(row5.getRowNumber(), "id5");
@@ -522,6 +530,7 @@ public class StatisticsDeleteServiceImplTests extends BaseTest {
         profilingResultsTable.stringColumn(StatisticsColumnNames.COLLECTOR_NAME_COLUMN_NAME).set(row5.getRowNumber(), "profiler1");
         profilingResultsTable.stringColumn(StatisticsColumnNames.DATA_GROUP_NAME_COLUMN_NAME).set(row5.getRowNumber(), "ds2");
         profilingResultsTable.stringColumn(StatisticsColumnNames.SENSOR_NAME_COLUMN_NAME).set(row5.getRowNumber(), "s1");
+        profilingResultsTable.longColumn(StatisticsColumnNames.CONNECTION_HASH_COLUMN_NAME).set(row5.getRowNumber(), 1L);
 
         return profilingResultsTable;
     }
