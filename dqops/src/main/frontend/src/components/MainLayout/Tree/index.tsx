@@ -91,7 +91,6 @@ const Tree = () => {
       const terms = undecodedTerms.map((x) => urlencodeDecoder(x));
       const connection = terms[3] || '';
       let newTreeData = [...(treeData || [])];
-
       if (!newTreeData.length) {
         const res: AxiosResponse<ConnectionModel[]> =
           await ConnectionApiClient.getAllConnections();
@@ -114,7 +113,6 @@ const Tree = () => {
         }));
         newTreeData = [...mappedConnectionsToTreeData];
       }
-
       const connectionNode = findTreeNode(newTreeData, connection);
       if (connectionNode && !connectionNode.open) {
         const items = await refreshNode(connectionNode, false);
@@ -175,6 +173,16 @@ const Tree = () => {
 
       if (match.path === ROUTES.PATTERNS.TABLE_PARTITIONED_MONTHLY) {
         setActiveTab(`${tableNode?.id || ''}.monthlyPartitionedChecks`);
+      }
+
+      if (match.path === ROUTES.PATTERNS.TABLE_PROFILING_FILTER) {
+        const checkNode = findTreeNode(
+          newTreeData,
+          `${tableNode?.id || ''}.checks`
+        );
+        const items = await refreshNode(checkNode, false);
+        newTreeData = getNewTreeData(newTreeData, items, checkNode!);
+        setActiveTab(`${checkNode?.id || ''}.${terms[10]}_${terms[11]}`);
       }
 
       if (match.path === ROUTES.PATTERNS.COLUMN) {
