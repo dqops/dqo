@@ -949,6 +949,10 @@ export const getProviderTypeTitle = (
       return 'DB2';
     case ConnectionModelProviderTypeEnum.duckdb:
       return 'DuckDB';
+    case ConnectionModelProviderTypeEnum.clickhouse:
+      return 'ClickHouse';
+    case ConnectionModelProviderTypeEnum.questdb:
+      return 'QuestDB';
     default:
       return '';
   }

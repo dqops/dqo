@@ -188,6 +188,10 @@ const CreateConnection = () => {
         copiedDatabase.clickhouse = { port: '8123', properties: { '': '' } };
         break;
       }
+      case ConnectionModelProviderTypeEnum.questdb: {
+        copiedDatabase.questdb = { port: '8812', properties: { '': '' } };
+        break;
+      }
     }
     setDatabase(copiedDatabase);
   };

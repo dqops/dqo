@@ -484,6 +484,12 @@ export const databaseOptions: IDatabaseOption[] = [
     displayName: 'Presto'
   },
   {
+    type: ConnectionModelProviderTypeEnum.questdb,
+    name: 'QuestDB',
+    iconName: 'questdb',
+    displayName: 'QuestDB'
+  },
+  {
     type: ConnectionModelProviderTypeEnum.mysql,
     name: 'SingleStoreDB',
     iconName: 'singlestoredb',

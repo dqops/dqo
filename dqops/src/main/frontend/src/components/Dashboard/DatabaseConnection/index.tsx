@@ -35,6 +35,7 @@ import SparkLogo from '../../SvgIcon/svg/spark.svg';
 import TrinoLogo from '../../SvgIcon/svg/trino.svg';
 import MariaDbLogo from '../../SvgIcon/svg/maria-db.svg';
 import ClickHouseLogo from '../../SvgIcon/svg/clickhouse.svg';
+import QuestDbLogo from '../../SvgIcon/svg/questdb.svg';
 import SectionWrapper from '../SectionWrapper';
 import BigqueryConnection from './BigqueryConnection';
 import ConfirmErrorModal from './ConfirmErrorModal';
@@ -55,6 +56,7 @@ import SparkConnection from './SparkConnection';
 import SqlServerConnection from './SqlServerConnection';
 import TrinoConnection from './TrinoConnection';
 import ClickHouseConnection from './ClickHouseConnection';
+import QuestDbConnection from './QuestDbConnection';
 
 interface IDatabaseConnectionProps {
   onNext: () => void;
@@ -342,6 +344,13 @@ const DatabaseConnection = ({
         onChange={(clickhouse) => onChange({ ...database, clickhouse })}
         sharedCredentials={sharedCredentials}
       />
+    ),
+    [ConnectionModelProviderTypeEnum.questdb]: (
+      <QuestDbConnection
+        questdb={database.questdb}
+        onChange={(questdb) => onChange({ ...database, questdb })}
+        sharedCredentials={sharedCredentials}
+      />
     )
   };
 
@@ -375,6 +384,8 @@ const DatabaseConnection = ({
         return MariaDbLogo;
       case ConnectionModelProviderTypeEnum.clickhouse:
         return ClickHouseLogo;
+      case ConnectionModelProviderTypeEnum.questdb:
+        return QuestDbLogo;
       default:
         return '';
     }
