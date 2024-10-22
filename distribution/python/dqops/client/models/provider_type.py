@@ -13,6 +13,7 @@ class ProviderType(str, Enum):
     ORACLE = "oracle"
     POSTGRESQL = "postgresql"
     PRESTO = "presto"
+    QUESTDB = "questdb"
     REDSHIFT = "redshift"
     SNOWFLAKE = "snowflake"
     SPARK = "spark"

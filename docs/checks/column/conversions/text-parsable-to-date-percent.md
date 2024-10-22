@@ -823,6 +823,68 @@ spec:
                 FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             ```
+    ??? example "QuestDB"
+
+        === "Sensor template for QuestDB"
+
+            ```sql+jinja
+            {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+            SELECT COALESCE(100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec)))\1|(?:(?:29|30)(\/|-|\.)(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec))\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:29(\/|-|\.)(?:0?2|(?:Feb))\1(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$'
+                                OR {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))\1(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR
+                                {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:(?:(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.|[ ])31)(?:[,]?\1)|(?:(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.|[ ])(?:29|30))(?:[,]?\2)))(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:(?:0?2|(?:Feb)(\/|-|\.|[ ])29)(?:[,]?\1)(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$'
+                                OR {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))(\/|-|\.|[ ])(?:0?[1-9]|1\d|2[0-8]))(?:[,]?\1)(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR
+                                {{ lib.render_target_column('analyzed_table')}}::varchar ~    '^(?:(?:1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(?:(?:(?:(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec))\1(?:31))|(?:(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\1(?:29|30))))|(?:(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))\1(?:0?[1-9]|1\d|2[0-8])))$'
+                                OR {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(\/|-|\.)(?:(?:0?2|(?:Feb)\1(?:29)))$'
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }}), 100.0)
+                AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM(
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for QuestDB"
+
+            ```sql
+            SELECT COALESCE(100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column"::varchar ~ '^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec)))\1|(?:(?:29|30)(\/|-|\.)(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec))\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR analyzed_table."target_column"::varchar ~ '^(?:29(\/|-|\.)(?:0?2|(?:Feb))\1(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$'
+                                OR analyzed_table."target_column"::varchar ~ '^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))\1(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR
+                                analyzed_table."target_column"::varchar ~ '^(?:(?:(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.|[ ])31)(?:[,]?\1)|(?:(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.|[ ])(?:29|30))(?:[,]?\2)))(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR analyzed_table."target_column"::varchar ~ '^(?:(?:0?2|(?:Feb)(\/|-|\.|[ ])29)(?:[,]?\1)(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$'
+                                OR analyzed_table."target_column"::varchar ~ '^(?:(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))(\/|-|\.|[ ])(?:0?[1-9]|1\d|2[0-8]))(?:[,]?\1)(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR
+                                analyzed_table."target_column"::varchar ~    '^(?:(?:1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(?:(?:(?:(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec))\1(?:31))|(?:(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\1(?:29|30))))|(?:(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))\1(?:0?[1-9]|1\d|2[0-8])))$'
+                                OR analyzed_table."target_column"::varchar ~ '^(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(\/|-|\.)(?:(?:0?2|(?:Feb)\1(?:29)))$'
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column"), 100.0)
+                AS actual_value
+            FROM(
+                SELECT
+                    original_table.*
+                FROM "<target_table>" original_table
+            ) analyzed_table
+            ```
     ??? example "Redshift"
 
         === "Sensor template for Redshift"
@@ -1883,6 +1945,74 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."country" AS grouping_level_1,
                 original_table."state" AS grouping_level_2
                 FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
+            ```
+    ??? example "QuestDB"
+
+        === "Sensor template for QuestDB"
+            ```sql+jinja
+            {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+            SELECT COALESCE(100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec)))\1|(?:(?:29|30)(\/|-|\.)(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec))\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:29(\/|-|\.)(?:0?2|(?:Feb))\1(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$'
+                                OR {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))\1(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR
+                                {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:(?:(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.|[ ])31)(?:[,]?\1)|(?:(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.|[ ])(?:29|30))(?:[,]?\2)))(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:(?:0?2|(?:Feb)(\/|-|\.|[ ])29)(?:[,]?\1)(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$'
+                                OR {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))(\/|-|\.|[ ])(?:0?[1-9]|1\d|2[0-8]))(?:[,]?\1)(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR
+                                {{ lib.render_target_column('analyzed_table')}}::varchar ~    '^(?:(?:1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(?:(?:(?:(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec))\1(?:31))|(?:(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\1(?:29|30))))|(?:(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))\1(?:0?[1-9]|1\d|2[0-8])))$'
+                                OR {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(\/|-|\.)(?:(?:0?2|(?:Feb)\1(?:29)))$'
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }}), 100.0)
+                AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM(
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for QuestDB"
+            ```sql
+            SELECT COALESCE(100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column"::varchar ~ '^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec)))\1|(?:(?:29|30)(\/|-|\.)(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec))\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR analyzed_table."target_column"::varchar ~ '^(?:29(\/|-|\.)(?:0?2|(?:Feb))\1(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$'
+                                OR analyzed_table."target_column"::varchar ~ '^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))\1(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR
+                                analyzed_table."target_column"::varchar ~ '^(?:(?:(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.|[ ])31)(?:[,]?\1)|(?:(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.|[ ])(?:29|30))(?:[,]?\2)))(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR analyzed_table."target_column"::varchar ~ '^(?:(?:0?2|(?:Feb)(\/|-|\.|[ ])29)(?:[,]?\1)(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$'
+                                OR analyzed_table."target_column"::varchar ~ '^(?:(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))(\/|-|\.|[ ])(?:0?[1-9]|1\d|2[0-8]))(?:[,]?\1)(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR
+                                analyzed_table."target_column"::varchar ~    '^(?:(?:1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(?:(?:(?:(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec))\1(?:31))|(?:(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\1(?:29|30))))|(?:(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))\1(?:0?[1-9]|1\d|2[0-8])))$'
+                                OR analyzed_table."target_column"::varchar ~ '^(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(\/|-|\.)(?:(?:0?2|(?:Feb)\1(?:29)))$'
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column"), 100.0)
+                AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            FROM(
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2
+                FROM "<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2
             ORDER BY grouping_level_1, grouping_level_2
@@ -3005,6 +3135,68 @@ spec:
                 FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             ```
+    ??? example "QuestDB"
+
+        === "Sensor template for QuestDB"
+
+            ```sql+jinja
+            {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+            SELECT COALESCE(100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec)))\1|(?:(?:29|30)(\/|-|\.)(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec))\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:29(\/|-|\.)(?:0?2|(?:Feb))\1(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$'
+                                OR {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))\1(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR
+                                {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:(?:(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.|[ ])31)(?:[,]?\1)|(?:(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.|[ ])(?:29|30))(?:[,]?\2)))(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:(?:0?2|(?:Feb)(\/|-|\.|[ ])29)(?:[,]?\1)(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$'
+                                OR {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))(\/|-|\.|[ ])(?:0?[1-9]|1\d|2[0-8]))(?:[,]?\1)(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR
+                                {{ lib.render_target_column('analyzed_table')}}::varchar ~    '^(?:(?:1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(?:(?:(?:(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec))\1(?:31))|(?:(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\1(?:29|30))))|(?:(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))\1(?:0?[1-9]|1\d|2[0-8])))$'
+                                OR {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(\/|-|\.)(?:(?:0?2|(?:Feb)\1(?:29)))$'
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }}), 100.0)
+                AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM(
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for QuestDB"
+
+            ```sql
+            SELECT COALESCE(100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column"::varchar ~ '^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec)))\1|(?:(?:29|30)(\/|-|\.)(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec))\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR analyzed_table."target_column"::varchar ~ '^(?:29(\/|-|\.)(?:0?2|(?:Feb))\1(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$'
+                                OR analyzed_table."target_column"::varchar ~ '^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))\1(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR
+                                analyzed_table."target_column"::varchar ~ '^(?:(?:(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.|[ ])31)(?:[,]?\1)|(?:(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.|[ ])(?:29|30))(?:[,]?\2)))(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR analyzed_table."target_column"::varchar ~ '^(?:(?:0?2|(?:Feb)(\/|-|\.|[ ])29)(?:[,]?\1)(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$'
+                                OR analyzed_table."target_column"::varchar ~ '^(?:(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))(\/|-|\.|[ ])(?:0?[1-9]|1\d|2[0-8]))(?:[,]?\1)(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR
+                                analyzed_table."target_column"::varchar ~    '^(?:(?:1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(?:(?:(?:(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec))\1(?:31))|(?:(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\1(?:29|30))))|(?:(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))\1(?:0?[1-9]|1\d|2[0-8])))$'
+                                OR analyzed_table."target_column"::varchar ~ '^(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(\/|-|\.)(?:(?:0?2|(?:Feb)\1(?:29)))$'
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column"), 100.0)
+                AS actual_value
+            FROM(
+                SELECT
+                    original_table.*
+                FROM "<target_table>" original_table
+            ) analyzed_table
+            ```
     ??? example "Redshift"
 
         === "Sensor template for Redshift"
@@ -4066,6 +4258,74 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."country" AS grouping_level_1,
                 original_table."state" AS grouping_level_2
                 FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
+            ```
+    ??? example "QuestDB"
+
+        === "Sensor template for QuestDB"
+            ```sql+jinja
+            {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+            SELECT COALESCE(100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec)))\1|(?:(?:29|30)(\/|-|\.)(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec))\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:29(\/|-|\.)(?:0?2|(?:Feb))\1(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$'
+                                OR {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))\1(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR
+                                {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:(?:(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.|[ ])31)(?:[,]?\1)|(?:(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.|[ ])(?:29|30))(?:[,]?\2)))(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:(?:0?2|(?:Feb)(\/|-|\.|[ ])29)(?:[,]?\1)(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$'
+                                OR {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))(\/|-|\.|[ ])(?:0?[1-9]|1\d|2[0-8]))(?:[,]?\1)(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR
+                                {{ lib.render_target_column('analyzed_table')}}::varchar ~    '^(?:(?:1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(?:(?:(?:(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec))\1(?:31))|(?:(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\1(?:29|30))))|(?:(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))\1(?:0?[1-9]|1\d|2[0-8])))$'
+                                OR {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(\/|-|\.)(?:(?:0?2|(?:Feb)\1(?:29)))$'
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }}), 100.0)
+                AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM(
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for QuestDB"
+            ```sql
+            SELECT COALESCE(100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column"::varchar ~ '^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec)))\1|(?:(?:29|30)(\/|-|\.)(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec))\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR analyzed_table."target_column"::varchar ~ '^(?:29(\/|-|\.)(?:0?2|(?:Feb))\1(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$'
+                                OR analyzed_table."target_column"::varchar ~ '^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))\1(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR
+                                analyzed_table."target_column"::varchar ~ '^(?:(?:(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.|[ ])31)(?:[,]?\1)|(?:(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.|[ ])(?:29|30))(?:[,]?\2)))(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR analyzed_table."target_column"::varchar ~ '^(?:(?:0?2|(?:Feb)(\/|-|\.|[ ])29)(?:[,]?\1)(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$'
+                                OR analyzed_table."target_column"::varchar ~ '^(?:(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))(\/|-|\.|[ ])(?:0?[1-9]|1\d|2[0-8]))(?:[,]?\1)(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR
+                                analyzed_table."target_column"::varchar ~    '^(?:(?:1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(?:(?:(?:(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec))\1(?:31))|(?:(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\1(?:29|30))))|(?:(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))\1(?:0?[1-9]|1\d|2[0-8])))$'
+                                OR analyzed_table."target_column"::varchar ~ '^(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(\/|-|\.)(?:(?:0?2|(?:Feb)\1(?:29)))$'
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column"), 100.0)
+                AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            FROM(
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2
+                FROM "<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2
             ORDER BY grouping_level_1, grouping_level_2
@@ -5188,6 +5448,68 @@ spec:
                 FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             ```
+    ??? example "QuestDB"
+
+        === "Sensor template for QuestDB"
+
+            ```sql+jinja
+            {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+            SELECT COALESCE(100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec)))\1|(?:(?:29|30)(\/|-|\.)(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec))\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:29(\/|-|\.)(?:0?2|(?:Feb))\1(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$'
+                                OR {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))\1(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR
+                                {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:(?:(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.|[ ])31)(?:[,]?\1)|(?:(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.|[ ])(?:29|30))(?:[,]?\2)))(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:(?:0?2|(?:Feb)(\/|-|\.|[ ])29)(?:[,]?\1)(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$'
+                                OR {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))(\/|-|\.|[ ])(?:0?[1-9]|1\d|2[0-8]))(?:[,]?\1)(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR
+                                {{ lib.render_target_column('analyzed_table')}}::varchar ~    '^(?:(?:1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(?:(?:(?:(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec))\1(?:31))|(?:(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\1(?:29|30))))|(?:(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))\1(?:0?[1-9]|1\d|2[0-8])))$'
+                                OR {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(\/|-|\.)(?:(?:0?2|(?:Feb)\1(?:29)))$'
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }}), 100.0)
+                AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM(
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for QuestDB"
+
+            ```sql
+            SELECT COALESCE(100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column"::varchar ~ '^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec)))\1|(?:(?:29|30)(\/|-|\.)(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec))\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR analyzed_table."target_column"::varchar ~ '^(?:29(\/|-|\.)(?:0?2|(?:Feb))\1(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$'
+                                OR analyzed_table."target_column"::varchar ~ '^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))\1(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR
+                                analyzed_table."target_column"::varchar ~ '^(?:(?:(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.|[ ])31)(?:[,]?\1)|(?:(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.|[ ])(?:29|30))(?:[,]?\2)))(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR analyzed_table."target_column"::varchar ~ '^(?:(?:0?2|(?:Feb)(\/|-|\.|[ ])29)(?:[,]?\1)(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$'
+                                OR analyzed_table."target_column"::varchar ~ '^(?:(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))(\/|-|\.|[ ])(?:0?[1-9]|1\d|2[0-8]))(?:[,]?\1)(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR
+                                analyzed_table."target_column"::varchar ~    '^(?:(?:1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(?:(?:(?:(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec))\1(?:31))|(?:(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\1(?:29|30))))|(?:(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))\1(?:0?[1-9]|1\d|2[0-8])))$'
+                                OR analyzed_table."target_column"::varchar ~ '^(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(\/|-|\.)(?:(?:0?2|(?:Feb)\1(?:29)))$'
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column"), 100.0)
+                AS actual_value
+            FROM(
+                SELECT
+                    original_table.*
+                FROM "<target_table>" original_table
+            ) analyzed_table
+            ```
     ??? example "Redshift"
 
         === "Sensor template for Redshift"
@@ -6249,6 +6571,74 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."country" AS grouping_level_1,
                 original_table."state" AS grouping_level_2
                 FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
+            ```
+    ??? example "QuestDB"
+
+        === "Sensor template for QuestDB"
+            ```sql+jinja
+            {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+            SELECT COALESCE(100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec)))\1|(?:(?:29|30)(\/|-|\.)(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec))\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:29(\/|-|\.)(?:0?2|(?:Feb))\1(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$'
+                                OR {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))\1(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR
+                                {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:(?:(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.|[ ])31)(?:[,]?\1)|(?:(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.|[ ])(?:29|30))(?:[,]?\2)))(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:(?:0?2|(?:Feb)(\/|-|\.|[ ])29)(?:[,]?\1)(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$'
+                                OR {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))(\/|-|\.|[ ])(?:0?[1-9]|1\d|2[0-8]))(?:[,]?\1)(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR
+                                {{ lib.render_target_column('analyzed_table')}}::varchar ~    '^(?:(?:1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(?:(?:(?:(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec))\1(?:31))|(?:(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\1(?:29|30))))|(?:(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))\1(?:0?[1-9]|1\d|2[0-8])))$'
+                                OR {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(\/|-|\.)(?:(?:0?2|(?:Feb)\1(?:29)))$'
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }}), 100.0)
+                AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM(
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for QuestDB"
+            ```sql
+            SELECT COALESCE(100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column"::varchar ~ '^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec)))\1|(?:(?:29|30)(\/|-|\.)(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec))\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR analyzed_table."target_column"::varchar ~ '^(?:29(\/|-|\.)(?:0?2|(?:Feb))\1(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$'
+                                OR analyzed_table."target_column"::varchar ~ '^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))\1(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR
+                                analyzed_table."target_column"::varchar ~ '^(?:(?:(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.|[ ])31)(?:[,]?\1)|(?:(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.|[ ])(?:29|30))(?:[,]?\2)))(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR analyzed_table."target_column"::varchar ~ '^(?:(?:0?2|(?:Feb)(\/|-|\.|[ ])29)(?:[,]?\1)(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$'
+                                OR analyzed_table."target_column"::varchar ~ '^(?:(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))(\/|-|\.|[ ])(?:0?[1-9]|1\d|2[0-8]))(?:[,]?\1)(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR
+                                analyzed_table."target_column"::varchar ~    '^(?:(?:1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(?:(?:(?:(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec))\1(?:31))|(?:(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\1(?:29|30))))|(?:(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))\1(?:0?[1-9]|1\d|2[0-8])))$'
+                                OR analyzed_table."target_column"::varchar ~ '^(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(\/|-|\.)(?:(?:0?2|(?:Feb)\1(?:29)))$'
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column"), 100.0)
+                AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            FROM(
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2
+                FROM "<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2
             ORDER BY grouping_level_1, grouping_level_2
@@ -7433,6 +7823,74 @@ spec:
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
+    ??? example "QuestDB"
+
+        === "Sensor template for QuestDB"
+
+            ```sql+jinja
+            {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+            SELECT COALESCE(100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec)))\1|(?:(?:29|30)(\/|-|\.)(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec))\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:29(\/|-|\.)(?:0?2|(?:Feb))\1(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$'
+                                OR {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))\1(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR
+                                {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:(?:(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.|[ ])31)(?:[,]?\1)|(?:(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.|[ ])(?:29|30))(?:[,]?\2)))(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:(?:0?2|(?:Feb)(\/|-|\.|[ ])29)(?:[,]?\1)(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$'
+                                OR {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))(\/|-|\.|[ ])(?:0?[1-9]|1\d|2[0-8]))(?:[,]?\1)(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR
+                                {{ lib.render_target_column('analyzed_table')}}::varchar ~    '^(?:(?:1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(?:(?:(?:(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec))\1(?:31))|(?:(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\1(?:29|30))))|(?:(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))\1(?:0?[1-9]|1\d|2[0-8])))$'
+                                OR {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(\/|-|\.)(?:(?:0?2|(?:Feb)\1(?:29)))$'
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }}), 100.0)
+                AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM(
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for QuestDB"
+
+            ```sql
+            SELECT COALESCE(100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column"::varchar ~ '^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec)))\1|(?:(?:29|30)(\/|-|\.)(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec))\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR analyzed_table."target_column"::varchar ~ '^(?:29(\/|-|\.)(?:0?2|(?:Feb))\1(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$'
+                                OR analyzed_table."target_column"::varchar ~ '^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))\1(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR
+                                analyzed_table."target_column"::varchar ~ '^(?:(?:(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.|[ ])31)(?:[,]?\1)|(?:(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.|[ ])(?:29|30))(?:[,]?\2)))(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR analyzed_table."target_column"::varchar ~ '^(?:(?:0?2|(?:Feb)(\/|-|\.|[ ])29)(?:[,]?\1)(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$'
+                                OR analyzed_table."target_column"::varchar ~ '^(?:(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))(\/|-|\.|[ ])(?:0?[1-9]|1\d|2[0-8]))(?:[,]?\1)(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR
+                                analyzed_table."target_column"::varchar ~    '^(?:(?:1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(?:(?:(?:(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec))\1(?:31))|(?:(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\1(?:29|30))))|(?:(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))\1(?:0?[1-9]|1\d|2[0-8])))$'
+                                OR analyzed_table."target_column"::varchar ~ '^(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(\/|-|\.)(?:(?:0?2|(?:Feb)\1(?:29)))$'
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column"), 100.0)
+                AS actual_value,
+                time_period,
+                time_period_utc
+            FROM(
+                SELECT
+                    original_table.*,
+                CAST(DATE_TRUNC('day', original_table."date_column") AS DATE) AS time_period,
+                CAST((CAST(DATE_TRUNC('day', original_table."date_column") AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                FROM "<target_table>" original_table
+            ) analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "Redshift"
 
         === "Sensor template for Redshift"
@@ -8558,6 +9016,78 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(original_table."date_column" AS date) AS time_period,
                 CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
                 FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "QuestDB"
+
+        === "Sensor template for QuestDB"
+            ```sql+jinja
+            {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+            SELECT COALESCE(100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec)))\1|(?:(?:29|30)(\/|-|\.)(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec))\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:29(\/|-|\.)(?:0?2|(?:Feb))\1(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$'
+                                OR {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))\1(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR
+                                {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:(?:(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.|[ ])31)(?:[,]?\1)|(?:(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.|[ ])(?:29|30))(?:[,]?\2)))(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:(?:0?2|(?:Feb)(\/|-|\.|[ ])29)(?:[,]?\1)(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$'
+                                OR {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))(\/|-|\.|[ ])(?:0?[1-9]|1\d|2[0-8]))(?:[,]?\1)(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR
+                                {{ lib.render_target_column('analyzed_table')}}::varchar ~    '^(?:(?:1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(?:(?:(?:(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec))\1(?:31))|(?:(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\1(?:29|30))))|(?:(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))\1(?:0?[1-9]|1\d|2[0-8])))$'
+                                OR {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(\/|-|\.)(?:(?:0?2|(?:Feb)\1(?:29)))$'
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }}), 100.0)
+                AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM(
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for QuestDB"
+            ```sql
+            SELECT COALESCE(100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column"::varchar ~ '^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec)))\1|(?:(?:29|30)(\/|-|\.)(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec))\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR analyzed_table."target_column"::varchar ~ '^(?:29(\/|-|\.)(?:0?2|(?:Feb))\1(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$'
+                                OR analyzed_table."target_column"::varchar ~ '^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))\1(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR
+                                analyzed_table."target_column"::varchar ~ '^(?:(?:(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.|[ ])31)(?:[,]?\1)|(?:(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.|[ ])(?:29|30))(?:[,]?\2)))(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR analyzed_table."target_column"::varchar ~ '^(?:(?:0?2|(?:Feb)(\/|-|\.|[ ])29)(?:[,]?\1)(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$'
+                                OR analyzed_table."target_column"::varchar ~ '^(?:(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))(\/|-|\.|[ ])(?:0?[1-9]|1\d|2[0-8]))(?:[,]?\1)(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR
+                                analyzed_table."target_column"::varchar ~    '^(?:(?:1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(?:(?:(?:(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec))\1(?:31))|(?:(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\1(?:29|30))))|(?:(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))\1(?:0?[1-9]|1\d|2[0-8])))$'
+                                OR analyzed_table."target_column"::varchar ~ '^(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(\/|-|\.)(?:(?:0?2|(?:Feb)\1(?:29)))$'
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column"), 100.0)
+                AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2,
+                time_period,
+                time_period_utc
+            FROM(
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                CAST(DATE_TRUNC('day', original_table."date_column") AS DATE) AS time_period,
+                CAST((CAST(DATE_TRUNC('day', original_table."date_column") AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                FROM "<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -9752,6 +10282,74 @@ spec:
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
+    ??? example "QuestDB"
+
+        === "Sensor template for QuestDB"
+
+            ```sql+jinja
+            {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+            SELECT COALESCE(100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec)))\1|(?:(?:29|30)(\/|-|\.)(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec))\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:29(\/|-|\.)(?:0?2|(?:Feb))\1(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$'
+                                OR {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))\1(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR
+                                {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:(?:(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.|[ ])31)(?:[,]?\1)|(?:(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.|[ ])(?:29|30))(?:[,]?\2)))(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:(?:0?2|(?:Feb)(\/|-|\.|[ ])29)(?:[,]?\1)(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$'
+                                OR {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))(\/|-|\.|[ ])(?:0?[1-9]|1\d|2[0-8]))(?:[,]?\1)(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR
+                                {{ lib.render_target_column('analyzed_table')}}::varchar ~    '^(?:(?:1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(?:(?:(?:(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec))\1(?:31))|(?:(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\1(?:29|30))))|(?:(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))\1(?:0?[1-9]|1\d|2[0-8])))$'
+                                OR {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(\/|-|\.)(?:(?:0?2|(?:Feb)\1(?:29)))$'
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }}), 100.0)
+                AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM(
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for QuestDB"
+
+            ```sql
+            SELECT COALESCE(100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column"::varchar ~ '^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec)))\1|(?:(?:29|30)(\/|-|\.)(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec))\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR analyzed_table."target_column"::varchar ~ '^(?:29(\/|-|\.)(?:0?2|(?:Feb))\1(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$'
+                                OR analyzed_table."target_column"::varchar ~ '^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))\1(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR
+                                analyzed_table."target_column"::varchar ~ '^(?:(?:(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.|[ ])31)(?:[,]?\1)|(?:(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.|[ ])(?:29|30))(?:[,]?\2)))(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR analyzed_table."target_column"::varchar ~ '^(?:(?:0?2|(?:Feb)(\/|-|\.|[ ])29)(?:[,]?\1)(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$'
+                                OR analyzed_table."target_column"::varchar ~ '^(?:(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))(\/|-|\.|[ ])(?:0?[1-9]|1\d|2[0-8]))(?:[,]?\1)(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR
+                                analyzed_table."target_column"::varchar ~    '^(?:(?:1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(?:(?:(?:(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec))\1(?:31))|(?:(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\1(?:29|30))))|(?:(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))\1(?:0?[1-9]|1\d|2[0-8])))$'
+                                OR analyzed_table."target_column"::varchar ~ '^(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(\/|-|\.)(?:(?:0?2|(?:Feb)\1(?:29)))$'
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column"), 100.0)
+                AS actual_value,
+                time_period,
+                time_period_utc
+            FROM(
+                SELECT
+                    original_table.*,
+                CAST(DATE_TRUNC('month', original_table."date_column") AS DATE) AS time_period,
+                CAST((CAST(DATE_TRUNC('month', original_table."date_column") AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                FROM "<target_table>" original_table
+            ) analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "Redshift"
 
         === "Sensor template for Redshift"
@@ -10877,6 +11475,78 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
                 FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "QuestDB"
+
+        === "Sensor template for QuestDB"
+            ```sql+jinja
+            {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+            SELECT COALESCE(100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec)))\1|(?:(?:29|30)(\/|-|\.)(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec))\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:29(\/|-|\.)(?:0?2|(?:Feb))\1(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$'
+                                OR {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))\1(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR
+                                {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:(?:(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.|[ ])31)(?:[,]?\1)|(?:(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.|[ ])(?:29|30))(?:[,]?\2)))(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:(?:0?2|(?:Feb)(\/|-|\.|[ ])29)(?:[,]?\1)(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$'
+                                OR {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))(\/|-|\.|[ ])(?:0?[1-9]|1\d|2[0-8]))(?:[,]?\1)(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR
+                                {{ lib.render_target_column('analyzed_table')}}::varchar ~    '^(?:(?:1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(?:(?:(?:(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec))\1(?:31))|(?:(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\1(?:29|30))))|(?:(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))\1(?:0?[1-9]|1\d|2[0-8])))$'
+                                OR {{ lib.render_target_column('analyzed_table')}}::varchar ~ '^(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(\/|-|\.)(?:(?:0?2|(?:Feb)\1(?:29)))$'
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }}), 100.0)
+                AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM(
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for QuestDB"
+            ```sql
+            SELECT COALESCE(100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column"::varchar ~ '^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec)))\1|(?:(?:29|30)(\/|-|\.)(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec))\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR analyzed_table."target_column"::varchar ~ '^(?:29(\/|-|\.)(?:0?2|(?:Feb))\1(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$'
+                                OR analyzed_table."target_column"::varchar ~ '^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))\1(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR
+                                analyzed_table."target_column"::varchar ~ '^(?:(?:(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.|[ ])31)(?:[,]?\1)|(?:(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.|[ ])(?:29|30))(?:[,]?\2)))(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR analyzed_table."target_column"::varchar ~ '^(?:(?:0?2|(?:Feb)(\/|-|\.|[ ])29)(?:[,]?\1)(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$'
+                                OR analyzed_table."target_column"::varchar ~ '^(?:(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))(\/|-|\.|[ ])(?:0?[1-9]|1\d|2[0-8]))(?:[,]?\1)(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+                                OR
+                                analyzed_table."target_column"::varchar ~    '^(?:(?:1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(?:(?:(?:(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec))\1(?:31))|(?:(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\1(?:29|30))))|(?:(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))\1(?:0?[1-9]|1\d|2[0-8])))$'
+                                OR analyzed_table."target_column"::varchar ~ '^(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(\/|-|\.)(?:(?:0?2|(?:Feb)\1(?:29)))$'
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column"), 100.0)
+                AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2,
+                time_period,
+                time_period_utc
+            FROM(
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                CAST(DATE_TRUNC('month', original_table."date_column") AS DATE) AS time_period,
+                CAST((CAST(DATE_TRUNC('month', original_table."date_column") AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                FROM "<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc

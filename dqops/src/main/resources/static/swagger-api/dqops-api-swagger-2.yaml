@@ -36540,6 +36540,7 @@ definitions:
         - "db2"
         - "mariadb"
         - "clickhouse"
+        - "questdb"
       bigquery:
         description: "BigQuery connection parameters. Specify parameters in the bigquery\
           \ section."
@@ -36589,6 +36590,9 @@ definitions:
       clickhouse:
         description: "ClickHouse connection parameters."
         $ref: "#/definitions/ClickHouseParametersSpec"
+      questdb:
+        description: "QuestDB connection parameters."
+        $ref: "#/definitions/QuestDbParametersSpec"
       run_checks_job_template:
         description: "Configured parameters for the \"check run\" job that should\
           \ be pushed to the job queue in order to run all checks within this connection."
@@ -36669,6 +36673,7 @@ definitions:
         - "db2"
         - "mariadb"
         - "clickhouse"
+        - "questdb"
       bigquery:
         description: "BigQuery connection parameters. Specify parameters in the bigquery\
           \ section."
@@ -36733,6 +36738,10 @@ definitions:
         description: "ClickHouse connection parameters. Specify parameters in the\
           \ clickhouse section or set the url (which is the ClickHouse JDBC url)."
         $ref: "#/definitions/ClickHouseParametersSpec"
+      questdb:
+        description: "QuestDB connection parameters. Specify parameters in the questdb\
+          \ section or set the url (which is the QuestDB JDBC url)."
+        $ref: "#/definitions/QuestDbParametersSpec"
       parallel_jobs_limit:
         type: "integer"
         format: "int32"
@@ -39733,6 +39742,7 @@ definitions:
         - "db2"
         - "mariadb"
         - "clickhouse"
+        - "questdb"
       custom:
         type: "boolean"
         description: "This connection specific template is a custom sensor template\
@@ -39769,6 +39779,7 @@ definitions:
         - "db2"
         - "mariadb"
         - "clickhouse"
+        - "questdb"
       providerSensorDefinitionSpec:
         description: "Provider specific sensor definition specification"
         $ref: "#/definitions/ProviderSensorDefinitionSpec"
@@ -39828,6 +39839,35 @@ definitions:
         $ref: "#/definitions/DeleteStoredDataQueueJobParameters"
     description: "Model that returns the form definition and the form data to edit\
       \ all checks within a single category."
+  QuestDbParametersSpec:
+    type: "object"
+    properties:
+      host:
+        type: "string"
+        description: "QuestDB host name. Supports also a ${QUESTDB_HOST} configuration\
+          \ with a custom environment variable."
+      port:
+        type: "string"
+        description: "QuestDB port number. The default port is 8812. Supports also\
+          \ a ${QUESTDB_PORT} configuration with a custom environment variable."
+      database:
+        type: "string"
+        description: "QuestDB database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}\
+          \ format to use dynamic substitution."
+      user:
+        type: "string"
+        description: "QuestDB user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}\
+          \ format to use dynamic substitution."
+      password:
+        type: "string"
+        description: "QuestDB database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}\
+          \ format to use dynamic substitution."
+      properties:
+        type: "object"
+        description: "A dictionary of custom JDBC parameters that are added to the\
+          \ JDBC connection string, a key/value dictionary."
+        additionalProperties:
+          type: "string"
   RedshiftParametersSpec:
     type: "object"
     properties:

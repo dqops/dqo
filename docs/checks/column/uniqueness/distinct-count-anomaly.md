@@ -114,11 +114,11 @@ spec:
         uniqueness:
           profile_distinct_count_anomaly:
             warning:
-              anomaly_percent: 1.0
-            error:
-              anomaly_percent: 0.5
-            fatal:
               anomaly_percent: 0.1
+            error:
+              anomaly_percent: 0.05
+            fatal:
+              anomaly_percent: 0.01
       labels:
       - This is the column that is analyzed for data quality issues
 
@@ -456,6 +456,42 @@ spec:
                 FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             ```
+    ??? example "QuestDB"
+
+        === "Sensor template for QuestDB"
+
+            ```sql+jinja
+            {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT_DISTINCT(
+                    {{ lib.render_target_column('analyzed_table')}}
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM(
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for QuestDB"
+
+            ```sql
+            SELECT
+                COUNT_DISTINCT(
+                    analyzed_table."target_column"
+                ) AS actual_value
+            FROM(
+                SELECT
+                    original_table.*
+                FROM "<target_table>" original_table
+            ) analyzed_table
+            ```
     ??? example "Redshift"
 
         === "Sensor template for Redshift"
@@ -625,11 +661,11 @@ Expand the *Configure with data grouping* section to see additional examples for
             uniqueness:
               profile_distinct_count_anomaly:
                 warning:
-                  anomaly_percent: 1.0
-                error:
-                  anomaly_percent: 0.5
-                fatal:
                   anomaly_percent: 0.1
+                error:
+                  anomaly_percent: 0.05
+                fatal:
+                  anomaly_percent: 0.01
           labels:
           - This is the column that is analyzed for data quality issues
         country:
@@ -1006,6 +1042,48 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."country" AS grouping_level_1,
                 original_table."state" AS grouping_level_2
                 FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
+            ```
+    ??? example "QuestDB"
+
+        === "Sensor template for QuestDB"
+            ```sql+jinja
+            {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT_DISTINCT(
+                    {{ lib.render_target_column('analyzed_table')}}
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM(
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for QuestDB"
+            ```sql
+            SELECT
+                COUNT_DISTINCT(
+                    analyzed_table."target_column"
+                ) AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            FROM(
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2
+                FROM "<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2
             ORDER BY grouping_level_1, grouping_level_2
@@ -1276,11 +1354,11 @@ spec:
           uniqueness:
             daily_distinct_count_anomaly:
               warning:
-                anomaly_percent: 1.0
-              error:
-                anomaly_percent: 0.5
-              fatal:
                 anomaly_percent: 0.1
+              error:
+                anomaly_percent: 0.05
+              fatal:
+                anomaly_percent: 0.01
       labels:
       - This is the column that is analyzed for data quality issues
 
@@ -1618,6 +1696,42 @@ spec:
                 FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             ```
+    ??? example "QuestDB"
+
+        === "Sensor template for QuestDB"
+
+            ```sql+jinja
+            {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT_DISTINCT(
+                    {{ lib.render_target_column('analyzed_table')}}
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM(
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for QuestDB"
+
+            ```sql
+            SELECT
+                COUNT_DISTINCT(
+                    analyzed_table."target_column"
+                ) AS actual_value
+            FROM(
+                SELECT
+                    original_table.*
+                FROM "<target_table>" original_table
+            ) analyzed_table
+            ```
     ??? example "Redshift"
 
         === "Sensor template for Redshift"
@@ -1788,11 +1902,11 @@ Expand the *Configure with data grouping* section to see additional examples for
               uniqueness:
                 daily_distinct_count_anomaly:
                   warning:
-                    anomaly_percent: 1.0
-                  error:
-                    anomaly_percent: 0.5
-                  fatal:
                     anomaly_percent: 0.1
+                  error:
+                    anomaly_percent: 0.05
+                  fatal:
+                    anomaly_percent: 0.01
           labels:
           - This is the column that is analyzed for data quality issues
         country:
@@ -2169,6 +2283,48 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."country" AS grouping_level_1,
                 original_table."state" AS grouping_level_2
                 FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
+            ```
+    ??? example "QuestDB"
+
+        === "Sensor template for QuestDB"
+            ```sql+jinja
+            {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT_DISTINCT(
+                    {{ lib.render_target_column('analyzed_table')}}
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM(
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for QuestDB"
+            ```sql
+            SELECT
+                COUNT_DISTINCT(
+                    analyzed_table."target_column"
+                ) AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            FROM(
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2
+                FROM "<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2
             ORDER BY grouping_level_1, grouping_level_2
@@ -2444,11 +2600,11 @@ spec:
           uniqueness:
             daily_partition_distinct_count_anomaly:
               warning:
-                anomaly_percent: 1.0
-              error:
-                anomaly_percent: 0.5
-              fatal:
                 anomaly_percent: 0.1
+              error:
+                anomaly_percent: 0.05
+              fatal:
+                anomaly_percent: 0.01
       labels:
       - This is the column that is analyzed for data quality issues
     date_column:
@@ -2843,6 +2999,48 @@ spec:
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
+    ??? example "QuestDB"
+
+        === "Sensor template for QuestDB"
+
+            ```sql+jinja
+            {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT_DISTINCT(
+                    {{ lib.render_target_column('analyzed_table')}}
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM(
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for QuestDB"
+
+            ```sql
+            SELECT
+                COUNT_DISTINCT(
+                    analyzed_table."target_column"
+                ) AS actual_value,
+                time_period,
+                time_period_utc
+            FROM(
+                SELECT
+                    original_table.*,
+                CAST(DATE_TRUNC('day', original_table."date_column") AS DATE) AS time_period,
+                CAST((CAST(DATE_TRUNC('day', original_table."date_column") AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                FROM "<target_table>" original_table
+            ) analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "Redshift"
 
         === "Sensor template for Redshift"
@@ -3042,11 +3240,11 @@ Expand the *Configure with data grouping* section to see additional examples for
               uniqueness:
                 daily_partition_distinct_count_anomaly:
                   warning:
-                    anomaly_percent: 1.0
-                  error:
-                    anomaly_percent: 0.5
-                  fatal:
                     anomaly_percent: 0.1
+                  error:
+                    anomaly_percent: 0.05
+                  fatal:
+                    anomaly_percent: 0.01
           labels:
           - This is the column that is analyzed for data quality issues
         date_column:
@@ -3458,6 +3656,52 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(original_table."date_column" AS date) AS time_period,
                 CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
                 FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "QuestDB"
+
+        === "Sensor template for QuestDB"
+            ```sql+jinja
+            {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT_DISTINCT(
+                    {{ lib.render_target_column('analyzed_table')}}
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM(
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for QuestDB"
+            ```sql
+            SELECT
+                COUNT_DISTINCT(
+                    analyzed_table."target_column"
+                ) AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2,
+                time_period,
+                time_period_utc
+            FROM(
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                CAST(DATE_TRUNC('day', original_table."date_column") AS DATE) AS time_period,
+                CAST((CAST(DATE_TRUNC('day', original_table."date_column") AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                FROM "<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc

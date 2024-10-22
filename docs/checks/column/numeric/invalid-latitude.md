@@ -522,6 +522,50 @@ spec:
                 FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             ```
+    ??? example "QuestDB"
+
+        === "Sensor template for QuestDB"
+
+            ```sql+jinja
+            {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+            SELECT
+                COALESCE(
+                    SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} < -90.0 OR {{ lib.render_target_column('analyzed_table') }} > 90.0 THEN 1
+                            ELSE 0
+                        END
+                    ), 0) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM(
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for QuestDB"
+
+            ```sql
+            SELECT
+                COALESCE(
+                    SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" < -90.0 OR analyzed_table."target_column" > 90.0 THEN 1
+                            ELSE 0
+                        END
+                    ), 0) AS actual_value
+            FROM(
+                SELECT
+                    original_table.*
+                FROM "<target_table>" original_table
+            ) analyzed_table
+            ```
     ??? example "Redshift"
 
         === "Sensor template for Redshift"
@@ -1168,6 +1212,56 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."country" AS grouping_level_1,
                 original_table."state" AS grouping_level_2
                 FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
+            ```
+    ??? example "QuestDB"
+
+        === "Sensor template for QuestDB"
+            ```sql+jinja
+            {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+            SELECT
+                COALESCE(
+                    SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} < -90.0 OR {{ lib.render_target_column('analyzed_table') }} > 90.0 THEN 1
+                            ELSE 0
+                        END
+                    ), 0) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM(
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for QuestDB"
+            ```sql
+            SELECT
+                COALESCE(
+                    SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" < -90.0 OR analyzed_table."target_column" > 90.0 THEN 1
+                            ELSE 0
+                        END
+                    ), 0) AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            FROM(
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2
+                FROM "<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2
             ORDER BY grouping_level_1, grouping_level_2
@@ -1876,6 +1970,50 @@ spec:
                 FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             ```
+    ??? example "QuestDB"
+
+        === "Sensor template for QuestDB"
+
+            ```sql+jinja
+            {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+            SELECT
+                COALESCE(
+                    SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} < -90.0 OR {{ lib.render_target_column('analyzed_table') }} > 90.0 THEN 1
+                            ELSE 0
+                        END
+                    ), 0) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM(
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for QuestDB"
+
+            ```sql
+            SELECT
+                COALESCE(
+                    SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" < -90.0 OR analyzed_table."target_column" > 90.0 THEN 1
+                            ELSE 0
+                        END
+                    ), 0) AS actual_value
+            FROM(
+                SELECT
+                    original_table.*
+                FROM "<target_table>" original_table
+            ) analyzed_table
+            ```
     ??? example "Redshift"
 
         === "Sensor template for Redshift"
@@ -2523,6 +2661,56 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."country" AS grouping_level_1,
                 original_table."state" AS grouping_level_2
                 FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
+            ```
+    ??? example "QuestDB"
+
+        === "Sensor template for QuestDB"
+            ```sql+jinja
+            {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+            SELECT
+                COALESCE(
+                    SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} < -90.0 OR {{ lib.render_target_column('analyzed_table') }} > 90.0 THEN 1
+                            ELSE 0
+                        END
+                    ), 0) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM(
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for QuestDB"
+            ```sql
+            SELECT
+                COALESCE(
+                    SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" < -90.0 OR analyzed_table."target_column" > 90.0 THEN 1
+                            ELSE 0
+                        END
+                    ), 0) AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            FROM(
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2
+                FROM "<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2
             ORDER BY grouping_level_1, grouping_level_2
@@ -3231,6 +3419,50 @@ spec:
                 FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             ```
+    ??? example "QuestDB"
+
+        === "Sensor template for QuestDB"
+
+            ```sql+jinja
+            {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+            SELECT
+                COALESCE(
+                    SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} < -90.0 OR {{ lib.render_target_column('analyzed_table') }} > 90.0 THEN 1
+                            ELSE 0
+                        END
+                    ), 0) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM(
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for QuestDB"
+
+            ```sql
+            SELECT
+                COALESCE(
+                    SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" < -90.0 OR analyzed_table."target_column" > 90.0 THEN 1
+                            ELSE 0
+                        END
+                    ), 0) AS actual_value
+            FROM(
+                SELECT
+                    original_table.*
+                FROM "<target_table>" original_table
+            ) analyzed_table
+            ```
     ??? example "Redshift"
 
         === "Sensor template for Redshift"
@@ -3878,6 +4110,56 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."country" AS grouping_level_1,
                 original_table."state" AS grouping_level_2
                 FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
+            ```
+    ??? example "QuestDB"
+
+        === "Sensor template for QuestDB"
+            ```sql+jinja
+            {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+            SELECT
+                COALESCE(
+                    SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} < -90.0 OR {{ lib.render_target_column('analyzed_table') }} > 90.0 THEN 1
+                            ELSE 0
+                        END
+                    ), 0) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM(
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for QuestDB"
+            ```sql
+            SELECT
+                COALESCE(
+                    SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" < -90.0 OR analyzed_table."target_column" > 90.0 THEN 1
+                            ELSE 0
+                        END
+                    ), 0) AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            FROM(
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2
+                FROM "<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2
             ORDER BY grouping_level_1, grouping_level_2
@@ -4648,6 +4930,56 @@ spec:
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
+    ??? example "QuestDB"
+
+        === "Sensor template for QuestDB"
+
+            ```sql+jinja
+            {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+            SELECT
+                COALESCE(
+                    SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} < -90.0 OR {{ lib.render_target_column('analyzed_table') }} > 90.0 THEN 1
+                            ELSE 0
+                        END
+                    ), 0) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM(
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for QuestDB"
+
+            ```sql
+            SELECT
+                COALESCE(
+                    SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" < -90.0 OR analyzed_table."target_column" > 90.0 THEN 1
+                            ELSE 0
+                        END
+                    ), 0) AS actual_value,
+                time_period,
+                time_period_utc
+            FROM(
+                SELECT
+                    original_table.*,
+                CAST(DATE_TRUNC('day', original_table."date_column") AS DATE) AS time_period,
+                CAST((CAST(DATE_TRUNC('day', original_table."date_column") AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                FROM "<target_table>" original_table
+            ) analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "Redshift"
 
         === "Sensor template for Redshift"
@@ -5359,6 +5691,60 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(original_table."date_column" AS date) AS time_period,
                 CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
                 FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "QuestDB"
+
+        === "Sensor template for QuestDB"
+            ```sql+jinja
+            {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+            SELECT
+                COALESCE(
+                    SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} < -90.0 OR {{ lib.render_target_column('analyzed_table') }} > 90.0 THEN 1
+                            ELSE 0
+                        END
+                    ), 0) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM(
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for QuestDB"
+            ```sql
+            SELECT
+                COALESCE(
+                    SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" < -90.0 OR analyzed_table."target_column" > 90.0 THEN 1
+                            ELSE 0
+                        END
+                    ), 0) AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2,
+                time_period,
+                time_period_utc
+            FROM(
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                CAST(DATE_TRUNC('day', original_table."date_column") AS DATE) AS time_period,
+                CAST((CAST(DATE_TRUNC('day', original_table."date_column") AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                FROM "<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -6139,6 +6525,56 @@ spec:
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
+    ??? example "QuestDB"
+
+        === "Sensor template for QuestDB"
+
+            ```sql+jinja
+            {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+            SELECT
+                COALESCE(
+                    SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} < -90.0 OR {{ lib.render_target_column('analyzed_table') }} > 90.0 THEN 1
+                            ELSE 0
+                        END
+                    ), 0) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM(
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for QuestDB"
+
+            ```sql
+            SELECT
+                COALESCE(
+                    SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" < -90.0 OR analyzed_table."target_column" > 90.0 THEN 1
+                            ELSE 0
+                        END
+                    ), 0) AS actual_value,
+                time_period,
+                time_period_utc
+            FROM(
+                SELECT
+                    original_table.*,
+                CAST(DATE_TRUNC('month', original_table."date_column") AS DATE) AS time_period,
+                CAST((CAST(DATE_TRUNC('month', original_table."date_column") AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                FROM "<target_table>" original_table
+            ) analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "Redshift"
 
         === "Sensor template for Redshift"
@@ -6850,6 +7286,60 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
                 FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "QuestDB"
+
+        === "Sensor template for QuestDB"
+            ```sql+jinja
+            {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+            SELECT
+                COALESCE(
+                    SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} < -90.0 OR {{ lib.render_target_column('analyzed_table') }} > 90.0 THEN 1
+                            ELSE 0
+                        END
+                    ), 0) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM(
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for QuestDB"
+            ```sql
+            SELECT
+                COALESCE(
+                    SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" < -90.0 OR analyzed_table."target_column" > 90.0 THEN 1
+                            ELSE 0
+                        END
+                    ), 0) AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2,
+                time_period,
+                time_period_utc
+            FROM(
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                CAST(DATE_TRUNC('month', original_table."date_column") AS DATE) AS time_period,
+                CAST((CAST(DATE_TRUNC('month', original_table."date_column") AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                FROM "<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc

@@ -1628,6 +1628,8 @@ from .provider_sensor_model import ProviderSensorModel
 from .provider_sensor_runner_type import ProviderSensorRunnerType
 from .provider_type import ProviderType
 from .quality_category_model import QualityCategoryModel
+from .quest_db_parameters_spec import QuestDbParametersSpec
+from .quest_db_parameters_spec_properties import QuestDbParametersSpecProperties
 from .redshift_authentication_mode import RedshiftAuthenticationMode
 from .redshift_parameters_spec import RedshiftParametersSpec
 from .redshift_parameters_spec_properties import RedshiftParametersSpecProperties
@@ -2864,6 +2866,8 @@ __all__ = (
     "ProviderSensorRunnerType",
     "ProviderType",
     "QualityCategoryModel",
+    "QuestDbParametersSpec",
+    "QuestDbParametersSpecProperties",
     "RedshiftAuthenticationMode",
     "RedshiftParametersSpec",
     "RedshiftParametersSpecProperties",

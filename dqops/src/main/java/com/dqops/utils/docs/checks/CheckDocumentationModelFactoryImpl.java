@@ -42,6 +42,7 @@ import com.dqops.connectors.postgresql.PostgresqlParametersSpec;
 import com.dqops.connectors.postgresql.PostgresqlProviderDialectSettings;
 import com.dqops.connectors.presto.PrestoParametersSpec;
 import com.dqops.connectors.presto.PrestoProviderDialectSettings;
+import com.dqops.connectors.questdb.QuestDbProviderDialectSettings;
 import com.dqops.connectors.redshift.RedshiftParametersSpec;
 import com.dqops.connectors.redshift.RedshiftProviderDialectSettings;
 import com.dqops.connectors.snowflake.SnowflakeParametersSpec;
@@ -773,6 +774,8 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 return new MariaDbProviderDialectSettings();
             case clickhouse:
                 return new ClickHouseProviderDialectSettings();
+            case questdb:
+                return new QuestDbProviderDialectSettings();
             default:
                 throw new DqoRuntimeException("Missing configuration of the dialect settings for the provider " + providerType + ", please add it here");
         }

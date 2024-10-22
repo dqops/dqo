@@ -732,6 +732,59 @@ spec:
                 FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             ```
+    ??? example "QuestDB"
+
+        === "Sensor template for QuestDB"
+
+            ```sql+jinja
+            {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+            
+            {% macro render_current_event_diff() -%}
+                {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                EXTRACT(EPOCH FROM (
+                    NOW() - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+                )) / 24.0 / 3600.0
+                {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                    TODAY() - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+                {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                EXTRACT(EPOCH FROM (
+                    NOW() - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+                )) / 24.0 / 3600.0
+                {%- else -%}
+                EXTRACT(EPOCH FROM (
+                    NOW() - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+                )) / 24.0 / 3600.0
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                {{ render_current_event_diff() }} AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM(
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for QuestDB"
+
+            ```sql
+            SELECT
+                EXTRACT(EPOCH FROM (
+                    NOW() - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
+                )) / 24.0 / 3600.0 AS actual_value
+            FROM(
+                SELECT
+                    original_table.*
+                FROM "<target_table>" original_table
+            ) analyzed_table
+            ```
     ??? example "Redshift"
 
         === "Sensor template for Redshift"
@@ -1695,6 +1748,65 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."country" AS grouping_level_1,
                 original_table."state" AS grouping_level_2
                 FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
+            ```
+    ??? example "QuestDB"
+
+        === "Sensor template for QuestDB"
+            ```sql+jinja
+            {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+            
+            {% macro render_current_event_diff() -%}
+                {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                EXTRACT(EPOCH FROM (
+                    NOW() - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+                )) / 24.0 / 3600.0
+                {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                    TODAY() - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+                {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                EXTRACT(EPOCH FROM (
+                    NOW() - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+                )) / 24.0 / 3600.0
+                {%- else -%}
+                EXTRACT(EPOCH FROM (
+                    NOW() - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+                )) / 24.0 / 3600.0
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                {{ render_current_event_diff() }} AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM(
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for QuestDB"
+            ```sql
+            SELECT
+                EXTRACT(EPOCH FROM (
+                    NOW() - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
+                )) / 24.0 / 3600.0 AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            FROM(
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2
+                FROM "<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2
             ORDER BY grouping_level_1, grouping_level_2
@@ -2720,6 +2832,59 @@ spec:
                 FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             ```
+    ??? example "QuestDB"
+
+        === "Sensor template for QuestDB"
+
+            ```sql+jinja
+            {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+            
+            {% macro render_current_event_diff() -%}
+                {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                EXTRACT(EPOCH FROM (
+                    NOW() - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+                )) / 24.0 / 3600.0
+                {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                    TODAY() - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+                {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                EXTRACT(EPOCH FROM (
+                    NOW() - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+                )) / 24.0 / 3600.0
+                {%- else -%}
+                EXTRACT(EPOCH FROM (
+                    NOW() - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+                )) / 24.0 / 3600.0
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                {{ render_current_event_diff() }} AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM(
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for QuestDB"
+
+            ```sql
+            SELECT
+                EXTRACT(EPOCH FROM (
+                    NOW() - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
+                )) / 24.0 / 3600.0 AS actual_value
+            FROM(
+                SELECT
+                    original_table.*
+                FROM "<target_table>" original_table
+            ) analyzed_table
+            ```
     ??? example "Redshift"
 
         === "Sensor template for Redshift"
@@ -3684,6 +3849,65 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."country" AS grouping_level_1,
                 original_table."state" AS grouping_level_2
                 FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
+            ```
+    ??? example "QuestDB"
+
+        === "Sensor template for QuestDB"
+            ```sql+jinja
+            {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+            
+            {% macro render_current_event_diff() -%}
+                {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                EXTRACT(EPOCH FROM (
+                    NOW() - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+                )) / 24.0 / 3600.0
+                {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                    TODAY() - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+                {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                EXTRACT(EPOCH FROM (
+                    NOW() - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+                )) / 24.0 / 3600.0
+                {%- else -%}
+                EXTRACT(EPOCH FROM (
+                    NOW() - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+                )) / 24.0 / 3600.0
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                {{ render_current_event_diff() }} AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM(
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for QuestDB"
+            ```sql
+            SELECT
+                EXTRACT(EPOCH FROM (
+                    NOW() - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
+                )) / 24.0 / 3600.0 AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            FROM(
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2
+                FROM "<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2
             ORDER BY grouping_level_1, grouping_level_2
@@ -4709,6 +4933,59 @@ spec:
                 FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             ```
+    ??? example "QuestDB"
+
+        === "Sensor template for QuestDB"
+
+            ```sql+jinja
+            {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+            
+            {% macro render_current_event_diff() -%}
+                {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                EXTRACT(EPOCH FROM (
+                    NOW() - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+                )) / 24.0 / 3600.0
+                {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                    TODAY() - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+                {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                EXTRACT(EPOCH FROM (
+                    NOW() - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+                )) / 24.0 / 3600.0
+                {%- else -%}
+                EXTRACT(EPOCH FROM (
+                    NOW() - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+                )) / 24.0 / 3600.0
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                {{ render_current_event_diff() }} AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM(
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for QuestDB"
+
+            ```sql
+            SELECT
+                EXTRACT(EPOCH FROM (
+                    NOW() - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
+                )) / 24.0 / 3600.0 AS actual_value
+            FROM(
+                SELECT
+                    original_table.*
+                FROM "<target_table>" original_table
+            ) analyzed_table
+            ```
     ??? example "Redshift"
 
         === "Sensor template for Redshift"
@@ -5673,6 +5950,65 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."country" AS grouping_level_1,
                 original_table."state" AS grouping_level_2
                 FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
+            ```
+    ??? example "QuestDB"
+
+        === "Sensor template for QuestDB"
+            ```sql+jinja
+            {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+            
+            {% macro render_current_event_diff() -%}
+                {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                EXTRACT(EPOCH FROM (
+                    NOW() - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+                )) / 24.0 / 3600.0
+                {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                    TODAY() - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+                {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                EXTRACT(EPOCH FROM (
+                    NOW() - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+                )) / 24.0 / 3600.0
+                {%- else -%}
+                EXTRACT(EPOCH FROM (
+                    NOW() - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+                )) / 24.0 / 3600.0
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                {{ render_current_event_diff() }} AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM(
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for QuestDB"
+            ```sql
+            SELECT
+                EXTRACT(EPOCH FROM (
+                    NOW() - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
+                )) / 24.0 / 3600.0 AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            FROM(
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2
+                FROM "<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2
             ORDER BY grouping_level_1, grouping_level_2

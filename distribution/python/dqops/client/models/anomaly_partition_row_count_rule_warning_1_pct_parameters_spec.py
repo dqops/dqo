@@ -15,19 +15,26 @@ class AnomalyPartitionRowCountRuleWarning1PctParametersSpec:
         anomaly_percent (Union[Unset, float]): The probability (in percent) that the current daily row count is an
             anomaly because the value is outside the regular range of previous partition volume measures. The default time
             window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation.
+        use_ai (Union[Unset, bool]): Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is
+            not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to
+            a closed-source DQOps distribution.
     """
 
     anomaly_percent: Union[Unset, float] = UNSET
+    use_ai: Union[Unset, bool] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         anomaly_percent = self.anomaly_percent
+        use_ai = self.use_ai
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
         if anomaly_percent is not UNSET:
             field_dict["anomaly_percent"] = anomaly_percent
+        if use_ai is not UNSET:
+            field_dict["use_ai"] = use_ai
 
         return field_dict
 
@@ -36,8 +43,11 @@ class AnomalyPartitionRowCountRuleWarning1PctParametersSpec:
         d = src_dict.copy()
         anomaly_percent = d.pop("anomaly_percent", UNSET)
 
+        use_ai = d.pop("use_ai", UNSET)
+
         anomaly_partition_row_count_rule_warning_1_pct_parameters_spec = cls(
             anomaly_percent=anomaly_percent,
+            use_ai=use_ai,
         )
 
         anomaly_partition_row_count_rule_warning_1_pct_parameters_spec.additional_properties = (

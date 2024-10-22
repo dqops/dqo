@@ -132,7 +132,9 @@ $ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--sqlserver-disable-encr
                 [--postgresql-sslmode=<sslmode>] [--postgresql-user=<user>]
                 [--presto-database=<database>] [--presto-host=<host>]
                 [--presto-password=<password>] [--presto-port=<port>]
-                [--presto-user=<user>]
+                [--presto-user=<user>] [--questdb-database=<database>]
+                [--questdb-host=<host>] [--questdb-password=<password>]
+                [--questdb-port=<port>] [--questdb-user=<user>]
                 [--redshift-authentication-mode=<redshiftAuthenticationMode>]
                 [--redshift-database=<database>] [--redshift-host=<host>]
                 [--redshift-password=<password>] [--redshift-port=<port>]
@@ -157,8 +159,8 @@ $ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--sqlserver-disable-encr
                 [-H=<String=String>]... [-K=<String=String>]...
                 [-M=<String=String>]... [-MA=<String=String>]...
                 [-O=<String=String>]... [-P=<String=String>]...
-                [-R=<String=String>]... [-S=<String=String>]...
-                [-T=<String=String>]...
+                [-Q=<String=String>]... [-R=<String=String>]...
+                [-S=<String=String>]... [-T=<String=String>]...
 
 ```
 
@@ -221,7 +223,9 @@ dqo> connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                 [--postgresql-sslmode=<sslmode>] [--postgresql-user=<user>]
                 [--presto-database=<database>] [--presto-host=<host>]
                 [--presto-password=<password>] [--presto-port=<port>]
-                [--presto-user=<user>]
+                [--presto-user=<user>] [--questdb-database=<database>]
+                [--questdb-host=<host>] [--questdb-password=<password>]
+                [--questdb-port=<port>] [--questdb-user=<user>]
                 [--redshift-authentication-mode=<redshiftAuthenticationMode>]
                 [--redshift-database=<database>] [--redshift-host=<host>]
                 [--redshift-password=<password>] [--redshift-port=<port>]
@@ -246,8 +250,8 @@ dqo> connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                 [-H=<String=String>]... [-K=<String=String>]...
                 [-M=<String=String>]... [-MA=<String=String>]...
                 [-O=<String=String>]... [-P=<String=String>]...
-                [-R=<String=String>]... [-S=<String=String>]...
-                [-T=<String=String>]...
+                [-Q=<String=String>]... [-R=<String=String>]...
+                [-S=<String=String>]... [-T=<String=String>]...
 
 ```
 
@@ -344,7 +348,12 @@ All parameters supported by the command are listed below.
 |<div id="connection add--presto-password" class="no-wrap-code">`--presto-password`</div>|Presto database password. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--presto-port" class="no-wrap-code">`--presto-port`</div>|Presto port number| ||
 |<div id="connection add--presto-user" class="no-wrap-code">`--presto-user`</div>|Presto user name. The value can be in the null format to use dynamic substitution.| ||
-|<div id="connection add-t" class="no-wrap-code">`-t`</div><div id="connection add--provider" class="no-wrap-code">`--provider`</div>|Connection provider type| |*bigquery*<br/>*databricks*<br/>*mysql*<br/>*oracle*<br/>*postgresql*<br/>*duckdb*<br/>*presto*<br/>*redshift*<br/>*snowflake*<br/>*spark*<br/>*sqlserver*<br/>*trino*<br/>*hana*<br/>*db2*<br/>*mariadb*<br/>*clickhouse*<br/>|
+|<div id="connection add-t" class="no-wrap-code">`-t`</div><div id="connection add--provider" class="no-wrap-code">`--provider`</div>|Connection provider type| |*bigquery*<br/>*databricks*<br/>*mysql*<br/>*oracle*<br/>*postgresql*<br/>*duckdb*<br/>*presto*<br/>*redshift*<br/>*snowflake*<br/>*spark*<br/>*sqlserver*<br/>*trino*<br/>*hana*<br/>*db2*<br/>*mariadb*<br/>*clickhouse*<br/>*questdb*<br/>|
+|<div id="connection add--questdb-database" class="no-wrap-code">`--questdb-database`</div>|QuestDB database name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection add--questdb-host" class="no-wrap-code">`--questdb-host`</div>|QuestDB host name| ||
+|<div id="connection add--questdb-password" class="no-wrap-code">`--questdb-password`</div>|QuestDB database password. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection add--questdb-port" class="no-wrap-code">`--questdb-port`</div>|QuestDB port number| ||
+|<div id="connection add--questdb-user" class="no-wrap-code">`--questdb-user`</div>|QuestDB user name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--redshift-authentication-mode" class="no-wrap-code">`--redshift-authentication-mode`</div>|The authentication mode for AWS. Supports also a null configuration with a custom environment variable.| |*iam*<br/>*default_credentials*<br/>*user_password*<br/>|
 |<div id="connection add--redshift-database" class="no-wrap-code">`--redshift-database`</div>|Redshift database name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--redshift-host" class="no-wrap-code">`--redshift-host`</div>|Redshift host name| ||
@@ -387,6 +396,7 @@ All parameters supported by the command are listed below.
 |<div id="connection add-MA" class="no-wrap-code">`-MA`</div>|MariaDB additional properties that are added to the JDBC connection string| ||
 |<div id="connection add-O" class="no-wrap-code">`-O`</div>|Oracle's additional properties that are added to the JDBC connection string| ||
 |<div id="connection add-P" class="no-wrap-code">`-P`</div>|PostgreSQL additional properties that are added to the JDBC connection string| ||
+|<div id="connection add-Q" class="no-wrap-code">`-Q`</div>|QuestDB additional properties that are added to the JDBC connection string| ||
 |<div id="connection add-R" class="no-wrap-code">`-R`</div>|Redshift additional properties that are added to the JDBC connection string| ||
 |<div id="connection add-S" class="no-wrap-code">`-S`</div>|SQL Server additional properties that are added to the JDBC connection string| ||
 |<div id="connection add-T" class="no-wrap-code">`-T`</div>|Trino additional properties that are added to the JDBC connection string| ||
@@ -522,6 +532,9 @@ $ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--sqlserver-disable-e
                    [--postgresql-user=<user>] [--presto-database=<database>]
                    [--presto-host=<host>] [--presto-password=<password>]
                    [--presto-port=<port>] [--presto-user=<user>]
+                   [--questdb-database=<database>] [--questdb-host=<host>]
+                   [--questdb-password=<password>] [--questdb-port=<port>]
+                   [--questdb-user=<user>]
                    [--redshift-authentication-mode=<redshiftAuthenticationMode>]
                     [--redshift-database=<database>] [--redshift-host=<host>]
                    [--redshift-password=<password>] [--redshift-port=<port>]
@@ -546,8 +559,9 @@ $ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--sqlserver-disable-e
                    [-F=<String=String>]... [-H=<String=String>]...
                    [-K=<String=String>]... [-M=<String=String>]...
                    [-MA=<String=String>]... [-O=<String=String>]...
-                   [-P=<String=String>]... [-R=<String=String>]...
-                   [-S=<String=String>]... [-T=<String=String>]...
+                   [-P=<String=String>]... [-Q=<String=String>]...
+                   [-R=<String=String>]... [-S=<String=String>]...
+                   [-T=<String=String>]...
 
 ```
 
@@ -614,6 +628,9 @@ dqo> connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                    [--postgresql-user=<user>] [--presto-database=<database>]
                    [--presto-host=<host>] [--presto-password=<password>]
                    [--presto-port=<port>] [--presto-user=<user>]
+                   [--questdb-database=<database>] [--questdb-host=<host>]
+                   [--questdb-password=<password>] [--questdb-port=<port>]
+                   [--questdb-user=<user>]
                    [--redshift-authentication-mode=<redshiftAuthenticationMode>]
                     [--redshift-database=<database>] [--redshift-host=<host>]
                    [--redshift-password=<password>] [--redshift-port=<port>]
@@ -638,8 +655,9 @@ dqo> connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                    [-F=<String=String>]... [-H=<String=String>]...
                    [-K=<String=String>]... [-M=<String=String>]...
                    [-MA=<String=String>]... [-O=<String=String>]...
-                   [-P=<String=String>]... [-R=<String=String>]...
-                   [-S=<String=String>]... [-T=<String=String>]...
+                   [-P=<String=String>]... [-Q=<String=String>]...
+                   [-R=<String=String>]... [-S=<String=String>]...
+                   [-T=<String=String>]...
 
 ```
 
@@ -736,6 +754,11 @@ All parameters supported by the command are listed below.
 |<div id="connection update--presto-password" class="no-wrap-code">`--presto-password`</div>|Presto database password. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update--presto-port" class="no-wrap-code">`--presto-port`</div>|Presto port number| ||
 |<div id="connection update--presto-user" class="no-wrap-code">`--presto-user`</div>|Presto user name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update--questdb-database" class="no-wrap-code">`--questdb-database`</div>|QuestDB database name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update--questdb-host" class="no-wrap-code">`--questdb-host`</div>|QuestDB host name| ||
+|<div id="connection update--questdb-password" class="no-wrap-code">`--questdb-password`</div>|QuestDB database password. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update--questdb-port" class="no-wrap-code">`--questdb-port`</div>|QuestDB port number| ||
+|<div id="connection update--questdb-user" class="no-wrap-code">`--questdb-user`</div>|QuestDB user name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update--redshift-authentication-mode" class="no-wrap-code">`--redshift-authentication-mode`</div>|The authentication mode for AWS. Supports also a null configuration with a custom environment variable.| |*iam*<br/>*default_credentials*<br/>*user_password*<br/>|
 |<div id="connection update--redshift-database" class="no-wrap-code">`--redshift-database`</div>|Redshift database name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update--redshift-host" class="no-wrap-code">`--redshift-host`</div>|Redshift host name| ||
@@ -778,6 +801,7 @@ All parameters supported by the command are listed below.
 |<div id="connection update-MA" class="no-wrap-code">`-MA`</div>|MariaDB additional properties that are added to the JDBC connection string| ||
 |<div id="connection update-O" class="no-wrap-code">`-O`</div>|Oracle's additional properties that are added to the JDBC connection string| ||
 |<div id="connection update-P" class="no-wrap-code">`-P`</div>|PostgreSQL additional properties that are added to the JDBC connection string| ||
+|<div id="connection update-Q" class="no-wrap-code">`-Q`</div>|QuestDB additional properties that are added to the JDBC connection string| ||
 |<div id="connection update-R" class="no-wrap-code">`-R`</div>|Redshift additional properties that are added to the JDBC connection string| ||
 |<div id="connection update-S" class="no-wrap-code">`-S`</div>|SQL Server additional properties that are added to the JDBC connection string| ||
 |<div id="connection update-T" class="no-wrap-code">`-T`</div>|Trino additional properties that are added to the JDBC connection string| ||

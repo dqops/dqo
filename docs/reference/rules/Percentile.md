@@ -31,6 +31,7 @@ The parameters passed to the rule are shown below.
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |<span class="no-wrap-code">`anomaly_percent`</span>|The probability (in percent) that the current sensor readout (measure) is an anomaly, because the value is outside the regular range of previous readouts. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation.|*double*|:material-check-bold:||
+|<span class="no-wrap-code">`use_ai`</span>|Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution.|*boolean*| ||
 
 
 
@@ -62,7 +63,13 @@ The rule definition YAML file *percentile/anomaly_differencing_percentile_moving
           \ but at least 30 readouts must exist to run the calculation."
         data_type: double
         required: true
-        default_value: 0.5
+        default_value: 0.05
+      - field_name: use_ai
+        display_name: use_ai
+        help_text: "Use an AI model to predict anomalies. WARNING: anomaly detection by\
+          \ AI models is not supported in an open-source distribution of DQOps. Please\
+          \ contact DQOps support to upgrade your instance to a closed-source DQOps distribution."
+        data_type: boolean
       parameters:
         degrees_of_freedom: 5
     ```
@@ -107,6 +114,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     import numpy as np
     import scipy
     import scipy.stats
+    from lib.anomalies.data_preparation import convert_historic_data_differencing
     from lib.anomalies.anomaly_detection import detect_upper_bound_anomaly, detect_lower_bound_anomaly
     
     
@@ -195,10 +203,10 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
         if all(difference > 0 for difference in differences_list):
             # using a 0-based calculation (scale from 0)
-            scaled_multiples_array = [(readout / differences_median_float - 1.0 if readout >= differences_median_float else
-                                       (-1.0 / (readout / differences_median_float)) + 1.0) for readout in differences_list]
-    
-            threshold_upper_multiple = detect_upper_bound_anomaly(values=scaled_multiples_array, median=0.0,
+            anomaly_data = convert_historic_data_differencing(rule_parameters.previous_readouts,
+                                                 lambda readout: (readout / differences_median_float - 1.0 if readout >= differences_median_float else
+                                                                  (-1.0 / (readout / differences_median_float)) + 1.0))
+            threshold_upper_multiple = detect_upper_bound_anomaly(historic_data=anomaly_data, median=0.0,
                                                                   tail=tail, parameters=rule_parameters)
     
             passed = True
@@ -208,7 +216,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
             else:
                 threshold_upper = None
     
-            threshold_lower_multiple = detect_lower_bound_anomaly(values=scaled_multiples_array, median=0.0,
+            threshold_lower_multiple = detect_lower_bound_anomaly(historic_data=anomaly_data, median=0.0,
                                                                   tail=tail, parameters=rule_parameters)
     
             if threshold_lower_multiple is not None:
@@ -232,7 +240,9 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
         else:
             # using unrestricted method for both positive and negative values
-            threshold_upper_result = detect_upper_bound_anomaly(values=differences_list, median=differences_median_float,
+            anomaly_data = convert_historic_data_differencing(rule_parameters.previous_readouts,
+                                                              lambda readout: readout)
+            threshold_upper_result = detect_upper_bound_anomaly(historic_data=anomaly_data, median=differences_median_float,
                                                                 tail=tail, parameters=rule_parameters)
     
             passed = True
@@ -242,7 +252,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
             else:
                 threshold_upper = None
     
-            threshold_lower_result = detect_lower_bound_anomaly(values=differences_list, median=differences_median_float,
+            threshold_lower_result = detect_lower_bound_anomaly(historic_data=anomaly_data, median=differences_median_float,
                                                                 tail=tail, parameters=rule_parameters)
             if threshold_lower_result is not None:
                 threshold_lower = threshold_lower_result
@@ -292,6 +302,7 @@ The parameters passed to the rule are shown below.
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |<span class="no-wrap-code">`anomaly_percent`</span>|The probability (in percent) that the current sensor readout (measure) is an anomaly, because the value is outside the regular range of previous readouts. The default time window of 30 periods (days, etc.) is required, but at least 10 readouts must exist to run the calculation.|*double*|:material-check-bold:||
+|<span class="no-wrap-code">`use_ai`</span>|Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution.|*boolean*| ||
 
 
 
@@ -323,7 +334,13 @@ The rule definition YAML file *percentile/anomaly_differencing_percentile_moving
           \ but at least 10 readouts must exist to run the calculation."
         data_type: double
         required: true
-        default_value: 0.5
+        default_value: 0.05
+      - field_name: use_ai
+        display_name: use_ai
+        help_text: "Use an AI model to predict anomalies. WARNING: anomaly detection by\
+          \ AI models is not supported in an open-source distribution of DQOps. Please\
+          \ contact DQOps support to upgrade your instance to a closed-source DQOps distribution."
+        data_type: boolean
       parameters:
         degrees_of_freedom: 5
     ```
@@ -364,10 +381,11 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     #
     
     from datetime import datetime
-    from typing import Sequence
+    from typing import Sequence, Dict
     import numpy as np
     import scipy
     import scipy.stats
+    from lib.anomalies.data_preparation import convert_historic_data_differencing
     from lib.anomalies.anomaly_detection import detect_upper_bound_anomaly, detect_lower_bound_anomaly
     
     
@@ -444,8 +462,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         differences_std = float(scipy.stats.tstd(differences))
         differences_median = np.median(differences)
         differences_median_float = float(differences_median)
-        degrees_of_freedom = float(rule_parameters.configuration_parameters.degrees_of_freedom)
-        tail = rule_parameters.parameters.anomaly_percent / 100.0 / 2.0
+        tail = rule_parameters.parameters.anomaly_percent / 100.0 / 2
     
         last_readout = float(filtered[-1])
         actual_difference = rule_parameters.actual_value - last_readout
@@ -457,10 +474,10 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
         if all(difference > 0 for difference in differences_list):
             # using a 0-based calculation (scale from 0)
-            scaled_multiples_array = [(readout / differences_median_float - 1.0 if readout >= differences_median_float else
-                                       (-1.0 / (readout / differences_median_float)) + 1.0) for readout in differences_list]
-    
-            threshold_upper_multiple = detect_upper_bound_anomaly(values=scaled_multiples_array, median=0.0,
+            anomaly_data = convert_historic_data_differencing(rule_parameters.previous_readouts,
+                                                              lambda readout: (readout / differences_median_float - 1.0 if readout >= differences_median_float else
+                                                                               (-1.0 / (readout / differences_median_float)) + 1.0))
+            threshold_upper_multiple = detect_upper_bound_anomaly(historic_data=anomaly_data, median=0.0,
                                                                   tail=tail, parameters=rule_parameters)
     
             passed = True
@@ -470,7 +487,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
             else:
                 threshold_upper = None
     
-            threshold_lower_multiple = detect_lower_bound_anomaly(values=scaled_multiples_array, median=0.0,
+            threshold_lower_multiple = detect_lower_bound_anomaly(historic_data=anomaly_data, median=0.0,
                                                                   tail=tail, parameters=rule_parameters)
     
             if threshold_lower_multiple is not None:
@@ -494,7 +511,9 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
         else:
             # using unrestricted method for both positive and negative values
-            threshold_upper_result = detect_upper_bound_anomaly(values=differences_list, median=differences_median_float,
+            anomaly_data = convert_historic_data_differencing(rule_parameters.previous_readouts,
+                                                              lambda readout: readout)
+            threshold_upper_result = detect_upper_bound_anomaly(historic_data=anomaly_data, median=differences_median_float,
                                                                 tail=tail, parameters=rule_parameters)
     
             passed = True
@@ -504,7 +523,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
             else:
                 threshold_upper = None
     
-            threshold_lower_result = detect_lower_bound_anomaly(values=differences_list, median=differences_median_float,
+            threshold_lower_result = detect_lower_bound_anomaly(historic_data=anomaly_data, median=differences_median_float,
                                                                 tail=tail, parameters=rule_parameters)
             if threshold_lower_result is not None:
                 threshold_lower = threshold_lower_result
@@ -551,6 +570,7 @@ The parameters passed to the rule are shown below.
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |<span class="no-wrap-code">`anomaly_percent`</span>|The probability (in percent) that the current daily row count is an anomaly because the value is outside the regular range of previous partition volume measures. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation.|*double*|:material-check-bold:||
+|<span class="no-wrap-code">`use_ai`</span>|Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution.|*boolean*| ||
 
 
 
@@ -582,7 +602,13 @@ The rule definition YAML file *percentile/anomaly_partition_row_count.dqorule.ya
           \ used, but at least 30 readouts must exist to run the calculation."
         data_type: double
         required: true
-        default_value: 0.5
+        default_value: 0.05
+      - field_name: use_ai
+        display_name: use_ai
+        help_text: "Use an AI model to predict anomalies. WARNING: anomaly detection by\
+          \ AI models is not supported in an open-source distribution of DQOps. Please\
+          \ contact DQOps support to upgrade your instance to a closed-source DQOps distribution."
+        data_type: boolean
       parameters:
         degrees_of_freedom: 5
     ```
@@ -627,6 +653,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     import numpy as np
     import scipy
     import scipy.stats
+    from lib.anomalies.data_preparation import convert_historic_data_stationary
     from lib.anomalies.anomaly_detection import detect_upper_bound_anomaly, detect_lower_bound_anomaly
     
     
@@ -709,10 +736,10 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
         tail = rule_parameters.parameters.anomaly_percent / 100.0 / 2.0
     
-        scaled_multiples_array = [(readout / filtered_median_float - 1.0 if readout >= filtered_median_float else
-                                   (-1.0 / (readout / filtered_median_float)) + 1.0) for readout in extracted]
-    
-        threshold_upper_multiple = detect_upper_bound_anomaly(values=scaled_multiples_array, median=0.0,
+        anomaly_data = convert_historic_data_stationary(rule_parameters.previous_readouts,
+                                             lambda readout: (readout / filtered_median_float - 1.0 if readout >= filtered_median_float else
+                                                              (-1.0 / (readout / filtered_median_float)) + 1.0))
+        threshold_upper_multiple = detect_upper_bound_anomaly(historic_data=anomaly_data, median=0.0,
                                                               tail=tail, parameters=rule_parameters)
     
         passed = True
@@ -722,7 +749,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         else:
             threshold_upper = None
     
-        threshold_lower_multiple = detect_lower_bound_anomaly(values=scaled_multiples_array, median=0.0,
+        threshold_lower_multiple = detect_lower_bound_anomaly(historic_data=anomaly_data, median=0.0,
                                                               tail=tail, parameters=rule_parameters)
     
         if threshold_lower_multiple is not None:
@@ -763,6 +790,7 @@ The parameters passed to the rule are shown below.
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |<span class="no-wrap-code">`anomaly_percent`</span>|The probability (in percent) that the count of values (records) is an anomaly because the value is outside the regular range of counts. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation.|*double*|:material-check-bold:||
+|<span class="no-wrap-code">`use_ai`</span>|Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution.|*boolean*| ||
 
 
 
@@ -794,7 +822,13 @@ The rule definition YAML file *percentile/anomaly_stationary_count_values.dqorul
           \ must exist to run the calculation."
         data_type: double
         required: true
-        default_value: 0.5
+        default_value: 0.05
+      - field_name: use_ai
+        display_name: use_ai
+        help_text: "Use an AI model to predict anomalies. WARNING: anomaly detection by\
+          \ AI models is not supported in an open-source distribution of DQOps. Please\
+          \ contact DQOps support to upgrade your instance to a closed-source DQOps distribution."
+        data_type: boolean
       parameters:
         degrees_of_freedom: 5
     ```
@@ -839,6 +873,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     import numpy as np
     import scipy
     import scipy.stats
+    from lib.anomalies.data_preparation import convert_historic_data_stationary
     from lib.anomalies.anomaly_detection import detect_upper_bound_anomaly, detect_lower_bound_anomaly
     
     
@@ -924,10 +959,10 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
         tail = rule_parameters.parameters.anomaly_percent / 100.0 / 2.0
     
-        scaled_multiples_array = [(readout / filtered_median_float - 1.0 if readout >= filtered_median_float else
-                                   (-1.0 / (readout / filtered_median_float)) + 1.0) for readout in extracted]
-    
-        threshold_upper_multiple = detect_upper_bound_anomaly(values=scaled_multiples_array, median=0.0,
+        anomaly_data = convert_historic_data_stationary(rule_parameters.previous_readouts,
+                                             lambda readout: (readout / filtered_median_float - 1.0 if readout >= filtered_median_float else
+                                                             (-1.0 / (readout / filtered_median_float)) + 1.0))
+        threshold_upper_multiple = detect_upper_bound_anomaly(historic_data=anomaly_data, median=0.0,
                                                               tail=tail, parameters=rule_parameters)
     
         passed = True
@@ -937,7 +972,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         else:
             threshold_upper = None
     
-        threshold_lower_multiple = detect_lower_bound_anomaly(values=scaled_multiples_array, median=0.0,
+        threshold_lower_multiple = detect_lower_bound_anomaly(historic_data=anomaly_data, median=0.0,
                                                               tail=tail, parameters=rule_parameters)
     
         if threshold_lower_multiple is not None:
@@ -978,6 +1013,7 @@ The parameters passed to the rule are shown below.
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |<span class="no-wrap-code">`anomaly_percent`</span>|The probability (in percent) that the current percentage value is an anomaly because the value is outside the regular range of captured percentage measures. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation.|*double*|:material-check-bold:||
+|<span class="no-wrap-code">`use_ai`</span>|Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution.|*boolean*| ||
 
 
 
@@ -1009,7 +1045,13 @@ The rule definition YAML file *percentile/anomaly_stationary_percent_values.dqor
           \ but at least 30 readouts must exist to run the calculation."
         data_type: double
         required: true
-        default_value: 0.5
+        default_value: 0.05
+      - field_name: use_ai
+        display_name: use_ai
+        help_text: "Use an AI model to predict anomalies. WARNING: anomaly detection by\
+          \ AI models is not supported in an open-source distribution of DQOps. Please\
+          \ contact DQOps support to upgrade your instance to a closed-source DQOps distribution."
+        data_type: boolean
       parameters:
         degrees_of_freedom: 5
     ```
@@ -1054,6 +1096,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     import numpy as np
     import scipy
     import scipy.stats
+    from lib.anomalies.data_preparation import convert_historic_data_stationary
     from lib.anomalies.anomaly_detection import detect_upper_bound_anomaly, detect_lower_bound_anomaly
     
     
@@ -1140,34 +1183,33 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
                                        filtered_median_float if 100.0 not in all_extracted else 100.0)
     
         tail = rule_parameters.parameters.anomaly_percent / 100.0 / 2.0
+        passed = True
     
         if 100.0 in all_extracted:
             threshold_upper = 100.0
         else:
-            upper_median_multiples_array = [1.0 / (1.0 - readout / 100.0) for readout in extracted]
-            threshold_upper_multiple = detect_upper_bound_anomaly(values=upper_median_multiples_array,
+            anomaly_data_upper = convert_historic_data_stationary(rule_parameters.previous_readouts,
+                                                                  lambda readout: 1.0 / (1.0 - readout / 100.0))
+            threshold_upper_multiple = detect_upper_bound_anomaly(historic_data=anomaly_data_upper,
                                                                   median=1.0 / (1.0 - filtered_median_float / 100.0),
                                                                   tail=tail, parameters=rule_parameters)
     
             if threshold_upper_multiple is not None:
                 threshold_upper = 100.0 - 100.0 * (1.0 / threshold_upper_multiple)
-            else:
-                threshold_upper = rule_parameters.actual_value
+                passed = rule_parameters.actual_value <= threshold_upper
     
         if 0.0 in all_extracted:
             threshold_lower = 0.0
         else:
-            lower_median_multiples_array = [(-1.0 / (readout / filtered_median_float)) for readout in extracted]
-            threshold_lower_multiple = detect_lower_bound_anomaly(values=lower_median_multiples_array,
+            anomaly_data_lower = convert_historic_data_stationary(rule_parameters.previous_readouts,
+                                                                  lambda readout: (-1.0 / (readout / filtered_median_float)))
+            threshold_lower_multiple = detect_lower_bound_anomaly(historic_data=anomaly_data_lower,
                                                                   median=-1.0,
                                                                   tail=tail, parameters=rule_parameters)
     
             if threshold_lower_multiple is not None:
                 threshold_lower = filtered_median_float * (-1.0 / threshold_lower_multiple)
-            else:
-                threshold_lower = rule_parameters.actual_value
-    
-        passed = threshold_lower <= rule_parameters.actual_value <= threshold_upper
+                passed = passed and threshold_lower <= rule_parameters.actual_value
     
         expected_value = filtered_median_float
         lower_bound = threshold_lower
@@ -1202,6 +1244,7 @@ The parameters passed to the rule are shown below.
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |<span class="no-wrap-code">`anomaly_percent`</span>|The probability (in percent) that the current sensor readout (measure) is an anomaly, because the value is outside the regular range of previous readouts. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation.|*double*|:material-check-bold:||
+|<span class="no-wrap-code">`use_ai`</span>|Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution.|*boolean*| ||
 
 
 
@@ -1233,7 +1276,13 @@ The rule definition YAML file *percentile/anomaly_stationary_percentile_moving_a
           \ but at least 30 readouts must exist to run the calculation."
         data_type: double
         required: true
-        default_value: 0.5
+        default_value: 0.05
+      - field_name: use_ai
+        display_name: use_ai
+        help_text: "Use an AI model to predict anomalies. WARNING: anomaly detection by\
+          \ AI models is not supported in an open-source distribution of DQOps. Please\
+          \ contact DQOps support to upgrade your instance to a closed-source DQOps distribution."
+        data_type: boolean
       parameters:
         degrees_of_freedom: 5
     ```
@@ -1278,6 +1327,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     import numpy as np
     import scipy
     import scipy.stats
+    from lib.anomalies.data_preparation import convert_historic_data_stationary
     from lib.anomalies.anomaly_detection import detect_upper_bound_anomaly, detect_lower_bound_anomaly
     
     
@@ -1362,10 +1412,10 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
         if all(readout > 0 for readout in extracted):
             # using a 0-based calculation (scale from 0)
-            scaled_multiples_array = [(readout / filtered_median_float - 1.0 if readout >= filtered_median_float else
-                                       (-1.0 / (readout / filtered_median_float)) + 1.0) for readout in extracted]
-    
-            threshold_upper_multiple = detect_upper_bound_anomaly(values=scaled_multiples_array, median=0.0,
+            anomaly_data = convert_historic_data_stationary(rule_parameters.previous_readouts,
+                                                 lambda readout: (readout / filtered_median_float - 1.0 if readout >= filtered_median_float else
+                                                                  (-1.0 / (readout / filtered_median_float)) + 1.0))
+            threshold_upper_multiple = detect_upper_bound_anomaly(historic_data=anomaly_data, median=0.0,
                                                                   tail=tail, parameters=rule_parameters)
     
             passed = True
@@ -1375,7 +1425,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
             else:
                 threshold_upper = None
     
-            threshold_lower_multiple = detect_lower_bound_anomaly(values=scaled_multiples_array, median=0.0,
+            threshold_lower_multiple = detect_lower_bound_anomaly(historic_data=anomaly_data, median=0.0,
                                                                   tail=tail, parameters=rule_parameters)
     
             if threshold_lower_multiple is not None:
@@ -1442,6 +1492,7 @@ The parameters passed to the rule are shown below.
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |<span class="no-wrap-code">`anomaly_percent`</span>|The probability (in percent) that the current sensor readout (measure) is an anomaly, because the value is outside the regular range of previous readouts. The default time window of 30 periods (days, etc.) is required, but at least 10 readouts must exist to run the calculation.|*double*|:material-check-bold:||
+|<span class="no-wrap-code">`use_ai`</span>|Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution.|*boolean*| ||
 
 
 
@@ -1473,7 +1524,13 @@ The rule definition YAML file *percentile/anomaly_stationary_percentile_moving_a
           \ but at least 10 readouts must exist to run the calculation."
         data_type: double
         required: true
-        default_value: 0.5
+        default_value: 0.05
+      - field_name: use_ai
+        display_name: use_ai
+        help_text: "Use an AI model to predict anomalies. WARNING: anomaly detection by\
+          \ AI models is not supported in an open-source distribution of DQOps. Please\
+          \ contact DQOps support to upgrade your instance to a closed-source DQOps distribution."
+        data_type: boolean
       parameters:
         degrees_of_freedom: 5
     ```
@@ -1518,6 +1575,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     import numpy as np
     import scipy
     import scipy.stats
+    from lib.anomalies.data_preparation import convert_historic_data_stationary
     from lib.anomalies.anomaly_detection import detect_upper_bound_anomaly, detect_lower_bound_anomaly
     
     
@@ -1605,10 +1663,10 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
         if all(readout > 0 for readout in extracted):
             # using a 0-based calculation (scale from 0)
-            scaled_multiples_array = [(readout / filtered_median_float - 1.0 if readout >= filtered_median_float else
-                                       (-1.0 / (readout / filtered_median_float)) + 1.0) for readout in extracted]
-    
-            threshold_upper_multiple = detect_upper_bound_anomaly(values=scaled_multiples_array, median=0.0,
+            anomaly_data = convert_historic_data_stationary(rule_parameters.previous_readouts,
+                                                 lambda readout: (readout / filtered_median_float - 1.0 if readout >= filtered_median_float else
+                                                                  (-1.0 / (readout / filtered_median_float)) + 1.0))
+            threshold_upper_multiple = detect_upper_bound_anomaly(historic_data=anomaly_data, median=0.0,
                                                                   tail=tail, parameters=rule_parameters)
     
             passed = True
@@ -1618,7 +1676,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
             else:
                 threshold_upper = None
     
-            threshold_lower_multiple = detect_lower_bound_anomaly(values=scaled_multiples_array, median=0.0,
+            threshold_lower_multiple = detect_lower_bound_anomaly(historic_data=anomaly_data, median=0.0,
                                                                   tail=tail, parameters=rule_parameters)
     
             if threshold_lower_multiple is not None:
@@ -1684,6 +1742,7 @@ The parameters passed to the rule are shown below.
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |<span class="no-wrap-code">`anomaly_percent`</span>|The probability (in percent) that the current data delay is an anomaly because the value is outside the regular range of previous delays. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation.|*double*|:material-check-bold:||
+|<span class="no-wrap-code">`use_ai`</span>|Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution.|*boolean*| ||
 
 
 
@@ -1716,6 +1775,12 @@ The rule definition YAML file *percentile/anomaly_timeliness_delay.dqorule.yaml*
         data_type: double
         required: true
         default_value: 0.5
+      - field_name: use_ai
+        display_name: use_ai
+        help_text: "Use an AI model to predict anomalies. WARNING: anomaly detection by\
+          \ AI models is not supported in an open-source distribution of DQOps. Please\
+          \ contact DQOps support to upgrade your instance to a closed-source DQOps distribution."
+        data_type: boolean
       parameters:
         degrees_of_freedom: 5
     ```
@@ -1760,6 +1825,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     import numpy as np
     import scipy
     import scipy.stats
+    from lib.anomalies.data_preparation import convert_historic_data_stationary
     from lib.anomalies.anomaly_detection import detect_upper_bound_anomaly, detect_lower_bound_anomaly
     
     
@@ -1842,7 +1908,8 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
         tail = rule_parameters.parameters.anomaly_percent / 100.0
     
-        threshold_upper_multiple = detect_upper_bound_anomaly(values=extracted, median=filtered_median_float,
+        anomaly_data = convert_historic_data_stationary(rule_parameters.previous_readouts, lambda readout: readout)
+        threshold_upper_multiple = detect_upper_bound_anomaly(historic_data=anomaly_data, median=filtered_median_float,
                                                               tail=tail, parameters=rule_parameters)
     
         passed = True

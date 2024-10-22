@@ -28,6 +28,7 @@ if TYPE_CHECKING:
     from ..models.oracle_parameters_spec import OracleParametersSpec
     from ..models.postgresql_parameters_spec import PostgresqlParametersSpec
     from ..models.presto_parameters_spec import PrestoParametersSpec
+    from ..models.quest_db_parameters_spec import QuestDbParametersSpec
     from ..models.redshift_parameters_spec import RedshiftParametersSpec
     from ..models.snowflake_parameters_spec import SnowflakeParametersSpec
     from ..models.spark_parameters_spec import SparkParametersSpec
@@ -59,6 +60,7 @@ class ConnectionSpec:
         db2 (Union[Unset, Db2ParametersSpec]):
         mariadb (Union[Unset, MariaDbParametersSpec]):
         clickhouse (Union[Unset, ClickHouseParametersSpec]):
+        questdb (Union[Unset, QuestDbParametersSpec]):
         parallel_jobs_limit (Union[Unset, int]): The concurrency limit for the maximum number of parallel SQL queries
             executed on this connection.
         default_grouping_configuration (Union[Unset, DataGroupingConfigurationSpec]):
@@ -95,6 +97,7 @@ class ConnectionSpec:
     db2: Union[Unset, "Db2ParametersSpec"] = UNSET
     mariadb: Union[Unset, "MariaDbParametersSpec"] = UNSET
     clickhouse: Union[Unset, "ClickHouseParametersSpec"] = UNSET
+    questdb: Union[Unset, "QuestDbParametersSpec"] = UNSET
     parallel_jobs_limit: Union[Unset, int] = UNSET
     default_grouping_configuration: Union[Unset, "DataGroupingConfigurationSpec"] = (
         UNSET
@@ -177,6 +180,10 @@ class ConnectionSpec:
         if not isinstance(self.clickhouse, Unset):
             clickhouse = self.clickhouse.to_dict()
 
+        questdb: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.questdb, Unset):
+            questdb = self.questdb.to_dict()
+
         parallel_jobs_limit = self.parallel_jobs_limit
         default_grouping_configuration: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.default_grouping_configuration, Unset):
@@ -250,6 +257,8 @@ class ConnectionSpec:
             field_dict["mariadb"] = mariadb
         if clickhouse is not UNSET:
             field_dict["clickhouse"] = clickhouse
+        if questdb is not UNSET:
+            field_dict["questdb"] = questdb
         if parallel_jobs_limit is not UNSET:
             field_dict["parallel_jobs_limit"] = parallel_jobs_limit
         if default_grouping_configuration is not UNSET:
@@ -298,6 +307,7 @@ class ConnectionSpec:
         from ..models.oracle_parameters_spec import OracleParametersSpec
         from ..models.postgresql_parameters_spec import PostgresqlParametersSpec
         from ..models.presto_parameters_spec import PrestoParametersSpec
+        from ..models.quest_db_parameters_spec import QuestDbParametersSpec
         from ..models.redshift_parameters_spec import RedshiftParametersSpec
         from ..models.snowflake_parameters_spec import SnowflakeParametersSpec
         from ..models.spark_parameters_spec import SparkParametersSpec
@@ -424,6 +434,13 @@ class ConnectionSpec:
         else:
             clickhouse = ClickHouseParametersSpec.from_dict(_clickhouse)
 
+        _questdb = d.pop("questdb", UNSET)
+        questdb: Union[Unset, QuestDbParametersSpec]
+        if isinstance(_questdb, Unset):
+            questdb = UNSET
+        else:
+            questdb = QuestDbParametersSpec.from_dict(_questdb)
+
         parallel_jobs_limit = d.pop("parallel_jobs_limit", UNSET)
 
         _default_grouping_configuration = d.pop("default_grouping_configuration", UNSET)
@@ -496,6 +513,7 @@ class ConnectionSpec:
             db2=db2,
             mariadb=mariadb,
             clickhouse=clickhouse,
+            questdb=questdb,
             parallel_jobs_limit=parallel_jobs_limit,
             default_grouping_configuration=default_grouping_configuration,
             schedules=schedules,

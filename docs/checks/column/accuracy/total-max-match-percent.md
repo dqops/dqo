@@ -502,6 +502,43 @@ spec:
                 MAX(analyzed_table."target_column") AS actual_value
             FROM "your_trino_database"."<target_schema>"."<target_table>" AS analyzed_table
             ```
+    ??? example "QuestDB"
+
+        === "Sensor template for QuestDB"
+
+            ```sql+jinja
+            {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+            
+            {%- macro render_referenced_table(referenced_table) -%}
+            {%- if referenced_table.find(".") < 0 -%}
+               {{- lib.quote_identifier(referenced_table) -}}
+            {%- else -%}
+               {{ referenced_table }}
+            {%- endif -%}
+            {%- endmacro -%}
+            
+            WITH referenced_data AS (
+                SELECT MAX(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }}) AS expected_value
+                FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+            )
+            SELECT referenced_data.expected_value AS expected_value,
+                MAX({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            CROSS JOIN referenced_data
+            {{- lib.render_where_clause() -}}
+            ```
+        === "Rendered SQL for QuestDB"
+
+            ```sql
+            WITH referenced_data AS (
+                SELECT MAX(referenced_table."customer_id") AS expected_value
+                FROM landing_zone.customer_raw AS referenced_table
+            )
+            SELECT referenced_data.expected_value AS expected_value,
+                MAX(analyzed_table."target_column") AS actual_value
+            FROM "<target_table>" AS analyzed_table
+            CROSS JOIN referenced_data
+            ```
     ??? example "Redshift"
 
         === "Sensor template for Redshift"
@@ -1172,6 +1209,43 @@ spec:
                 MAX(analyzed_table."target_column") AS actual_value
             FROM "your_trino_database"."<target_schema>"."<target_table>" AS analyzed_table
             ```
+    ??? example "QuestDB"
+
+        === "Sensor template for QuestDB"
+
+            ```sql+jinja
+            {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+            
+            {%- macro render_referenced_table(referenced_table) -%}
+            {%- if referenced_table.find(".") < 0 -%}
+               {{- lib.quote_identifier(referenced_table) -}}
+            {%- else -%}
+               {{ referenced_table }}
+            {%- endif -%}
+            {%- endmacro -%}
+            
+            WITH referenced_data AS (
+                SELECT MAX(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }}) AS expected_value
+                FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+            )
+            SELECT referenced_data.expected_value AS expected_value,
+                MAX({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            CROSS JOIN referenced_data
+            {{- lib.render_where_clause() -}}
+            ```
+        === "Rendered SQL for QuestDB"
+
+            ```sql
+            WITH referenced_data AS (
+                SELECT MAX(referenced_table."customer_id") AS expected_value
+                FROM landing_zone.customer_raw AS referenced_table
+            )
+            SELECT referenced_data.expected_value AS expected_value,
+                MAX(analyzed_table."target_column") AS actual_value
+            FROM "<target_table>" AS analyzed_table
+            CROSS JOIN referenced_data
+            ```
     ??? example "Redshift"
 
         === "Sensor template for Redshift"
@@ -1841,6 +1915,43 @@ spec:
                 ) AS expected_value,
                 MAX(analyzed_table."target_column") AS actual_value
             FROM "your_trino_database"."<target_schema>"."<target_table>" AS analyzed_table
+            ```
+    ??? example "QuestDB"
+
+        === "Sensor template for QuestDB"
+
+            ```sql+jinja
+            {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+            
+            {%- macro render_referenced_table(referenced_table) -%}
+            {%- if referenced_table.find(".") < 0 -%}
+               {{- lib.quote_identifier(referenced_table) -}}
+            {%- else -%}
+               {{ referenced_table }}
+            {%- endif -%}
+            {%- endmacro -%}
+            
+            WITH referenced_data AS (
+                SELECT MAX(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }}) AS expected_value
+                FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+            )
+            SELECT referenced_data.expected_value AS expected_value,
+                MAX({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            CROSS JOIN referenced_data
+            {{- lib.render_where_clause() -}}
+            ```
+        === "Rendered SQL for QuestDB"
+
+            ```sql
+            WITH referenced_data AS (
+                SELECT MAX(referenced_table."customer_id") AS expected_value
+                FROM landing_zone.customer_raw AS referenced_table
+            )
+            SELECT referenced_data.expected_value AS expected_value,
+                MAX(analyzed_table."target_column") AS actual_value
+            FROM "<target_table>" AS analyzed_table
+            CROSS JOIN referenced_data
             ```
     ??? example "Redshift"
 

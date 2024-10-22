@@ -25,6 +25,7 @@ if TYPE_CHECKING:
     from ..models.oracle_parameters_spec import OracleParametersSpec
     from ..models.postgresql_parameters_spec import PostgresqlParametersSpec
     from ..models.presto_parameters_spec import PrestoParametersSpec
+    from ..models.quest_db_parameters_spec import QuestDbParametersSpec
     from ..models.redshift_parameters_spec import RedshiftParametersSpec
     from ..models.snowflake_parameters_spec import SnowflakeParametersSpec
     from ..models.spark_parameters_spec import SparkParametersSpec
@@ -68,6 +69,7 @@ class ConnectionModel:
         db2 (Union[Unset, Db2ParametersSpec]):
         mariadb (Union[Unset, MariaDbParametersSpec]):
         clickhouse (Union[Unset, ClickHouseParametersSpec]):
+        questdb (Union[Unset, QuestDbParametersSpec]):
         run_checks_job_template (Union[Unset, CheckSearchFilters]): Target data quality checks filter, identifies which
             checks on which tables and columns should be executed.
         run_profiling_checks_job_template (Union[Unset, CheckSearchFilters]): Target data quality checks filter,
@@ -112,6 +114,7 @@ class ConnectionModel:
     db2: Union[Unset, "Db2ParametersSpec"] = UNSET
     mariadb: Union[Unset, "MariaDbParametersSpec"] = UNSET
     clickhouse: Union[Unset, "ClickHouseParametersSpec"] = UNSET
+    questdb: Union[Unset, "QuestDbParametersSpec"] = UNSET
     run_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
     run_profiling_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
     run_monitoring_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
@@ -201,6 +204,10 @@ class ConnectionModel:
         if not isinstance(self.clickhouse, Unset):
             clickhouse = self.clickhouse.to_dict()
 
+        questdb: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.questdb, Unset):
+            questdb = self.questdb.to_dict()
+
         run_checks_job_template: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.run_checks_job_template, Unset):
             run_checks_job_template = self.run_checks_job_template.to_dict()
@@ -288,6 +295,8 @@ class ConnectionModel:
             field_dict["mariadb"] = mariadb
         if clickhouse is not UNSET:
             field_dict["clickhouse"] = clickhouse
+        if questdb is not UNSET:
+            field_dict["questdb"] = questdb
         if run_checks_job_template is not UNSET:
             field_dict["run_checks_job_template"] = run_checks_job_template
         if run_profiling_checks_job_template is not UNSET:
@@ -343,6 +352,7 @@ class ConnectionModel:
         from ..models.oracle_parameters_spec import OracleParametersSpec
         from ..models.postgresql_parameters_spec import PostgresqlParametersSpec
         from ..models.presto_parameters_spec import PrestoParametersSpec
+        from ..models.quest_db_parameters_spec import QuestDbParametersSpec
         from ..models.redshift_parameters_spec import RedshiftParametersSpec
         from ..models.snowflake_parameters_spec import SnowflakeParametersSpec
         from ..models.spark_parameters_spec import SparkParametersSpec
@@ -480,6 +490,13 @@ class ConnectionModel:
         else:
             clickhouse = ClickHouseParametersSpec.from_dict(_clickhouse)
 
+        _questdb = d.pop("questdb", UNSET)
+        questdb: Union[Unset, QuestDbParametersSpec]
+        if isinstance(_questdb, Unset):
+            questdb = UNSET
+        else:
+            questdb = QuestDbParametersSpec.from_dict(_questdb)
+
         _run_checks_job_template = d.pop("run_checks_job_template", UNSET)
         run_checks_job_template: Union[Unset, CheckSearchFilters]
         if isinstance(_run_checks_job_template, Unset):
@@ -585,6 +602,7 @@ class ConnectionModel:
             db2=db2,
             mariadb=mariadb,
             clickhouse=clickhouse,
+            questdb=questdb,
             run_checks_job_template=run_checks_job_template,
             run_profiling_checks_job_template=run_profiling_checks_job_template,
             run_monitoring_checks_job_template=run_monitoring_checks_job_template,
