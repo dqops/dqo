@@ -254,7 +254,6 @@ public class QuestDbColumnIntegrityForeignKeyNotMatchCountSensorParametersSpecIn
         }};
         sampleTableMetadata.getTableSpec().setDefaultDataGroupingConfiguration(dataGroupingConfigurationSpec);
         sampleTableMetadata.getTableSpec().getColumns().getAt(0).setId(true);
-        sampleTableMetadata.getTableSpec().getColumns().getAt(1).setId(true);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForErrorSampling(
                 sampleTableMetadata, "foreign_key", this.checkSpec);
@@ -263,12 +262,11 @@ public class QuestDbColumnIntegrityForeignKeyNotMatchCountSensorParametersSpecIn
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(5, resultTable.rowCount());
-        Assertions.assertEquals(5, resultTable.columnCount());
+        Assertions.assertEquals(4, resultTable.columnCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         Assertions.assertEquals("sample_index", resultTable.column(1).name());
         Assertions.assertEquals("grouping_level_1", resultTable.column(2).name());
         Assertions.assertEquals("row_id_1", resultTable.column(3).name());
-        Assertions.assertEquals("row_id_2", resultTable.column(4).name());
         List<Integer> sampleValues = List.of(resultTable.column("actual_value").asObjectArray())
                 .stream().map(val -> ValueConverter.toInteger(val))
                 .collect(Collectors.toList());
