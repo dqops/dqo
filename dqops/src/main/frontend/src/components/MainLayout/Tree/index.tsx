@@ -74,7 +74,6 @@ const Tree = () => {
     items: CustomTreeNode[],
     node: CustomTreeNode
   ) => {
-    console.log(newTreeData, node);
     newTreeData = newTreeData
       .filter(
         (item) =>
@@ -83,7 +82,6 @@ const Tree = () => {
           item.parentId !== node.id
       )
       .map((item) => (item.id === node.id ? { ...item, open: true } : item));
-    console.log(newTreeData);
     return [...newTreeData, ...items];
   };
 
@@ -326,31 +324,73 @@ const Tree = () => {
       }
 
       if (match.path === ROUTES.PATTERNS.COLUMN_MONITORING_FILTER) {
-        const checkNode =
-          findTreeNode(newTreeData, `${tableNode?.id || ''}.dailyCheck`) ??
-          findTreeNode(newTreeData, `${tableNode?.id || ''}.monthlyCheck`);
-        const items = await refreshNode(checkNode, false);
+        const columnsNode = findTreeNode(
+          newTreeData,
+          `${tableNode?.id || ''}.columns`
+        );
 
-        newTreeData = getNewTreeData(newTreeData, items, checkNode!);
-        setActiveTab(`${checkNode?.id || ''}.${terms[10]}_${terms[11]}`);
+        const items = await refreshNode(columnsNode, false);
+        newTreeData = getNewTreeData(newTreeData, items, columnsNode!);
+        const columnNode = findTreeNode(
+          newTreeData,
+          `${columnsNode?.id || ''}.${terms[9]}`
+        );
+        const items2 = await refreshNode(columnNode, true);
+
+        newTreeData = getNewTreeData(newTreeData, items2, columnNode!);
+        const checksNode =
+          findTreeNode(newTreeData, `${columnNode?.id || ''}.dailyCheck`) ??
+          findTreeNode(newTreeData, `${columnNode?.id || ''}.monthlyCheck`);
+
+        const items3 = await refreshNode(checksNode, false);
+        newTreeData = getNewTreeData(newTreeData, items3, checksNode!);
+
+        const checkNode = findTreeNode(
+          newTreeData,
+          `${checksNode?.id || ''}.${terms[12]}_${terms[13]}`
+        );
+        newTreeData = getNewTreeData(newTreeData, items3, checkNode!);
+
+        setActiveTab(`${checkNode?.id || ''}`);
       }
 
       if (match.path === ROUTES.PATTERNS.COLUMN_PARTITIONED_FILTER) {
-        const checkNode =
+        const columnsNode = findTreeNode(
+          newTreeData,
+          `${tableNode?.id || ''}.columns`
+        );
+
+        const items = await refreshNode(columnsNode, false);
+        newTreeData = getNewTreeData(newTreeData, items, columnsNode!);
+        const columnNode = findTreeNode(
+          newTreeData,
+          `${columnsNode?.id || ''}.${terms[9]}`
+        );
+        const items2 = await refreshNode(columnNode, true);
+
+        newTreeData = getNewTreeData(newTreeData, items2, columnNode!);
+        const checksNode =
           findTreeNode(
             newTreeData,
-            `${tableNode?.id || ''}.dailyPartitionedChecks`
+            `${columnNode?.id || ''}.dailyPartitionedChecks`
           ) ??
           findTreeNode(
             newTreeData,
-            `${tableNode?.id || ''}.monthlyPartitionedCheck`
+            `${columnNode?.id || ''}.monthlyPartitionedChecks`
           );
-        const items = await refreshNode(checkNode, false);
 
-        newTreeData = getNewTreeData(newTreeData, items, checkNode!);
-        setActiveTab(`${checkNode?.id || ''}.${terms[10]}_${terms[11]}`);
+        const items3 = await refreshNode(checksNode, false);
+        newTreeData = getNewTreeData(newTreeData, items3, checksNode!);
+
+        const checkNode = findTreeNode(
+          newTreeData,
+          `${checksNode?.id || ''}.${terms[12]}_${terms[13]}`
+        );
+        newTreeData = getNewTreeData(newTreeData, items3, checkNode!);
+
+        setActiveTab(`${checkNode?.id || ''}`);
       }
-      console.log(newTreeData);
+
       setTreeData(newTreeData);
 
       setFlag((prev) => !prev);
@@ -470,7 +510,6 @@ const Tree = () => {
       </Tooltip>
     );
   };
-  //console.log('activeTab', activeTab);
   const renderTreeNode = (node: CustomTreeNode, deep: number) => {
     return (
       <div style={{ paddingLeft: deep ? 16 : 0 }}>
