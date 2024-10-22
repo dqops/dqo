@@ -765,7 +765,8 @@ const connectionReducer = (state = initialState, action: Action) => {
         loading: false,
         checksUIFilter: action.data,
         isUpdatedChecksUIFilter: false,
-        error: null
+        error: null,
+        ruleParametersConfigured: getRuleParametersConfigured(action.data)
       });
     case SOURCE_ACTION.GET_TABLE_PROFILING_CHECKS_MODEL_FILTER_ERROR:
       return setActiveTabState(state, action, {
@@ -781,7 +782,8 @@ const connectionReducer = (state = initialState, action: Action) => {
         loading: false,
         monitoringChecksUIFilter: action.data,
         isUpdatedMonitoringUIFilter: false,
-        error: null
+        error: null,
+        ruleParametersConfigured: getRuleParametersConfigured(action.data)
       });
     case SOURCE_ACTION.GET_TABLE_MONITORING_CHECKS_MODEL_FILTER_ERROR:
       return setActiveTabState(state, action, {
@@ -797,7 +799,8 @@ const connectionReducer = (state = initialState, action: Action) => {
         loading: false,
         partitionedChecksUIFilter: action.data,
         isUpdatedPartitionedChecksUIFilter: false,
-        error: null
+        error: null,
+        ruleParametersConfigured: getRuleParametersConfigured(action.data)
       });
     case SOURCE_ACTION.GET_TABLE_PARTITIONED_CHECKS_MODEL_FILTER_ERROR:
       return setActiveTabState(state, action, {
@@ -1159,7 +1162,8 @@ const connectionReducer = (state = initialState, action: Action) => {
         loading: false,
         checksUIFilter: action.data,
         isUpdatedChecksUIFilter: false,
-        error: null
+        error: null,
+        ruleParametersConfigured: getRuleParametersConfigured(action.data)
       });
     case SOURCE_ACTION.GET_COLUMN_PROFILING_CHECKS_MODEL_FILTER_ERROR:
       return setActiveTabState(state, action, {
@@ -1175,7 +1179,8 @@ const connectionReducer = (state = initialState, action: Action) => {
         loading: false,
         monitoringUIFilter: action.data,
         isUpdatedMonitoringUIFilter: false,
-        error: null
+        error: null,
+        ruleParametersConfigured: getRuleParametersConfigured(action.data)
       });
     case SOURCE_ACTION.GET_COLUMN_MONITORING_CHECKS_MODEL_FILTER_ERROR:
       return setActiveTabState(state, action, {
@@ -1191,7 +1196,8 @@ const connectionReducer = (state = initialState, action: Action) => {
         loading: false,
         partitionedChecksUIFilter: action.data,
         isUpdatedPartitionedChecksUIFilter: false,
-        error: null
+        error: null,
+        ruleParametersConfigured: getRuleParametersConfigured(action.data)
       });
     case SOURCE_ACTION.GET_COLUMN_PARTITIONED_CHECKS_MODEL_FILTER_ERROR:
       return setActiveTabState(state, action, {
