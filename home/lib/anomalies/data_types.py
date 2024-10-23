@@ -36,7 +36,8 @@ class RuleTimeWindowSettingsSpec:
 
 
 class AnomalyConfigurationParameters:
-    degrees_of_freedom: float
+    degrees_of_freedom: int
+    ai_degrees_of_freedom: int
     anderson_significance_level: float
     kolmogorov_significance_level: float
 
