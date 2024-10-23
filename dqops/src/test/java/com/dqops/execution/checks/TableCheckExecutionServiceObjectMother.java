@@ -85,7 +85,7 @@ public class TableCheckExecutionServiceObjectMother {
         RuleDefinitionFindService ruleDefinitionFindService = RuleDefinitionFindServiceObjectMother.getRuleDefinitionFindService();
         DataQualityRuleRunnerImpl ruleRunner = new DataQualityRuleRunnerImpl(ruleDefinitionFindService, RuleRunnerFactoryObjectMother.createDefault());
         RuleEvaluationServiceImpl ruleEvaluationService = new RuleEvaluationServiceImpl(ruleRunner, ruleDefinitionFindService, defaultTimeZoneProvider,
-                new RuleModelTrainingQueueImpl());
+                new RuleModelTrainingQueueImpl(), new DqoPythonConfigurationProperties());
 
         ParquetPartitionStorageServiceImpl parquetPartitionStorageService =
                 ParquetPartitionStorageServiceObjectMother.create(userHomeContext);

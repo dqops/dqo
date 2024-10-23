@@ -76,6 +76,7 @@ dqo:
     use-host-python: false
     enable-debugging: false
     debug-mode: silent
+    rule-model-update-mode: never
   user:
     home: .
     has-local-home: true

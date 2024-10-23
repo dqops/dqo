@@ -31,10 +31,7 @@ import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import com.dqops.connectors.ConnectionProviderRegistry;
 import com.dqops.connectors.ConnectionProviderRegistryObjectMother;
 import com.dqops.connectors.ProviderType;
-import com.dqops.core.configuration.DqoErrorSamplingConfigurationProperties;
-import com.dqops.core.configuration.DqoLoggingUserErrorsConfigurationProperties;
-import com.dqops.core.configuration.DqoSensorLimitsConfigurationProperties;
-import com.dqops.core.configuration.DqoSensorLimitsConfigurationPropertiesObjectMother;
+import com.dqops.core.configuration.*;
 import com.dqops.core.jobqueue.DqoJobQueueObjectMother;
 import com.dqops.core.jobqueue.DqoQueueJobFactoryImpl;
 import com.dqops.core.jobqueue.JobCancellationTokenObjectMother;
@@ -148,7 +145,7 @@ public class CheckExecutionServiceImplTests extends BaseTest {
         RuleEvaluationService ruleEvaluationService = new RuleEvaluationServiceImpl(
                 DataQualityRuleRunnerObjectMother.getDefault(),
                 RuleDefinitionFindServiceObjectMother.getRuleDefinitionFindService(),
-                defaultTimeZoneProvider, new RuleModelTrainingQueueImpl());
+                defaultTimeZoneProvider, new RuleModelTrainingQueueImpl(), new DqoPythonConfigurationProperties());
 
         CommonTableNormalizationService commonTableNormalizationService = new CommonTableNormalizationServiceImpl();
         ErrorsNormalizationService errorsNormalizationService = new ErrorsNormalizationServiceImpl(

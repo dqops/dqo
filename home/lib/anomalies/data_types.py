@@ -49,6 +49,9 @@ class RuleExecutionRunParameters:
     previous_readouts: Sequence[HistoricDataPoint]
     time_window: RuleTimeWindowSettingsSpec
     configuration_parameters: AnomalyConfigurationParameters
+    model_path: str
+    data_group: str
+    update_model: str
 
 
 class HistoricData(TypedDict):

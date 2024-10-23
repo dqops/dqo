@@ -16,6 +16,7 @@
 package com.dqops.execution.checks.ruleeval;
 
 import com.dqops.checks.AbstractCheckSpec;
+import com.dqops.core.configuration.DqoPythonConfigurationProperties;
 import com.dqops.core.filesystem.BuiltInFolderNames;
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.readouts.factory.SensorReadoutsColumnNames;
@@ -65,21 +66,27 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
     private final RuleDefinitionFindService ruleDefinitionFindService;
     private final DefaultTimeZoneProvider defaultTimeZoneProvider;
     private final RuleModelTrainingQueue ruleModelTrainingQueue;
+    private final DqoPythonConfigurationProperties dqoPythonConfigurationProperties;
 
     /**
      * Creates an instance of the rule evaluation service, given all dependencies.
      * @param ruleRunner Rule runner dependency.
      * @param ruleDefinitionFindService Rule definition find service.
+     * @param defaultTimeZoneProvider Default time zone provider.
+     * @param ruleModelTrainingQueue ML rule training queue.
+     * @param dqoPythonConfigurationProperties Python configuration parameters.
      */
     @Autowired
     public RuleEvaluationServiceImpl(DataQualityRuleRunner ruleRunner,
                                      RuleDefinitionFindService ruleDefinitionFindService,
                                      DefaultTimeZoneProvider defaultTimeZoneProvider,
-                                     RuleModelTrainingQueue ruleModelTrainingQueue) {
+                                     RuleModelTrainingQueue ruleModelTrainingQueue,
+                                     DqoPythonConfigurationProperties dqoPythonConfigurationProperties) {
         this.ruleRunner = ruleRunner;
         this.ruleDefinitionFindService = ruleDefinitionFindService;
         this.defaultTimeZoneProvider = defaultTimeZoneProvider;
         this.ruleModelTrainingQueue = ruleModelTrainingQueue;
+        this.dqoPythonConfigurationProperties = dqoPythonConfigurationProperties;
     }
 
     /**
@@ -248,7 +255,8 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
 
                 if (customSeverity == null && fatalRule != null) {
                     RuleExecutionRunParameters ruleRunParametersFatal = new RuleExecutionRunParameters(actualValue, expectedValueFromSensor,
-                            fatalRule, timePeriodLocal, dataGroupName, previousDataPoints, ruleTimeWindowSettings, ruleConfigurationParameters, modelPath);
+                            fatalRule, timePeriodLocal, dataGroupName, previousDataPoints, ruleTimeWindowSettings, ruleConfigurationParameters,
+                            modelPath, this.dqoPythonConfigurationProperties.getRuleModelUpdateMode());
                     ruleExecutionResultFatal = this.ruleRunner.executeRule(executionContext, ruleRunParametersFatal, sensorRunParameters);
                     modelMustBeRetrained |= ruleExecutionResultFatal.isModelIsOutdated();
 
@@ -269,7 +277,8 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
 
                 if (customSeverity == null && errorRule != null) {
                     RuleExecutionRunParameters ruleRunParametersError = new RuleExecutionRunParameters(actualValue, expectedValueFromSensor,
-                            errorRule, timePeriodLocal, dataGroupName, previousDataPoints, ruleTimeWindowSettings, ruleConfigurationParameters, modelPath);
+                            errorRule, timePeriodLocal, dataGroupName, previousDataPoints, ruleTimeWindowSettings, ruleConfigurationParameters,
+                            modelPath, this.dqoPythonConfigurationProperties.getRuleModelUpdateMode());
                     ruleExecutionResultError = this.ruleRunner.executeRule(executionContext, ruleRunParametersError, sensorRunParameters);
                     modelMustBeRetrained |= ruleExecutionResultError.isModelIsOutdated();
 
@@ -290,7 +299,8 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
 
                 if (customSeverity == null && warningRule != null) {
                     RuleExecutionRunParameters ruleRunParametersWarning = new RuleExecutionRunParameters(actualValue, expectedValueFromSensor,
-                            warningRule, timePeriodLocal, dataGroupName, previousDataPoints, ruleTimeWindowSettings, ruleConfigurationParameters, modelPath);
+                            warningRule, timePeriodLocal, dataGroupName, previousDataPoints, ruleTimeWindowSettings, ruleConfigurationParameters,
+                            modelPath, this.dqoPythonConfigurationProperties.getRuleModelUpdateMode());
                     ruleExecutionResultWarning = this.ruleRunner.executeRule(executionContext, ruleRunParametersWarning, sensorRunParameters);
                     modelMustBeRetrained |= ruleExecutionResultWarning.isModelIsOutdated();
 
