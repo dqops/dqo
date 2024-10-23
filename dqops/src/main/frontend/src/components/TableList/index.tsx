@@ -149,6 +149,16 @@ export default function index({
 
   const isEnd = tables.length < filters.pageSize;
 
+  const maxRowCount = Math.max(
+    ...tables.map((x) => x.data_quality_status?.total_row_count ?? 0)
+  );
+
+  const maxDelay = Math.max(
+    ...tables.map((x) => x.data_quality_status?.data_freshness_delay_days ?? 0)
+  );
+
+  console.log(maxDelay, maxRowCount);
+
   return (
     <div className="bg-white py-2">
       <div className="flex">
@@ -191,6 +201,8 @@ export default function index({
                     item={item}
                     dimensionKeys={getDimensionKey()}
                     showDimensions={showDimensions}
+                    maxRowCount={maxRowCount}
+                    maxDelay={maxDelay}
                   />
                 ))}
               </tbody>

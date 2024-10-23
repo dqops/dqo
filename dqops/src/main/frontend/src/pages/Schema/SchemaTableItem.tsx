@@ -20,11 +20,15 @@ type TTableWithSchema = TableListModel & { schema?: string };
 export default function SchemaTableItem({
   item,
   dimensionKeys,
-  showDimensions
+  showDimensions,
+  maxRowCount,
+  maxDelay
 }: {
   item: TTableWithSchema;
   dimensionKeys: string[];
   showDimensions?: boolean;
+  maxRowCount?: number;
+  maxDelay?: number;
 }) {
   const {
     checkTypes,
@@ -155,15 +159,61 @@ export default function SchemaTableItem({
             />
           ) : (
             <>
-              <td className="content-start pt-2 text-right">
-                {formatNumber(item.data_quality_status?.total_row_count)}
+              <td className="content-start pt-2">
+                <div className="flex items-center">
+                  <div className="w-10">
+                    {formatNumber(item.data_quality_status?.total_row_count)}
+                  </div>
+                  {maxRowCount && item.data_quality_status?.total_row_count && (
+                    <div
+                      className=" h-3 border border-gray-100 flex ml-2"
+                      style={{ width: '66.66px' }}
+                    >
+                      <div
+                        className="h-3 bg-teal-500"
+                        style={{
+                          width: `${
+                            ((item.data_quality_status?.total_row_count /
+                              maxRowCount) *
+                              200) /
+                            3
+                          }px`
+                        }}
+                      ></div>
+                    </div>
+                  )}
+                </div>
               </td>
-              <td className="content-start pt-2 text-right">
-                {item.data_quality_status?.data_freshness_delay_days
-                  ? item.data_quality_status?.data_freshness_delay_days.toFixed(
-                      2
-                    ) + ' d'
-                  : ''}
+              <td className="content-start pt-2">
+                <div className="flex items-center">
+                  <div className="w-12">
+                    {item.data_quality_status?.data_freshness_delay_days
+                      ? item.data_quality_status?.data_freshness_delay_days.toFixed(
+                          2
+                        ) + ' d'
+                      : ''}
+                  </div>
+                  {maxDelay &&
+                    item.data_quality_status?.data_freshness_delay_days && (
+                      <div
+                        className=" h-3 border border-gray-100 flex ml-2"
+                        style={{ width: '66.66px' }}
+                      >
+                        <div
+                          className="h-3 bg-teal-500"
+                          style={{
+                            width: `${
+                              ((item.data_quality_status
+                                ?.data_freshness_delay_days /
+                                maxDelay) *
+                                200) /
+                              3
+                            }px`
+                          }}
+                        ></div>
+                      </div>
+                    )}
+                </div>
               </td>
             </>
           )}
