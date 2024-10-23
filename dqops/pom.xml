@@ -1481,6 +1481,11 @@
 					<artifactId>clickhouse-jdbc</artifactId>
 					<version>0.6.5</version>
 				</dependency>
+				<dependency>
+					<groupId>com.teradata.jdbc</groupId>
+					<artifactId>terajdbc</artifactId>
+					<version>20.00.00.34</version>
+				</dependency>
 			</dependencies>
 		</profile>
 	</profiles>

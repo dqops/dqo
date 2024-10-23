@@ -33,6 +33,7 @@ import com.dqops.connectors.redshift.RedshiftParametersSpec;
 import com.dqops.connectors.snowflake.SnowflakeParametersSpec;
 import com.dqops.connectors.spark.SparkParametersSpec;
 import com.dqops.connectors.sqlserver.SqlServerParametersSpec;
+import com.dqops.connectors.teradata.TeradataParametersSpec;
 import com.dqops.connectors.trino.TrinoParametersSpec;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
 import com.dqops.metadata.search.CheckSearchFilters;
@@ -185,6 +186,12 @@ public class ConnectionModel {
      */
     @JsonPropertyDescription("QuestDB connection parameters.")
     private QuestDbParametersSpec questdb;
+
+    /**
+     * Teradata connection parameters.
+     */
+    @JsonPropertyDescription("Teradata connection parameters.")
+    private TeradataParametersSpec teradata;
 
     /**
      * Configured parameters for the "check run" job that should be pushed to the job queue in order to run all checks within this connection.

@@ -33,6 +33,7 @@ import com.dqops.connectors.redshift.RedshiftParametersSpec;
 import com.dqops.connectors.snowflake.SnowflakeParametersSpec;
 import com.dqops.connectors.spark.SparkParametersSpec;
 import com.dqops.connectors.sqlserver.SqlServerParametersSpec;
+import com.dqops.connectors.teradata.TeradataParametersSpec;
 import com.dqops.connectors.trino.TrinoParametersSpec;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
@@ -92,6 +93,7 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
             put("mariadb", o -> o.mariadb);
             put("clickhouse", o -> o.clickhouse);
             put("questdb", o -> o.questdb);
+            put("teradata", o -> o.teradata);
 
             put("labels", o -> o.labels);
             put("schedules", o -> o.schedules);
@@ -204,6 +206,12 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private QuestDbParametersSpec questdb;
+
+    @CommandLine.Mixin // fill properties from CLI command line arguments
+    @JsonPropertyDescription("Teradata connection parameters. Specify parameters in the teradata section or set the url (which is the Teradata JDBC url).")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TeradataParametersSpec teradata;
 
     @JsonPropertyDescription("The concurrency limit for the maximum number of parallel SQL queries executed on this connection.")
     private Integer parallelJobsLimit;
@@ -612,6 +620,24 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
         setDirtyIf(!Objects.equals(this.questdb, questdb));
         this.questdb = questdb;
         propagateHierarchyIdToField(questdb, "questdb");
+    }
+
+    /**
+     * Returns the connection parameters for Teradata.
+     * @return Teradata connection parameters.
+     */
+    public TeradataParametersSpec getTeradata() {
+        return teradata;
+    }
+
+    /**
+     * Sets the Teradata connection parameters.
+     * @param teradata New Teradata connection parameters.
+     */
+    public void setTeradata(TeradataParametersSpec teradata) {
+        setDirtyIf(!Objects.equals(this.teradata, teradata));
+        this.teradata = teradata;
+        propagateHierarchyIdToField(teradata, "teradata");
     }
 
     /**
