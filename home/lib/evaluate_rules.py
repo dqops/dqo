@@ -141,8 +141,8 @@ def main():
                         (request.debug_mode == 'exception' and response.error is not None)
             if write_log:
                 time_period_local = datetime.fromtimestamp(request.rule_parameters.time_period_local_epoch)
-                result_file_name = request.rule_parameters.data_group.replace(' ', '_') + '_' + \
-                                   time_period_local.strftime('%Y-%m-%dT%H%M%S') + '.log.json'
+                safe_group_name = "".join([c if c.isalnum() else "_" for c in request.rule_parameters.data_group])
+                result_file_name = safe_group_name + '_' + time_period_local.strftime('%Y-%m-%dT%H%M%S') + '.log.json'
                 log_file_name = os.path.join(request.rule_parameters.model_path, result_file_name)
                 log_content = {
                     'request': request,
