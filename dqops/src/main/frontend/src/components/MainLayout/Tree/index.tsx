@@ -318,8 +318,6 @@ const Tree = () => {
           `${checksNode?.id || ''}.${terms[12]}_${terms[13]}`
         );
 
-        newTreeData = getNewTreeData(newTreeData, items3, checkNode!);
-
         setActiveTab(`${checkNode?.id || ''}`);
       }
 
@@ -349,7 +347,6 @@ const Tree = () => {
           newTreeData,
           `${checksNode?.id || ''}.${terms[12]}_${terms[13]}`
         );
-        newTreeData = getNewTreeData(newTreeData, items3, checkNode!);
 
         setActiveTab(`${checkNode?.id || ''}`);
       }
@@ -386,7 +383,6 @@ const Tree = () => {
           newTreeData,
           `${checksNode?.id || ''}.${terms[12]}_${terms[13]}`
         );
-        newTreeData = getNewTreeData(newTreeData, items3, checkNode!);
 
         setActiveTab(`${checkNode?.id || ''}`);
       }
