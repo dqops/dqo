@@ -148,19 +148,21 @@ export default function SchemaTableItem({
       </td>
       {item?.data_quality_status?.dimensions || !showDimensions ? (
         <>
-          <SchemaTableItemDimensions
-            item={item}
-            dimensionKeys={dimensionKeys}
-            showDimensions={showDimensions}
-          />
-          {!showDimensions && (
+          {showDimensions ? (
+            <SchemaTableItemDimensions
+              item={item}
+              dimensionKeys={dimensionKeys}
+            />
+          ) : (
             <>
               <td className="content-start pt-2 text-right">
                 {formatNumber(item.data_quality_status?.total_row_count)}
               </td>
               <td className="content-start pt-2 text-right">
                 {item.data_quality_status?.data_freshness_delay_days
-                  ? item.data_quality_status?.data_freshness_delay_days + ' d'
+                  ? item.data_quality_status?.data_freshness_delay_days.toFixed(
+                      2
+                    ) + ' d'
                   : ''}
               </td>
             </>

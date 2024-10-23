@@ -104,7 +104,7 @@ export default function index({
 
     ...constantHeaderItems,
 
-    loading || tables.length == 0
+    loading || tables.length == 0 || !showDimensions
       ? undefined
       : {
           label: 'Data quality KPI',
@@ -121,16 +121,16 @@ export default function index({
         }))
       : [
           {
-            label: 'Row count',
-            value: 'row_count',
-            toRotate: true,
-            className: 'tracking-wider font-normal'
+            label: 'Rows',
+            value: 'rows',
+            toRotate: false,
+            className: 'font-normal'
           },
           {
-            label: 'Timeliness delay',
-            value: 'timeliness_delay',
-            toRotate: true,
-            className: 'tracking-wider font-normal'
+            label: 'Delays',
+            value: 'delays',
+            toRotate: false,
+            className: ' font-normal'
           }
         ]),
     ...(showDimensions
