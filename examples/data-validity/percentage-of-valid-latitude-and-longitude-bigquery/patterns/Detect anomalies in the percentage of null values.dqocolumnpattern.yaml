@@ -1,0 +1,19 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/ColumnLevelDataQualityPolicyYaml-schema.json
+apiVersion: dqo/v1
+kind: default_column_checks
+spec:
+  priority: 1000
+  description: Monitors the scale of null values in columns and raises an issue when
+    the day-to-day change is significant.
+  monitoring_checks:
+    daily:
+      nulls:
+        daily_nulls_percent_anomaly:
+          warning:
+            anomaly_percent: 0.1
+  partitioned_checks:
+    daily:
+      nulls:
+        daily_partition_nulls_percent_anomaly:
+          warning:
+            anomaly_percent: 0.1
