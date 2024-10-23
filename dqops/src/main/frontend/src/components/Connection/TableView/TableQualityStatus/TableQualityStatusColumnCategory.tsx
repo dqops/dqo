@@ -1,7 +1,7 @@
 import { Tooltip } from '@material-tailwind/react';
 import clsx from 'clsx';
 import moment from 'moment';
-import React from 'react';
+import React, { useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import {
   CheckCurrentDataQualityStatusModelCurrentSeverityEnum,
@@ -46,6 +46,8 @@ interface ITableQualityStatusColumnCategoryProps {
   ) => React.JSX.Element;
   timeScale: 'daily' | 'monthly' | undefined;
 }
+const MAX_TEXT_WIDTH = 175;
+const FONT_STYLE = '11px Arial';
 
 export default function TableQualityStatusColumnCategory({
   customKey,
@@ -61,6 +63,7 @@ export default function TableQualityStatusColumnCategory({
 }: ITableQualityStatusColumnCategoryProps) {
   const dispatch = useActionDispatch();
   const history = useHistory();
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const { checkTypes, connection, schema, table } = useDecodedParams();
 
   const openFirstLevelColumnTab = (column: string) => {
@@ -88,6 +91,48 @@ export default function TableQualityStatusColumnCategory({
       })
     );
     history.push(url);
+  };
+
+  const measureTextWidth = (text: string): number => {
+    if (!canvasRef.current) {
+      canvasRef.current = document.createElement('canvas');
+    }
+    const context = canvasRef.current.getContext('2d');
+    if (context) {
+      context.font = FONT_STYLE;
+      return context.measureText(text).width;
+    }
+    return 0;
+  };
+
+  const truncateCheckName = (name: string): string => {
+    const prefixes = [
+      'daily_partition_',
+      'monthly_partition_',
+      'profile_',
+      'daily_',
+      'monthly_'
+    ];
+
+    let truncated = name;
+    for (const prefix of prefixes) {
+      if (name.startsWith(prefix)) {
+        truncated = name.replace(prefix, '');
+        break;
+      }
+    }
+
+    if (measureTextWidth(truncated) > MAX_TEXT_WIDTH) {
+      while (
+        measureTextWidth(truncated + '...') > MAX_TEXT_WIDTH &&
+        truncated.length > 0
+      ) {
+        truncated = truncated.slice(0, -1);
+      }
+      return truncated + '...';
+    }
+
+    return truncated;
   };
 
   const toggleExtendedChecks = (
@@ -259,7 +304,7 @@ export default function TableQualityStatusColumnCategory({
                 >
                   <div
                     className={clsx(
-                      'cursor-auto h-5 px-1 ml-[15.5px] truncate',
+                      'cursor-auto h-5 px-1 ml-[15.5px]',
                       getSecondColor(
                         severity ??
                           CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error
@@ -273,7 +318,7 @@ export default function TableQualityStatusColumnCategory({
                         : {})
                     }}
                   >
-                    {x.checkName}
+                    {truncateCheckName(x.checkName)}
                   </div>
                 </Tooltip>
               );
