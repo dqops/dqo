@@ -39,6 +39,7 @@ type TTableListProps = {
   labels: TLabel[];
   onChangeLabels: (index: number) => void;
   loading: boolean;
+  showDimensions?: boolean;
 };
 
 type TLabel = LabelModel & { clicked: boolean };
@@ -49,7 +50,8 @@ export default function index({
   onChangeFilters,
   labels,
   onChangeLabels,
-  loading
+  loading,
+  showDimensions
 }: TTableListProps) {
   const {
     checkTypes,
@@ -110,20 +112,35 @@ export default function index({
           toRotate: true,
           className: 'tracking-wider'
         },
-
-    ...getBasicDimensions().map((x) => ({
-      label: x,
-      value: x,
-      toRotate: true,
-      className: 'tracking-wider font-normal'
-    })),
-
-    ...getDimensionKey().map((x) => ({
-      label: x,
-      value: x,
-      toRotate: true,
-      className: 'tracking-wider font-normal'
-    })),
+    ...(showDimensions
+      ? getBasicDimensions().map((x) => ({
+          label: x,
+          value: x,
+          toRotate: true,
+          className: 'tracking-wider font-normal'
+        }))
+      : [
+          {
+            label: 'Row count',
+            value: 'row_count',
+            toRotate: true,
+            className: 'tracking-wider font-normal'
+          },
+          {
+            label: 'Timeliness delay',
+            value: 'timeliness_delay',
+            toRotate: true,
+            className: 'tracking-wider font-normal'
+          }
+        ]),
+    ...(showDimensions
+      ? getDimensionKey().map((x) => ({
+          label: x,
+          value: x,
+          toRotate: true,
+          className: 'tracking-wider font-normal'
+        }))
+      : []),
     {
       label: 'Actions',
       value: 'actions'
@@ -173,6 +190,7 @@ export default function index({
                     key={index}
                     item={item}
                     dimensionKeys={getDimensionKey()}
+                    showDimensions={showDimensions}
                   />
                 ))}
               </tbody>

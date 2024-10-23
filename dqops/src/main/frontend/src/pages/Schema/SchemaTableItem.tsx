@@ -6,6 +6,7 @@ import { TableListModel } from '../../api';
 import Button from '../../components/Button';
 import SvgIcon from '../../components/SvgIcon';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
+import { formatNumber } from '../../shared/constants';
 import { CheckTypes, ROUTES } from '../../shared/routes';
 import {
   getFirstLevelTableTab,
@@ -18,10 +19,12 @@ type TTableWithSchema = TableListModel & { schema?: string };
 
 export default function SchemaTableItem({
   item,
-  dimensionKeys
+  dimensionKeys,
+  showDimensions
 }: {
   item: TTableWithSchema;
   dimensionKeys: string[];
+  showDimensions?: boolean;
 }) {
   const {
     checkTypes,
@@ -143,12 +146,25 @@ export default function SchemaTableItem({
       <td className="px-4 text-xs content-start pt-2 max-w-100 min-w-50 break-all">
         {getLabelsOverview(item?.labels ?? [])}
       </td>
-      {item?.data_quality_status?.dimensions ? (
+      {item?.data_quality_status?.dimensions || !showDimensions ? (
         <>
           <SchemaTableItemDimensions
             item={item}
             dimensionKeys={dimensionKeys}
+            showDimensions={showDimensions}
           />
+          {!showDimensions && (
+            <>
+              <td className="content-start pt-2 text-right">
+                {formatNumber(item.data_quality_status?.total_row_count)}
+              </td>
+              <td className="content-start pt-2 text-right">
+                {item.data_quality_status?.data_freshness_delay_days
+                  ? item.data_quality_status?.data_freshness_delay_days + ' d'
+                  : ''}
+              </td>
+            </>
+          )}
           <td>
             <div className="flex gap-x-2 items-center justify-center mx-3">
               <Tooltip

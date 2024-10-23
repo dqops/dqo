@@ -11,10 +11,12 @@ import { getColor } from '../../components/Connection/TableView/TableQualityStat
 
 export default function SchemaTableItemDimensions({
   item,
-  dimensionKeys
+  dimensionKeys,
+  showDimensions
 }: {
   item: TableListModel;
   dimensionKeys: string[];
+  showDimensions?: boolean;
 }) {
   const getBasicDimmensionsKeys = (dimentions: any, type: string) => {
     const basicDimensions = Object.keys(dimentions ?? {})?.find(
@@ -58,117 +60,119 @@ export default function SchemaTableItemDimensions({
           </div>
         </Tooltip>
       </td>
-      {basicDimensionTypes.map((dimType) => {
-        const dimensionKey = getBasicDimmensionsKeys(
-          item.data_quality_status?.dimensions,
-          dimType
-        );
-        const currentSeverity = (item.data_quality_status?.dimensions ?? {})[
-          dimensionKey as any
-        ]?.current_severity;
-        const lastCheckExecutedAt = (item.data_quality_status?.dimensions ??
-          {})?.[dimensionKey as any]?.last_check_executed_at;
-        const severityColor = getColor(currentSeverity as any);
-        const hasNoSeverity = severityColor.length === 0;
+      {showDimensions &&
+        basicDimensionTypes.map((dimType) => {
+          const dimensionKey = getBasicDimmensionsKeys(
+            item.data_quality_status?.dimensions,
+            dimType
+          );
+          const currentSeverity = (item.data_quality_status?.dimensions ?? {})[
+            dimensionKey as any
+          ]?.current_severity;
+          const lastCheckExecutedAt = (item.data_quality_status?.dimensions ??
+            {})?.[dimensionKey as any]?.last_check_executed_at;
+          const severityColor = getColor(currentSeverity as any);
+          const hasNoSeverity = severityColor.length === 0;
 
-        const dimensionsClassNames = clsx(
-          'w-[35px] h-4.5 text-center flex items-center justify-center text-[10px]',
-          {
-            'bg-gray-150': hasNoSeverity && lastCheckExecutedAt,
-            [severityColor]: !hasNoSeverity
-            // 'border border-gray-150': hasNoSeverity
-          }
-        );
-        if (
-          (item.data_quality_status?.dimensions ?? {})?.[dimensionKey as any]
-        ) {
-          return (
-            <td key={`Dimensionindex${dimType}`} className="pl-4">
-              <Tooltip
-                content={renderSecondLevelTooltip(
-                  (item.data_quality_status?.dimensions ?? {})?.[
-                    dimensionKey as any
-                  ] ?? {
-                    dimension: dimType
-                  }
-                )}
-              >
-                <div className={dimensionsClassNames}>
-                  {(item.data_quality_status?.dimensions ?? {})?.[
-                    dimensionKey as any
-                  ]?.data_quality_kpi !== undefined
-                    ? Math.round(
-                        Number(
-                          (item.data_quality_status?.dimensions ?? {})?.[
-                            dimensionKey as any
-                          ].data_quality_kpi
-                        )
-                      ) + '%'
-                    : ''}
-                </div>
-              </Tooltip>
-            </td>
+          const dimensionsClassNames = clsx(
+            'w-[35px] h-4.5 text-center flex items-center justify-center text-[10px]',
+            {
+              'bg-gray-150': hasNoSeverity && lastCheckExecutedAt,
+              [severityColor]: !hasNoSeverity
+              // 'border border-gray-150': hasNoSeverity
+            }
           );
-        } else {
-          return (
-            <td key={`Dimensionindex${dimType}`} className="pl-4">
-              <div className="w-[35px]"></div>
-            </td>
-          );
-        }
-      })}
-      {getAdditionalDimentionsKeys(
-        item.data_quality_status?.dimensions ?? {}
-      ).map((dimensionKey: string | undefined, dimIndex) => {
-        if (dimensionKey) {
-          return (
-            <td key={`DimensionTooltipindex${dimIndex}`} className="pl-4">
-              <Tooltip
-                content={renderSecondLevelTooltip(
-                  (item.data_quality_status?.dimensions ?? {})?.[
-                    dimensionKey as any
-                  ]
-                )}
-              >
-                <div
-                  className={clsx(
-                    'w-[35px] h-4.5 text-[10px] text-center flex items-center justify-center',
-                    getColor(
-                      (item.data_quality_status?.dimensions ?? {})?.[
-                        dimensionKey as any
-                      ]?.current_severity as
-                        | DimensionCurrentDataQualityStatusModelCurrentSeverityEnum
-                        | undefined
-                    ).length === 0
-                      ? 'bg-gray-150'
-                      : getColor(
-                          (item.data_quality_status?.dimensions ?? {})?.[
-                            dimensionKey as any
-                          ]?.current_severity as
-                            | DimensionCurrentDataQualityStatusModelCurrentSeverityEnum
-                            | undefined
-                        )
+          if (
+            (item.data_quality_status?.dimensions ?? {})?.[dimensionKey as any]
+          ) {
+            return (
+              <td key={`Dimensionindex${dimType}`} className="pl-4">
+                <Tooltip
+                  content={renderSecondLevelTooltip(
+                    (item.data_quality_status?.dimensions ?? {})?.[
+                      dimensionKey as any
+                    ] ?? {
+                      dimension: dimType
+                    }
                   )}
                 >
-                  {(item.data_quality_status?.dimensions ?? {})?.[
-                    dimensionKey as any
-                  ]?.data_quality_kpi !== undefined
-                    ? Math.round(
-                        Number(
-                          (item.data_quality_status?.dimensions ?? {})?.[
-                            dimensionKey as any
-                          ].data_quality_kpi
-                        )
-                      ) + '%'
-                    : ''}
-                </div>
-              </Tooltip>
-            </td>
-          );
-        } else {
-          return <td key={`DimensionTooltipindex${dimIndex}`}></td>;
-        }
-      })}
+                  <div className={dimensionsClassNames}>
+                    {(item.data_quality_status?.dimensions ?? {})?.[
+                      dimensionKey as any
+                    ]?.data_quality_kpi !== undefined
+                      ? Math.round(
+                          Number(
+                            (item.data_quality_status?.dimensions ?? {})?.[
+                              dimensionKey as any
+                            ].data_quality_kpi
+                          )
+                        ) + '%'
+                      : ''}
+                  </div>
+                </Tooltip>
+              </td>
+            );
+          } else {
+            return (
+              <td key={`Dimensionindex${dimType}`} className="pl-4">
+                <div className="w-[35px]"></div>
+              </td>
+            );
+          }
+        })}
+      {showDimensions &&
+        getAdditionalDimentionsKeys(
+          item.data_quality_status?.dimensions ?? {}
+        ).map((dimensionKey: string | undefined, dimIndex) => {
+          if (dimensionKey) {
+            return (
+              <td key={`DimensionTooltipindex${dimIndex}`} className="pl-4">
+                <Tooltip
+                  content={renderSecondLevelTooltip(
+                    (item.data_quality_status?.dimensions ?? {})?.[
+                      dimensionKey as any
+                    ]
+                  )}
+                >
+                  <div
+                    className={clsx(
+                      'w-[35px] h-4.5 text-[10px] text-center flex items-center justify-center',
+                      getColor(
+                        (item.data_quality_status?.dimensions ?? {})?.[
+                          dimensionKey as any
+                        ]?.current_severity as
+                          | DimensionCurrentDataQualityStatusModelCurrentSeverityEnum
+                          | undefined
+                      ).length === 0
+                        ? 'bg-gray-150'
+                        : getColor(
+                            (item.data_quality_status?.dimensions ?? {})?.[
+                              dimensionKey as any
+                            ]?.current_severity as
+                              | DimensionCurrentDataQualityStatusModelCurrentSeverityEnum
+                              | undefined
+                          )
+                    )}
+                  >
+                    {(item.data_quality_status?.dimensions ?? {})?.[
+                      dimensionKey as any
+                    ]?.data_quality_kpi !== undefined
+                      ? Math.round(
+                          Number(
+                            (item.data_quality_status?.dimensions ?? {})?.[
+                              dimensionKey as any
+                            ].data_quality_kpi
+                          )
+                        ) + '%'
+                      : ''}
+                  </div>
+                </Tooltip>
+              </td>
+            );
+          } else {
+            return <td key={`DimensionTooltipindex${dimIndex}`}></td>;
+          }
+        })}
     </>
   );
 }
