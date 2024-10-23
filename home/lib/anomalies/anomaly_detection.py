@@ -84,6 +84,7 @@ def test_significance(values: list[float], parameters: RuleExecutionRunParameter
 
 def detect_upper_bound_anomaly(historic_data: HistoricData, median: float, tail: float,
                                parameters: RuleExecutionRunParameters):
+    parameters.upper_bound_historic_data = historic_data
     if hasattr(parameters.parameters, 'use_ai') and parameters.parameters.use_ai and ai_module_present:
         return dqopspaid.ai.anomaly_detection.detect_upper_bound_anomaly(historic_data, median, tail, parameters)
 
@@ -106,6 +107,7 @@ def detect_upper_bound_anomaly(historic_data: HistoricData, median: float, tail:
 
 def detect_lower_bound_anomaly(historic_data: HistoricData, median: float, tail: float,
                                parameters: RuleExecutionRunParameters):
+    parameters.lower_bound_historic_data = historic_data
     if hasattr(parameters.parameters, 'use_ai') and parameters.parameters.use_ai and ai_module_present:
         return dqopspaid.ai.anomaly_detection.detect_lower_bound_anomaly(historic_data, median, tail, parameters)
 
