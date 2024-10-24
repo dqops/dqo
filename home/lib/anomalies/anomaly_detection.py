@@ -130,9 +130,8 @@ def detect_lower_bound_anomaly(historic_data: HistoricData, median: float, tail:
 
 
 def detect_anomaly(historic_data: HistoricData, median: float, tail: float,
-                               parameters: RuleExecutionRunParameters):
-    parameters.upper_bound_historic_data = historic_data
-    parameters.lower_bound_historic_data = historic_data
+                   parameters: RuleExecutionRunParameters):
+    parameters.historic_data = historic_data
     if hasattr(parameters.parameters, 'use_ai') and parameters.parameters.use_ai and ai_module_present:
         return dqopspaid.ai.anomaly_detection.detect_anomaly(historic_data, median, tail, parameters)
 
