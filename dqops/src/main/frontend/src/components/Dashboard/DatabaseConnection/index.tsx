@@ -36,6 +36,7 @@ import TrinoLogo from '../../SvgIcon/svg/trino.svg';
 import MariaDbLogo from '../../SvgIcon/svg/maria-db.svg';
 import ClickHouseLogo from '../../SvgIcon/svg/clickhouse.svg';
 import QuestDbLogo from '../../SvgIcon/svg/questdb.svg';
+import TeradataLogo from '../../SvgIcon/svg/teradata.svg';
 import SectionWrapper from '../SectionWrapper';
 import BigqueryConnection from './BigqueryConnection';
 import ConfirmErrorModal from './ConfirmErrorModal';
@@ -57,6 +58,7 @@ import SqlServerConnection from './SqlServerConnection';
 import TrinoConnection from './TrinoConnection';
 import ClickHouseConnection from './ClickHouseConnection';
 import QuestDbConnection from './QuestDbConnection';
+import TeradataConnection from './TeradataConnection';
 
 interface IDatabaseConnectionProps {
   onNext: () => void;
@@ -351,6 +353,13 @@ const DatabaseConnection = ({
         onChange={(questdb) => onChange({ ...database, questdb })}
         sharedCredentials={sharedCredentials}
       />
+    ),
+    [ConnectionModelProviderTypeEnum.teradata]: (
+      <TeradataConnection
+        teradata={database.teradata}
+        onChange={(teradata) => onChange({ ...database, teradata })}
+        sharedCredentials={sharedCredentials}
+      />
     )
   };
 
@@ -386,6 +395,8 @@ const DatabaseConnection = ({
         return ClickHouseLogo;
       case ConnectionModelProviderTypeEnum.questdb:
         return QuestDbLogo;
+      case ConnectionModelProviderTypeEnum.teradata:
+        return TeradataLogo;
       default:
         return '';
     }

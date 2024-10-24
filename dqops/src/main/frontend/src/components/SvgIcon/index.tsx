@@ -96,6 +96,7 @@ import { ReactComponent as PostgreSQLSvg } from './svg/postgresql.svg';
 import { ReactComponent as PrestoSvg } from './svg/presto.svg';
 import { ReactComponent as ProfilingSvg } from './svg/profiling.svg';
 import { ReactComponent as QuestDbSvg } from './svg/questdb.svg';
+import { ReactComponent as TeradataSvg } from './svg/teradata.svg';
 import { ReactComponent as QuestionmarkSvg } from './svg/question-mark.svg';
 import { ReactComponent as QueueSvg } from './svg/queue.svg';
 import { ReactComponent as RectangleListSvg } from './svg/rectangle-list.svg';
@@ -274,6 +275,7 @@ const iconsMap: any = {
   warning_orange: WarningOrange,
   timescale: TimescaleSvg,
   questdb: QuestDbSvg,
+  teradata: TeradataSvg,
 };
 
 interface SvgIconProps {
