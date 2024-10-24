@@ -124,13 +124,13 @@ export default function index({
             label: 'Rows',
             value: 'rows',
             toRotate: false,
-            className: 'font-normal'
+            className: 'font-normal flex !items-start !text-left'
           },
           {
             label: 'Delays',
             value: 'delays',
             toRotate: false,
-            className: ' font-normal'
+            className: ' font-normal  flex !items-start !text-left'
           }
         ]),
     ...(showDimensions

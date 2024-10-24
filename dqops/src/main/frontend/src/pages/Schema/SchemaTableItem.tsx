@@ -160,11 +160,11 @@ export default function SchemaTableItem({
           ) : (
             <>
               <td className="content-start pt-2">
-                <div className="flex items-center">
-                  <div className="w-10">
+                <div className="flex items-center pl-4">
+                  <div className="w-11 ">
                     {formatNumber(item.data_quality_status?.total_row_count)}
                   </div>
-                  {maxRowCount && item.data_quality_status?.total_row_count && (
+                  {maxRowCount && item.data_quality_status?.total_row_count ? (
                     <div
                       className=" h-3 border border-gray-100 flex ml-2"
                       style={{ width: '66.66px' }}
@@ -181,38 +181,45 @@ export default function SchemaTableItem({
                         }}
                       ></div>
                     </div>
+                  ) : (
+                    <div
+                      className=" h-3  flex ml-2"
+                      style={{ width: '66.66px' }}
+                    ></div>
                   )}
                 </div>
               </td>
               <td className="content-start pt-2">
-                <div className="flex items-center">
-                  <div className="w-12">
+                <div className="flex items-center px-4">
+                  <div className="w-11">
                     {item.data_quality_status?.data_freshness_delay_days
                       ? item.data_quality_status?.data_freshness_delay_days.toFixed(
-                          2
+                          1
                         ) + ' d'
                       : ''}
                   </div>
                   {maxDelay &&
-                    item.data_quality_status?.data_freshness_delay_days && (
+                  item.data_quality_status?.data_freshness_delay_days ? (
+                    <div
+                      className=" h-3 border border-gray-100 flex ml-2"
+                      style={{ width: '66.66px' }}
+                    >
                       <div
-                        className=" h-3 border border-gray-100 flex ml-2"
-                        style={{ width: '66.66px' }}
-                      >
-                        <div
-                          className="h-3 bg-teal-500"
-                          style={{
-                            width: `${
-                              ((item.data_quality_status
-                                ?.data_freshness_delay_days /
-                                maxDelay) *
-                                200) /
-                              3
-                            }px`
-                          }}
-                        ></div>
-                      </div>
-                    )}
+                        className="h-3 bg-teal-500"
+                        style={{
+                          width: `${
+                            ((item.data_quality_status
+                              ?.data_freshness_delay_days /
+                              maxDelay) *
+                              200) /
+                            3
+                          }px`
+                        }}
+                      ></div>
+                    </div>
+                  ) : (
+                    <></>
+                  )}
                 </div>
               </td>
             </>

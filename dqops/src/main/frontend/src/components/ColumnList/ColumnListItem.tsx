@@ -183,7 +183,6 @@ export default function SchemaTableItem({
           <SchemaTableItemDimensions
             item={item}
             dimensionKeys={dimensionKeys}
-            showDimensions
           />
           <td>
             <div className="flex gap-x-2 items-center justify-center mx-3">
