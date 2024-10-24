@@ -62,7 +62,7 @@ nav:
       - DuckDB: "data-sources/duckdb.md"
       - Google BigQuery: "data-sources/bigquery.md"
       - Goggle Cloud Storage: "data-sources/gcp.md"
-      - IBM Db2: "data-sources/db2.md"
+      - IBM DB2: "data-sources/db2.md"
       - Iceberg: "data-sources/iceberg.md"
       - JSON files: "data-sources/json.md"
       - MariaDB: "data-sources/mariadb.md"
@@ -77,6 +77,7 @@ nav:
       - SAP HANA: "data-sources/hana.md"
       - SingleStoreDB: "data-sources/single-store.md"
       - Snowflake: "data-sources/snowflake.md"
+      - Teradata: "data-sources/teradata.md"
       - Timescale: "data-sources/timescale.md"
       - Trino: "data-sources/trino.md"
 ########## INCLUDE TYPES OF CHECKS REFERENCE - DO NOT MODIFY MANUALLY
