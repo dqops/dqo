@@ -39,6 +39,7 @@ type TTableListProps = {
   labels: TLabel[];
   onChangeLabels: (index: number) => void;
   loading: boolean;
+  showDimensions?: boolean;
 };
 
 type TLabel = LabelModel & { clicked: boolean };
@@ -49,7 +50,8 @@ export default function index({
   onChangeFilters,
   labels,
   onChangeLabels,
-  loading
+  loading,
+  showDimensions
 }: TTableListProps) {
   const {
     checkTypes,
@@ -102,7 +104,7 @@ export default function index({
 
     ...constantHeaderItems,
 
-    loading || tables.length == 0
+    loading || tables.length == 0 || !showDimensions
       ? undefined
       : {
           label: 'Data quality KPI',
@@ -110,20 +112,35 @@ export default function index({
           toRotate: true,
           className: 'tracking-wider'
         },
-
-    ...getBasicDimensions().map((x) => ({
-      label: x,
-      value: x,
-      toRotate: true,
-      className: 'tracking-wider font-normal'
-    })),
-
-    ...getDimensionKey().map((x) => ({
-      label: x,
-      value: x,
-      toRotate: true,
-      className: 'tracking-wider font-normal'
-    })),
+    ...(showDimensions
+      ? getBasicDimensions().map((x) => ({
+          label: x,
+          value: x,
+          toRotate: true,
+          className: 'tracking-wider font-normal'
+        }))
+      : [
+          {
+            label: 'Rows',
+            value: 'rows',
+            toRotate: false,
+            className: 'font-normal flex !items-start !text-left'
+          },
+          {
+            label: 'Delays',
+            value: 'delays',
+            toRotate: false,
+            className: ' font-normal  flex !items-start !text-left'
+          }
+        ]),
+    ...(showDimensions
+      ? getDimensionKey().map((x) => ({
+          label: x,
+          value: x,
+          toRotate: true,
+          className: 'tracking-wider font-normal'
+        }))
+      : []),
     {
       label: 'Actions',
       value: 'actions'
@@ -131,6 +148,16 @@ export default function index({
   ];
 
   const isEnd = tables.length < filters.pageSize;
+
+  const maxRowCount = Math.max(
+    ...tables.map((x) => x.data_quality_status?.total_row_count ?? 0)
+  );
+
+  const maxDelay = Math.max(
+    ...tables.map((x) => x.data_quality_status?.data_freshness_delay_days ?? 0)
+  );
+
+  console.log(maxDelay, maxRowCount);
 
   return (
     <div className="bg-white py-2">
@@ -173,6 +200,9 @@ export default function index({
                     key={index}
                     item={item}
                     dimensionKeys={getDimensionKey()}
+                    showDimensions={showDimensions}
+                    maxRowCount={maxRowCount}
+                    maxDelay={maxDelay}
                   />
                 ))}
               </tbody>

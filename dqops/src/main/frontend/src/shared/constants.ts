@@ -589,7 +589,10 @@ export const RUN_CHECK_TIME_WINDOW_FILTERS: {
   }
 };
 
-export const formatNumber = (t: number) => {
+export const formatNumber = (t?: number) => {
+  if (t === undefined) {
+    return '';
+  }
   const k = Math.abs(t);
 
   if (k > 1000 && k < 1000000) {
