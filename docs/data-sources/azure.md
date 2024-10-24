@@ -1,9 +1,9 @@
 ---
-title: How to set up data quality and data observability for Azure
+title: How to set up data quality and data observability for Microsoft Azure
 ---
 
-# How to set up data quality and data observability for Azure storage
-Learn how to connect DQOps to data stored in Azure Blob Storage from the UI or command-line interface and activate data quality and observability.
+# How to set up data quality and data observability for Microsoft Azure storage
+Data observability and data monitoring for Azure Blob Storage. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
 
 ## Prerequisites
 

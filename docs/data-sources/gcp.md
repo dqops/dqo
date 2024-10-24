@@ -3,7 +3,7 @@ title: How to set up data quality and data observability for Google Cloud Storag
 ---
 
 # How to set up data quality and data observability for Google Cloud Storage
-Learn how to connect DQOps to data stored in Google Cloud Storage buckets from the UI or command-line interface and activate data quality and observability.
+Data observability and data monitoring for Cloud Storage buckets. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
 
 ## Prerequisites
 

@@ -2,7 +2,7 @@
 title: How to set up data quality and data observability for IBM DB2
 ---
 # How to set up data quality and data observability for IBM DB2
-Learn how to connect DQOps to IBM Db2 database from the UI or command-line interface and activate data quality and data observability.
+Data observability and data monitoring for IBM Db2. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
 
 ## Overview
 

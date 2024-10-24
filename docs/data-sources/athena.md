@@ -2,7 +2,7 @@
 title: How to set up data quality and data observability for Amazon Athena
 ---
 # How to set up data quality and data observability for Amazon Athena
-Learn how to connect DQOps to  Amazon Athena from the UI or command-line interface and activate data quality and data observability.
+Data observability and data monitoring for Amazon Athena. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
 
 ## Overview
 

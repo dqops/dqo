@@ -2,7 +2,7 @@
 title: How to set up data quality and data observability for Snowflake
 ---
 # How to set up data quality and data observability for Snowflake
-Learn how to connect DQOps to Snowflake from the UI or command-line interface and activate data quality and data observability.
+Data observability and data monitoring for Snowflake. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
 
 ## Overview
 

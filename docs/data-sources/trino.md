@@ -2,7 +2,7 @@
 title: How to set up data quality and data observability for Trino
 ---
 # How to set up data quality and data observability for Trino
-Learn how to connect DQOps to Trino from the UI or command-line interface and activate data quality and data observability.
+Data observability and data monitoring for Trino. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
 
 ## Overview
 

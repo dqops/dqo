@@ -2,7 +2,7 @@
 title: How to set up data quality and data observability for Microsoft SQL Server
 ---
 # How to set up data quality and data observability for Microsoft SQL Server
-Learn how to connect DQOps to Microsoft SQL Server from the UI or command-line interface and activate data quality and data observability.
+Data observability and data monitoring for Microsoft SQL Server. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
 
 ## Overview
 
