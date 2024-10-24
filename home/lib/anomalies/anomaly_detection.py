@@ -96,13 +96,13 @@ def detect_upper_bound_anomaly(historic_data: HistoricData, median: float, tail:
     df = float(parameters.configuration_parameters.degrees_of_freedom)
 
     if float(values_std) == 0:
-        return float(values_median)
+        return float(values_median), median
     else:
         if not test_significance(values, parameters):
-            return None
+            return None, median
 
         # Assumption: the historical data follows t-student distribution
-        return find_tail(df, values_median, values_std, 1 - tail)
+        return find_tail(df, values_median, values_std, 1 - tail), median
 
 
 def detect_lower_bound_anomaly(historic_data: HistoricData, median: float, tail: float,
@@ -119,10 +119,10 @@ def detect_lower_bound_anomaly(historic_data: HistoricData, median: float, tail:
     df = float(parameters.configuration_parameters.degrees_of_freedom)
 
     if float(values_std) == 0:
-        return float(values_median)
+        return float(values_median), median
     else:
         if not test_significance(values, parameters):
-            return None
+            return None, median
 
         # Assumption: the historical data follows t-student distribution
-        return find_tail(df, values_median, values_std, tail)
+        return find_tail(df, values_median, values_std, tail), median
