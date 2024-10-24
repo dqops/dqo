@@ -2,7 +2,7 @@
 title: How to set up data quality and data observability for QuestDB
 ---
 # How to set up data quality and data observability for QuestDB
-Learn how to connect DQOps to QuestDB from the UI or command-line interface and activate data quality and data observability.
+Data observability and data monitoring for QuestDB. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
 
 ## Overview
 

@@ -2,7 +2,7 @@
 title: How to set up data quality and data observability for Databricks
 ---
 # How to set up data quality and data observability for Databricks
-Learn how to connect DQOps to Databricks from the UI or command-line interface and activate data quality and data observability.
+Data observability and data monitoring for Databricks. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
 
 ## Overview
 

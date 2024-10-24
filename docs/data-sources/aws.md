@@ -1,9 +1,9 @@
 ---
-title: How to set up data quality and data observability for AWS S3
+title: How to set up data quality and data observability for Amazon S3
 ---
 
-# How to set up data quality and data observability for AWS S3
-Learn how to connect DQOps to data stored in AWS S3 buckets from the UI or command-line interface and activate data quality and observability.
+# How to set up data quality and data observability for Amazon S3
+Data observability and data monitoring for Amazon S3 buckets. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
 
 ## Prerequisites
 

@@ -2,7 +2,7 @@
 title: How to set up data quality and data observability for JSON files
 ---
 # How to set up data quality and data observability for JSON files
-Learn how to configure DQOps to use JSON files from the UI or command-line interface and activate data quality and data observability.
+Data observability and data monitoring for JSON files. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
 
 ## Overview
 

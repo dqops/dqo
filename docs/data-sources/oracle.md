@@ -2,7 +2,7 @@
 title: How to set up data quality and data observability for Oracle
 ---
 # How to set up data quality and data observability for Oracle
-Learn how to connect DQOps to Oracle database from the UI or command-line interface and activate data quality and data observability.
+Data observability and data monitoring for Oracle. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
 
 ## Overview
 

@@ -2,7 +2,7 @@
 title: How to set up data quality and data observability for Parquet files
 ---
 # How to set up data quality and data observability for Parquet files
-Learn how to configure DQOps to use Parquet files from the UI or command-line interface and activate data quality and data observability.
+Data observability and data monitoring for Parquet files. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
 
 ## Overview
 

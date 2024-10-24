@@ -2,7 +2,7 @@
 title: How to set up data quality and data observability for CSV files
 ---
 # How to set up data quality and data observability for Delta Lake table
-Learn how to connect DQOps to Dalta Lake from the UI or command-line interface and activate data quality and data observability.
+Data observability and data monitoring for Delta Lake table. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
 
 ## Overview
 

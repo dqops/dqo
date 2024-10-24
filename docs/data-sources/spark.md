@@ -2,7 +2,7 @@
 title: How to set up data quality and data observability for Apache Spark
 ---
 # How to set up data quality and data observability for Apache Spark
-Learn how to connect DQOps to Apache Spark from the UI or command-line interface and activate data quality and data observability.
+Data observability and data monitoring for Apache Spark. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
 
 ## Overview
 

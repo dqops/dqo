@@ -2,7 +2,7 @@
 title: How to set up data quality and data observability for DuckDB
 ---
 # How to set up data quality and data observability for DuckDB
-Learn how to connect DQOps to DuckDB processing engine from the UI or command-line interface and activate data quality and data observability.
+Data observability and data monitoring for DuckDB. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
 
 ## Overview
 
