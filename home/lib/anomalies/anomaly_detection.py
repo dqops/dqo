@@ -16,6 +16,7 @@ import numpy as np
 import scipy
 import scipy.stats
 from .data_types import RuleExecutionRunParameters, HistoricData
+from .data_preparation import average_forecast
 
 try:
     import dqopspaid.ai.anomaly_detection
@@ -126,3 +127,17 @@ def detect_lower_bound_anomaly(historic_data: HistoricData, median: float, tail:
 
         # Assumption: the historical data follows t-student distribution
         return find_tail(df, values_median, values_std, tail), median
+
+
+def detect_anomaly(historic_data: HistoricData, median: float, tail: float,
+                               parameters: RuleExecutionRunParameters):
+    parameters.upper_bound_historic_data = historic_data
+    parameters.lower_bound_historic_data = historic_data
+    if hasattr(parameters.parameters, 'use_ai') and parameters.parameters.use_ai and ai_module_present:
+        return dqopspaid.ai.anomaly_detection.detect_anomaly(historic_data, median, tail, parameters)
+
+    upper_bound, upper_forecast = detect_upper_bound_anomaly(historic_data, median, tail, parameters)
+    lower_bound, lower_forecast = detect_lower_bound_anomaly(historic_data, median, tail, parameters)
+
+    forecast = average_forecast(upper_forecast, lower_forecast)
+    return upper_bound, lower_bound, forecast
