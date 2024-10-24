@@ -1,8 +1,8 @@
 ---
-title: How to activate data observability for Amazon Athena
+title: How to set up data quality and data observability for Amazon Athena
 ---
-# How to activate data observability for Amazon Athena
-Read this guide to learn how to connect DQOps to Amazon Athena from the UI, command-line interface, or directly in YAML files, and activate monitoring. 
+# How to set up data quality and data observability for Amazon Athena
+Learn how to connect DQOps to  Amazon Athena from the UI or command-line interface and activate data quality and data observability.
 
 ## Overview
 

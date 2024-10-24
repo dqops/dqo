@@ -1,8 +1,8 @@
 ---
-title: How to activate data observability for PostgreSQL
+title: How to set up data quality and data observability for PostgreSQL
 ---
-# How to activate data observability for PostgreSQL
-Read this guide to learn how to connect DQOps to PostgreSQL from the UI, command-line interface, or directly in YAML files, and activate monitoring.
+# How to set up data quality and data observability for PostgreSQL
+Learn how to connect DQOps to PostgreSQL database from the UI or command-line interface and activate data quality and data observability.
 
 ## Overview
 
