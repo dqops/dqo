@@ -508,6 +508,12 @@ export const databaseOptions: IDatabaseOption[] = [
     displayName: 'Snowflake'
   },
   {
+    type: ConnectionModelProviderTypeEnum.teradata,
+    name: 'Teradata',
+    iconName: 'teradata',
+    displayName: 'Teradata'
+  },
+  {
     type: ConnectionModelProviderTypeEnum.postgresql,
     name: 'Timescale',
     iconName: 'timescale',

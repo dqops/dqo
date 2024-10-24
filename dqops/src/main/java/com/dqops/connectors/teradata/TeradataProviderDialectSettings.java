@@ -53,11 +53,6 @@ public class TeradataProviderDialectSettings extends ProviderDialectSettings {
         if (columnTypeSnapshot == null || columnTypeSnapshot.getColumnType() == null) {
             return null;
         }
-//
-//        String columnType = columnTypeSnapshot.getColumnType().toLowerCase(Locale.ROOT);
-//        if (StringCheckUtility.containsAny(columnType, "timestamp with time zone", "timestamp")) {
-//            return DataTypeCategory.datetime_timestamp;
-//        }
 
         return super.detectColumnType(columnTypeSnapshot);
     }

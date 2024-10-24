@@ -118,14 +118,6 @@ public class TeradataConnectionProvider extends AbstractSqlConnectionProvider {
             teradataSpec.setPort(terminalReader.prompt("Teradata port number (--teradata-port)", "${TERADATA_PORT}", false));
         }
 
-        if (Strings.isNullOrEmpty(teradataSpec.getDatabase())) {
-            if (isHeadless) {
-                throw new CliRequiredParameterMissingException("--teradata-database");
-            }
-
-            teradataSpec.setDatabase(terminalReader.prompt("Teradata database name (--teradata-database)", "${TERADATA_DATABASE}", false));
-        }
-
         if (Strings.isNullOrEmpty(teradataSpec.getUser())) {
             if (isHeadless) {
                 throw new CliRequiredParameterMissingException("--teradata-user");
@@ -193,37 +185,6 @@ public class TeradataConnectionProvider extends AbstractSqlConnectionProvider {
         else {
             throw new NoSuchElementException("Unsupported column type: " + columnType.name());
         }
-    }
-
-    /**
-     * Formats a constant for the target database.
-     *
-     * @param constant   Constant to be formatted.
-     * @param columnType Column type snapshot.
-     * @return Formatted constant.
-     */
-    @Override
-    public String formatConstant(Object constant, ColumnTypeSnapshotSpec columnType) {
-        StringBuilder formattedConstant = new StringBuilder();
-
-//        if (constant instanceof Boolean) {
-//            Boolean asBoolean = (Boolean)constant;
-//            return asBoolean ? "true" : "false";
-//        }
-//
-//        // due to bug in teradata the datetime yyyy-MM-dd HH:mm:ss format is not supported
-//        if (constant instanceof LocalDateTime) {
-//            LocalDateTime asLocalTimeTime = (LocalDateTime)constant;
-//            return "cast('" + asLocalTimeTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")) + "' as timestamp)";
-//        }
-//
-//        if (constant instanceof LocalDate) {
-//            LocalDate asLocalDate = (LocalDate)constant;
-//            return "cast('" + asLocalDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) + "' as date)";
-//        }
-
-        formattedConstant.append(super.formatConstant(constant, columnType));
-        return formattedConstant.toString();
     }
 
 }

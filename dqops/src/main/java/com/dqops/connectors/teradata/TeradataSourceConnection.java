@@ -112,10 +112,6 @@ public class TeradataSourceConnection extends AbstractJdbcSourceConnection {
             }
         }
         jdbcConnectionBuilder.append('/');
-        String database = this.getSecretValueProvider().expandValue(teradataSpec.getDatabase(), secretValueLookupContext);
-        if (!Strings.isNullOrEmpty(database)) {
-            jdbcConnectionBuilder.append(database);
-        }
 
         String jdbcUrl = jdbcConnectionBuilder.toString();
         hikariConfig.setJdbcUrl(jdbcUrl);
@@ -439,6 +435,29 @@ public class TeradataSourceConnection extends AbstractJdbcSourceConnection {
         catch (Exception ex) {
             throw new ConnectionQueryException(ex);
         }
+    }
+
+    /**
+     * Returns a list of schemas from the source.
+     *
+     * @return List of schemas.
+     */
+    @Override
+    public List<SourceSchemaModel> listSchemas() {
+        StringBuilder sqlBuilder = new StringBuilder();
+        sqlBuilder.append("SELECT DatabaseName AS schema_name FROM DBC.Databases ");
+        sqlBuilder.append("WHERE schema_name NOT IN ('tdwm', 'dbcmngr', 'TD_SYSFNLIB', 'SYSLIB', 'SysAdmin', 'Sys_Calendar', 'SYSUDTLIB', 'SYSSPATIAL', 'TD_SYSXML', 'SQLJ', 'TDStats', 'SYSBAR', 'External_AP', 'TDMaps', 'TDQCD', 'TD_SERVER_DB', 'TD_SYSGPL', 'SYSUIF')");
+        String listSchemataSql = sqlBuilder.toString();
+        Table schemaRows = this.executeQuery(listSchemataSql, JobCancellationToken.createDummyJobCancellationToken(), null, false);
+
+        List<SourceSchemaModel> results = new ArrayList<>();
+        for (int rowIndex = 0; rowIndex < schemaRows.rowCount(); rowIndex++) {
+            String schemaName = schemaRows.getString(rowIndex, "schema_name");
+            SourceSchemaModel schemaModel = new SourceSchemaModel(schemaName);
+            results.add(schemaModel);
+        }
+
+        return results;
     }
 
 }

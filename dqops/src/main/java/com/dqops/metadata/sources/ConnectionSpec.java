@@ -885,6 +885,15 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
             if (cloned.mariadb != null) {
                 cloned.mariadb = cloned.mariadb.expandAndTrim(secretValueProvider, secretValueLookupContext);
             }
+            if (cloned.clickhouse != null) {
+                cloned.clickhouse = cloned.clickhouse.expandAndTrim(secretValueProvider, secretValueLookupContext);
+            }
+            if (cloned.questdb != null) {
+                cloned.questdb = cloned.questdb.expandAndTrim(secretValueProvider, secretValueLookupContext);
+            }
+            if (cloned.teradata != null) {
+                cloned.teradata = cloned.teradata.expandAndTrim(secretValueProvider, secretValueLookupContext);
+            }
             if (cloned.incidentGrouping != null) {
                 cloned.incidentGrouping = cloned.incidentGrouping.expandAndTrim(secretValueProvider, secretValueLookupContext);
             }

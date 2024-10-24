@@ -50,12 +50,8 @@ public class TeradataParametersSpec extends BaseProviderParametersSpec
     private String host;
 
     @CommandLine.Option(names = {"--teradata-port"}, description = "Teradata port number")
-    @JsonPropertyDescription("Teradata port number. The default port is 8080. Supports also a ${TERADATA_PORT} configuration with a custom environment variable.")
+    @JsonPropertyDescription("Teradata port number. The default port is 1025. Supports also a ${TERADATA_PORT} configuration with a custom environment variable.")
     private String port;
-
-    @CommandLine.Option(names = {"--teradata-database"}, description = "Teradata database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
-    @JsonPropertyDescription("Teradata database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
-    private String database;
 
     @CommandLine.Option(names = {"--teradata-user"}, description = "Teradata user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     @JsonPropertyDescription("Teradata user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
@@ -102,23 +98,6 @@ public class TeradataParametersSpec extends BaseProviderParametersSpec
     public void setPort(String port) {
         setDirtyIf(!Objects.equals(this.port, port));
         this.port = port;
-    }
-
-    /**
-     * Returns a physical database name.
-     * @return Physical database name.
-     */
-    public String getDatabase() {
-        return database;
-    }
-
-    /**
-     * Sets a physical database name.
-     * @param database Physical database name.
-     */
-    public void setDatabase(String database) {
-        setDirtyIf(!Objects.equals(this.database, database));
-        this.database = database;
     }
 
     /**
@@ -201,11 +180,15 @@ public class TeradataParametersSpec extends BaseProviderParametersSpec
         TeradataParametersSpec cloned = this.deepClone();
         cloned.host = secretValueProvider.expandValue(cloned.host, lookupContext);
         cloned.port = secretValueProvider.expandValue(cloned.port, lookupContext);
-        cloned.database = secretValueProvider.expandValue(cloned.database, lookupContext);
         cloned.user = secretValueProvider.expandValue(cloned.user, lookupContext);
         cloned.password = secretValueProvider.expandValue(cloned.password, lookupContext);
         cloned.properties = secretValueProvider.expandProperties(cloned.properties, lookupContext);
 
         return cloned;
+    }
+
+    @Override
+    public String getDatabase() {
+        return null;
     }
 }

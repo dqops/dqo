@@ -303,6 +303,7 @@ public class ConnectionModel {
             setMariadb(connectionSpec.getMariadb());
             setClickhouse(connectionSpec.getClickhouse());
             setQuestdb(connectionSpec.getQuestdb());
+            setTeradata(connectionSpec.getTeradata());
             setCanEdit(isEditor);
             setCanRunChecks(isOperator);
             setCanCollectStatistics(isOperator);
@@ -379,6 +380,7 @@ public class ConnectionModel {
         targetConnectionSpec.setMariadb(this.getMariadb());
         targetConnectionSpec.setClickhouse(this.getClickhouse());
         targetConnectionSpec.setQuestdb(this.getQuestdb());
+        targetConnectionSpec.setTeradata(this.getTeradata());
         targetConnectionSpec.setAdvancedProperties(this.getAdvancedProperties());
     }
 
