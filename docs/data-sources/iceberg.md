@@ -1,7 +1,7 @@
 ---
-title: How to set up data quality and data observability for Iceberg files
+title: How to set up data quality monitoring and data observability for Iceberg files
 ---
-# How to set up data quality and data observability for Iceberg table
+# How to set up data quality monitoring and data observability for Iceberg table
 Data observability and data monitoring for Iceberg table. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
 
 ## Overview

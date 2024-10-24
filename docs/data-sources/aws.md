@@ -1,8 +1,8 @@
 ---
-title: How to set up data quality and data observability for Amazon S3
+title: How to set up data quality monitoring and data observability for Amazon S3
 ---
 
-# How to set up data quality and data observability for Amazon S3
+# How to set up data quality monitoring and data observability for Amazon S3
 Data observability and data monitoring for Amazon S3 buckets. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
 
 ## Prerequisites

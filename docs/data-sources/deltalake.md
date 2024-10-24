@@ -1,7 +1,7 @@
 ---
-title: How to set up data quality and data observability for CSV files
+title: How to set up data quality monitoring and data observability for CSV files
 ---
-# How to set up data quality and data observability for Delta Lake table
+# How to set up data quality monitoring and data observability for Delta Lake table
 Data observability and data monitoring for Delta Lake table. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
 
 ## Overview

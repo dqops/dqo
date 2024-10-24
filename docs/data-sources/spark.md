@@ -1,7 +1,7 @@
 ---
-title: How to set up data quality and data observability for Apache Spark
+title: How to set up data quality monitoring and data observability for Apache Spark
 ---
-# How to set up data quality and data observability for Apache Spark
+# How to set up data quality monitoring and data observability for Apache Spark
 Data observability and data monitoring for Apache Spark. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
 
 ## Overview

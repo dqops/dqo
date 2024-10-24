@@ -1,7 +1,7 @@
 ---
-title: How to set up data quality and data observability for JSON files
+title: How to set up data quality monitoring and data observability for JSON files
 ---
-# How to set up data quality and data observability for JSON files
+# How to set up data quality monitoring and data observability for JSON files
 Data observability and data monitoring for JSON files. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
 
 ## Overview

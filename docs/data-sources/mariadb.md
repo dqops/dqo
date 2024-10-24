@@ -1,7 +1,7 @@
 ---
-title: How to set up data quality and data observability for MariaDB
+title: How to set up data quality monitoring and data observability for MariaDB
 ---
-# How to set up data quality and data observability for MariaDB
+# How to set up data quality monitoring and data observability for MariaDB
 Data observability and data monitoring for MariaDB. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
 
 ## Overview

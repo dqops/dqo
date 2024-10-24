@@ -1,8 +1,8 @@
 ---
-title: How to activate data observability for Teradata
+title: How to set up data quality monitoring and data observability for Teradata
 ---
-# How to activate data observability for Teradata
-Read this guide to learn how to connect DQOps to Teradata from the UI, command-line interface, or directly in YAML files, and activate monitoring.
+# How to set up data quality monitoring and data observability for Teradata
+Data observability and data monitoring for Teradata. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
 
 ## Overview
 

@@ -1,7 +1,7 @@
 ---
-title: How to set up data quality and data observability for ClickHouse
+title: How to set up data quality monitoring and data observability for ClickHouse
 ---
-# How to set up data quality and data observability for ClickHouse
+# How to set up data quality monitoring and data observability for ClickHouse
 Data observability and data monitoring for ClickHouse. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
 
 ## Overview

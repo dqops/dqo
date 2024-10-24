@@ -1,7 +1,7 @@
 ---
-title: How to set up data quality and data observability for Presto
+title: How to set up data quality monitoring and data observability for Presto
 ---
-# How to set up data quality and data observability for Presto
+# How to set up data quality monitoring and data observability for Presto
 Data observability and data monitoring for Presto. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
 
 ## Overview

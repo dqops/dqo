@@ -1,7 +1,7 @@
 ---
-title: How to set up data quality and data observability for DuckDB
+title: How to set up data quality monitoring and data observability for DuckDB
 ---
-# How to set up data quality and data observability for DuckDB
+# How to set up data quality monitoring and data observability for DuckDB
 Data observability and data monitoring for DuckDB. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
 
 ## Overview

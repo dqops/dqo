@@ -1,7 +1,7 @@
 ---
-title: How to set up data quality and data observability for MySQL
+title: How to set up data quality monitoring and data observability for MySQL
 ---
-# How to set up data quality and data observability for MySQL
+# How to set up data quality monitoring and data observability for MySQL
 Data observability and data monitoring for MySQL. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
 
 ## Overview

@@ -1,7 +1,7 @@
 ---
-title: How to set up data quality and data observability for Databricks
+title: How to set up data quality monitoring and data observability for Databricks
 ---
-# How to set up data quality and data observability for Databricks
+# How to set up data quality monitoring and data observability for Databricks
 Data observability and data monitoring for Databricks. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
 
 ## Overview

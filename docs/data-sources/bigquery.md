@@ -1,7 +1,7 @@
 ---
-title: How to set up data quality and data observability for Google BigQuery
+title: How to set up data quality monitoring and data observability for Google BigQuery
 ---
-# How to set up data quality and data observability for Google BigQuery
+# How to set up data quality monitoring and data observability for Google BigQuery
 Data observability and data monitoring for Google BigQuery. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
 
 ## Overview

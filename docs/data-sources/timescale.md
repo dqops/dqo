@@ -1,7 +1,7 @@
 ---
-title: How to set up data quality and data observability for Timescale
+title: How to set up data quality monitoring and data observability for Timescale
 ---
-# How to set up data quality and data observability for Timescale
+# How to set up data quality monitoring and data observability for Timescale
 Data observability and data monitoring for Timescale. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
 
 ## Overview

@@ -1,7 +1,7 @@
 ---
-title: How to set up data quality and data observability for Amazon Athena
+title: How to set up data quality monitoring and data observability for Amazon Athena
 ---
-# How to set up data quality and data observability for Amazon Athena
+# How to set up data quality monitoring and data observability for Amazon Athena
 Data observability and data monitoring for Amazon Athena. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
 
 ## Overview
