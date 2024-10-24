@@ -1,4 +1,4 @@
 {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
 {%- call lib.render_error_sampler(wrap_condition = 'NOT') -%}
-    REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), {{lib.render_date_format_regex(parameters.date_format)}}) IS NOT FALSE
+    REGEXP_SUBSTR(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR(4096)), {{lib.render_date_format_regex(parameters.date_format)}}) IS NOT NULL
 {%- endcall -%}

@@ -30,6 +30,7 @@ import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
 import com.dqops.sensors.table.timeliness.TableTimelinessDataIngestionDelaySensorParametersSpec;
 import com.dqops.teradata.BaseTeradataIntegrationTest;
+import com.dqops.testutils.ValueConverter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -67,7 +68,7 @@ public class TeradataTableTimelinessDataIngestionDelaySensorParametersSpecIntegr
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(9.083, (double) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(9.083, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
@@ -83,7 +84,7 @@ public class TeradataTableTimelinessDataIngestionDelaySensorParametersSpecIntegr
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(9.083, (double) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(9.083, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
@@ -99,7 +100,7 @@ public class TeradataTableTimelinessDataIngestionDelaySensorParametersSpecIntegr
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(9.083, (double) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(9.083, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
@@ -115,7 +116,7 @@ public class TeradataTableTimelinessDataIngestionDelaySensorParametersSpecIntegr
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(10, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(10.041, (double) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(10.041, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
@@ -131,6 +132,6 @@ public class TeradataTableTimelinessDataIngestionDelaySensorParametersSpecIntegr
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(9.083, (double) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(9.083, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 }

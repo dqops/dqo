@@ -30,6 +30,7 @@ import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
 import com.dqops.sensors.table.timeliness.TableTimelinessDataStalenessSensorParametersSpec;
 import com.dqops.teradata.BaseTeradataIntegrationTest;
+import com.dqops.testutils.ValueConverter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -73,7 +74,7 @@ public class TeradataTableTimelinessDataStalenessSensorParametersSpecIntegration
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertTrue((double)resultTable.column(0).get(0)>=min && (double)resultTable.column(0).get(0)<=max);
+        Assertions.assertTrue(ValueConverter.toDouble(resultTable.column(0).get(0))>=min && ValueConverter.toDouble(resultTable.column(0).get(0))<=max);
     }
 
     @Test
@@ -93,7 +94,7 @@ public class TeradataTableTimelinessDataStalenessSensorParametersSpecIntegration
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertTrue((double)resultTable.column(0).get(0)>=min && (double)resultTable.column(0).get(0)<=max);
+        Assertions.assertTrue(ValueConverter.toDouble(resultTable.column(0).get(0))>=min && ValueConverter.toDouble(resultTable.column(0).get(0))<=max);
     }
 
     @Test
@@ -113,7 +114,7 @@ public class TeradataTableTimelinessDataStalenessSensorParametersSpecIntegration
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertTrue((double)resultTable.column(0).get(0)>=min && (double)resultTable.column(0).get(0)<=max);
+        Assertions.assertTrue(ValueConverter.toDouble(resultTable.column(0).get(0))>=min && ValueConverter.toDouble(resultTable.column(0).get(0))<=max);
     }
 
     @Test
@@ -133,7 +134,7 @@ public class TeradataTableTimelinessDataStalenessSensorParametersSpecIntegration
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(10, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertTrue((double)resultTable.column(0).get(0)>=min && (double)resultTable.column(0).get(0)<=max);
+        Assertions.assertTrue(ValueConverter.toDouble(resultTable.column(0).get(0))>=min && ValueConverter.toDouble(resultTable.column(0).get(0))<=max);
     }
 
     @Test
@@ -153,6 +154,6 @@ public class TeradataTableTimelinessDataStalenessSensorParametersSpecIntegration
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertTrue((double)resultTable.column(0).get(0)>=min && (double)resultTable.column(0).get(0)<=max);
+        Assertions.assertTrue(ValueConverter.toDouble(resultTable.column(0).get(0))>=min && ValueConverter.toDouble(resultTable.column(0).get(0))<=max);
     }
 }

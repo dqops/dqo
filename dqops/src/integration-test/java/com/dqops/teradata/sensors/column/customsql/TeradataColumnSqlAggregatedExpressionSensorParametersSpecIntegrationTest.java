@@ -30,6 +30,7 @@ import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
 import com.dqops.sensors.column.customsql.ColumnSqlAggregatedExpressionSensorParametersSpec;
+import com.dqops.testutils.ValueConverter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -68,7 +69,7 @@ public class TeradataColumnSqlAggregatedExpressionSensorParametersSpecIntegratio
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(20, resultTable.column(0).get(0));
+        Assertions.assertEquals(20, ValueConverter.toInteger(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -83,7 +84,7 @@ public class TeradataColumnSqlAggregatedExpressionSensorParametersSpecIntegratio
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(20, resultTable.column(0).get(0));
+        Assertions.assertEquals(20, ValueConverter.toInteger(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -98,7 +99,7 @@ public class TeradataColumnSqlAggregatedExpressionSensorParametersSpecIntegratio
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(20, resultTable.column(0).get(0));
+        Assertions.assertEquals(20, ValueConverter.toInteger(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -113,7 +114,7 @@ public class TeradataColumnSqlAggregatedExpressionSensorParametersSpecIntegratio
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(9, resultTable.column(0).get(0));
+        Assertions.assertEquals(9, ValueConverter.toInteger(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -128,7 +129,7 @@ public class TeradataColumnSqlAggregatedExpressionSensorParametersSpecIntegratio
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(20, resultTable.column(0).get(0));
+        Assertions.assertEquals(20, ValueConverter.toInteger(resultTable.column(0).get(0)));
     }
 
     @Test

@@ -2,10 +2,11 @@
 SELECT
     SUM(
         CASE
-            WHEN NOT REGEXP(
-                CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
-                "^[0-9]{5}(?:-[0-9]{4})?$"
-            ) THEN 1
+            WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
+                REGEXP_SUBSTR(
+                CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR(4096)),
+                '^[0-9]{5}(?:-[0-9]{4})?$'
+            ) IS NULL THEN 1
             ELSE 0
         END
     ) AS actual_value

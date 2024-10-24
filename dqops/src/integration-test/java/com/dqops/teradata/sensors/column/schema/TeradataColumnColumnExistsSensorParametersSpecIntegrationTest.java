@@ -31,6 +31,7 @@ import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
 import com.dqops.sensors.column.schema.ColumnColumnExistsSensorParametersSpec;
 import com.dqops.teradata.BaseTeradataIntegrationTest;
+import com.dqops.testutils.ValueConverter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -47,7 +48,7 @@ public class TeradataColumnColumnExistsSensorParametersSpecIntegrationTest exten
     @BeforeEach
     void setUp(){
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(
-                SampleCsvFileNames.continuous_days_one_row_per_day,
+                SampleCsvFileNames.ip4_test,
                 ProviderType.teradata);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
@@ -72,7 +73,7 @@ public class TeradataColumnColumnExistsSensorParametersSpecIntegrationTest exten
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(1.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(1.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -91,7 +92,7 @@ public class TeradataColumnColumnExistsSensorParametersSpecIntegrationTest exten
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(0.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
 }

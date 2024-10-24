@@ -1,4 +1,4 @@
 {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
-{%- call lib.render_error_sampler(wrap_condition = 'NOT') -%}
-    {{ lib.render_target_column('analyzed_table') }} RLIKE {{ lib.render_regex(parameters.regex) }}
+{%- call lib.render_error_sampler() -%}
+    REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }}) IS NULL
 {%- endcall -%}

@@ -92,7 +92,7 @@ public class TeradataColumnTextTextParsableToBooleanPercentSensorParametersSpecI
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals((double) 86.666, (double) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(86.666, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.1);
     }
 
     @Test
@@ -105,7 +105,7 @@ public class TeradataColumnTextTextParsableToBooleanPercentSensorParametersSpecI
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals((double) 86.666, (double)  resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(86.666, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.1);
     }
 
     @Test
@@ -118,7 +118,7 @@ public class TeradataColumnTextTextParsableToBooleanPercentSensorParametersSpecI
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals((double) 86.666, (double) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(86.666, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.1);
     }
 
     @Test
@@ -131,7 +131,7 @@ public class TeradataColumnTextTextParsableToBooleanPercentSensorParametersSpecI
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(83.333, (double) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(83.333, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.1);
     }
 
     @Test
@@ -144,7 +144,7 @@ public class TeradataColumnTextTextParsableToBooleanPercentSensorParametersSpecI
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals((double) 86.666, (double) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(86.666, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.1);
     }
 
     @Test

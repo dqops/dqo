@@ -5,10 +5,10 @@ SELECT
         ELSE 100.0 * SUM(
             CASE
                 WHEN
-                    REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
-                        "(^|[ \t.,:;\"'`|\n\r])([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}([ \t.,:;\"'`|\n\r]|$)") OR
-                    REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
-                        "(^|[ \t.,:;\"'`|\n\r])[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}([ \t.,:;\"'`|\n\r]|$)")
+                    REGEXP_SUBSTR(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR(4096)),
+                        '(^|[ \t.,:;\"''`|\n\r])([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}([ \t.,:;\"''`|\n\r]|$)') IS NOT NULL OR
+                    REGEXP_SUBSTR(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR(4096)),
+                        '(^|[ \t.,:;\"''`|\n\r])[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}([ \t.,:;\"''`|\n\r]|$)') IS NOT NULL
                     THEN 1
                 ELSE 0
             END

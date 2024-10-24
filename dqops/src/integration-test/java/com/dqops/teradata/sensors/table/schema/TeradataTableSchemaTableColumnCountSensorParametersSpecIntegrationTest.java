@@ -45,7 +45,7 @@ public class TeradataTableSchemaTableColumnCountSensorParametersSpecIntegrationT
     @BeforeEach
     void setUp(){
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(
-                SampleCsvFileNames.continuous_days_one_row_per_day,
+                SampleCsvFileNames.ip4_test,
                 ProviderType.teradata);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);

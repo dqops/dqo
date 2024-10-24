@@ -54,4 +54,4 @@ SELECT
     {%- endif %}
 FROM error_samples AS sample_table
 WHERE sample_table.sample_index = 2
-LIMIT {{ error_sampling.total_samples_limit }}
+QUALIFY ROW_NUMBER() OVER (ORDER BY sample_table.sample_index DESC) <= {{ error_sampling.total_samples_limit }}

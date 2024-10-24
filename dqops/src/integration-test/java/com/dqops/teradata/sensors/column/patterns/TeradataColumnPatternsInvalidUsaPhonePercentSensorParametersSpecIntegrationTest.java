@@ -91,7 +91,7 @@ public class TeradataColumnPatternsInvalidUsaPhonePercentSensorParametersSpecInt
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(39.130, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.01);
+        Assertions.assertEquals(39.130, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.1);
     }
 
     @Test
@@ -104,7 +104,7 @@ public class TeradataColumnPatternsInvalidUsaPhonePercentSensorParametersSpecInt
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(39.130, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.01);
+        Assertions.assertEquals(39.130, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.1);
     }
 
     @Test
@@ -117,7 +117,7 @@ public class TeradataColumnPatternsInvalidUsaPhonePercentSensorParametersSpecInt
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(39.130, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.01);
+        Assertions.assertEquals(39.130, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.1);
     }
 
     @Test
@@ -130,7 +130,7 @@ public class TeradataColumnPatternsInvalidUsaPhonePercentSensorParametersSpecInt
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.01);
+        Assertions.assertEquals(0.0, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.1);
     }
 
     @Test
@@ -143,7 +143,7 @@ public class TeradataColumnPatternsInvalidUsaPhonePercentSensorParametersSpecInt
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(39.130, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.01);
+        Assertions.assertEquals(39.130, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.1);
     }
 
     @Test

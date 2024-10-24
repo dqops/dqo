@@ -53,8 +53,8 @@ class TeradataColumnPiiContainsIp6PercentSensorParametersSpecIntegrationTest ext
     private ColumnPiiContainsIp6PercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
     private final String testedColumnName = "ip6";
-    private final String validExamplesFilterText = "result = 1";
-    private final String invalidExamplesFilterText = "result = 0";
+    private final String validExamplesFilterText = "\"result\" = 1";
+    private final String invalidExamplesFilterText = "\"result\" = 0";
 
     @BeforeEach
     void setUp() {
@@ -99,7 +99,7 @@ class TeradataColumnPiiContainsIp6PercentSensorParametersSpecIntegrationTest ext
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(88.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(88.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -114,7 +114,7 @@ class TeradataColumnPiiContainsIp6PercentSensorParametersSpecIntegrationTest ext
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(0.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -130,7 +130,7 @@ class TeradataColumnPiiContainsIp6PercentSensorParametersSpecIntegrationTest ext
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(88.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(88.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -146,7 +146,7 @@ class TeradataColumnPiiContainsIp6PercentSensorParametersSpecIntegrationTest ext
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(0.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -162,7 +162,7 @@ class TeradataColumnPiiContainsIp6PercentSensorParametersSpecIntegrationTest ext
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(88.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(88.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -178,7 +178,7 @@ class TeradataColumnPiiContainsIp6PercentSensorParametersSpecIntegrationTest ext
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(0.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -194,8 +194,8 @@ class TeradataColumnPiiContainsIp6PercentSensorParametersSpecIntegrationTest ext
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(2, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(87.5, resultTable.column(0).get(0));
-        Assertions.assertEquals(100.0, resultTable.column(0).get(1));
+        Assertions.assertEquals(87.5, ValueConverter.toDouble(resultTable.column(0).get(0)));
+        Assertions.assertEquals(100.0, ValueConverter.toDouble(resultTable.column(0).get(1)));
     }
 
     @Test
@@ -211,9 +211,9 @@ class TeradataColumnPiiContainsIp6PercentSensorParametersSpecIntegrationTest ext
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(3, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
-        Assertions.assertEquals(0.0, resultTable.column(0).get(1));
-        Assertions.assertEquals(0.0, resultTable.column(0).get(2));
+        Assertions.assertEquals(0.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
+        Assertions.assertEquals(0.0, ValueConverter.toDouble(resultTable.column(0).get(1)));
+        Assertions.assertEquals(0.0, ValueConverter.toDouble(resultTable.column(0).get(2)));
     }
 
     @Test
@@ -229,7 +229,7 @@ class TeradataColumnPiiContainsIp6PercentSensorParametersSpecIntegrationTest ext
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(88.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(88.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -245,8 +245,8 @@ class TeradataColumnPiiContainsIp6PercentSensorParametersSpecIntegrationTest ext
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(2, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
-        Assertions.assertEquals(0.0, resultTable.column(0).get(1));
+        Assertions.assertEquals(0.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
+        Assertions.assertEquals(0.0, ValueConverter.toDouble(resultTable.column(0).get(1)));
     }
 
     @Test

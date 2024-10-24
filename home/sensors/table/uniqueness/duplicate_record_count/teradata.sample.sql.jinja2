@@ -9,7 +9,7 @@
 
 WITH error_samples AS (
     SELECT
-        {{ ( "CONCAT(" ~ extract_in_list(parameters.columns, separate_by_comma = true) ~ ")" ) }} AS sample_value
+        {{ ( "CONCAT(" ~ extract_in_list(parameters.columns, separate_by_comma = true, column_prefix='CAST( ', column_suffix=' AS VARCHAR(100))') ~ ")" ) }} AS sample_value
         {{- lib.render_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '        ') }}
         {%- if (error_sampling.id_columns is not none and (error_sampling.id_columns | length()) > 0) -%}
             {%- for id_column in error_sampling.id_columns -%}
@@ -42,7 +42,7 @@ WITH error_samples AS (
         ) AS sample_index
     FROM
         {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause(extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST( ', column_suffix=' AS STRING)') ~ ')  IS NOT NULL',
+        {{- lib.render_where_clause(extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST( ', column_suffix=' AS VARCHAR(4096))') ~ ')  IS NOT NULL',
             table_alias_prefix = 'analyzed_table', indentation = '    ') }}
 )
 SELECT
@@ -61,4 +61,4 @@ SELECT
     {%- endif %}
 FROM error_samples AS sample_table
 WHERE sample_table.sample_index = 2
-LIMIT {{ error_sampling.total_samples_limit }}
+QUALIFY ROW_NUMBER() OVER (ORDER BY sample_table.sample_index DESC) <= {{ error_sampling.total_samples_limit }}

@@ -78,7 +78,7 @@ public class TeradataColumnBoolTruePercentSensorParametersSpecIntegrationTest ex
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -91,7 +91,7 @@ public class TeradataColumnBoolTruePercentSensorParametersSpecIntegrationTest ex
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(50.0, (double) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(50.0, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
@@ -104,7 +104,7 @@ public class TeradataColumnBoolTruePercentSensorParametersSpecIntegrationTest ex
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(50.0, (double) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(50.0, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
@@ -117,7 +117,7 @@ public class TeradataColumnBoolTruePercentSensorParametersSpecIntegrationTest ex
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(50.0, (double) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(50.0, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
@@ -130,7 +130,7 @@ public class TeradataColumnBoolTruePercentSensorParametersSpecIntegrationTest ex
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0, (double) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(100.0, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
@@ -143,7 +143,7 @@ public class TeradataColumnBoolTruePercentSensorParametersSpecIntegrationTest ex
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(50.0, (double) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(50.0, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
@@ -161,7 +161,7 @@ public class TeradataColumnBoolTruePercentSensorParametersSpecIntegrationTest ex
                 .stream().map(val -> String.valueOf(val))
                 .collect(Collectors.toList());
 
-        Assertions.assertTrue(sampleValues.contains("false"));
+        Assertions.assertTrue(sampleValues.contains("0"));
     }
 
     @Test
@@ -183,7 +183,7 @@ public class TeradataColumnBoolTruePercentSensorParametersSpecIntegrationTest ex
         List<String> sampleValues = List.of(resultTable.column("actual_value").asObjectArray())
                 .stream().map(val -> String.valueOf(val))
                 .collect(Collectors.toList());
-        Assertions.assertTrue(sampleValues.contains("false"));
+        Assertions.assertTrue(sampleValues.contains("0"));
 
         List<Integer> rowId1Values = List.of(resultTable.column("row_id_1").asObjectArray())
                 .stream().map(val -> ValueConverter.toInteger(val))
@@ -219,7 +219,7 @@ public class TeradataColumnBoolTruePercentSensorParametersSpecIntegrationTest ex
         List<String> sampleValues = List.of(resultTable.column("actual_value").asObjectArray())
                 .stream().map(val -> String.valueOf(val))
                 .collect(Collectors.toList());
-        Assertions.assertTrue(sampleValues.contains("false"));
+        Assertions.assertTrue(sampleValues.contains("0"));
 
         List<Integer> groupingLevel1Values = new ArrayList<>(
                 Stream.of(resultTable.column("grouping_level_1").asObjectArray())

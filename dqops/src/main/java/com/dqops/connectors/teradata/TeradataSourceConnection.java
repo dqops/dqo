@@ -15,10 +15,7 @@
  */
 package com.dqops.connectors.teradata;
 
-import com.dqops.connectors.ConnectionProvider;
-import com.dqops.connectors.ConnectionProviderSpecificParameters;
-import com.dqops.connectors.ConnectorOperationFailedException;
-import com.dqops.connectors.ProviderDialectSettings;
+import com.dqops.connectors.*;
 import com.dqops.connectors.jdbc.AbstractJdbcSourceConnection;
 import com.dqops.connectors.jdbc.JdbcConnectionPool;
 import com.dqops.connectors.jdbc.JdbcQueryFailedException;
@@ -26,10 +23,8 @@ import com.dqops.core.jobqueue.JobCancellationListenerHandle;
 import com.dqops.core.jobqueue.JobCancellationToken;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
-import com.dqops.metadata.sources.ColumnSpec;
-import com.dqops.metadata.sources.ColumnTypeSnapshotSpec;
-import com.dqops.metadata.sources.ConnectionSpec;
-import com.dqops.metadata.sources.TableSpec;
+import com.dqops.metadata.sources.*;
+import com.dqops.utils.conversion.NumericTypeConverter;
 import com.dqops.utils.exceptions.RunSilently;
 import com.zaxxer.hikari.HikariConfig;
 import org.apache.parquet.Strings;
@@ -38,12 +33,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import tech.tablesaw.api.Row;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.columns.Column;
 
 import java.sql.Statement;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -316,6 +311,133 @@ public class TeradataSourceConnection extends AbstractJdbcSourceConnection {
             throw new JdbcQueryFailedException(
                     String.format("SQL statement failed: %s, connection: %s, SQL: %s", ex.getMessage(), connectionName, sqlStatement),
                     ex, sqlStatement, connectionName);
+        }
+    }
+
+    /**
+     * Creates an SQL for listing columns in the given tables.
+     * @param schemaName Schema name (bigquery dataset name).
+     * @param tableNames Table names to list.
+     * @return SQL of the INFORMATION_SCHEMA query.
+     */
+    public String buildListColumnsSql(String schemaName, List<String> tableNames) {
+        ConnectionProviderSpecificParameters providerSpecificConfiguration = this.getConnectionSpec().getProviderSpecificConfiguration();
+
+        StringBuilder sqlBuilder = new StringBuilder();
+        sqlBuilder.append("SELECT * FROM dbc.columns ");
+        sqlBuilder.append("WHERE DatabaseName = '");
+        sqlBuilder.append(schemaName.replace("'", "''"));
+        sqlBuilder.append("'");
+
+        if (tableNames != null && tableNames.size() > 0) {
+            sqlBuilder.append(" AND TableName IN (");
+            for (int ti = 0; ti < tableNames.size(); ti++) {
+                String tableName = tableNames.get(ti);
+                if (ti > 0) {
+                    sqlBuilder.append(",");
+                }
+                sqlBuilder.append('\'');
+                sqlBuilder.append(tableName.replace("'", "''"));
+                sqlBuilder.append('\'');
+            }
+            sqlBuilder.append(") ");
+        }
+        sqlBuilder.append("ORDER BY DatabaseName, TableName");
+        String sql = sqlBuilder.toString();
+        return sql;
+    }
+
+    /**
+     * Retrieves the metadata (column information) for a given list of tables from a given schema.
+     *
+     * @param schemaName Schema name.
+     * @param tableNameContains Optional filter with a substring that must be present in the table names.
+     * @param limit The limit of tables to return.
+     * @param secretValueLookupContext Secret value lookup context.
+     * @param tableNames Table names.
+     * @param connectionWrapper Parent connection wrapper.
+     * @param secretValueLookupContext Secret value lookup context.
+     * @return List of table specifications with the column list.
+     */
+    @Override
+    public List<TableSpec> retrieveTableMetadata(String schemaName,
+                                                 String tableNameContains,
+                                                 int limit,
+                                                 List<String> tableNames,
+                                                 ConnectionWrapper connectionWrapper,
+                                                 SecretValueLookupContext secretValueLookupContext) {
+        assert !Strings.isNullOrEmpty(schemaName);
+
+        try {
+            List<TableSpec> tableSpecs = new ArrayList<>();
+            String sql = buildListColumnsSql(schemaName, tableNames);
+            tech.tablesaw.api.Table tableResult = this.executeQuery(sql, JobCancellationToken.createDummyJobCancellationToken(), null, false);
+            Column<?>[] columns = tableResult.columnArray();
+            for (Column<?> column : columns) {
+                column.setName(column.name().toLowerCase(Locale.ROOT));
+            }
+
+            HashMap<String, HashSet<String>> tableColumnMap = new HashMap<>();
+            try {
+                String keyColumnUsageSql = buildKeyColumnUsageSql(schemaName, tableNames);
+                tech.tablesaw.api.Table keyColumnUsageResult = this.executeQuery(keyColumnUsageSql, JobCancellationToken.createDummyJobCancellationToken(), null, false);
+                for (Row row : keyColumnUsageResult) {
+                    String tableName = row.getString("TableName");
+                    String columnName = row.getString("ColumnName");
+                    tableColumnMap.computeIfAbsent(tableName, k -> new HashSet<>()).add(columnName);
+                }
+            } catch (Exception ex) {
+                // exception is swallowed
+            }
+
+            HashMap<String, TableSpec> tablesByTableName = new LinkedHashMap<>();
+
+            for (Row colRow : tableResult) {
+                String physicalTableName = colRow.getString("TableName");
+
+                if (!Strings.isNullOrEmpty(tableNameContains)) {
+                    if (!physicalTableName.contains(tableNameContains)) {
+                        continue;
+                    }
+                }
+
+                String columnName = colRow.getString("ColumnName");
+                boolean isNullable = Objects.equals(colRow.getString("Nullable"),"Y");
+                String dataType = colRow.getString("ColumnType");
+
+                TableSpec tableSpec = tablesByTableName.get(physicalTableName);
+                if (tableSpec == null) {
+                    if (tableSpecs.size() >= limit) {
+                        break;
+                    }
+
+                    tableSpec = new TableSpec();
+                    tableSpec.setPhysicalTableName(new PhysicalTableName(schemaName, physicalTableName));
+                    tablesByTableName.put(physicalTableName, tableSpec);
+                    tableSpecs.add(tableSpec);
+                }
+
+                ColumnSpec columnSpec = new ColumnSpec();
+                ColumnTypeSnapshotSpec columnType = ColumnTypeSnapshotSpec.fromType(dataType);
+
+                if (tableResult.containsColumn("ColumnLength") &&
+                        !colRow.isMissing("ColumnLength")) {
+                    columnType.setLength(NumericTypeConverter.toInt(colRow.getObject("ColumnLength")));
+                }
+
+                columnType.setNullable(isNullable);
+                columnSpec.setTypeSnapshot(columnType);
+                tableSpec.getColumns().put(columnName, columnSpec);
+
+                if(tableColumnMap.containsKey(physicalTableName) && tableColumnMap.get(physicalTableName).contains(columnName)){
+                    columnSpec.setId(true);
+                }
+            }
+
+            return tableSpecs;
+        }
+        catch (Exception ex) {
+            throw new ConnectionQueryException(ex);
         }
     }
 
