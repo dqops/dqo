@@ -393,7 +393,7 @@ public class TeradataSourceConnection extends AbstractJdbcSourceConnection {
             HashMap<String, TableSpec> tablesByTableName = new LinkedHashMap<>();
 
             for (Row colRow : tableResult) {
-                String physicalTableName = colRow.getString("TableName");
+                String physicalTableName = colRow.getString("TableName").trim();
 
                 if (!Strings.isNullOrEmpty(tableNameContains)) {
                     if (!physicalTableName.contains(tableNameContains)) {
@@ -401,9 +401,9 @@ public class TeradataSourceConnection extends AbstractJdbcSourceConnection {
                     }
                 }
 
-                String columnName = colRow.getString("ColumnName");
-                boolean isNullable = Objects.equals(colRow.getString("Nullable"),"Y");
-                String dataType = colRow.getString("ColumnType");
+                String columnName = colRow.getString("ColumnName").trim();
+                boolean isNullable = Objects.equals(colRow.getString("Nullable").trim(),"Y");
+                String dataType = colRow.getString("ColumnType").trim();
 
                 TableSpec tableSpec = tablesByTableName.get(physicalTableName);
                 if (tableSpec == null) {
