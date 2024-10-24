@@ -48,3 +48,11 @@ def convert_historic_data_differencing(previous_readouts: Sequence[HistoricDataP
                                 for index, sensor_value in enumerate(data['sensor_values']) if index > 0]
 
     return data
+
+
+def average_forecast(upper_forecast: float, lower_forecast: float) -> float | None:
+    if upper_forecast is None:
+        return lower_forecast
+    if lower_forecast is not None:
+        return (upper_forecast + lower_forecast) / 2.0
+    return None
