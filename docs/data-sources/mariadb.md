@@ -1,8 +1,8 @@
 ---
-title: How to activate data observability for MariaDB
+title: How to set up data quality and data observability for MariaDB
 ---
-# How to activate data observability for MariaDB
-Read this guide to learn how to connect DQOps to MariaDB from the UI, command-line interface, or directly in YAML files, and activate monitoring.
+# How to set up data quality and data observability for MariaDB
+Learn how to connect DQOps to MariaDB database from the UI or command-line interface and activate data quality and data observability.
 
 ## Overview
 

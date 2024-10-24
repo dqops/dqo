@@ -1,11 +1,9 @@
 ---
-title: How to activate data observability for AWS S3
+title: How to set up data quality and data observability for AWS S3
 ---
 
-# How to activate data observability for AWS S3
-
-This guide shows how to enable data observability for data stored in a AWS S3 buckets using DQOps. To seamlessly connect to AWS S3 
-buckets, DQOps uses the DuckDB connector.
+# How to set up data quality and data observability for AWS S3
+Learn how to connect DQOps to data stored in AWS S3 buckets from the UI or command-line interface and activate data quality and observability.
 
 ## Prerequisites
 

@@ -6,6 +6,7 @@ import { TableListModel } from '../../api';
 import Button from '../../components/Button';
 import SvgIcon from '../../components/SvgIcon';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
+import { formatNumber } from '../../shared/constants';
 import { CheckTypes, ROUTES } from '../../shared/routes';
 import {
   getFirstLevelTableTab,
@@ -18,10 +19,16 @@ type TTableWithSchema = TableListModel & { schema?: string };
 
 export default function SchemaTableItem({
   item,
-  dimensionKeys
+  dimensionKeys,
+  showDimensions,
+  maxRowCount,
+  maxDelay
 }: {
   item: TTableWithSchema;
   dimensionKeys: string[];
+  showDimensions?: boolean;
+  maxRowCount?: number;
+  maxDelay?: number;
 }) {
   const {
     checkTypes,
@@ -143,12 +150,80 @@ export default function SchemaTableItem({
       <td className="px-4 text-xs content-start pt-2 max-w-100 min-w-50 break-all">
         {getLabelsOverview(item?.labels ?? [])}
       </td>
-      {item?.data_quality_status?.dimensions ? (
+      {item?.data_quality_status?.dimensions || !showDimensions ? (
         <>
-          <SchemaTableItemDimensions
-            item={item}
-            dimensionKeys={dimensionKeys}
-          />
+          {showDimensions ? (
+            <SchemaTableItemDimensions
+              item={item}
+              dimensionKeys={dimensionKeys}
+            />
+          ) : (
+            <>
+              <td className="content-start pt-2">
+                <div className="flex items-center pl-4">
+                  <div className="w-11 ">
+                    {formatNumber(item.data_quality_status?.total_row_count)}
+                  </div>
+                  {maxRowCount && item.data_quality_status?.total_row_count ? (
+                    <div
+                      className=" h-3 border border-gray-100 flex ml-2"
+                      style={{ width: '66.66px' }}
+                    >
+                      <div
+                        className="h-3 bg-teal-500"
+                        style={{
+                          width: `${
+                            ((item.data_quality_status?.total_row_count /
+                              maxRowCount) *
+                              200) /
+                            3
+                          }px`
+                        }}
+                      ></div>
+                    </div>
+                  ) : (
+                    <div
+                      className=" h-3  flex ml-2"
+                      style={{ width: '66.66px' }}
+                    ></div>
+                  )}
+                </div>
+              </td>
+              <td className="content-start pt-2">
+                <div className="flex items-center px-4">
+                  <div className="w-11">
+                    {item.data_quality_status?.data_freshness_delay_days
+                      ? item.data_quality_status?.data_freshness_delay_days.toFixed(
+                          1
+                        ) + ' d'
+                      : ''}
+                  </div>
+                  {maxDelay &&
+                  item.data_quality_status?.data_freshness_delay_days ? (
+                    <div
+                      className=" h-3 border border-gray-100 flex ml-2"
+                      style={{ width: '66.66px' }}
+                    >
+                      <div
+                        className="h-3 bg-teal-500"
+                        style={{
+                          width: `${
+                            ((item.data_quality_status
+                              ?.data_freshness_delay_days /
+                              maxDelay) *
+                              200) /
+                            3
+                          }px`
+                        }}
+                      ></div>
+                    </div>
+                  ) : (
+                    <></>
+                  )}
+                </div>
+              </td>
+            </>
+          )}
           <td>
             <div className="flex gap-x-2 items-center justify-center mx-3">
               <Tooltip

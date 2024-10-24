@@ -1,8 +1,8 @@
 ---
-title: How to activate data observability for SAP HANA
+title: How to set up data quality and data observability for SAP HANA
 ---
-# How to activate data observability for SAP HANA
-Read this guide to learn how to connect DQOps to SAP HANA from the UI, command-line interface, or directly in YAML files, and activate monitoring.
+# How to set up data quality and data observability for SAP HANA
+Learn how to connect DQOps to SAP HANA database from the UI or command-line interface and activate data quality and data observability.
 
 ## Overview
 

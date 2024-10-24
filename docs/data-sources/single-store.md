@@ -1,8 +1,8 @@
 ---
-title: How to activate data observability for SingleStoreDB
+title: How to set up data quality and data observability for SingleStoreDB
 ---
-# How to activate data observability for SingleStoreDB
-Read this guide to learn how to connect DQOps to SingleStoreDB from the UI, command-line interface, or directly in YAML files, and activate monitoring.
+# How to set up data quality and data observability for SingleStoreDB
+Learn how to connect DQOps to SingleStoreDB from the UI or command-line interface and activate data quality and data observability.
 
 ## Overview
 

@@ -1,8 +1,8 @@
 ---
-title: How to activate data observability for Snowflake
+title: How to set up data quality and data observability for Snowflake
 ---
-# How to activate data observability for Snowflake
-Read this guide to learn how to connect DQOps to Snowflake from the UI, command-line interface, or directly in YAML files, and activate monitoring.
+# How to set up data quality and data observability for Snowflake
+Learn how to connect DQOps to Snowflake from the UI or command-line interface and activate data quality and data observability.
 
 ## Overview
 

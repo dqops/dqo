@@ -1,8 +1,8 @@
 ---
-title: How to activate data observability for Google BigQuery
+title: How to set up data quality and data observability for Google BigQuery
 ---
-# How to activate data observability for Google BigQuery
-Read this guide to learn how to connect DQOps to BigQuery from the UI, command-line interface, or directly in YAML files, and activate monitoring.
+# How to set up data quality and data observability for Google BigQuery
+Learn how to connect DQOps to Google BigQuery from the UI or command-line interface and activate data quality and data observability.
 
 ## Overview
 

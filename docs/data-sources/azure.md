@@ -1,11 +1,9 @@
 ---
-title: How to activate data observability for Azure
+title: How to set up data quality and data observability for Azure
 ---
 
-# How to activate data observability for Azure storage
-
-This guide shows how to enable data observability for data stored in Azure Blob Storage using DQOps. To seamlessly connect to Azure Blob Storage,
-DQOps uses the DuckDB connector.
+# How to set up data quality and data observability for Azure storage
+Learn how to connect DQOps to data stored in Azure Blob Storage from the UI or command-line interface and activate data quality and observability.
 
 ## Prerequisites
 
