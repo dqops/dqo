@@ -17,6 +17,7 @@ package com.dqops.data.storage;
 
 import com.dqops.core.synchronization.contract.DqoRoot;
 import com.dqops.data.normalization.CommonColumnNames;
+import tech.tablesaw.api.Table;
 
 /**
  * Configuration for the parquet file storage for each type of supported table (sensor readouts, rule results, etc.)
@@ -37,6 +38,7 @@ public class FileStorageSettings {
     private String idStringColumnName;
     private String[] copiedColumnNames;
     private TablePartitioningPattern partitioningPattern;
+    private Table tableSchemaSample;
 
     /**
      * Creates a file storage configuration for a single type of table that is stored as parquet files.
@@ -63,6 +65,7 @@ public class FileStorageSettings {
         this.idStringColumnName = idStringColumnName;
         this.copiedColumnNames = copiedColumnNames;
         this.partitioningPattern = partitioningPattern;
+        this.tableSchemaSample = ParquetTableSchemaSamples.getSampleTable(tableType);
     }
 
     /**
@@ -121,5 +124,13 @@ public class FileStorageSettings {
      */
     public TablePartitioningPattern getPartitioningPattern() {
         return partitioningPattern;
+    }
+
+    /**
+     * Returns a sample table of this type that contains a proper schema of all columns.
+     * @return Table schema sample.
+     */
+    public Table getTableSchemaSample() {
+        return tableSchemaSample;
     }
 }

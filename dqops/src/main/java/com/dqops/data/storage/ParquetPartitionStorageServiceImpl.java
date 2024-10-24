@@ -126,23 +126,25 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
                                                 UserDomainIdentity userIdentity) {
         Path targetParquetFilePath = makeParquetTargetFilePath(partitionId, storageSettings, userIdentity);
         File targetParquetFile = targetParquetFilePath.toFile();
+        String[] effectiveColumnNames = columnNames != null ? columnNames :
+                storageSettings.getTableSchemaSample().columnNames().toArray(String[]::new);
 
         try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(storageSettings.getTableType(), userIdentity.getDataDomainFolder())) {
             LoadedMonthlyPartition cachedParquetFile = this.localFileSystemCache.getParquetFile(targetParquetFilePath);
             if (cachedParquetFile != null) {
-                if (cachedParquetFile.getData() == null || columnNames == null) {
+                if (cachedParquetFile.getData() == null) {
                     return cachedParquetFile;
                 }
 
                 List<String> columnsInTable = cachedParquetFile.getData().columnNames();
                 Set<String> columnNamesHashSet = new LinkedHashSet<>(columnsInTable);
-                boolean allRequiredColumnsPresent = Arrays.stream(columnNames).allMatch(columnNamesHashSet::contains);
+                boolean allRequiredColumnsPresent = Arrays.stream(effectiveColumnNames).allMatch(columnNamesHashSet::contains);
                 if (allRequiredColumnsPresent) {
-                    if (columnNames.length == columnsInTable.size()) {
+                    if (effectiveColumnNames.length == columnsInTable.size()) {
                         return cachedParquetFile;
                     } else {
                         List<Column<?>> requestedColumns = cachedParquetFile.getData().columns().stream()
-                                .filter(column -> ArrayUtils.contains(columnNames, column.name()))
+                                .filter(column -> ArrayUtils.contains(effectiveColumnNames, column.name()))
                                 .collect(Collectors.toList());
 
                         Table tableWithRequestedColumns = Table.create(cachedParquetFile.getData().name(), requestedColumns);
@@ -160,8 +162,8 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
 
             TablesawParquetReadOptions.Builder optionsBuilder = TablesawParquetReadOptions
                     .builder(targetParquetFile);
-            if (columnNames != null) {
-                optionsBuilder = optionsBuilder.withOnlyTheseColumns(columnNames);
+            if (effectiveColumnNames != null) {
+                optionsBuilder = optionsBuilder.withOnlyTheseColumns(effectiveColumnNames);
             }
             TablesawParquetReadOptions readOptions = optionsBuilder.build();
 

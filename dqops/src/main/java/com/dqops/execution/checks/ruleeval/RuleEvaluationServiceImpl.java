@@ -133,10 +133,10 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
         // the rule uses historic data, and can use a persistent model for prediction
         String modelRelativePath = checkSpecHierarchyId.toModelRelativePath();
         Path userHomePath = executionContext.getUserHomeContext().getHomeRoot().getPhysicalAbsolutePath();
-        modelPath = userHomePath.resolve(BuiltInFolderNames.INDEX)
+        modelPath = userHomePath != null ? userHomePath.resolve(BuiltInFolderNames.INDEX)
                 .resolve(BuiltInFolderNames.TIME_SERIES_PREDICTION_MODELS)
                 .resolve(modelRelativePath)
-                .toAbsolutePath().toString();
+                .toAbsolutePath().toString() : null;
 
         for (TableSlice dimensionTableSlice : dimensionTimeSeriesSlices) {
             Table dimensionSensorResults = dimensionTableSlice.asTable();  // results for a single dimension, the rows should be already sorted by the time period, ascending
