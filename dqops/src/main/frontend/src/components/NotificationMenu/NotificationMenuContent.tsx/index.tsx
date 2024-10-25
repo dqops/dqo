@@ -46,8 +46,8 @@ export default function NotificationMenuContent() {
 
   return (
     <>
-      <div className="border-b border-gray-300 text-gray-700 font-semibold pb-2 text-lg flex flex-col gap-y-2 px-4 relative">
-        <div>Notifications: {notificationCount}</div>
+      <div className="border-b border-gray-300 text-gray-700 font-semibold pb-2 text-lg flex flex-col gap-y-2 px-4 z-[9999]">
+        <div className="pt-2">Notifications: {notificationCount}</div>
         <div className="flex items-center gap-x-3 text-sm">
           <div className="whitespace-no-wrap">Jobs scheduler </div>
           <div

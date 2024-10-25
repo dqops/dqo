@@ -48,7 +48,7 @@ const HomePage = () => {
     <div style={{ height: 'calc(100vh - 200px)' }}>
       <Header />
       <div
-        className="border-b border-gray-300 px-0 top-[64px] fixed r-0 l-0 w-full z-[100]"
+        className="border-b border-gray-300 px-0 top-[64px] fixed r-0 l-0 w-full z-1"
         style={{ backgroundColor: '#F9FAFC', userSelect: 'none' }}
       >
         <Tabs
