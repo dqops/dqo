@@ -37835,7 +37835,7 @@
         "provider_type" : {
           "type" : "string",
           "description" : "Database provider type (required). Accepts: bigquery, snowflake, etc.",
-          "enum" : [ "bigquery", "databricks", "mysql", "oracle", "postgresql", "duckdb", "presto", "redshift", "snowflake", "spark", "sqlserver", "trino", "hana", "db2", "mariadb", "clickhouse", "questdb" ]
+          "enum" : [ "bigquery", "databricks", "mysql", "oracle", "postgresql", "duckdb", "presto", "redshift", "snowflake", "spark", "sqlserver", "trino", "hana", "db2", "mariadb", "clickhouse", "questdb", "teradata" ]
         },
         "bigquery" : {
           "description" : "BigQuery connection parameters. Specify parameters in the bigquery section.",
@@ -37905,6 +37905,10 @@
           "description" : "QuestDB connection parameters.",
           "$ref" : "#/definitions/QuestDbParametersSpec"
         },
+        "teradata" : {
+          "description" : "Teradata connection parameters.",
+          "$ref" : "#/definitions/TeradataParametersSpec"
+        },
         "run_checks_job_template" : {
           "description" : "Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run all checks within this connection.",
           "$ref" : "#/definitions/CheckSearchFilters"
@@ -37965,7 +37969,7 @@
         "provider_type" : {
           "type" : "string",
           "description" : "Database provider type (required).",
-          "enum" : [ "bigquery", "databricks", "mysql", "oracle", "postgresql", "duckdb", "presto", "redshift", "snowflake", "spark", "sqlserver", "trino", "hana", "db2", "mariadb", "clickhouse", "questdb" ]
+          "enum" : [ "bigquery", "databricks", "mysql", "oracle", "postgresql", "duckdb", "presto", "redshift", "snowflake", "spark", "sqlserver", "trino", "hana", "db2", "mariadb", "clickhouse", "questdb", "teradata" ]
         },
         "bigquery" : {
           "description" : "BigQuery connection parameters. Specify parameters in the bigquery section.",
@@ -38034,6 +38038,10 @@
         "questdb" : {
           "description" : "QuestDB connection parameters. Specify parameters in the questdb section or set the url (which is the QuestDB JDBC url).",
           "$ref" : "#/definitions/QuestDbParametersSpec"
+        },
+        "teradata" : {
+          "description" : "Teradata connection parameters. Specify parameters in the teradata section or set the url (which is the Teradata JDBC url).",
+          "$ref" : "#/definitions/TeradataParametersSpec"
         },
         "parallel_jobs_limit" : {
           "type" : "integer",
@@ -41140,7 +41148,7 @@
         "provider_type" : {
           "type" : "string",
           "description" : "Provider type.",
-          "enum" : [ "bigquery", "databricks", "mysql", "oracle", "postgresql", "duckdb", "presto", "redshift", "snowflake", "spark", "sqlserver", "trino", "hana", "db2", "mariadb", "clickhouse", "questdb" ]
+          "enum" : [ "bigquery", "databricks", "mysql", "oracle", "postgresql", "duckdb", "presto", "redshift", "snowflake", "spark", "sqlserver", "trino", "hana", "db2", "mariadb", "clickhouse", "questdb", "teradata" ]
         },
         "custom" : {
           "type" : "boolean",
@@ -41163,7 +41171,7 @@
         "providerType" : {
           "type" : "string",
           "description" : "Provider type.",
-          "enum" : [ "bigquery", "databricks", "mysql", "oracle", "postgresql", "duckdb", "presto", "redshift", "snowflake", "spark", "sqlserver", "trino", "hana", "db2", "mariadb", "clickhouse", "questdb" ]
+          "enum" : [ "bigquery", "databricks", "mysql", "oracle", "postgresql", "duckdb", "presto", "redshift", "snowflake", "spark", "sqlserver", "trino", "hana", "db2", "mariadb", "clickhouse", "questdb", "teradata" ]
         },
         "providerSensorDefinitionSpec" : {
           "description" : "Provider specific sensor definition specification",
@@ -46636,6 +46644,37 @@
         },
         "durationEstimated" : {
           "type" : "boolean"
+        }
+      }
+    },
+    "TeradataParametersSpec" : {
+      "type" : "object",
+      "properties" : {
+        "host" : {
+          "type" : "string",
+          "description" : "Teradata host name. Supports also a ${TERADATA_HOST} configuration with a custom environment variable."
+        },
+        "port" : {
+          "type" : "string",
+          "description" : "Teradata port number. The default port is 1025. Supports also a ${TERADATA_PORT} configuration with a custom environment variable."
+        },
+        "user" : {
+          "type" : "string",
+          "description" : "Teradata user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
+        },
+        "password" : {
+          "type" : "string",
+          "description" : "Teradata database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
+        },
+        "properties" : {
+          "type" : "object",
+          "description" : "A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.",
+          "additionalProperties" : {
+            "type" : "string"
+          }
+        },
+        "database" : {
+          "type" : "string"
         }
       }
     },

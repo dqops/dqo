@@ -1,8 +1,8 @@
 ---
-title: How to activate data observability for Parquet files
+title: How to set up data quality monitoring and data observability for Parquet files
 ---
-# How to activate data observability for Parquet files
-Read this guide to learn how to configure DQOps to use Parquet files from the UI, command-line interface, or directly in YAML files, and activate monitoring.
+# How to set up data quality monitoring and data observability for Parquet files
+Data observability and data monitoring for Parquet files. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
 
 ## Overview
 

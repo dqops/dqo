@@ -36,7 +36,8 @@ class RuleTimeWindowSettingsSpec:
 
 
 class AnomalyConfigurationParameters:
-    degrees_of_freedom: float
+    degrees_of_freedom: int
+    ai_degrees_of_freedom: int
     anderson_significance_level: float
     kolmogorov_significance_level: float
 
@@ -49,6 +50,9 @@ class RuleExecutionRunParameters:
     previous_readouts: Sequence[HistoricDataPoint]
     time_window: RuleTimeWindowSettingsSpec
     configuration_parameters: AnomalyConfigurationParameters
+    model_path: str
+    data_group: str
+    update_model: str
 
 
 class HistoricData(TypedDict):

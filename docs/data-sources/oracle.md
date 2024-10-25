@@ -1,8 +1,8 @@
 ---
-title: How to activate data observability for Oracle
+title: How to set up data quality monitoring and data observability for Oracle
 ---
-# How to activate data observability for Oracle
-Read this guide to learn how to connect DQOps to Oracle from the UI, command-line interface, or directly in YAML files, and activate monitoring.
+# How to set up data quality monitoring and data observability for Oracle
+Data observability and data monitoring for Oracle. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
 
 ## Overview
 

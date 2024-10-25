@@ -382,11 +382,11 @@ function TreeProvider(props: any) {
       } else {
         items.push({
           id: `${node.id}.dailyCheck`,
-          label: 'All data quality checks',
+          label: 'Daily monitoring',
           level: TREE_LEVEL.TABLE_DAILY_CHECKS,
           parentId: node.id,
           items: [],
-          tooltip: `${node.tooltip} all data quality checks`,
+          tooltip: `${node.tooltip} daily monitoring`,
           open: false
         });
       }
@@ -420,11 +420,11 @@ function TreeProvider(props: any) {
       } else {
         items.push({
           id: `${node.id}.dailyPartitionedChecks`,
-          label: 'All data quality checks',
+          label: 'Day period checks',
           level: TREE_LEVEL.TABLE_PARTITIONED_DAILY_CHECKS,
           parentId: node.id,
           items: [],
-          tooltip: `${node.tooltip} all data quality checks`,
+          tooltip: `${node.tooltip} day period checks`,
           open: false
         });
       }
@@ -481,11 +481,11 @@ function TreeProvider(props: any) {
       } else {
         items.push({
           id: `${node.id}.dailyCheck`,
-          label: 'All data quality checks',
+          label: 'Daily monitoring',
           level: TREE_LEVEL.COLUMN_DAILY_CHECKS,
           parentId: node.id,
           items: [],
-          tooltip: `${connection}.${schema}.${table}.${node?.label} all data quality checks`,
+          tooltip: `${connection}.${schema}.${table}.${node?.label} daily monitoring`,
           open: false
         });
       }
@@ -519,11 +519,11 @@ function TreeProvider(props: any) {
       } else {
         items.push({
           id: `${node.id}.dailyPartitionedChecks`,
-          label: 'All data quality checks',
+          label: 'Day period checks',
           level: TREE_LEVEL.COLUMN_PARTITIONED_DAILY_CHECKS,
           parentId: node.id,
           items: [],
-          tooltip: `${connection}.${schema}.${table}.${node?.label} all data quality checks`,
+          tooltip: `${connection}.${schema}.${table}.${node?.label} day period checks`,
           open: false
         });
       }

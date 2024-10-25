@@ -1,5 +1,5 @@
 #
-# Copyright © 2023 DQOps (support@dqops.com)
+# Copyright © 2024 DQOps (support@dqops.com)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ from typing import Sequence
 import numpy as np
 import scipy
 import scipy.stats
-from lib.anomalies.data_preparation import convert_historic_data_stationary
+from lib.anomalies.data_preparation import convert_historic_data_stationary, average_forecast
 from lib.anomalies.anomaly_detection import detect_upper_bound_anomaly, detect_lower_bound_anomaly
 
 
@@ -103,17 +103,18 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
     tail = rule_parameters.parameters.anomaly_percent / 100.0
 
     anomaly_data = convert_historic_data_stationary(rule_parameters.previous_readouts, lambda readout: readout)
-    threshold_upper_multiple = detect_upper_bound_anomaly(historic_data=anomaly_data, median=filtered_median_float,
+    threshold_upper_multiple, forecast_upper_multiple = detect_upper_bound_anomaly(historic_data=anomaly_data, median=filtered_median_float,
                                                           tail=tail, parameters=rule_parameters)
 
     passed = True
     if threshold_upper_multiple is not None:
         threshold_upper = threshold_upper_multiple
+        forecast_upper = forecast_upper_multiple
         passed = rule_parameters.actual_value <= threshold_upper
     else:
         threshold_upper = None
 
-    expected_value = filtered_median_float
+    expected_value = forecast_upper
     lower_bound = 0.0  # always, our target is to have a delay of 0.0 days
     upper_bound = threshold_upper
     return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)

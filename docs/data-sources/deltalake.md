@@ -1,8 +1,8 @@
 ---
-title: How to activate data observability for CSV files
+title: How to set up data quality monitoring and data observability for CSV files
 ---
-# How to activate data observability for Delta Lake table
-Read this guide to learn how to configure DQOps to use Delta Lake table from the UI, command-line interface, or directly in YAML files, and activate monitoring.
+# How to set up data quality monitoring and data observability for Delta Lake table
+Data observability and data monitoring for Delta Lake table. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
 
 ## Overview
 

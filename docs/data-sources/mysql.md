@@ -1,8 +1,8 @@
 ---
-title: How to activate data observability for MySQL
+title: How to set up data quality monitoring and data observability for MySQL
 ---
-# How to activate data observability for MySQL
-Read this guide to learn how to connect DQOps to MySQL from the UI, command-line interface, or directly in YAML files, and activate monitoring.
+# How to set up data quality monitoring and data observability for MySQL
+Data observability and data monitoring for MySQL. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
 
 ## Overview
 

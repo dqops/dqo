@@ -1,11 +1,9 @@
 ---
-title: How to activate data observability for Azure
+title: How to set up data quality monitoring and data observability for Microsoft Azure
 ---
 
-# How to activate data observability for Azure storage
-
-This guide shows how to enable data observability for data stored in Azure Blob Storage using DQOps. To seamlessly connect to Azure Blob Storage,
-DQOps uses the DuckDB connector.
+# How to set up data quality monitoring and data observability for Microsoft Azure storage
+Data observability and data monitoring for Azure Blob Storage. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
 
 ## Prerequisites
 

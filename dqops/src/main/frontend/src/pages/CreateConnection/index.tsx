@@ -192,6 +192,10 @@ const CreateConnection = () => {
         copiedDatabase.questdb = { port: '8812', properties: { '': '' } };
         break;
       }
+      case ConnectionModelProviderTypeEnum.teradata: {
+        copiedDatabase.teradata = { port: '1025', properties: { '': '' } };
+        break;
+      }
     }
     setDatabase(copiedDatabase);
   };

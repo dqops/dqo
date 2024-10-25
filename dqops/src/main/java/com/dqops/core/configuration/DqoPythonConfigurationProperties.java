@@ -15,6 +15,7 @@
  */
 package com.dqops.core.configuration;
 
+import com.dqops.execution.rules.RuleModelUpdateMode;
 import com.dqops.execution.rules.runners.python.PythonRuleDebugMode;
 import lombok.EqualsAndHashCode;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -38,6 +39,7 @@ public class DqoPythonConfigurationProperties implements Cloneable {
     private int pythonScriptTimeoutSeconds = 120;
     private boolean enableDebugging;
     private PythonRuleDebugMode debugMode = PythonRuleDebugMode.silent;
+    private RuleModelUpdateMode ruleModelUpdateMode = RuleModelUpdateMode.never;
 
     /**
      * Python runtime file name (python, python3, python.exe, python3.exe, etc.)
@@ -213,6 +215,22 @@ public class DqoPythonConfigurationProperties implements Cloneable {
      */
     public void setDebugMode(PythonRuleDebugMode debugMode) {
         this.debugMode = debugMode;
+    }
+
+    /**
+     * Returns the mode of updating ML models for rules.
+     * @return ML model update mode.
+     */
+    public RuleModelUpdateMode getRuleModelUpdateMode() {
+        return ruleModelUpdateMode;
+    }
+
+    /**
+     * Sets the mode of updating ML models.
+     * @param ruleModelUpdateMode Model update mode.
+     */
+    public void setRuleModelUpdateMode(RuleModelUpdateMode ruleModelUpdateMode) {
+        this.ruleModelUpdateMode = ruleModelUpdateMode;
     }
 
     /**

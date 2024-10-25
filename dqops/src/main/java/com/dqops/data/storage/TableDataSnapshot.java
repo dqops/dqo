@@ -257,11 +257,11 @@ public class TableDataSnapshot {
                 LoadedMonthlyPartition newLoadedPartition = new LoadedMonthlyPartition(
                         loadedMonthlyPartition.getPartitionId(), loadedMonthlyPartition.getLastModified(), newTableWithLimitedColumns);
 
-                loadedPartitions.put(loadedMonthlyPartition.getPartitionId(),newLoadedPartition);
+                loadedPartitions.put(loadedMonthlyPartition.getPartitionId(), newLoadedPartition);
             }
         }
         else {
-            for (LoadedMonthlyPartition loadedMonthlyPartition : loadedPartitions.values()) {
+            for (LoadedMonthlyPartition loadedMonthlyPartition : new ArrayList<>(loadedPartitions.values())) {
                 Table partitionData = loadedMonthlyPartition.getData();
                 if (partitionData == null) {
                     continue;
@@ -301,7 +301,9 @@ public class TableDataSnapshot {
                 }
 
                 if (updatedPartitionData != null) {
-                    loadedMonthlyPartition.setData(updatedPartitionData); // this is not perfect, because we are updating a table in the cache
+                    LoadedMonthlyPartition newLoadedPartition = new LoadedMonthlyPartition(
+                            loadedMonthlyPartition.getPartitionId(), loadedMonthlyPartition.getLastModified(), updatedPartitionData);
+                    loadedPartitions.put(loadedMonthlyPartition.getPartitionId(), newLoadedPartition);
                 }
             }
         }
@@ -317,7 +319,7 @@ public class TableDataSnapshot {
             return this.columnNames;
         }
 
-        return null;
+        return this.allColumnNames;
     }
 
     /**

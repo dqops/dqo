@@ -1,11 +1,9 @@
 ---
-title: How to activate data observability for Google Cloud Storage
+title: How to set up data quality monitoring and data observability for Google Cloud Storage
 ---
 
-# How to activate data observability for Google Cloud Storage
-
-This guide shows how to enable data observability for data stored in a Google Cloud Storage buckets using DQOps. To seamlessly connect to Google 
-Cloud Storage buckets, DQOps uses the DuckDB connector.
+# How to set up data quality monitoring and data observability for Google Cloud Storage
+Data observability and data monitoring for Cloud Storage buckets. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
 
 ## Prerequisites
 

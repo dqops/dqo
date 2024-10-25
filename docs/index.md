@@ -151,11 +151,15 @@ title: What is DQOps Data Quality Operations Center
 </div>
 
 ## Supported data sources
-### SQL engines
+
+DQOps supports integration with relational databases, data lakes, data warehouses, time series databases, data processing frameworks, object storage services, table formats, and flat files.
+
 [![Athena](https://dqops.com/docs/images/connections/athena2.png){ class=glightbox-ignored-image }](data-sources/athena.md)
 &nbsp; &nbsp; &nbsp; [![Google BigQuery](https://dqops.com/docs/images/connections/google-bigquery.png){ class=glightbox-ignored-image }](data-sources/bigquery.md)
+&nbsp; &nbsp; &nbsp; [![CSV](https://dqops.com/docs/images/connections/csv-icon2.png){ class=glightbox-ignored-image }](data-sources/csv.md)
 &nbsp; &nbsp; &nbsp; [![Databricks](https://dqops.com/docs/images/connections/databricks.png){ class=glightbox-ignored-image }](data-sources/databricks.md)
 &nbsp; &nbsp; &nbsp; [![DuckDB](https://dqops.com/docs/images/connections/duckdb-titled1.png){ class=glightbox-ignored-image }](data-sources/duckdb.md)
+&nbsp; &nbsp; &nbsp; [![Iceberg](https://dqops.com/docs/images/connections/iceberg3.png){ class=glightbox-ignored-image }](data-sources/iceberg.md)
 &nbsp; &nbsp; &nbsp; [![MySQL](https://dqops.com/docs/images/connections/mysql.png){ class=glightbox-ignored-image }](data-sources/mysql.md)
 &nbsp; &nbsp; &nbsp; [![Oracle](https://dqops.com/docs/images/connections/oracle2.png){ class=glightbox-ignored-image }](data-sources/oracle.md)
 &nbsp; &nbsp; &nbsp; [![PostgreSQL](https://dqops.com/docs/images/connections/postgresql.png){ class=glightbox-ignored-image }](data-sources/postgresql.md)
@@ -167,15 +171,7 @@ title: What is DQOps Data Quality Operations Center
 &nbsp; &nbsp; &nbsp; [![Microsoft SQL Server](https://dqops.com/docs/images/connections/microsoft-sql-server.png){ class=glightbox-ignored-image }](data-sources/sql-server.md)
 &nbsp; &nbsp; &nbsp; [![Trino](https://dqops.com/docs/images/connections/trino1.png){ class=glightbox-ignored-image }](data-sources/trino.md)
 
-### Flat files
-[![CSV](https://dqops.com/docs/images/connections/csv-icon2.png){ class=glightbox-ignored-image }](data-sources/csv.md)
-&nbsp; &nbsp; &nbsp; [![JSON](https://dqops.com/docs/images/connections/json-icon2.png){ class=glightbox-ignored-image }](data-sources/json.md)
-&nbsp; &nbsp; &nbsp; [![Parquet](https://dqops.com/docs/images/connections/parquet-icon2.png){ class=glightbox-ignored-image }](data-sources/parquet.md)
-
-### Table formats
-[![Delta Lake](https://dqops.com/docs/images/connections/delta-lake3.png){ class=glightbox-ignored-image }](data-sources/deltalake.md)
-&nbsp; &nbsp; &nbsp; [![Iceberg](https://dqops.com/docs/images/connections/iceberg3.png){ class=glightbox-ignored-image }](data-sources/iceberg.md)
-
+[:octicons-arrow-right-24: See all connectors](data-sources/index.md)
 
 ## Getting started
 !!! info "Start with DQOps"

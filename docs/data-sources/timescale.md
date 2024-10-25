@@ -1,36 +1,36 @@
 ---
-title: How to activate data observability for TimescaleDB
+title: How to set up data quality monitoring and data observability for Timescale
 ---
-# How to activate data observability for TimescaleDB
-Read this guide to learn how to connect DQOps to Timescale from the UI, command-line interface, or directly in YAML files, and activate monitoring.
+# How to set up data quality monitoring and data observability for Timescale
+Data observability and data monitoring for Timescale. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
 
 ## Overview
 
-TimescaleDB is an open-source database designed to make SQL scalable for time-series data. 
+Timescale is an open-source database designed to make SQL scalable for time-series data. 
 It is engineered up from PostgreSQL and packaged as a PostgreSQL extension, providing automatic partitioning across time and space (partitioning key), as well as full SQL support.
 
-## Add a TimescaleDB connection using the user interface
+## Add a Timescale connection using the user interface
 
 ### **Navigate to the connection settings**
 
-To navigate to the TimescaleDB connection settings:
+To navigate to the Timescale connection settings:
 
 1. Go to the Data Sources section and click the **+ Add connection** button in the upper left corner.
 
     ![Adding connection](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection2.png){ loading=lazy; width="1200px" }
 
-2. Select TimescaleDB database type.
+2. Select Timescale database type.
 
-    ![Selecting TimescaleDB database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-timescale.png){ loading=lazy; width="1200px" }
+    ![Selecting Timescale database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-timescale.png){ loading=lazy; width="1200px" }
 
 
 ### **Fill in the connection settings**
 
-After navigating to the TimescaleDB connection settings, you will need to fill in its details.
+After navigating to the Timescale connection settings, you will need to fill in its details.
 
 ![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-timescale.png){ loading=lazy; width="1200px" }
 
-| TimescaleDB connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                               |
+| Timescale connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                               |
 |---------------------------------|------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Connection name                 |                                          | The name of the connection that will be created in DQOps. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters. |
 | Engine Type                     | `postgresql_engine_type`                 | PostgreSQL engine type. Supports also a ${POSTGRESQL_ENGINE} configuration with a custom environment variable.                                                                                                                            |
@@ -38,7 +38,7 @@ After navigating to the TimescaleDB connection settings, you will need to fill i
 | Port                            | `port`                                   | PostgreSQL port name. The default port is 5432. Supports also a ${POSTGRESQL_PORT} configuration with a custom environment variable.                                                                                                      |
 | Password                        | `password`                               | PostgreSQL database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                    |
 | SSL mode                        | `sslmode`                                | PostgreSQL sslmode parameter. The default value is disabled. [See the PostgreSQL documentation for more information about using SSL.](https://jdbc.postgresql.org/documentation/ssl/)                                                     |  
-| JDBC connection property        |                                          | Optional setting. DQOps supports using JDBC driver to access TimescaleDB. [See the PostgreSQL documentation for JDBC connection parameter references.](https://jdbc.postgresql.org/documentation/use/)                                    |
+| JDBC connection property        |                                          | Optional setting. DQOps supports using JDBC driver to access Timescale. [See the PostgreSQL documentation for JDBC connection parameter references.](https://jdbc.postgresql.org/documentation/use/)                                    |
     
 DQOps allows you to dynamically replace properties in connection settings with environment variables. To use it, simply
 change "clear text" to ${ENV_VAR} using the drop-down menu at the end of the variable entry field and type your variable.
@@ -91,7 +91,7 @@ and profiling data by running default data profiling checks. Simply click on the
     standard checks that monitor the data quality of a table or column. They can also be referred to as **Data Observability** checks.
     These checks capture a single data quality result for the entire table or column.
 
-## Add a TimescaleDB connection using DQOps Shell
+## Add a Timescale connection using DQOps Shell
 
 To add a connection run the following command in DQOps Shell.
 
@@ -162,7 +162,7 @@ character can be used at the beginning, middle, or end of the name.
 Connection configurations are stored in the YAML files in the `./sources` folder. The name of the connection is also
 the name of the folder where the configuration file is stored.
 
-Below is a sample YAML file showing an example configuration of the TimescaleDB data source connection.
+Below is a sample YAML file showing an example configuration of the Timescale data source connection.
 
 ``` yaml
 apiVersion: dqo/v1

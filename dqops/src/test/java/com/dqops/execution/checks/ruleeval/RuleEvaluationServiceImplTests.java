@@ -22,6 +22,7 @@ import com.dqops.checks.table.profiling.TableVolumeProfilingChecksSpec;
 import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import com.dqops.connectors.ProviderDialectSettingsObjectMother;
 import com.dqops.connectors.ProviderType;
+import com.dqops.core.configuration.DqoPythonConfigurationProperties;
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.principal.UserDomainIdentityObjectMother;
 import com.dqops.data.normalization.CommonTableNormalizationServiceImpl;
@@ -78,7 +79,8 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
     void setUp() {
         DataQualityRuleRunner ruleRunner = DataQualityRuleRunnerObjectMother.getDefault();
         DefaultTimeZoneProvider defaultTimeZoneProvider = DefaultTimeZoneProviderObjectMother.getDefaultTimeZoneProvider();
-        this.sut = new RuleEvaluationServiceImpl(ruleRunner, new RuleDefinitionFindServiceImpl(), defaultTimeZoneProvider, new RuleModelTrainingQueueImpl());
+        this.sut = new RuleEvaluationServiceImpl(ruleRunner, new RuleDefinitionFindServiceImpl(), defaultTimeZoneProvider,
+                new RuleModelTrainingQueueImpl(), new DqoPythonConfigurationProperties());
 		this.normalizeService = new SensorReadoutsNormalizationServiceImpl(new CommonTableNormalizationServiceImpl(), defaultTimeZoneProvider);
 		this.table = Table.create("results");
 		executionContext = CheckExecutionContextObjectMother.createWithInMemoryUserContext();

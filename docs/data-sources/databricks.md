@@ -1,8 +1,8 @@
 ---
-title: How to activate data observability for Databricks
+title: How to set up data quality monitoring and data observability for Databricks
 ---
-# How to activate data observability for Databricks
-Read this guide to learn how to connect DQOps to Databricks from the UI, command-line interface, or directly in YAML files, and activate monitoring.
+# How to set up data quality monitoring and data observability for Databricks
+Data observability and data monitoring for Databricks. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
 
 ## Overview
 
@@ -204,7 +204,7 @@ described in the reference section of the [DatabricksParametersSpec](../referenc
 YAML file format.
 
 
-## How to activate data observability for external tables using Databricks in Azure
+## How to set up data quality and data observability for external tables using Databricks in Azure
 
 This guide shows how to connect an external table using Databricks. The example will use the Azure Blob Storage for storing data.
 

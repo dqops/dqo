@@ -16,9 +16,10 @@ import numpy as np
 import scipy
 import scipy.stats
 from .data_types import RuleExecutionRunParameters, HistoricData
+from .data_preparation import average_forecast
 
 try:
-    import rules.dqopspaid.ai.anomaly_detection
+    import dqopspaid.ai.anomaly_detection
 except ModuleNotFoundError:
     ai_module_present = False
 else:
@@ -84,8 +85,9 @@ def test_significance(values: list[float], parameters: RuleExecutionRunParameter
 
 def detect_upper_bound_anomaly(historic_data: HistoricData, median: float, tail: float,
                                parameters: RuleExecutionRunParameters):
+    parameters.upper_bound_historic_data = historic_data
     if hasattr(parameters.parameters, 'use_ai') and parameters.parameters.use_ai and ai_module_present:
-        return rules.dqopspaid.ai.anomaly_detection.detect_upper_bound_anomaly(historic_data, median, tail, parameters)
+        return dqopspaid.ai.anomaly_detection.detect_upper_bound_anomaly(historic_data, median, tail, parameters)
 
     values = historic_data['converted_values']
     values_above_median = [value for value in values if value is not None and value >= median]
@@ -95,19 +97,20 @@ def detect_upper_bound_anomaly(historic_data: HistoricData, median: float, tail:
     df = float(parameters.configuration_parameters.degrees_of_freedom)
 
     if float(values_std) == 0:
-        return float(values_median)
+        return float(values_median), median
     else:
         if not test_significance(values, parameters):
-            return None
+            return None, median
 
         # Assumption: the historical data follows t-student distribution
-        return find_tail(df, values_median, values_std, 1 - tail)
+        return find_tail(df, values_median, values_std, 1 - tail), median
 
 
 def detect_lower_bound_anomaly(historic_data: HistoricData, median: float, tail: float,
                                parameters: RuleExecutionRunParameters):
+    parameters.lower_bound_historic_data = historic_data
     if hasattr(parameters.parameters, 'use_ai') and parameters.parameters.use_ai and ai_module_present:
-        return rules.dqopspaid.ai.anomaly_detection.detect_lower_bound_anomaly(historic_data, median, tail, parameters)
+        return dqopspaid.ai.anomaly_detection.detect_lower_bound_anomaly(historic_data, median, tail, parameters)
 
     values = historic_data['converted_values']
     values_below_median = [value for value in values if value is not None and value <= median]
@@ -117,10 +120,23 @@ def detect_lower_bound_anomaly(historic_data: HistoricData, median: float, tail:
     df = float(parameters.configuration_parameters.degrees_of_freedom)
 
     if float(values_std) == 0:
-        return float(values_median)
+        return float(values_median), median
     else:
         if not test_significance(values, parameters):
-            return None
+            return None, median
 
         # Assumption: the historical data follows t-student distribution
-        return find_tail(df, values_median, values_std, tail)
+        return find_tail(df, values_median, values_std, tail), median
+
+
+def detect_anomaly(historic_data: HistoricData, median: float, tail: float,
+                   parameters: RuleExecutionRunParameters):
+    parameters.historic_data = historic_data
+    if hasattr(parameters.parameters, 'use_ai') and parameters.parameters.use_ai and ai_module_present:
+        return dqopspaid.ai.anomaly_detection.detect_anomaly(historic_data, median, tail, parameters)
+
+    upper_bound, upper_forecast = detect_upper_bound_anomaly(historic_data, median, tail, parameters)
+    lower_bound, lower_forecast = detect_lower_bound_anomaly(historic_data, median, tail, parameters)
+
+    forecast = average_forecast(upper_forecast, lower_forecast)
+    return upper_bound, lower_bound, forecast

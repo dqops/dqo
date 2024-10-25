@@ -27,3 +27,4 @@ spec:
     data_type: boolean
   parameters:
     degrees_of_freedom: 5
+    ai_degrees_of_freedom: 8

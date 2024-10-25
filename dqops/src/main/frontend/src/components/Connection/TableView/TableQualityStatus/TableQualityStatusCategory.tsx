@@ -1,7 +1,7 @@
 import { Tooltip } from '@material-tailwind/react';
 import clsx from 'clsx';
 import moment from 'moment';
-import React from 'react';
+import React, { useRef } from 'react';
 import {
   CheckCurrentDataQualityStatusModelCurrentSeverityEnum,
   TableCurrentDataQualityStatusModel
@@ -40,6 +40,9 @@ interface ITableQualityStatusColumnCategoryProps {
   ) => React.JSX.Element;
 }
 
+const MAX_TEXT_WIDTH = 175;
+const FONT_STYLE = '11px Arial';
+
 export default function TableQualityStatusCategory({
   severityType,
   extendedChecks,
@@ -48,6 +51,49 @@ export default function TableQualityStatusCategory({
   renderSecondLevelTooltip,
   renderTooltipContent
 }: ITableQualityStatusColumnCategoryProps) {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
+  const measureTextWidth = (text: string): number => {
+    if (!canvasRef.current) {
+      canvasRef.current = document.createElement('canvas');
+    }
+    const context = canvasRef.current.getContext('2d');
+    if (context) {
+      context.font = FONT_STYLE;
+      return context.measureText(text).width;
+    }
+    return 0;
+  };
+
+  const truncateCheckName = (name: string): string => {
+    const prefixes = [
+      'daily_partition_',
+      'monthly_partition_',
+      'profile_',
+      'daily_',
+      'monthly_'
+    ];
+
+    let truncated = name;
+    for (const prefix of prefixes) {
+      if (name.startsWith(prefix)) {
+        truncated = name.replace(prefix, '');
+        break;
+      }
+    }
+
+    if (measureTextWidth(truncated) > MAX_TEXT_WIDTH) {
+      while (
+        measureTextWidth(truncated + '...') > MAX_TEXT_WIDTH &&
+        truncated.length > 0
+      ) {
+        truncated = truncated.slice(0, -1);
+      }
+      return truncated + '...';
+    }
+
+    return truncated;
+  };
   const toggleExtendedChecks = (
     checkType: string,
     categoryDimension: string
@@ -216,7 +262,7 @@ export default function TableQualityStatusCategory({
                         : {})
                     }}
                   >
-                    {x.checkName}
+                    {truncateCheckName(x.checkName)}
                   </div>
                 </Tooltip>
               );

@@ -1,8 +1,8 @@
 ---
-title: How to activate data observability for Iceberg files
+title: How to set up data quality monitoring and data observability for Iceberg files
 ---
-# How to activate data observability for Iceberg table
-Read this guide to learn how to configure DQOps to use Iceberg table from the UI, command-line interface, or directly in YAML files, and activate monitoring.
+# How to set up data quality monitoring and data observability for Iceberg table
+Data observability and data monitoring for Iceberg table. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
 
 ## Overview
 

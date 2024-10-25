@@ -1,5 +1,5 @@
 #
-# Copyright © 2023 DQOps (support@dqops.com)
+# Copyright © 2024 DQOps (support@dqops.com)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,8 +19,8 @@ from typing import Sequence, Dict
 import numpy as np
 import scipy
 import scipy.stats
-from lib.anomalies.data_preparation import convert_historic_data_differencing
-from lib.anomalies.anomaly_detection import detect_upper_bound_anomaly, detect_lower_bound_anomaly
+from lib.anomalies.data_preparation import convert_historic_data_differencing, average_forecast
+from lib.anomalies.anomaly_detection import detect_upper_bound_anomaly, detect_lower_bound_anomaly, detect_anomaly
 
 
 # rule specific parameters object, contains values received from the quality check threshold configuration
@@ -111,8 +111,8 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
         anomaly_data = convert_historic_data_differencing(rule_parameters.previous_readouts,
                                                           lambda readout: (readout / differences_median_float - 1.0 if readout >= differences_median_float else
                                                                            (-1.0 / (readout / differences_median_float)) + 1.0))
-        threshold_upper_multiple = detect_upper_bound_anomaly(historic_data=anomaly_data, median=0.0,
-                                                              tail=tail, parameters=rule_parameters)
+        threshold_upper_multiple, threshold_lower_multiple, forecast_multiple = detect_anomaly(historic_data=anomaly_data, median=0.0,
+                                                                                               tail=tail, parameters=rule_parameters)
 
         passed = True
         if threshold_upper_multiple is not None:
@@ -121,16 +121,24 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
         else:
             threshold_upper = None
 
-        threshold_lower_multiple = detect_lower_bound_anomaly(historic_data=anomaly_data, median=0.0,
-                                                              tail=tail, parameters=rule_parameters)
-
         if threshold_lower_multiple is not None:
             threshold_lower = differences_median_float * (-1.0 / (threshold_lower_multiple - 1.0))
             passed = passed and threshold_lower <= actual_difference
         else:
             threshold_lower = None
 
-        expected_value = last_readout + differences_median_float
+        if forecast_multiple is not None:
+            if forecast_multiple >= 0:
+                forecast = (forecast_multiple + 1.0) * differences_median_float
+            else:
+                forecast = differences_median_float * (-1.0 / (forecast_multiple - 1.0))
+        else:
+            forecast = differences_median_float
+
+        if forecast is not None:
+            expected_value = last_readout + forecast
+        else:
+            expected_value = None
 
         if threshold_lower is not None:
             lower_bound = last_readout + threshold_lower
@@ -147,8 +155,8 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
         # using unrestricted method for both positive and negative values
         anomaly_data = convert_historic_data_differencing(rule_parameters.previous_readouts,
                                                           lambda readout: readout)
-        threshold_upper_result = detect_upper_bound_anomaly(historic_data=anomaly_data, median=differences_median_float,
-                                                            tail=tail, parameters=rule_parameters)
+        threshold_upper_result, threshold_lower_result, forecast = detect_anomaly(historic_data=anomaly_data, median=differences_median_float,
+                                                                                  tail=tail, parameters=rule_parameters)
 
         passed = True
         if threshold_upper_result is not None:
@@ -157,15 +165,17 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
         else:
             threshold_upper = None
 
-        threshold_lower_result = detect_lower_bound_anomaly(historic_data=anomaly_data, median=differences_median_float,
-                                                            tail=tail, parameters=rule_parameters)
         if threshold_lower_result is not None:
             threshold_lower = threshold_lower_result
             passed = passed and threshold_lower <= actual_difference
         else:
             threshold_lower = None
 
-        expected_value = last_readout + differences_median_float
+        if forecast is not None:
+            expected_value = last_readout + forecast
+        else:
+            expected_value = None
+
         if threshold_lower is not None:
             lower_bound = last_readout + threshold_lower
         else:

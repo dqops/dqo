@@ -19,7 +19,7 @@ from typing import Sequence
 import numpy as np
 import scipy
 import scipy.stats
-from lib.anomalies.data_preparation import convert_historic_data_stationary
+from lib.anomalies.data_preparation import convert_historic_data_stationary, average_forecast
 from lib.anomalies.anomaly_detection import detect_upper_bound_anomaly, detect_lower_bound_anomaly
 
 
@@ -110,31 +110,41 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 
     if 100.0 in all_extracted:
         threshold_upper = 100.0
+        forecast_upper = filtered_median_float
     else:
         anomaly_data_upper = convert_historic_data_stationary(rule_parameters.previous_readouts,
                                                               lambda readout: 1.0 / (1.0 - readout / 100.0))
-        threshold_upper_multiple = detect_upper_bound_anomaly(historic_data=anomaly_data_upper,
+        threshold_upper_multiple, forecast_upper_multiple = detect_upper_bound_anomaly(historic_data=anomaly_data_upper,
                                                               median=1.0 / (1.0 - filtered_median_float / 100.0),
                                                               tail=tail, parameters=rule_parameters)
 
         if threshold_upper_multiple is not None:
             threshold_upper = 100.0 - 100.0 * (1.0 / threshold_upper_multiple)
+            forecast_upper = 100.0 - 100.0 * (1.0 / forecast_upper_multiple)
             passed = rule_parameters.actual_value <= threshold_upper
+        else:
+            threshold_upper = None
+            forecast_upper = None
 
     if 0.0 in all_extracted:
         threshold_lower = 0.0
+        forecast_lower = filtered_median_float
     else:
         anomaly_data_lower = convert_historic_data_stationary(rule_parameters.previous_readouts,
                                                               lambda readout: (-1.0 / (readout / filtered_median_float)))
-        threshold_lower_multiple = detect_lower_bound_anomaly(historic_data=anomaly_data_lower,
+        threshold_lower_multiple, forecast_lower_multiple = detect_lower_bound_anomaly(historic_data=anomaly_data_lower,
                                                               median=-1.0,
                                                               tail=tail, parameters=rule_parameters)
 
         if threshold_lower_multiple is not None:
             threshold_lower = filtered_median_float * (-1.0 / threshold_lower_multiple)
+            forecast_lower = filtered_median_float * (-1.0 / forecast_lower_multiple)
             passed = passed and threshold_lower <= rule_parameters.actual_value
+        else:
+            threshold_lower = None
+            forecast_lower = None
 
-    expected_value = filtered_median_float
+    expected_value = average_forecast(forecast_upper, forecast_lower)
     lower_bound = threshold_lower
     upper_bound = threshold_upper
     return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)

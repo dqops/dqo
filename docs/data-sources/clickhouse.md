@@ -1,8 +1,8 @@
 ---
-title: How to activate data observability for ClickHouse
+title: How to set up data quality monitoring and data observability for ClickHouse
 ---
-# How to activate data observability for ClickHouse
-Read this guide to learn how to connect DQOps to ClickHouse from the UI, command-line interface, or directly in YAML files, and activate monitoring.
+# How to set up data quality monitoring and data observability for ClickHouse
+Data observability and data monitoring for ClickHouse. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
 
 ## Overview
 

@@ -73,6 +73,9 @@ public enum ProviderType {
     @JsonProperty("questdb")
     questdb,
 
+    @JsonProperty("teradata")
+    teradata,
+
     // TODO: add more connectors
 
     ;

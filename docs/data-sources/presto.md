@@ -1,8 +1,8 @@
 ---
-title: How to activate data observability for Presto
+title: How to set up data quality monitoring and data observability for Presto
 ---
-# How to activate data observability for Presto
-Read this guide to learn how to connect DQOps to Presto from the UI, command-line interface, or directly in YAML files, and activate monitoring.
+# How to set up data quality monitoring and data observability for Presto
+Data observability and data monitoring for Presto. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
 
 ## Overview
 

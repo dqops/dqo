@@ -1,8 +1,8 @@
 ---
-title: How to activate data observability for Amazon Redshift
+title: How to set up data quality monitoring and data observability for Amazon Redshift
 ---
-# How to activate data observability for Amazon Redshift
-Read this guide to learn how to connect DQOps to AWS Redshift from the UI, command-line interface, or directly in YAML files, and activate monitoring.
+# How to set up data quality monitoring and data observability for Amazon Redshift
+Data observability and data monitoring for Amazon Redshift. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
 
 ## Overview
 
@@ -17,7 +17,7 @@ Amazon Redshift uses an elastic IP address for the external IP address. An elast
 address is a static IP address. In case of restrictions, you need to add the IP address used by DQOps
 to [Allowed IP Addresses in Redshift Network Policies](https://docs.aws.amazon.com/redshift/latest/mgmt/managing-clusters-vpc.html).
 
-## Add a Redshift connection using the user interface
+## Add an Amazon Redshift connection using the user interface
 
 ### **Navigate to the connection settings**
 
@@ -104,7 +104,7 @@ and profiling data by running default data profiling checks. Simply click on the
     standard checks that monitor the data quality of a table or column. They can also be referred to as **Data Observability** checks.
     These checks capture a single data quality result for the entire table or column.
 
-## Add a Redshift connection using DQOps Shell
+## Add an Amazon Redshift connection using DQOps Shell
 
 To add a connection run the following command in DQOps Shell.
 

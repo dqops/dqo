@@ -1,7 +1,7 @@
 site_name: DQOps Data Quality Operations Center Documentation
 site_url: https://dqops.com/docs/
 repo_url: https://github.com/dqops/dqo
-site_description: DQOps is an open-source data quality platform for data quality and DataOps teams, providing customizable data quality checks and data quality dashboards.
+site_description: DQOps is an an open-source data quality platform for the whole data platform lifecycle from profiling new data sources to automating data quality monitoring.
 
 # Docs navigation
 nav:
@@ -51,31 +51,33 @@ nav:
       - Install DQOps from release package: "dqops-installation/install-dqops-from-release-package.md"
   - Data sources:
       - "data-sources/index.md"
-      - Athena: "data-sources/athena.md"
-      - AWS: "data-sources/aws.md"
-      - Azure: "data-sources/azure.md"
-      - BigQuery: "data-sources/bigquery.md"
+      - Amazon Athena: "data-sources/athena.md"
+      - Amazon Redshift: "data-sources/redshift.md"
+      - Amazon S3: "data-sources/aws.md"
+      - Apache Spark: "data-sources/spark.md"
       - ClickHouse: "data-sources/clickhouse.md"
-      - CSV: "data-sources/csv.md"
+      - CSV files: "data-sources/csv.md"
       - Databricks: "data-sources/databricks.md"
-      - Db2: "data-sources/db2.md"
       - Delta Lake: "data-sources/deltalake.md"
       - DuckDB: "data-sources/duckdb.md"
-      - GCP: "data-sources/gcp.md"
+      - Google BigQuery: "data-sources/bigquery.md"
+      - Goggle Cloud Storage: "data-sources/gcp.md"
+      - IBM DB2: "data-sources/db2.md"
       - Iceberg: "data-sources/iceberg.md"
-      - JSON: "data-sources/json.md"
+      - JSON files: "data-sources/json.md"
       - MariaDB: "data-sources/mariadb.md"
+      - Microsoft Azure Blob Storage: "data-sources/azure.md"
+      - Microsoft SQL Server: "data-sources/sql-server.md"
       - MySQL: "data-sources/mysql.md"
       - Oracle: "data-sources/oracle.md"
-      - Parquet: "data-sources/parquet.md"
+      - Parquet files: "data-sources/parquet.md"
       - PostgreSQL: "data-sources/postgresql.md"
       - Presto: "data-sources/presto.md"
-      - Redshift: "data-sources/redshift.md"
+      - QuestDB: "data-sources/questdb.md"
       - SAP HANA: "data-sources/hana.md"
       - SingleStoreDB: "data-sources/single-store.md"
       - Snowflake: "data-sources/snowflake.md"
-      - Spark: "data-sources/spark.md"
-      - SQL Server: "data-sources/sql-server.md"
+      - Teradata: "data-sources/teradata.md"
       - Timescale: "data-sources/timescale.md"
       - Trino: "data-sources/trino.md"
 ########## INCLUDE TYPES OF CHECKS REFERENCE - DO NOT MODIFY MANUALLY

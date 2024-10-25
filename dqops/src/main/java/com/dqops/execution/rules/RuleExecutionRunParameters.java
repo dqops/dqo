@@ -42,6 +42,7 @@ public class RuleExecutionRunParameters {
     private RuleTimeWindowSettingsSpec timeWindow;
     private Map<String, String> configurationParameters;
     private String modelPath;
+    private RuleModelUpdateMode updateModel;
 
     /**
      * Default empty constructor.
@@ -60,6 +61,7 @@ public class RuleExecutionRunParameters {
      * @param timeWindow Rule threshold time window configuration.
      * @param configurationParameters Optional configuration parameters that are configured in the rule configuration.
      * @param modelPath A path to a folder where the rule can store its model.
+     * @param updateModel The mode of updating an ML model.
      */
     public RuleExecutionRunParameters(Double actualValue,
                                       Double expectedValue,
@@ -69,7 +71,8 @@ public class RuleExecutionRunParameters {
 									  HistoricDataPoint[] previousReadouts,
 									  RuleTimeWindowSettingsSpec timeWindow,
                                       Map<String, String> configurationParameters,
-                                      String modelPath) {
+                                      String modelPath,
+                                      RuleModelUpdateMode updateModel) {
         this.actualValue = actualValue;
         this.expectedValue = expectedValue;
         this.parameters = parameters;
@@ -79,6 +82,7 @@ public class RuleExecutionRunParameters {
         this.timeWindow = timeWindow;
         this.configurationParameters = configurationParameters;
         this.modelPath = modelPath;
+        this.updateModel = updateModel;
     }
 
     /**
@@ -223,5 +227,21 @@ public class RuleExecutionRunParameters {
      */
     public void setModelPath(String modelPath) {
         this.modelPath = modelPath;
+    }
+
+    /**
+     * Returns the mode of updating an ML model.
+     * @return Mode to update the model.
+     */
+    public RuleModelUpdateMode getUpdateModel() {
+        return updateModel;
+    }
+
+    /**
+     * Sets the mode of updating the model.
+     * @param updateModel Model update mode.
+     */
+    public void setUpdateModel(RuleModelUpdateMode updateModel) {
+        this.updateModel = updateModel;
     }
 }
