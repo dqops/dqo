@@ -21,25 +21,28 @@ To import source schemas and tables:
 2. Select the connection from the tree view on the left
 3. Click on the **Import metadata** button on the right. 
 
-    ![Importing metadata](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/importing-metadata.png){ loading=lazy; width="1200px" }
+    ![Importing metadata](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/importing-metadata2.png){ loading=lazy; width="1200px" }
 
 4. Select the source schema name you want to import by clicking on the **Import tables** button.
 
-    ![Importing schemas](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/importing-schemas.png){ loading=lazy; width="1200px" }
+    ![Importing schemas](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/importing-schemas2.png){ loading=lazy; width="1200px" }
 
 5. Select the tables you want to import or import all tables using the buttons in the upper right corner.
 
-    ![Importing tables](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/importing-tables.png){ loading=lazy; width="1200px" }
+    ![Importing tables](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/importing-tables2.png){ loading=lazy; width="1200px" }
+
+## Start data quality assessment
+DQOps simplifies the data quality assessment process which is a routine activity for data governance and quality teams.
 
 Upon import, you will receive information that a new tables have been imported. You can then begin collecting basic statistics
 and profiling data by running default data profiling checks. Simply click on the **Start profiling** button to initiate this process.
 
-![Collect basic statistics and profile data with default profiling checks](https://dqops.com/docs/images/getting-started/collect-basic-statistics-and-profile-data.png)
+![Collect basic statistics and profile data with default profiling checks](https://dqops.com/docs/images/getting-started/collect-basic-statistics-and-profile-data.png){ loading=lazy; width="800px" }
 
 !!! info "Automatically activated checks"
 
-    Once new tables are imported, DQOps automatically activates [profiling and monitoring checks](../dqo-concepts/definition-of-data-quality-checks/index.md).
-    These checks include row count, table availability, and checks detecting schema changes. The profiling checks are scheduled 
+    Once new tables are imported, DQOps automatically activates [profiling and monitoring checks](../dqo-concepts/definition-of-data-quality-checks/index.md) which are which are pre-enabled by [data quality policies](../dqo-concepts/data-observability.md#automatic-activation-of-checks).
+    These checks detect volume anomalies, data freshness anomalies, empty tables, table availability, schema changes, anomalies in the count of distinct values, and null percent anomalies. The profiling checks are scheduled 
     to run at 1:00 a.m. on the 1st day of every month, and the monitoring checks are scheduled to run daily at 12:00 p.m.
     
     [**Profiling checks**](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md) are designed to assess
@@ -50,14 +53,20 @@ and profiling data by running default data profiling checks. Simply click on the
     standard checks that monitor the data quality of a table or column. They can also be referred to as **Data Observability** checks.
     These checks capture a single data quality result for the entire table or column.
 
-## Verify activation of the default checks 
+Follow the link for more information [how to review Data statistics](collecting-basic-data-statistics.md).
 
-To verify the activation of the default checks, go to the **Monitoring checks** section, select the table of interest from
-the tree view on the left and the **Daily checks** tab. The main workspace on the right will show the check editor.
-The toggle button next to the name of the activated default checks will have a light green color. If the check has
+## Run automatically activated monitoring checks
+To run automatically activated monitoring checks, go to the **Monitoring checks** section, select the table of interest from
+the tree view on the left and the **Data quality checks editor** tab. 
+
+The main workspace on the right will show the [Check editor](../dqo-concepts/dqops-user-interface-overview.md#check-editor).
+The table with data quality checks contains a list of checks divided into different data quality subcategories that you
+can expand and collapse by clicking on an arrow. [Learn more about the different check subcategories.](../dqo-concepts/definition-of-data-quality-checks/index.md)
+
+The toggle button next to the name of the automatically activated checks will have a light green color. If the check has
 been activated manually, the toggle button will have a darker green color.
 
-![Default table checks](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/default-table-checks3.png){ loading=lazy; width="1200px" }
+![Automatically activated table checks](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/automatically-activated-table-checks1.png){ loading=lazy; width="1200px" }
 
 Similarly, you can view the column checks. Just select the column of interest from the tree view on the left. 
 
@@ -80,8 +89,7 @@ tree view on the left, click on the Profiling checks or Daily Checks.
 
 ![Navigating to the check editor](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/navigate-to-the-check-editor2.png){ loading=lazy; width="1200px" }
 
-The table with data quality checks contains a list of checks divided into different data quality subcategories that you
-can expand and collapse by clicking on an arrow. [Learn more about the different check subcategories.](../dqo-concepts/definition-of-data-quality-checks/index.md)
+
 
 The right side of the table allows setting different threshold levels (severity levels). [Learn more about threshold levels ](../dqo-concepts/definition-of-data-quality-checks/index.md#issue-severity-levels)
 
