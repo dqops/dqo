@@ -8,6 +8,12 @@ Data observability and data monitoring for Teradata. Detect schema changes, data
 
 Teradata provides the most flexible analytical engine in the most scalable and manageable database for your data warehouse.
 
+!!! note "DQOps free version limits"
+
+    Teradata drivers are not provided in an open-source version.
+
+    For more details, please [contact DQOps sales](https://dqops.com/contact-us/).
+
 ## Add a Teradata connection using the user interface
 
 ### **Navigate to the connection settings**
