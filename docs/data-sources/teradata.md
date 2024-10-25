@@ -8,6 +8,12 @@ Data observability and data monitoring for Teradata. Detect schema changes, data
 
 Teradata provides the most flexible analytical engine in the most scalable and manageable database for your data warehouse.
 
+!!! note "DQOps free version limits"
+
+    Teradata drivers are not provided in an open-source version.
+
+    For more details, please [contact DQOps sales](https://dqops.com/contact-us/).
+
 ## Add a Teradata connection using the user interface
 
 ### **Navigate to the connection settings**
@@ -107,24 +113,24 @@ Fill in the data you will be asked for.
 Connection name (--name): connection1
 Database provider type (--provider):
  [ 1] bigquery
- [ 2] databricks
- [ 3] mysql
- [ 4] oracle
- [ 5] postgresql
- [ 6] duckdb
- [ 7] presto
- [ 8] redshift
- [ 9] snowflake
- [10] spark
- [11] sqlserver
- [12] trino
- [13] hana
- [14] db2
- [15] mariadb
- [16] clickhouse
- [17] questdb
- [18] teradata
-Please enter one of the [] values: 18
+ [ 2] clickhouse
+ [ 3] databricks
+ [ 4] db2
+ [ 5] duckdb
+ [ 6] hana
+ [ 7] mariadb
+ [ 8] mysql
+ [ 9] oracle
+ [10] postgresql
+ [11] presto
+ [12] questdb
+ [13] redshift
+ [14] snowflake
+ [15] spark
+ [16] sqlserver
+ [17] teradata
+ [18] trino
+Please enter one of the [] values: 17
 Teradata host name (--teradata-host) [${TERADATA_HOST}]: localhost
 Teradata port number (--teradata-port) [${TERADATA_PORT}]: 1025
 Teradata user name (--teradata-user) [${TERADATA_USER}]: test

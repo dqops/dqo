@@ -25,8 +25,23 @@ public enum ProviderType {
     @JsonProperty("bigquery")
     bigquery,
 
+    @JsonProperty("clickhouse")
+    clickhouse,
+
     @JsonProperty("databricks")
     databricks,
+
+    @JsonProperty("db2")
+    db2,
+
+    @JsonProperty("duckdb")
+    duckdb,
+
+    @JsonProperty("hana")
+    hana,
+
+    @JsonProperty("mariadb")
+    mariadb,
 
     @JsonProperty("mysql")
     mysql,
@@ -37,11 +52,11 @@ public enum ProviderType {
     @JsonProperty("postgresql")
     postgresql,
 
-    @JsonProperty("duckdb")
-    duckdb,
-
     @JsonProperty("presto")
     presto,
+
+    @JsonProperty("questdb")
+    questdb,
 
     @JsonProperty("redshift")
     redshift,
@@ -55,46 +70,41 @@ public enum ProviderType {
     @JsonProperty("sqlserver")
     sqlserver,
 
-    @JsonProperty("trino")
-    trino,
-
-    @JsonProperty("hana")
-    hana,
-
-    @JsonProperty("db2")
-    db2,
-
-    @JsonProperty("mariadb")
-    mariadb,
-
-    @JsonProperty("clickhouse")
-    clickhouse,
-
-    @JsonProperty("questdb")
-    questdb,
-
     @JsonProperty("teradata")
     teradata,
 
-    // TODO: add more connectors
+    @JsonProperty("trino")
+    trino,
+
+    // TODO: add more connectors, keep in asc order
 
     ;
     public String getDisplayName() {
         switch (this) {
             case bigquery:
                 return "BigQuery";
+            case clickhouse:
+                return "ClickHouse";
             case databricks:
                 return "Databricks";
+            case db2:
+                return "DB2";
+            case duckdb:
+                return "DuckDB";
+            case hana:
+                return "HANA";
+            case mariadb:
+                return "MariaDB";
             case mysql:
                 return "MySQL";
             case oracle:
                 return "Oracle";
             case postgresql:
                 return "PostgreSQL";
-            case duckdb:
-                return "DuckDB";
             case presto:
                 return "Presto";
+            case questdb:
+                return "QuestDB";
             case redshift:
                 return "Redshift";
             case snowflake:
@@ -103,18 +113,10 @@ public enum ProviderType {
                 return "Spark";
             case sqlserver:
                 return "SQL Server";
+            case teradata:
+                return "Teradata";
             case trino:
                 return "Trino";
-            case hana:
-                return "HANA";
-            case db2:
-                return "DB2";
-            case mariadb:
-                return "MariaDB";
-            case clickhouse:
-                return "ClickHouse";
-            case questdb:
-                return "QuestDB";
             default:
                 throw new RuntimeException("Unsupported enum: " + this.name());
         }

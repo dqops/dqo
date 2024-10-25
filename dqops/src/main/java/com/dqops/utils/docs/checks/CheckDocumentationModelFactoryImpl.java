@@ -51,6 +51,7 @@ import com.dqops.connectors.spark.SparkParametersSpec;
 import com.dqops.connectors.spark.SparkProviderDialectSettings;
 import com.dqops.connectors.sqlserver.SqlServerParametersSpec;
 import com.dqops.connectors.sqlserver.SqlServerProviderDialectSettings;
+import com.dqops.connectors.teradata.TeradataProviderDialectSettings;
 import com.dqops.connectors.trino.TrinoParametersSpec;
 import com.dqops.connectors.trino.TrinoProviderDialectSettings;
 import com.dqops.core.principal.UserDomainIdentity;
@@ -776,6 +777,8 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 return new ClickHouseProviderDialectSettings();
             case questdb:
                 return new QuestDbProviderDialectSettings();
+            case teradata:
+                return new TeradataProviderDialectSettings();
             default:
                 throw new DqoRuntimeException("Missing configuration of the dialect settings for the provider " + providerType + ", please add it here");
         }
