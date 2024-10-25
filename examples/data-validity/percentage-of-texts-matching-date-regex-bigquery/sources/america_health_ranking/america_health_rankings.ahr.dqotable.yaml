@@ -48,13 +48,9 @@ spec:
         nullable: true
       monitoring_checks:
         daily:
-          patterns:
-            daily_text_matching_date_pattern_percent:
+          datetime:
+            daily_text_match_date_format_percent:
               parameters:
                 date_format: YYYY-MM-DD
               warning:
                 min_percent: 99.0
-              error:
-                min_percent: 98.0
-              fatal:
-                min_percent: 95.0

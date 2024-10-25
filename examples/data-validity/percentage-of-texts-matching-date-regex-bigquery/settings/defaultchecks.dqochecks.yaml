@@ -8,12 +8,22 @@ spec:
         profile_row_count:
           warning:
             min_count: 1
+      availability:
+        profile_table_availability:
+          warning:
+            max_failures: 0
       schema:
         profile_column_count: {}
     column:
       nulls:
         profile_nulls_count: {}
         profile_nulls_percent: {}
+      schema:
+        profile_column_exists:
+          warning:
+            expected_value: 1
+        profile_column_type_changed:
+          warning: {}
   monitoring_daily:
     table:
       volume:
@@ -66,4 +76,34 @@ spec:
           warning:
             expected_value: 1
         daily_column_type_changed:
+          warning: {}
+  monitoring_monthly:
+    table:
+      volume:
+        monthly_row_count:
+          warning:
+            min_count: 1
+      availability:
+        monthly_table_availability:
+          warning:
+            max_failures: 0
+      schema:
+        monthly_column_count: {}
+        monthly_column_count_changed:
+          warning: {}
+        monthly_column_list_changed:
+          warning: {}
+        monthly_column_list_or_order_changed:
+          warning: {}
+        monthly_column_types_changed:
+          warning: {}
+    column:
+      nulls:
+        monthly_nulls_count: {}
+        monthly_nulls_percent: {}
+      schema:
+        monthly_column_exists:
+          warning:
+            expected_value: 1
+        monthly_column_type_changed:
           warning: {}
