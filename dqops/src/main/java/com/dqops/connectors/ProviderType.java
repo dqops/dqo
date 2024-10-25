@@ -76,25 +76,35 @@ public enum ProviderType {
     @JsonProperty("trino")
     trino,
 
-    // TODO: add more connectors, keep in mind the order
+    // TODO: add more connectors, keep in asc order
 
     ;
     public String getDisplayName() {
         switch (this) {
             case bigquery:
                 return "BigQuery";
+            case clickhouse:
+                return "ClickHouse";
             case databricks:
                 return "Databricks";
+            case db2:
+                return "DB2";
+            case duckdb:
+                return "DuckDB";
+            case hana:
+                return "HANA";
+            case mariadb:
+                return "MariaDB";
             case mysql:
                 return "MySQL";
             case oracle:
                 return "Oracle";
             case postgresql:
                 return "PostgreSQL";
-            case duckdb:
-                return "DuckDB";
             case presto:
                 return "Presto";
+            case questdb:
+                return "QuestDB";
             case redshift:
                 return "Redshift";
             case snowflake:
@@ -103,18 +113,10 @@ public enum ProviderType {
                 return "Spark";
             case sqlserver:
                 return "SQL Server";
+            case teradata:
+                return "Teradata";
             case trino:
                 return "Trino";
-            case hana:
-                return "HANA";
-            case db2:
-                return "DB2";
-            case mariadb:
-                return "MariaDB";
-            case clickhouse:
-                return "ClickHouse";
-            case questdb:
-                return "QuestDB";
             default:
                 throw new RuntimeException("Unsupported enum: " + this.name());
         }
