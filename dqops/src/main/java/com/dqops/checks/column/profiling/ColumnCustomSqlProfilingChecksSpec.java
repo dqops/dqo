@@ -47,6 +47,7 @@ public class ColumnCustomSqlProfilingChecksSpec extends AbstractCheckCategorySpe
             put("profile_sql_condition_failed_on_column", o -> o.profileSqlConditionFailedOnColumn);
             put("profile_sql_condition_passed_percent_on_column", o -> o.profileSqlConditionPassedPercentOnColumn);
             put("profile_sql_aggregate_expression_on_column", o -> o.profileSqlAggregateExpressionOnColumn);
+            put("profile_sql_invalid_value_count_on_column", o -> o.profileSqlInvalidValueCountOnColumn);
             put("profile_import_custom_result_on_column", o -> o.profileImportCustomResultOnColumn);
         }
     };
@@ -60,6 +61,12 @@ public class ColumnCustomSqlProfilingChecksSpec extends AbstractCheckCategorySpe
 
     @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the expected range.")
     private ColumnSqlAggregateExpressionCheckSpec profileSqlAggregateExpressionOnColumn;
+
+    @JsonPropertyDescription("Runs a custom query that retrieves invalid values found in a column and returns the number of them," +
+            " and raises an issue if too many failures were detected. " +
+            "This check is used for setting testing queries or ready queries used by users in their own systems (legacy SQL queries). " +
+            "For example, when this check is applied on a column, the condition can verify that the column has lower value than 18 using an SQL expression: `{alias}.{column} < 18`.")
+    private ColumnSqlConditionFailedCheckSpec profileSqlInvalidValueCountOnColumn;
 
     @JsonPropertyDescription("Runs a custom query that retrieves a result of a data quality check performed in the data engineering, whose result (the severity level) is pulled from a separate table.")
     private ColumnSqlImportCustomResultCheckSpec profileImportCustomResultOnColumn;
@@ -116,6 +123,24 @@ public class ColumnCustomSqlProfilingChecksSpec extends AbstractCheckCategorySpe
         this.setDirtyIf(!Objects.equals(this.profileSqlAggregateExpressionOnColumn, profileSqlAggregateExpressionOnColumn));
         this.profileSqlAggregateExpressionOnColumn = profileSqlAggregateExpressionOnColumn;
         propagateHierarchyIdToField(profileSqlAggregateExpressionOnColumn, "profile_sql_aggregate_expression_on_column");
+    }
+
+    /**
+     * Returns a check specification.
+     * @return New check specification.
+     */
+    public ColumnSqlConditionFailedCheckSpec getProfileSqlInvalidValueCountOnColumn() {
+        return profileSqlInvalidValueCountOnColumn;
+    }
+
+    /**
+     * Sets a new check specification.
+     * @param profileSqlInvalidValueCountOnColumn Check specification.
+     */
+    public void setProfileSqlInvalidValueCountOnColumn(ColumnSqlConditionFailedCheckSpec profileSqlInvalidValueCountOnColumn) {
+        this.setDirtyIf(!Objects.equals(this.profileSqlInvalidValueCountOnColumn, profileSqlInvalidValueCountOnColumn));
+        this.profileSqlInvalidValueCountOnColumn = profileSqlInvalidValueCountOnColumn;
+        propagateHierarchyIdToField(profileSqlInvalidValueCountOnColumn, "profile_sql_invalid_value_count_on_column");
     }
 
     /**
