@@ -96,7 +96,7 @@ public class DefaultObservabilityConfigurationServiceImpl implements DefaultObse
                 continue;
             }
 
-            defaultChecksPattern.applyOnTable(targetTableSpec, providerDialectSettings);
+            defaultChecksPattern.applyOnTable(targetTableSpec, providerDialectSettings, tableQualityPolicyWrapper.getLastModified());
         }
     }
 
@@ -129,7 +129,7 @@ public class DefaultObservabilityConfigurationServiceImpl implements DefaultObse
                 continue;
             }
 
-            defaultChecksPattern.applyOnColumn(targetTableSpec, targetColumnSpec, providerDialectSettings);
+            defaultChecksPattern.applyOnColumn(targetTableSpec, targetColumnSpec, providerDialectSettings, columnQualityPolicyWrapper.getLastModified());
         }
     }
 }

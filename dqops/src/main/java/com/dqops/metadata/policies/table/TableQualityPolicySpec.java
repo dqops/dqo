@@ -40,6 +40,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.base.Strings;
 import lombok.EqualsAndHashCode;
 
+import java.time.Instant;
 import java.util.Objects;
 
 
@@ -294,24 +295,27 @@ public class TableQualityPolicySpec extends AbstractSpec implements InvalidYamlS
      * Applies the default checks on a target table.
      * @param targetTable Target table.
      * @param dialectSettings Dialect settings, to decide if the checks are applicable.
+     * @param policyLastModified The timestamp when the policy YAML file was last modified.
      */
-    public void applyOnTable(TableSpec targetTable, ProviderDialectSettings dialectSettings) {
+    public void applyOnTable(TableSpec targetTable,
+                             ProviderDialectSettings dialectSettings,
+                             Instant policyLastModified) {
         if (this.profilingChecks != null && !this.profilingChecks.isDefault()) {
             AbstractRootChecksContainerSpec tableProfilingContainer = targetTable.getTableCheckRootContainer(CheckType.profiling, null, true);
-            this.profilingChecks.copyChecksToContainer(tableProfilingContainer, targetTable, null, dialectSettings);
+            this.profilingChecks.copyChecksToContainer(tableProfilingContainer, targetTable, null, dialectSettings, policyLastModified);
         }
 
         if (this.monitoringChecks != null) {
             AbstractRootChecksContainerSpec defaultChecksDaily = this.monitoringChecks.getDaily();
             if (defaultChecksDaily != null && !defaultChecksDaily.isDefault()) {
                 AbstractRootChecksContainerSpec targetContainer = targetTable.getTableCheckRootContainer(CheckType.monitoring, CheckTimeScale.daily, true);
-                defaultChecksDaily.copyChecksToContainer(targetContainer, targetTable, null, dialectSettings);
+                defaultChecksDaily.copyChecksToContainer(targetContainer, targetTable, null, dialectSettings, policyLastModified);
             }
 
             AbstractRootChecksContainerSpec defaultChecksMonthly = this.monitoringChecks.getMonthly();
             if (defaultChecksMonthly != null && !defaultChecksMonthly.isDefault()) {
                 AbstractRootChecksContainerSpec targetContainer = targetTable.getTableCheckRootContainer(CheckType.monitoring, CheckTimeScale.monthly, true);
-                defaultChecksMonthly.copyChecksToContainer(targetContainer, targetTable, null, dialectSettings);
+                defaultChecksMonthly.copyChecksToContainer(targetContainer, targetTable, null, dialectSettings, policyLastModified);
             }
         }
 
@@ -320,13 +324,13 @@ public class TableQualityPolicySpec extends AbstractSpec implements InvalidYamlS
             AbstractRootChecksContainerSpec defaultChecksDaily = this.partitionedChecks.getDaily();
             if (defaultChecksDaily != null && !defaultChecksDaily.isDefault()) {
                 AbstractRootChecksContainerSpec targetContainer = targetTable.getTableCheckRootContainer(CheckType.partitioned, CheckTimeScale.daily, true);
-                defaultChecksDaily.copyChecksToContainer(targetContainer, targetTable,null, dialectSettings);
+                defaultChecksDaily.copyChecksToContainer(targetContainer, targetTable,null, dialectSettings, policyLastModified);
             }
 
             AbstractRootChecksContainerSpec defaultChecksMonthly = this.partitionedChecks.getMonthly();
             if (defaultChecksMonthly != null && !defaultChecksMonthly.isDefault()) {
                 AbstractRootChecksContainerSpec targetContainer = targetTable.getTableCheckRootContainer(CheckType.partitioned, CheckTimeScale.monthly, true);
-                defaultChecksMonthly.copyChecksToContainer(targetContainer, targetTable, null, dialectSettings);
+                defaultChecksMonthly.copyChecksToContainer(targetContainer, targetTable, null, dialectSettings, policyLastModified);
             }
         }
     }

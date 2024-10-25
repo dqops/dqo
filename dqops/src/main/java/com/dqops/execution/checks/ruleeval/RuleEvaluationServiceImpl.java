@@ -176,6 +176,17 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                 LocalDateTime timePeriodLocal = timePeriodColumn.get(allSensorResultsRowIndex);
                 HistoricDataPoint[] previousDataPoints = null; // combined data points from current readouts and historic sensor readouts
 
+                if (previousDataPointTimeSeriesCollectorOld != null && timePeriodLocal != null && sensorRunParameters.getCheckConfiguredAt() != null) {
+                    HistoricResultPreviousRun previousResult = previousDataPointTimeSeriesCollectorOld.getPreviousResult(timePeriodLocal);
+                    if (previousResult != null && Objects.equals(previousResult.getLastActualValue(), actualValue) &&
+                            (expectedValueFromSensor == null || Objects.equals(previousResult.getLastExpectedValue(), expectedValueFromSensor)) &&
+                            sensorRunParameters.getCheckConfiguredAt().isBefore(previousResult.getExecutedAt())) {
+                        // no data changes, we can ignore calculating the rule again
+                        continue;
+                    }
+                }
+
+
                 if (customSeverity == null) {
                     if (historicDataPointGrouping == HistoricDataPointsGrouping.last_n_readouts) {
                         // these checks do not have real time periods, we just take the last data points, also we don't want the current sensor results

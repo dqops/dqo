@@ -92,6 +92,7 @@ public class SensorReadoutsNormalizationServiceImplTests extends BaseTest {
                 null,
                 1000,
                 true,
+                null,
                 null);
 		sensorExecutionResult = new SensorExecutionResult(this.sensorExecutionRunParameters, this.table);
     }

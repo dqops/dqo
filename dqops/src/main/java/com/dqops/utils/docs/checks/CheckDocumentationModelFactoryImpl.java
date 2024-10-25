@@ -712,6 +712,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                         new CheckSearchFilters(),
                         1000,
                         true,
+                        null,
                         null
                 );
 

@@ -31,6 +31,8 @@ import com.dqops.metadata.sources.TableSpec;
 import com.dqops.metadata.userhome.UserHome;
 import com.dqops.statistics.AbstractStatisticsCollectorSpec;
 
+import java.time.Instant;
+
 /**
  * Factory for {@link SensorExecutionRunParameters} objects. Expands all parameters in the form ${ENV_VAR} or ${sm://secret-name}
  */
@@ -51,6 +53,7 @@ public interface SensorExecutionRunParametersFactory {
      * @param userTimeWindowFilters Optional user provided time window filters to analyze a time range of data or recent months/days.
      *                             When not provided, the defaults are copied from the table's incremental time window configuration for a matching partition time scale.
      * @param dialectSettings Dialect settings.
+     * @param tableYamlLastModified The timestamp when the table YAML was last modified.
      * @return Sensor execution run parameters.
      */
     SensorExecutionRunParameters createSensorParameters(UserHome userHome,
@@ -64,7 +67,8 @@ public interface SensorExecutionRunParametersFactory {
                                                         TableComparisonConfigurationSpec tableComparisonConfigurationSpec,
                                                         TimeSeriesConfigurationSpec timeSeriesConfigurationSpec,
                                                         TimeWindowFilterParameters userTimeWindowFilters,
-                                                        ProviderDialectSettings dialectSettings);
+                                                        ProviderDialectSettings dialectSettings,
+                                                        Instant tableYamlLastModified);
 
     /**
      * Creates a sensor parameters object for a statistics collector. The sensor parameter object contains cloned, truncated and expanded (parameter expansion)

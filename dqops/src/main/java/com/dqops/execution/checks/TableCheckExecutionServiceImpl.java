@@ -90,6 +90,7 @@ import org.springframework.stereotype.Service;
 import tech.tablesaw.api.*;
 import tech.tablesaw.columns.Column;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -249,13 +250,13 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                 .collect(Collectors.toList());
         executeSingleTableChecks(executionContext, userHome, userTimeWindowFilters, progressListener, dummySensorExecution, executionTarget, jobCancellationToken,
                 checkExecutionSummary, singleTableChecks, tableSpec, outputSensorReadoutsSnapshot, allNormalizedSensorResultsTable, checkResultsSnapshot,
-                allRuleEvaluationResultsTable, allErrorsTable, executionStatistics, checksForErrorSampling, collectErrorSamples);
+                allRuleEvaluationResultsTable, allErrorsTable, executionStatistics, checksForErrorSampling, collectErrorSamples, targetTable.getLastModified());
 
         List<AbstractCheckSpec<?, ?, ?, ?>> tableComparisonChecks = checks.stream().filter(c -> c.isTableComparisonCheck())
                 .collect(Collectors.toList());
         executeTableComparisonChecks(executionContext, userHome, userTimeWindowFilters, progressListener, dummySensorExecution, executionTarget, jobCancellationToken,
                 checkExecutionSummary, tableComparisonChecks, tableSpec, outputSensorReadoutsSnapshot, allNormalizedSensorResultsTable, checkResultsSnapshot,
-                allRuleEvaluationResultsTable, allErrorsTable, executionStatistics);
+                allRuleEvaluationResultsTable, allErrorsTable, executionStatistics, targetTable.getLastModified());
 
         if (outputSensorReadoutsSnapshot.getTableDataChanges().hasChanges() && !dummySensorExecution) {
             allNormalizedSensorResultsTable.removeColumns(severityColumnTemporary); // removed, it was temporary
@@ -326,14 +327,15 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
             Table allErrorsTable,
             TableChecksExecutionStatistics executionStatistics,
             List<AbstractCheckSpec<?, ?, ?, ?>> checksNotPassedForErrorCollection,
-            Boolean collectErrorSamples) {
+            Boolean collectErrorSamples,
+            Instant tableYamlLastModified) {
         if (checks.isEmpty()) {
             return;
         }
 
         List<SensorPrepareResult> allPreparedSensors = this.prepareSensors(
                 checks, executionContext, userHome, tableSpec, userTimeWindowFilters, progressListener,
-                allErrorsTable, checkExecutionSummary, executionStatistics, jobCancellationToken);
+                allErrorsTable, checkExecutionSummary, executionStatistics, jobCancellationToken, tableYamlLastModified);
 
         GroupedSensorsCollection groupedSensorsCollection = new GroupedSensorsCollection(this.dqoSensorLimitsConfigurationProperties.getMaxMergedQueries());
         groupedSensorsCollection.addAllPreparedSensors(allPreparedSensors);
@@ -487,7 +489,8 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
             CheckResultsSnapshot checkResultsSnapshot,
             Table allRuleEvaluationResultsTable,
             Table allErrorsTable,
-            TableChecksExecutionStatistics executionStatistics) {
+            TableChecksExecutionStatistics executionStatistics,
+            Instant tableYamlLastModified) {
         if (checks.isEmpty()) {
             return;
         }
@@ -498,7 +501,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
 
         List<SensorPrepareResult> allPreparedSensorsOnComparedTable = this.prepareSensors(
                 checks, executionContext, userHome, tableSpec, userTimeWindowFilters, progressListener,
-                allErrorsTable, checkExecutionSummary, executionStatistics, jobCancellationToken);
+                allErrorsTable, checkExecutionSummary, executionStatistics, jobCancellationToken, tableYamlLastModified);
 
         GroupedSensorsCollection groupedSensorsCollectionOnComparedTable = new GroupedSensorsCollection(this.dqoSensorLimitsConfigurationProperties.getMaxMergedQueries());
         groupedSensorsCollectionOnComparedTable.addAllPreparedSensors(allPreparedSensorsOnComparedTable);
@@ -509,7 +512,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
 
         List<SensorPrepareResult> allPreparedSensorsOnReferenceTables = this.prepareComparisonSensorsOnReferenceTable(
                 checks, executionContext, userHome, userTimeWindowFilters, progressListener,
-                checkExecutionSummary, executionStatistics, jobCancellationToken);
+                checkExecutionSummary, executionStatistics, jobCancellationToken, tableYamlLastModified);
 
         GroupedSensorsCollection groupedSensorsCollectionOnReferenceTables = new GroupedSensorsCollection(this.dqoSensorLimitsConfigurationProperties.getMaxMergedQueries());
         groupedSensorsCollectionOnReferenceTables.addAllPreparedSensors(allPreparedSensorsOnReferenceTables);
@@ -634,6 +637,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
      * @param checkExecutionSummary Check execution summary where results are added.
      * @param executionStatistics Execution statistics - counts of checks and errors.
      * @param jobCancellationToken Job cancellation token - to cancel the preparation by the user.
+     * @param tableYamlLastModified The timestamp when the table YAML was last modified.
      * @return List of prepared sensors.
      */
     public List<SensorPrepareResult> prepareSensors(Collection<AbstractCheckSpec<?, ?, ?, ?>> checks,
@@ -645,7 +649,8 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                                                     Table allErrorsTable,
                                                     CheckExecutionSummary checkExecutionSummary,
                                                     TableChecksExecutionStatistics executionStatistics,
-                                                    JobCancellationToken jobCancellationToken) {
+                                                    JobCancellationToken jobCancellationToken,
+                                                    Instant tableYamlLastModified) {
         List<SensorPrepareResult> sensorPrepareResults = new ArrayList<>();
         int sensorResultId = 0;
 
@@ -657,7 +662,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
             executionStatistics.incrementExecutedChecksCount(1);
 
             try {
-                SensorExecutionRunParameters sensorRunParameters = createSensorRunParameters(userHome, targetTableSpec, checkSpec, userTimeWindowFilters);
+                SensorExecutionRunParameters sensorRunParameters = createSensorRunParameters(userHome, targetTableSpec, checkSpec, userTimeWindowFilters, tableYamlLastModified);
                 if (!sensorRunParameters.isSuccess()) {
                     this.userErrorLogger.logCheck(sensorRunParameters.toString() + " failed to capture the initial configuration, error: " +
                                     (sensorRunParameters.getSensorConfigurationException() != null ?
@@ -747,6 +752,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
      * @param checkExecutionSummary Check execution summary where results are added.
      * @param executionStatistics Execution statistics - counts of checks and errors.
      * @param jobCancellationToken Job cancellation token - to cancel the preparation by the user.
+     * @param tableYamlLastModified The timestamp when teh table YAML was last modified.
      * @return List of prepared sensors.
      */
     public List<SensorPrepareResult> prepareComparisonSensorsOnReferenceTable(Collection<AbstractCheckSpec<?, ?, ?, ?>> checks,
@@ -756,7 +762,8 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                                                                               CheckExecutionProgressListener progressListener,
                                                                               CheckExecutionSummary checkExecutionSummary,
                                                                               TableChecksExecutionStatistics executionStatistics,
-                                                                              JobCancellationToken jobCancellationToken) {
+                                                                              JobCancellationToken jobCancellationToken,
+                                                                              Instant tableYamlLastModified) {
         List<SensorPrepareResult> sensorPrepareResults = new ArrayList<>();
         int sensorResultId = 0;
 
@@ -766,7 +773,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
             }
 
             try {
-                SensorExecutionRunParameters sensorRunParameters = createSensorRunParametersToReferenceTable(userHome, checkSpec, userTimeWindowFilters);
+                SensorExecutionRunParameters sensorRunParameters = createSensorRunParametersToReferenceTable(userHome, checkSpec, userTimeWindowFilters, tableYamlLastModified);
                 if (!sensorRunParameters.isSuccess()) {
                     this.userErrorLogger.logCheck(sensorRunParameters.toString() + " failed to capture the initial configuration, error: " +
                                     (sensorRunParameters.getSensorConfigurationException() != null ?
@@ -950,12 +957,14 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
      * @param tableSpec Target table to query.
      * @param checkSpec Check specification.
      * @param userTimeWindowFilters Optional user time window filters, to run the checks for a given time period.
+     * @param tableYamlLastModified The timestamp when the table YAML was last modified.
      * @return Sensor run parameters.
      */
     public SensorExecutionRunParameters createSensorRunParameters(UserHome userHome,
                                                                   TableSpec tableSpec,
                                                                   AbstractCheckSpec<?,?,?,?> checkSpec,
-                                                                  TimeWindowFilterParameters userTimeWindowFilters) {
+                                                                  TimeWindowFilterParameters userTimeWindowFilters,
+                                                                  Instant tableYamlLastModified) {
         try {
             HierarchyId checkHierarchyId = checkSpec.getHierarchyId();
             ConnectionWrapper connectionWrapper = userHome.findConnectionFor(checkHierarchyId);
@@ -1027,7 +1036,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
 
             SensorExecutionRunParameters sensorRunParameters = this.sensorExecutionRunParametersFactory.createSensorParameters(
                     userHome, connectionSpec, tableSpec, columnSpec, checkSpec, customCheckDefinitionSpec, checkType, dataGroupingConfigurationForComparison,
-                    tableComparisonConfigurationSpec, timeSeriesConfigurationSpec, userTimeWindowFilters, dialectSettings);
+                    tableComparisonConfigurationSpec, timeSeriesConfigurationSpec, userTimeWindowFilters, dialectSettings, tableYamlLastModified);
             sensorRunParameters.appendAdditionalFilter(extraComparisonFilter);
             return sensorRunParameters;
         }
@@ -1044,11 +1053,13 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
      * @param userHome User home with the metadata.
      * @param checkSpec Table comparison check specification on the compared table.
      * @param userTimeWindowFilters Optional user time window filters, to run the checks for a given time period.
+     * @param tableYamlLastModified The timestamp when the table YAML as last modified.
      * @return Sensor run parameters.
      */
     public SensorExecutionRunParameters createSensorRunParametersToReferenceTable(UserHome userHome,
                                                                                   AbstractCheckSpec<?,?,?,?> checkSpec,
-                                                                                  TimeWindowFilterParameters userTimeWindowFilters) {
+                                                                                  TimeWindowFilterParameters userTimeWindowFilters,
+                                                                                  Instant tableYamlLastModified) {
         try {
             HierarchyId checkHierarchyId = checkSpec.getHierarchyId();
             TableWrapper comparedTableWrapper = userHome.findTableFor(checkHierarchyId);
@@ -1145,7 +1156,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
 
             SensorExecutionRunParameters sensorRunParameters = this.sensorExecutionRunParametersFactory.createSensorParameters(
                     userHome, referencedConnectionSpec, referencedTableSpec, referencedColumnSpec, checkSpec, customCheckDefinitionSpec, checkType, referencedTableGroupingConfiguration,
-                    tableComparisonConfigurationSpec, timeSeriesConfigurationSpec, timeWindowConfigurationFromComparedTable, referencedDialectSettings);
+                    tableComparisonConfigurationSpec, timeSeriesConfigurationSpec, timeWindowConfigurationFromComparedTable, referencedDialectSettings, tableYamlLastModified);
             sensorRunParameters.setTableComparisonConfiguration(tableComparisonConfigurationSpec);
             sensorRunParameters.setReferenceColumnName(referencedColumnName);
             sensorRunParameters.appendAdditionalFilter(tableComparisonConfigurationSpec.getReferenceTableFilter());

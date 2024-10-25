@@ -108,6 +108,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
                 null,
                 1000,
                 true,
+                null,
                 null);
 		progressListener = new CheckExecutionProgressListenerStub();
 		sensorExecutionResult = new SensorExecutionResult(this.sensorExecutionRunParameters, this.table);

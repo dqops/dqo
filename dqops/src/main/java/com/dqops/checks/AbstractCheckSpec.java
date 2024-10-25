@@ -48,6 +48,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import tech.tablesaw.api.IntColumn;
 
+import java.time.Instant;
 import java.util.Objects;
 
 /**
@@ -120,6 +121,13 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
      */
     @JsonIgnore
     private boolean defaultCheck;
+
+    /**
+     * Special field filled with the timestamp of the last modification of the table-level or column-level policy YAML file, if this check
+     * was applied from a data quality policy. It is used to detect the modification time of a check to avoid recalculating rules.
+     */
+    @JsonIgnore
+    private Instant policyLastModified;
 
     /**
      * Returns the schedule configuration for running the checks automatically.
@@ -308,6 +316,24 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
     public void setDefaultCheck(boolean defaultCheck) {
         this.setDirtyIf(this.defaultCheck != defaultCheck);
         this.defaultCheck = defaultCheck;
+    }
+
+    /**
+     * Returns the timestamp of the YAML file modification date of the DQ policy file from which this check was copied.
+     * Filled only when this check was applied form a DQ policy.
+     * @return DQ policy file modification timestamp.
+     */
+    public Instant getPolicyLastModified() {
+        return policyLastModified;
+    }
+
+    /**
+     * Sets the timestamp when the check was modified in the DQ policy (for DQ policy checks only).
+     * @param policyLastModified DQ policy YAML file modification date.
+     */
+    public void setPolicyLastModified(Instant policyLastModified) {
+        this.setDirtyIf(!Objects.equals(this.policyLastModified, policyLastModified));
+        this.policyLastModified = policyLastModified;
     }
 
     /**

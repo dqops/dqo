@@ -37835,7 +37835,7 @@
         "provider_type" : {
           "type" : "string",
           "description" : "Database provider type (required). Accepts: bigquery, snowflake, etc.",
-          "enum" : [ "bigquery", "databricks", "mysql", "oracle", "postgresql", "duckdb", "presto", "redshift", "snowflake", "spark", "sqlserver", "trino", "hana", "db2", "mariadb", "clickhouse", "questdb", "teradata" ]
+          "enum" : [ "bigquery", "clickhouse", "databricks", "db2", "duckdb", "hana", "mariadb", "mysql", "oracle", "postgresql", "presto", "questdb", "redshift", "snowflake", "spark", "sqlserver", "teradata", "trino" ]
         },
         "bigquery" : {
           "description" : "BigQuery connection parameters. Specify parameters in the bigquery section.",
@@ -37969,7 +37969,7 @@
         "provider_type" : {
           "type" : "string",
           "description" : "Database provider type (required).",
-          "enum" : [ "bigquery", "databricks", "mysql", "oracle", "postgresql", "duckdb", "presto", "redshift", "snowflake", "spark", "sqlserver", "trino", "hana", "db2", "mariadb", "clickhouse", "questdb", "teradata" ]
+          "enum" : [ "bigquery", "clickhouse", "databricks", "db2", "duckdb", "hana", "mariadb", "mysql", "oracle", "postgresql", "presto", "questdb", "redshift", "snowflake", "spark", "sqlserver", "teradata", "trino" ]
         },
         "bigquery" : {
           "description" : "BigQuery connection parameters. Specify parameters in the bigquery section.",
@@ -41148,7 +41148,7 @@
         "provider_type" : {
           "type" : "string",
           "description" : "Provider type.",
-          "enum" : [ "bigquery", "databricks", "mysql", "oracle", "postgresql", "duckdb", "presto", "redshift", "snowflake", "spark", "sqlserver", "trino", "hana", "db2", "mariadb", "clickhouse", "questdb", "teradata" ]
+          "enum" : [ "bigquery", "clickhouse", "databricks", "db2", "duckdb", "hana", "mariadb", "mysql", "oracle", "postgresql", "presto", "questdb", "redshift", "snowflake", "spark", "sqlserver", "teradata", "trino" ]
         },
         "custom" : {
           "type" : "boolean",
@@ -41171,7 +41171,7 @@
         "providerType" : {
           "type" : "string",
           "description" : "Provider type.",
-          "enum" : [ "bigquery", "databricks", "mysql", "oracle", "postgresql", "duckdb", "presto", "redshift", "snowflake", "spark", "sqlserver", "trino", "hana", "db2", "mariadb", "clickhouse", "questdb", "teradata" ]
+          "enum" : [ "bigquery", "clickhouse", "databricks", "db2", "duckdb", "hana", "mariadb", "mysql", "oracle", "postgresql", "presto", "questdb", "redshift", "snowflake", "spark", "sqlserver", "teradata", "trino" ]
         },
         "providerSensorDefinitionSpec" : {
           "description" : "Provider specific sensor definition specification",
