@@ -128,7 +128,7 @@ and profiling data by running default data profiling checks. Simply click on the
 !!! info "Automatically activated checks"
 
     Once new tables are imported, DQOps automatically activates checks defined in [data policies](../dqo-concepts/data-observability.md)
-    These checks include row count, table availability, and checks detecting schema changes. By default, the profiling checks are scheduled 
+    These checks detect volume anomalies, data freshness anomalies, empty tables, table availability, schema changes, anomalies in the count of distinct values, and null percent anomalies. By default, the profiling checks are scheduled 
     to run at 1:00 a.m. on the 1st day of every month, and the monitoring checks are scheduled to run daily at 12:00 p.m.
     
     [**Profiling checks**](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md) are designed to assess
