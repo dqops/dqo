@@ -25,8 +25,23 @@ public enum ProviderType {
     @JsonProperty("bigquery")
     bigquery,
 
+    @JsonProperty("clickhouse")
+    clickhouse,
+
     @JsonProperty("databricks")
     databricks,
+
+    @JsonProperty("db2")
+    db2,
+
+    @JsonProperty("duckdb")
+    duckdb,
+
+    @JsonProperty("hana")
+    hana,
+
+    @JsonProperty("mariadb")
+    mariadb,
 
     @JsonProperty("mysql")
     mysql,
@@ -37,11 +52,11 @@ public enum ProviderType {
     @JsonProperty("postgresql")
     postgresql,
 
-    @JsonProperty("duckdb")
-    duckdb,
-
     @JsonProperty("presto")
     presto,
+
+    @JsonProperty("questdb")
+    questdb,
 
     @JsonProperty("redshift")
     redshift,
@@ -55,28 +70,13 @@ public enum ProviderType {
     @JsonProperty("sqlserver")
     sqlserver,
 
-    @JsonProperty("trino")
-    trino,
-
-    @JsonProperty("hana")
-    hana,
-
-    @JsonProperty("db2")
-    db2,
-
-    @JsonProperty("mariadb")
-    mariadb,
-
-    @JsonProperty("clickhouse")
-    clickhouse,
-
-    @JsonProperty("questdb")
-    questdb,
-
     @JsonProperty("teradata")
     teradata,
 
-    // TODO: add more connectors
+    @JsonProperty("trino")
+    trino,
+
+    // TODO: add more connectors, keep in mind the order
 
     ;
     public String getDisplayName() {

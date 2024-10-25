@@ -108,22 +108,24 @@ Fill in the data you will be asked for.
 Connection name (--name): connection1
 Database provider type (--provider):
  [ 1] bigquery
- [ 2] databricks
- [ 3] mysql
- [ 4] oracle
- [ 5] postgresql
- [ 6] duckdb
- [ 7] presto
- [ 8] redshift
- [ 9] snowflake
- [10] spark
- [11] sqlserver
- [12] trino
- [13] hana
- [14] db2
- [15] mariadb
- [16] clickhouse
-Please enter one of the [] values: 15
+ [ 2] clickhouse
+ [ 3] databricks
+ [ 4] db2
+ [ 5] duckdb
+ [ 6] hana
+ [ 7] mariadb
+ [ 8] mysql
+ [ 9] oracle
+ [10] postgresql
+ [11] presto
+ [12] questdb
+ [13] redshift
+ [14] snowflake
+ [15] spark
+ [16] sqlserver
+ [17] teradata
+ [18] trino
+Please enter one of the [] values: 7
 MariaDB host name (--mariadb-host) [${MARIADB_HOST}]: localhost
 MariaDB port number (--mariadb-port) [${MARIADB_PORT}]: 8123
 MariaDB database(--mariadb-database) [${MARIADB_DATABASE}]: testing

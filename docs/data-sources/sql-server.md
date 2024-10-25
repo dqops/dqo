@@ -116,18 +116,24 @@ Fill in the data you will be asked for.
 Connection name (--name): connection1
 Database provider type (--provider): 
  [ 1] bigquery
- [ 2] databricks
- [ 3] mysql
- [ 4] oracle
- [ 5] postgresql
- [ 6] duckdb
- [ 7] presto
- [ 8] redshift
- [ 9] snowflake
- [10] spark
- [11] sqlserver
- [12] trino
-Please enter one of the [] values: 11
+ [ 2] clickhouse
+ [ 3] databricks
+ [ 4] db2
+ [ 5] duckdb
+ [ 6] hana
+ [ 7] mariadb
+ [ 8] mysql
+ [ 9] oracle
+ [10] postgresql
+ [11] presto
+ [12] questdb
+ [13] redshift
+ [14] snowflake
+ [15] spark
+ [16] sqlserver
+ [17] teradata
+ [18] trino
+Please enter one of the [] values: 16
 SQL Server host (--sqlserver-host)[${SQLSERVER_HOST}]: localhost
 SQL Server port (--sqlserver-port) [${SQLSERVER_PORT}]: 1433
 SQL Server database name (--sqlserver-database) [${SQLSERVER_DATABASE}]: TESTING
