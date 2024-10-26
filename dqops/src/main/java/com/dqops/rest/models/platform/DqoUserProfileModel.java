@@ -223,6 +223,12 @@ public class DqoUserProfileModel {
     private boolean canSynchronizeToDataCatalog;
 
     /**
+     * The DQOps instance is a paid version with advanced AI anomaly prediction.
+     */
+    @JsonPropertyDescription("The DQOps instance is a paid version with advanced AI anomaly prediction.")
+    private boolean canUseAiAnomalyDetection;
+
+    /**
      * Creates a user profile model from the API key.
      * @param dqoCloudApiKey DQOps Cloud api key.
      * @param principal Calling user principal.
@@ -270,6 +276,8 @@ public class DqoUserProfileModel {
                     dqoCloudApiKey.getApiKeyPayload().getDataQualityDataWarehouse() == true);
             model.setCanChangeOwnPassword(true);
             model.setCanUseDataDomains(dqoCloudApiKey.getApiKeyPayload().getLicenseType() == DqoCloudLicenseType.ENTERPRISE);
+            model.setCanUseAiAnomalyDetection(dqoCloudApiKey.getApiKeyPayload().getLicenseType() != DqoCloudLicenseType.FREE &&
+                    dqoCloudApiKey.getApiKeyPayload().getExpiresAt() == null);
         } else {
             model.setTenant("Standalone");
             model.setLicenseType(DqoCloudLicenseType.FREE.name());

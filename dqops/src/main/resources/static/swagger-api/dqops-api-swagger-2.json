@@ -39258,6 +39258,10 @@
         "can_synchronize_to_data_catalog" : {
           "type" : "boolean",
           "description" : "User can synchronize data to a data catalog. The instance must be configured correctly and the user must have at least an EDITOR role."
+        },
+        "can_use_ai_anomaly_detection" : {
+          "type" : "boolean",
+          "description" : "The DQOps instance is a paid version with advanced AI anomaly prediction."
         }
       },
       "description" : "The model that describes the current user and his access rights."
@@ -40941,7 +40945,7 @@
         "display_hint" : {
           "type" : "string",
           "description" : "UI control display hint.",
-          "enum" : [ "textarea", "column_names" ]
+          "enum" : [ "textarea", "column_names", "requires_paid_version" ]
         },
         "required" : {
           "type" : "boolean",

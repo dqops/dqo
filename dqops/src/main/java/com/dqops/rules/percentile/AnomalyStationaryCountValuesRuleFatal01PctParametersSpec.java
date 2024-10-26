@@ -16,6 +16,8 @@
 package com.dqops.rules.percentile;
 
 import com.dqops.data.checkresults.normalization.CheckResultsNormalizedResult;
+import com.dqops.metadata.fields.ControlDisplayHint;
+import com.dqops.metadata.fields.DisplayHint;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.AbstractRuleParametersSpec;
@@ -55,6 +57,7 @@ public class AnomalyStationaryCountValuesRuleFatal01PctParametersSpec extends Ab
 
     @JsonPropertyDescription("Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. " +
             "Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution.")
+    @ControlDisplayHint(DisplayHint.requires_paid_version)
     private Boolean useAi;
 
     /**

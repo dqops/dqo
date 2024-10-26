@@ -25,6 +25,7 @@ spec:
       \ AI models is not supported in an open-source distribution of DQOps. Please\
       \ contact DQOps support to upgrade your instance to a closed-source DQOps distribution."
     data_type: boolean
+    display_hint: requires_paid_version
   parameters:
     degrees_of_freedom: 5
     ai_degrees_of_freedom: 8
