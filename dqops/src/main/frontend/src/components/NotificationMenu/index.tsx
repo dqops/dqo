@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { toggleMenu } from '../../redux/actions/job.actions';
@@ -9,16 +9,38 @@ import NotificationMenuHeader from './NotificationMenuContent.tsx/NotificationMe
 const NotificationMenu = () => {
   const { isOpen } = useSelector((state: IRootState) => state.job || {});
   const dispatch = useActionDispatch();
+  const menuRef = useRef<HTMLDivElement>(null);
 
-  const toggleOpen = () => {
+  const toggleOpen = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    e.stopPropagation();
     dispatch(toggleMenu(!isOpen));
   };
 
+  const handleClickOutside = (e: MouseEvent) => {
+    if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+      dispatch(toggleMenu(false));
+    }
+  };
+
+  useEffect(() => {
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen]);
+
   return (
-    <div style={{ position: 'relative', display: 'inline-block' }}>
+    <div
+      ref={menuRef}
+      style={{ position: 'relative', display: 'inline-block' }}
+    >
       <div
-        onClick={toggleOpen}
-        className="flex items-center justify-center mt-3 ml-3 mr-4 cursor-pointer "
+        onClick={(e) => toggleOpen(e)}
+        className="flex items-center justify-center mt-3 ml-3 mr-4 cursor-pointer"
       >
         <NotificationMenuHeader />
       </div>
