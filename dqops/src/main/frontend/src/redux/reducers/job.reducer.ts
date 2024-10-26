@@ -235,11 +235,16 @@ const schemaReducer = (state = initialState, action: any) => {
           }
         }
       });
+
+      const isNewNotification =
+        Object.keys(state.job_dictionary_state).length !==
+        Object.keys(job_dictionary_state).length;
+
       return {
         ...state,
         loading: false,
         lastSequenceNumber: action.data.lastSequenceNumber,
-        newNotification: true,
+        newNotification: isNewNotification ? true : state.newNotification,
         job_dictionary_state,
         jobList,
         notificationCount,

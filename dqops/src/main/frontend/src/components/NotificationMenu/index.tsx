@@ -1,10 +1,4 @@
-import {
-  IconButton,
-  Popover,
-  PopoverContent,
-  PopoverHandler
-} from '@material-tailwind/react';
-import React, { memo } from 'react';
+import React, { memo, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { toggleMenu } from '../../redux/actions/job.actions';
@@ -15,29 +9,58 @@ import NotificationMenuHeader from './NotificationMenuContent.tsx/NotificationMe
 const NotificationMenu = () => {
   const { isOpen } = useSelector((state: IRootState) => state.job || {});
   const dispatch = useActionDispatch();
+  const menuRef = useRef<HTMLDivElement>(null);
 
-  const toggleOpen = () => {
+  const toggleOpen = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    e.stopPropagation();
     dispatch(toggleMenu(!isOpen));
   };
 
+  const handleClickOutside = (e: MouseEvent) => {
+    if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+      dispatch(toggleMenu(false));
+    }
+  };
+
+  useEffect(() => {
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen]);
+
   return (
-    <Popover placement="bottom-end" open={isOpen} handler={toggleOpen}>
-      <PopoverHandler style={{ position: 'relative' }}>
-        <IconButton
-          className="!mr-3 !bg-transparent !shadow-none hover:!shadow-none"
-          ripple={false}
-          variant="text"
-        >
-          <NotificationMenuHeader />
-        </IconButton>
-      </PopoverHandler>
-      <PopoverContent
-        className="min-w-120 max-w-120 px-0 relative z-[101]"
-        style={{ position: 'relative', zIndex: '100' }}
+    <div
+      ref={menuRef}
+      style={{ position: 'relative', display: 'inline-block' }}
+    >
+      <div
+        onClick={(e) => toggleOpen(e)}
+        className="flex items-center justify-center mt-3 ml-3 mr-4 cursor-pointer"
       >
-        <NotificationMenuContent />
-      </PopoverContent>
-    </Popover>
+        <NotificationMenuHeader />
+      </div>
+
+      {isOpen && (
+        <div
+          style={{
+            position: 'absolute',
+            top: '130%',
+            right: 0,
+            padding: 0,
+            backgroundColor: 'white',
+            boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.15)'
+          }}
+          className="!z-[9999]"
+        >
+          <NotificationMenuContent />
+        </div>
+      )}
+    </div>
   );
 };
 
