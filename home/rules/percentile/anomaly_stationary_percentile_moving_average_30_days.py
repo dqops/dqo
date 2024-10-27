@@ -138,7 +138,8 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 
     else:
         # using unrestricted method
-        threshold_upper_result, threshold_lower_result, forecast = detect_anomaly(values=extracted, median=filtered_median_float,
+        anomaly_data = convert_historic_data_stationary(rule_parameters.previous_readouts, lambda readout: readout)
+        threshold_upper_result, threshold_lower_result, forecast = detect_anomaly(historic_data=anomaly_data, median=filtered_median_float,
                                                                                   tail=tail, parameters=rule_parameters)
 
         passed = True

@@ -44,13 +44,15 @@ public class SummaryCheckExecutionProgressListener extends SilentCheckExecutionP
      */
     @Override
     public void onCheckExecutionFinished(CheckExecutionFinishedEvent event) {
-        if (this.isShowSummary()) {
-            CheckExecutionSummary checkExecutionSummary = event.getCheckExecutionSummary();
-            TablesawDatasetTableModel tablesawDatasetTableModel = new TablesawDatasetTableModel(checkExecutionSummary.getSummaryTable());
-            this.terminalWriter.writeTable(tablesawDatasetTableModel, true);
-            CheckExecutionErrorSummary checkExecutionErrorSummary = checkExecutionSummary.getCheckExecutionErrorSummary();
-            if (checkExecutionErrorSummary != null) {
-                this.terminalWriter.writeLine(checkExecutionErrorSummary.getSummaryMessage());
+        synchronized (this.lock) {
+            if (this.isShowSummary()) {
+                CheckExecutionSummary checkExecutionSummary = event.getCheckExecutionSummary();
+                TablesawDatasetTableModel tablesawDatasetTableModel = new TablesawDatasetTableModel(checkExecutionSummary.getSummaryTable());
+                this.terminalWriter.writeTable(tablesawDatasetTableModel, true);
+                CheckExecutionErrorSummary checkExecutionErrorSummary = checkExecutionSummary.getCheckExecutionErrorSummary();
+                if (checkExecutionErrorSummary != null) {
+                    this.terminalWriter.writeLine(checkExecutionErrorSummary.getSummaryMessage());
+                }
             }
         }
     }

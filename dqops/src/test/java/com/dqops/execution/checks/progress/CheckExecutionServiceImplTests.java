@@ -57,6 +57,7 @@ import com.dqops.execution.checks.CheckExecutionServiceImpl;
 import com.dqops.execution.checks.CheckExecutionSummary;
 import com.dqops.execution.checks.RunChecksTarget;
 import com.dqops.execution.checks.TableCheckExecutionServiceImpl;
+import com.dqops.execution.checks.ruleeval.RuleEvaluationSchedulerProviderObjectMother;
 import com.dqops.execution.checks.ruleeval.RuleEvaluationService;
 import com.dqops.execution.checks.ruleeval.RuleEvaluationServiceImpl;
 import com.dqops.execution.checks.scheduled.ScheduledTargetChecksFindService;
@@ -196,7 +197,8 @@ public class CheckExecutionServiceImplTests extends BaseTest {
                 defaultObservabilityConfigurationService,
                 tableErrorSamplerExecutionService,
                 DefaultTimeZoneProviderObjectMother.getDefaultTimeZoneProvider(),
-                new ParallelJobLimitProviderStub(2));
+                new ParallelJobLimitProviderStub(2),
+                RuleEvaluationSchedulerProviderObjectMother.getDefault());
 
         this.sut = new CheckExecutionServiceImpl(
                 hierarchyNodeTreeSearcher,

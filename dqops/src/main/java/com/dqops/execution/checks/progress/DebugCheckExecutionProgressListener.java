@@ -54,22 +54,24 @@ public class DebugCheckExecutionProgressListener extends InfoCheckExecutionProgr
      */
     @Override
     public void onSensorExecuted(SensorExecutedEvent event) {
-        renderEventHeader();
-        String tableName = event.getTableSpec().getPhysicalTableName().toString();
-        SensorExecutionRunParameters sensorRunParameters = event.getSensorRunParameters();
-        String checkName = sensorRunParameters.getCheck().getCheckName();
-        String sensorDefinitionName = sensorRunParameters.getEffectiveSensorRuleNames().getSensorName();
-        Table resultTable = event.getSensorResult().getResultTable();
-        int sensorResultCount = resultTable.rowCount();
-        this.terminalWriter.writeLine(String.format("Finished executing a sensor for a check %s on the table %s using a sensor definition %s, sensor result count: %d",
-                checkName, tableName, sensorDefinitionName, sensorResultCount));
-        this.terminalWriter.writeLine("");
+        synchronized (this.lock) {
+            renderEventHeader();
+            String tableName = event.getTableSpec().getPhysicalTableName().toString();
+            SensorExecutionRunParameters sensorRunParameters = event.getSensorRunParameters();
+            String checkName = sensorRunParameters.getCheck().getCheckName();
+            String sensorDefinitionName = sensorRunParameters.getEffectiveSensorRuleNames().getSensorName();
+            Table resultTable = event.getSensorResult().getResultTable();
+            int sensorResultCount = resultTable.rowCount();
+            this.terminalWriter.writeLine(String.format("Finished executing a sensor for a check %s on the table %s using a sensor definition %s, sensor result count: %d",
+                    checkName, tableName, sensorDefinitionName, sensorResultCount));
+            this.terminalWriter.writeLine("");
 
-        this.terminalWriter.writeLine("Results returned by the sensor:");
-        Table tableSample = (sensorResultCount > 10) ? resultTable.first(10) : resultTable;
-        this.terminalWriter.writeTable(tableSample, true);
+            this.terminalWriter.writeLine("Results returned by the sensor:");
+            Table tableSample = (sensorResultCount > 10) ? resultTable.first(10) : resultTable;
+            this.terminalWriter.writeTable(tableSample, true);
 
-        renderEventFooter();
+            renderEventFooter();
+        }
     }
 
     /**
@@ -79,15 +81,17 @@ public class DebugCheckExecutionProgressListener extends InfoCheckExecutionProgr
      */
     @Override
     public void onSensorFailed(SensorFailedEvent event) {
-        renderEventHeader();
-        String tableName = event.getTableSpec().getPhysicalTableName().toString();
-        SensorExecutionRunParameters sensorRunParameters = event.getSensorRunParameters();
-        String checkName = sensorRunParameters.getCheck().getCheckName();
-        String sensorDefinitionName = sensorRunParameters.getEffectiveSensorRuleNames().getSensorName();
-        this.terminalWriter.writeLine(String.format("Sensor failed with an error for a check %s on the table %s using a sensor definition %s",
-                checkName, tableName, sensorDefinitionName));
-        this.terminalWriter.writeLine("Error message: " + event.getSensorExecutionException().getMessage());
-        renderEventFooter();
+        synchronized (this.lock) {
+            renderEventHeader();
+            String tableName = event.getTableSpec().getPhysicalTableName().toString();
+            SensorExecutionRunParameters sensorRunParameters = event.getSensorRunParameters();
+            String checkName = sensorRunParameters.getCheck().getCheckName();
+            String sensorDefinitionName = sensorRunParameters.getEffectiveSensorRuleNames().getSensorName();
+            this.terminalWriter.writeLine(String.format("Sensor failed with an error for a check %s on the table %s using a sensor definition %s",
+                    checkName, tableName, sensorDefinitionName));
+            this.terminalWriter.writeLine("Error message: " + event.getSensorExecutionException().getMessage());
+            renderEventFooter();
+        }
     }
 
     /**
@@ -107,21 +111,23 @@ public class DebugCheckExecutionProgressListener extends InfoCheckExecutionProgr
      */
     @Override
     public void onRuleExecuted(RuleExecutedEvent event) {
-        renderEventHeader();
-        String tableName = event.getTableSpec().getPhysicalTableName().toString();
-        String checkName = event.getSensorRunParameters().getCheck().getCheckName();
-        Table ruleResultsTable = event.getRuleEvaluationResult().getRuleResultsTable();
-        int evaluatedRulesCount = ruleResultsTable.rowCount();
-        this.terminalWriter.writeLine(String.format("Finished executing rules (thresholds) for a check %s on the table %s, verified rules count: %d",
-                checkName, tableName, evaluatedRulesCount));
+        synchronized (this.lock) {
+            renderEventHeader();
+            String tableName = event.getTableSpec().getPhysicalTableName().toString();
+            String checkName = event.getSensorRunParameters().getCheck().getCheckName();
+            Table ruleResultsTable = event.getRuleEvaluationResult().getRuleResultsTable();
+            int evaluatedRulesCount = ruleResultsTable.rowCount();
+            this.terminalWriter.writeLine(String.format("Finished executing rules (thresholds) for a check %s on the table %s, verified rules count: %d",
+                    checkName, tableName, evaluatedRulesCount));
 
-        this.terminalWriter.writeLine("");
-        this.terminalWriter.writeLine("Rule evaluation results:");
-        Table tableSample = (evaluatedRulesCount > 10) ? ruleResultsTable.first(10) : TableCopyUtility.fastTableCopy(ruleResultsTable);
-        tableSample.removeColumnsWithMissingValues();
-        this.terminalWriter.writeTable(tableSample, true);
+            this.terminalWriter.writeLine("");
+            this.terminalWriter.writeLine("Rule evaluation results:");
+            Table tableSample = (evaluatedRulesCount > 10) ? ruleResultsTable.first(10) : TableCopyUtility.fastTableCopy(ruleResultsTable);
+            tableSample.removeColumnsWithMissingValues();
+            this.terminalWriter.writeTable(tableSample, true);
 
-        renderEventFooter();
+            renderEventFooter();
+        }
     }
 
     /**
@@ -131,13 +137,15 @@ public class DebugCheckExecutionProgressListener extends InfoCheckExecutionProgr
      */
     @Override
     public void onRuleFailed(RuleFailedEvent event) {
-        renderEventHeader();
-        String tableName = event.getTableSpec().getPhysicalTableName().toString();
-        String checkName = event.getSensorRunParameters().getCheck().getCheckName();
-        this.terminalWriter.writeLine(String.format("Rule evaluation failed with an error for a check %s on the table %s using a rule definition %s",
-                checkName, tableName, event.getRuleDefinitionName()));
-        this.terminalWriter.writeLine("Error message: " + event.getRuleExecutionException().getMessage());
-        renderEventFooter();
+        synchronized (this.lock) {
+            renderEventHeader();
+            String tableName = event.getTableSpec().getPhysicalTableName().toString();
+            String checkName = event.getSensorRunParameters().getCheck().getCheckName();
+            this.terminalWriter.writeLine(String.format("Rule evaluation failed with an error for a check %s on the table %s using a rule definition %s",
+                    checkName, tableName, event.getRuleDefinitionName()));
+            this.terminalWriter.writeLine("Error message: " + event.getRuleExecutionException().getMessage());
+            renderEventFooter();
+        }
     }
 
     /**
@@ -177,22 +185,24 @@ public class DebugCheckExecutionProgressListener extends InfoCheckExecutionProgr
      */
     @Override
     public void onBeforeSqlTemplateRender(BeforeSqlTemplateRenderEvent event) {
-        renderEventHeader();
-        //String tableName = event.getInputDto().getParameters().getTable().getTarget().toPhysicalTableName().toString();
-        //String sensorDefinitionPath = event.getInputDto().getParameters().getSensorDefinition().getHierarchyId().toString();
-        String templateText = event.getInputDto().getTemplateText();
-        String templateHomePath = event.getInputDto().getTemplateHomePath();
-        this.terminalWriter.writeLine(String.format("Calling Jinja2 rendering template %s", templateHomePath));
-        if (templateText != null) {
-            this.terminalWriter.writeLine("The following template will be filled:");
-            this.terminalWriter.writeLine(templateText);
+        synchronized (this.lock) {
+            renderEventHeader();
+            //String tableName = event.getInputDto().getParameters().getTable().getTarget().toPhysicalTableName().toString();
+            //String sensorDefinitionPath = event.getInputDto().getParameters().getSensorDefinition().getHierarchyId().toString();
+            String templateText = event.getInputDto().getTemplateText();
+            String templateHomePath = event.getInputDto().getTemplateHomePath();
+            this.terminalWriter.writeLine(String.format("Calling Jinja2 rendering template %s", templateHomePath));
+            if (templateText != null) {
+                this.terminalWriter.writeLine("The following template will be filled:");
+                this.terminalWriter.writeLine(templateText);
+            }
+
+            String serializedParameters = this.jsonSerializer.serialize(event.getInputDto());
+            this.terminalWriter.writeLine("JSON parameters sent to the Jinja2 template:");
+            this.terminalWriter.writeLine(serializedParameters);
+
+            renderEventFooter();
         }
-
-        String serializedParameters = this.jsonSerializer.serialize(event.getInputDto());
-        this.terminalWriter.writeLine("JSON parameters sent to the Jinja2 template:");
-        this.terminalWriter.writeLine(serializedParameters);
-
-        renderEventFooter();
     }
 
     /**
@@ -202,16 +212,18 @@ public class DebugCheckExecutionProgressListener extends InfoCheckExecutionProgr
      */
     @Override
     public void onSqlTemplateRendered(SqlTemplateRenderedRenderedEvent event) {
-        renderEventHeader();
-        String renderedTemplate = event.getOutput().getTemplate();
-        String errorMessage = event.getOutput().getError();
-        if (errorMessage != null) {
-            this.terminalWriter.writeLine(String.format("Failed to render a Jinja2 sensor template, error: %s", errorMessage));
-        } else {
-            this.terminalWriter.writeLine("Jinja2 engine has rendered the following template:");
-            this.terminalWriter.writeLine(renderedTemplate);
+        synchronized (this.lock) {
+            renderEventHeader();
+            String renderedTemplate = event.getOutput().getTemplate();
+            String errorMessage = event.getOutput().getError();
+            if (errorMessage != null) {
+                this.terminalWriter.writeLine(String.format("Failed to render a Jinja2 sensor template, error: %s", errorMessage));
+            } else {
+                this.terminalWriter.writeLine("Jinja2 engine has rendered the following template:");
+                this.terminalWriter.writeLine(renderedTemplate);
+            }
+            renderEventFooter();
         }
-        renderEventFooter();
     }
 
     /**
@@ -221,14 +233,16 @@ public class DebugCheckExecutionProgressListener extends InfoCheckExecutionProgr
      */
     @Override
     public void onExecutingSqlOnConnection(ExecutingSqlOnConnectionEvent event) {
-        renderEventHeader();
-        String connectionName = event.getConnectionSpec().getConnectionName();
-        String providerType = event.getConnectionSpec().getProviderType().name();
-        String sql = event.getRenderedSql();
-        this.terminalWriter.writeLine(String.format("Executing SQL on connection %s (%s)", connectionName, providerType));
-        this.terminalWriter.writeLine("SQL to be executed on the connection:");
-        this.terminalWriter.writeLine(sql);
-        renderEventFooter();
+        synchronized (this.lock) {
+            renderEventHeader();
+            String connectionName = event.getConnectionSpec().getConnectionName();
+            String providerType = event.getConnectionSpec().getProviderType().name();
+            String sql = event.getRenderedSql();
+            this.terminalWriter.writeLine(String.format("Executing SQL on connection %s (%s)", connectionName, providerType));
+            this.terminalWriter.writeLine("SQL to be executed on the connection:");
+            this.terminalWriter.writeLine(sql);
+            renderEventFooter();
+        }
     }
 
     /**
@@ -238,14 +252,16 @@ public class DebugCheckExecutionProgressListener extends InfoCheckExecutionProgr
      */
     @Override
     public void onCheckExecutionFinished(CheckExecutionFinishedEvent event) {
-        renderEventHeader();
-        CheckExecutionSummary checkExecutionSummary = event.getCheckExecutionSummary();
-        TablesawDatasetTableModel tablesawDatasetTableModel = new TablesawDatasetTableModel(checkExecutionSummary.getSummaryTable());
-        this.terminalWriter.writeTable(tablesawDatasetTableModel, true);
-        CheckExecutionErrorSummary checkExecutionErrorSummary = checkExecutionSummary.getCheckExecutionErrorSummary();
-        if (checkExecutionErrorSummary != null) {
-            this.terminalWriter.writeLine(checkExecutionErrorSummary.getDebugMessage());
+        synchronized (this.lock) {
+            renderEventHeader();
+            CheckExecutionSummary checkExecutionSummary = event.getCheckExecutionSummary();
+            TablesawDatasetTableModel tablesawDatasetTableModel = new TablesawDatasetTableModel(checkExecutionSummary.getSummaryTable());
+            this.terminalWriter.writeTable(tablesawDatasetTableModel, true);
+            CheckExecutionErrorSummary checkExecutionErrorSummary = checkExecutionSummary.getCheckExecutionErrorSummary();
+            if (checkExecutionErrorSummary != null) {
+                this.terminalWriter.writeLine(checkExecutionErrorSummary.getDebugMessage());
+            }
+            renderEventFooter();
         }
-        renderEventFooter();
     }
 }

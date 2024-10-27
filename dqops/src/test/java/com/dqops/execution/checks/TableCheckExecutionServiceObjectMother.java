@@ -38,6 +38,8 @@ import com.dqops.data.readouts.normalization.SensorReadoutsNormalizationServiceI
 import com.dqops.data.readouts.snapshot.SensorReadoutsSnapshotFactoryImpl;
 import com.dqops.data.storage.ParquetPartitionStorageServiceImpl;
 import com.dqops.data.storage.ParquetPartitionStorageServiceObjectMother;
+import com.dqops.execution.checks.ruleeval.RuleEvaluationSchedulerProvider;
+import com.dqops.execution.checks.ruleeval.RuleEvaluationSchedulerProviderObjectMother;
 import com.dqops.execution.checks.ruleeval.RuleEvaluationServiceImpl;
 import com.dqops.execution.errorsampling.TableErrorSamplerExecutionServiceImpl;
 import com.dqops.execution.rules.DataQualityRuleRunnerImpl;
@@ -132,7 +134,8 @@ public class TableCheckExecutionServiceObjectMother {
                 defaultObservabilityConfigurationService,
                 tableErrorSamplerExecutionService,
                 DefaultTimeZoneProviderObjectMother.getDefaultTimeZoneProvider(),
-                new ParallelJobLimitProviderStub(2));
+                new ParallelJobLimitProviderStub(2),
+                RuleEvaluationSchedulerProviderObjectMother.getDefault());
 
         return tableCheckExecutionService;
     }

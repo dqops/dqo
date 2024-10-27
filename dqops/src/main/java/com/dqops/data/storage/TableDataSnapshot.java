@@ -37,6 +37,7 @@ import java.time.LocalTime;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 /**
@@ -53,10 +54,11 @@ public class TableDataSnapshot {
     private final Table newResultsTable;
     private final String[] columnNames;
     private final String[] allColumnNames;
-    private Map<ParquetPartitionId, LoadedMonthlyPartition> loadedMonthlyPartitions;
-    private LocalDate firstLoadedMonth;
-    private LocalDate lastLoadedMonth;
+    private ConcurrentHashMap<ParquetPartitionId, LoadedMonthlyPartition> loadedMonthlyPartitions;
+    private volatile LocalDate firstLoadedMonth;
+    private volatile LocalDate lastLoadedMonth;
     private Table cachedAllData;
+    private final Object allDataLock = new Object();
 
     /**
      * Creates a new writable snapshot of data for a single parquet table with results for one connection and physical table.
@@ -193,26 +195,27 @@ public class TableDataSnapshot {
      */
     @Deprecated()
     public Table getAllData() {
-        if (this.cachedAllData != null) {
-            return this.cachedAllData;
-        }
+        synchronized (this.allDataLock) {
+            if (this.cachedAllData != null) {
+                return this.cachedAllData;
+            }
 
-        Table allData = null;
-        if (this.loadedMonthlyPartitions != null) {
-            for (LoadedMonthlyPartition loadedMonthlyPartition : this.loadedMonthlyPartitions.values()) {
-                if (loadedMonthlyPartition.getData() != null) {
-                    if (allData == null) {
-                        allData = TableCopyUtility.fastTableCopy(loadedMonthlyPartition.getData());
-                    }
-                    else {
-                        allData.append(loadedMonthlyPartition.getData());
+            Table allData = null;
+            if (this.loadedMonthlyPartitions != null) {
+                for (LoadedMonthlyPartition loadedMonthlyPartition : this.loadedMonthlyPartitions.values()) {
+                    if (loadedMonthlyPartition.getData() != null) {
+                        if (allData == null) {
+                            allData = TableCopyUtility.fastTableCopy(loadedMonthlyPartition.getData());
+                        } else {
+                            allData.append(loadedMonthlyPartition.getData());
+                        }
                     }
                 }
             }
-        }
 
-        this.cachedAllData = allData;
-        return allData;
+            this.cachedAllData = allData;
+            return allData;
+        }
     }
 
     /**
@@ -357,11 +360,13 @@ public class TableDataSnapshot {
                     this.connectionName, this.tableName, this.firstLoadedMonth, this.lastLoadedMonth, this.storageSettings, this.getExpectedColumns(), this.userIdentity);
             if (loadedPartitions != null) {
                 if (this.loadedMonthlyPartitions == null) {
-                    this.loadedMonthlyPartitions = new LinkedHashMap<>();
+                    this.loadedMonthlyPartitions = new ConcurrentHashMap<>();
                 }
                 updateSchemaForLoadedPartitions(loadedPartitions);
                 this.loadedMonthlyPartitions.putAll(loadedPartitions);
-                this.cachedAllData = null;
+                synchronized (this.allDataLock) {
+                    this.cachedAllData = null;
+                }
                 return true;
             }
         }
@@ -377,7 +382,9 @@ public class TableDataSnapshot {
             if (loadedEarlierPartitions != null) {
                 updateSchemaForLoadedPartitions(loadedEarlierPartitions);
                 this.loadedMonthlyPartitions.putAll(loadedEarlierPartitions);
-                this.cachedAllData = null;
+                synchronized (this.allDataLock) {
+                    this.cachedAllData = null;
+                }
                 anyMonthLoaded = true;
             }
         }
@@ -393,7 +400,9 @@ public class TableDataSnapshot {
             if (loadedLaterPartitions != null) {
                 updateSchemaForLoadedPartitions(loadedLaterPartitions);
                 this.loadedMonthlyPartitions.putAll(loadedLaterPartitions);
-                this.cachedAllData = null;
+                synchronized (this.allDataLock) {
+                    this.cachedAllData = null;
+                }
                 anyMonthLoaded = true;
             }
         }
@@ -433,11 +442,13 @@ public class TableDataSnapshot {
                         .orElse(null);
 
                 if (this.loadedMonthlyPartitions == null) {
-                    this.loadedMonthlyPartitions = new LinkedHashMap<>();
+                    this.loadedMonthlyPartitions = new ConcurrentHashMap<>();
                 }
                 updateSchemaForLoadedPartitions(loadedPartitions);
                 this.loadedMonthlyPartitions.putAll(loadedPartitions);
-                this.cachedAllData = null;
+                synchronized (this.allDataLock) {
+                    this.cachedAllData = null;
+                }
             }
         }
         else {
@@ -457,7 +468,9 @@ public class TableDataSnapshot {
                 this.lastLoadedMonth = lastLoadedLaterMonth.orElse(this.lastLoadedMonth);
                 updateSchemaForLoadedPartitions(loadedLaterPartitions);
                 this.loadedMonthlyPartitions.putAll(loadedLaterPartitions);
-                this.cachedAllData = null;
+                synchronized (this.allDataLock) {
+                    this.cachedAllData = null;
+                }
             }
             currentlyLoadedPartitions = loadedMonthlyPartitions == null ? 0 : loadedMonthlyPartitions.size();
             needToLoad = maxRecentMonthsToLoad - currentlyLoadedPartitions;
@@ -481,7 +494,9 @@ public class TableDataSnapshot {
                 this.firstLoadedMonth = lastLoadedEarlierMonth.orElse(this.firstLoadedMonth);
                 updateSchemaForLoadedPartitions(loadedEarlierPartitions);
                 this.loadedMonthlyPartitions.putAll(loadedEarlierPartitions);
-                this.cachedAllData = null;
+                synchronized (this.allDataLock) {
+                    this.cachedAllData = null;
+                }
             }
         }
     }
