@@ -22,6 +22,7 @@ import com.dqops.core.configuration.DqoConfigurationProperties;
 import com.dqops.core.configuration.DqoConfigurationPropertiesObjectMother;
 import com.dqops.core.configuration.DqoPythonConfigurationProperties;
 import com.dqops.core.configuration.DqoPythonConfigurationPropertiesObjectMother;
+import com.dqops.core.jobqueue.concurrency.ParallelJobLimitProviderStub;
 import com.dqops.data.readouts.factory.SensorReadoutsColumnNames;
 import com.dqops.execution.sensors.TimeWindowFilterParameters;
 import com.dqops.metadata.definitions.sensors.ProviderSensorDefinitionSpec;
@@ -57,7 +58,7 @@ public class JinjaTemplateRenderServiceImplTests extends BaseTest {
         DqoPythonConfigurationProperties pythonConfigurationProperties = DqoPythonConfigurationPropertiesObjectMother.getDefaultCloned();
         PythonVirtualEnvService pythonVirtualEnvService = PythonVirtualEnvServiceObjectMother.getDefault();
         PythonCallerServiceImpl pythonCallerService = new PythonCallerServiceImpl(
-                dqoConfigurationProperties, pythonConfigurationProperties, new JsonSerializerImpl(), pythonVirtualEnvService);
+                dqoConfigurationProperties, pythonConfigurationProperties, new JsonSerializerImpl(), pythonVirtualEnvService, new ParallelJobLimitProviderStub(8));
 		this.sut = new JinjaTemplateRenderServiceImpl(pythonCallerService, pythonConfigurationProperties);
         table = new TableSpec();
         table.setPhysicalTableName(new PhysicalTableName("schema1", "table1"));

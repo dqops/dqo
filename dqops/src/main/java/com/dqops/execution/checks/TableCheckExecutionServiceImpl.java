@@ -29,6 +29,7 @@ import com.dqops.core.configuration.DqoSensorLimitsConfigurationProperties;
 import com.dqops.core.incidents.IncidentImportQueueService;
 import com.dqops.core.incidents.TableIncidentImportBatch;
 import com.dqops.core.jobqueue.*;
+import com.dqops.core.jobqueue.concurrency.ParallelJobLimitProvider;
 import com.dqops.core.jobqueue.exceptions.DqoQueueJobCancelledException;
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.checkresults.factory.CheckResultsColumnNames;
@@ -120,6 +121,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
     private final DefaultObservabilityConfigurationService defaultObservabilityConfigurationService;
     private final TableErrorSamplerExecutionService tableErrorSamplerExecutionService;
     private final DefaultTimeZoneProvider defaultTimeZoneProvider;
+    private final ParallelJobLimitProvider parallelJobLimitProvider;
 
     /**
      * Creates a data quality check execution service.
@@ -140,6 +142,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
      * @param defaultObservabilityConfigurationService Default observability configuration service.
      * @param tableErrorSamplerExecutionService Table error sampling service, to collect error samples for failed data quality checks (when requested).
      * @param defaultTimeZoneProvider Default time zone provider.
+     * @param parallelJobLimitProvider Service that returns the limit of parallel jobs to run.
      */
     @Autowired
     public TableCheckExecutionServiceImpl(HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher,
@@ -158,7 +161,8 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                                           UserErrorLogger userErrorLogger,
                                           DefaultObservabilityConfigurationService defaultObservabilityConfigurationService,
                                           TableErrorSamplerExecutionService tableErrorSamplerExecutionService,
-                                          DefaultTimeZoneProvider defaultTimeZoneProvider) {
+                                          DefaultTimeZoneProvider defaultTimeZoneProvider,
+                                          ParallelJobLimitProvider parallelJobLimitProvider) {
         this.hierarchyNodeTreeSearcher = hierarchyNodeTreeSearcher;
         this.sensorExecutionRunParametersFactory = sensorExecutionRunParametersFactory;
         this.dataQualitySensorRunner = dataQualitySensorRunner;
@@ -176,6 +180,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
         this.defaultObservabilityConfigurationService = defaultObservabilityConfigurationService;
         this.tableErrorSamplerExecutionService = tableErrorSamplerExecutionService;
         this.defaultTimeZoneProvider = defaultTimeZoneProvider;
+        this.parallelJobLimitProvider = parallelJobLimitProvider;
     }
 
     /**

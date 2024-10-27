@@ -35,6 +35,7 @@ import com.dqops.core.configuration.*;
 import com.dqops.core.jobqueue.DqoJobQueueObjectMother;
 import com.dqops.core.jobqueue.DqoQueueJobFactoryImpl;
 import com.dqops.core.jobqueue.JobCancellationTokenObjectMother;
+import com.dqops.core.jobqueue.concurrency.ParallelJobLimitProviderStub;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.principal.DqoUserPrincipalObjectMother;
 import com.dqops.data.errors.normalization.ErrorsNormalizationService;
@@ -194,7 +195,8 @@ public class CheckExecutionServiceImplTests extends BaseTest {
                 userErrorLogger,
                 defaultObservabilityConfigurationService,
                 tableErrorSamplerExecutionService,
-                DefaultTimeZoneProviderObjectMother.getDefaultTimeZoneProvider());
+                DefaultTimeZoneProviderObjectMother.getDefaultTimeZoneProvider(),
+                new ParallelJobLimitProviderStub(2));
 
         this.sut = new CheckExecutionServiceImpl(
                 hierarchyNodeTreeSearcher,

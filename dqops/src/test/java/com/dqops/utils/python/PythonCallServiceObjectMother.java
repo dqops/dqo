@@ -19,6 +19,7 @@ import com.dqops.core.configuration.DqoConfigurationProperties;
 import com.dqops.core.configuration.DqoConfigurationPropertiesObjectMother;
 import com.dqops.core.configuration.DqoPythonConfigurationProperties;
 import com.dqops.core.configuration.DqoPythonConfigurationPropertiesObjectMother;
+import com.dqops.core.jobqueue.concurrency.ParallelJobLimitProviderStub;
 import com.dqops.utils.BeanFactoryObjectMother;
 import com.dqops.utils.serialization.JsonSerializerImpl;
 import org.springframework.beans.factory.BeanFactory;
@@ -35,7 +36,8 @@ public class PythonCallServiceObjectMother {
         DqoConfigurationProperties configurationProperties = DqoConfigurationPropertiesObjectMother.getDefaultCloned();
         PythonVirtualEnvService pythonVirtualEnvService = PythonVirtualEnvServiceObjectMother.getDefault();
         DqoPythonConfigurationProperties pythonConfigurationProperties = DqoPythonConfigurationPropertiesObjectMother.getDefaultCloned();
-        return new PythonCallerServiceImpl(configurationProperties, pythonConfigurationProperties, new JsonSerializerImpl(), pythonVirtualEnvService);
+        return new PythonCallerServiceImpl(configurationProperties, pythonConfigurationProperties, new JsonSerializerImpl(), pythonVirtualEnvService,
+                new ParallelJobLimitProviderStub(8));
     }
 
     /**

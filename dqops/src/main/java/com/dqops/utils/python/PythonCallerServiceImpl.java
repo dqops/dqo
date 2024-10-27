@@ -17,6 +17,8 @@ package com.dqops.utils.python;
 
 import com.dqops.core.configuration.DqoConfigurationProperties;
 import com.dqops.core.configuration.DqoPythonConfigurationProperties;
+import com.dqops.core.jobqueue.concurrency.ParallelJobLimitProvider;
+import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.dqops.utils.serialization.JsonSerializer;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.exec.CommandLine;
@@ -47,8 +49,10 @@ public class PythonCallerServiceImpl implements PythonCallerService, DisposableB
     private final DqoPythonConfigurationProperties pythonConfigurationProperties;
     private final JsonSerializer jsonSerializer;
     private final PythonVirtualEnvService pythonVirtualEnvService;
-    private Map<String, Stack<StreamingPythonProcess>> pythonModuleProcesses = new LinkedHashMap<>();
+    private final ParallelJobLimitProvider parallelJobLimitProvider;
+    private Map<String, PythonScriptProcesses> pythonModuleProcesses = new LinkedHashMap<>();
     private final Object processDictionaryLock = new Object();
+    private Integer maxProcessesPerScript;
 
     /**
      * Default injection constructor.
@@ -61,11 +65,33 @@ public class PythonCallerServiceImpl implements PythonCallerService, DisposableB
     public PythonCallerServiceImpl(DqoConfigurationProperties configurationProperties,
                                    DqoPythonConfigurationProperties pythonConfigurationProperties,
                                    JsonSerializer jsonSerializer,
-                                   PythonVirtualEnvService pythonVirtualEnvService){
+                                   PythonVirtualEnvService pythonVirtualEnvService,
+                                   ParallelJobLimitProvider parallelJobLimitProvider){
         this.configurationProperties = configurationProperties;
         this.pythonConfigurationProperties = pythonConfigurationProperties;
         this.jsonSerializer = jsonSerializer;
         this.pythonVirtualEnvService = pythonVirtualEnvService;
+        this.parallelJobLimitProvider = parallelJobLimitProvider;
+    }
+
+    /**
+     * Returns a maximum degree of parallelism, which is the number of scripts of one type that can be started at a time.
+     * It is never higher than the number of CPU cores.
+     * @return The maximum number of processes of one type to run.
+     */
+    public int getMaxProcessesPerScript() {
+        if (this.maxProcessesPerScript != null) {
+            return this.maxProcessesPerScript;
+        }
+
+        if (this.parallelJobLimitProvider != null) {
+            int maxDegreeOfParallelism = this.parallelJobLimitProvider.getMaxDegreeOfParallelism();
+            this.maxProcessesPerScript = Math.min(maxDegreeOfParallelism, Runtime.getRuntime().availableProcessors());
+        } else {
+            this.maxProcessesPerScript = 1;
+        }
+        
+        return this.maxProcessesPerScript;
     }
 
     /**
@@ -108,7 +134,7 @@ public class PythonCallerServiceImpl implements PythonCallerService, DisposableB
      */
     @Override
     public <I, O> O executePythonHomeScript(I input, String pythonFilePathInHome, Class<O> outputType) {
-        Stack<StreamingPythonProcess> availableProcessesStack = null;
+        PythonScriptProcesses availableProcesses = null;
         StreamingPythonProcess streamingPythonProcess = null;
 
         synchronized (this.processDictionaryLock) {
@@ -117,13 +143,26 @@ public class PythonCallerServiceImpl implements PythonCallerService, DisposableB
                     throw new PythonExecutionException("Python script cannot be called, because Python processes were already closed and the application is shutting down."); // closing
                 }
 
-                availableProcessesStack = this.pythonModuleProcesses.get(pythonFilePathInHome);
-                if (availableProcessesStack == null) {
-                    availableProcessesStack = new Stack<>();
-                    this.pythonModuleProcesses.put(pythonFilePathInHome, availableProcessesStack);
+                availableProcesses = this.pythonModuleProcesses.get(pythonFilePathInHome);
+                if (availableProcesses == null) {
+                    availableProcesses = new PythonScriptProcesses();
+                    this.pythonModuleProcesses.put(pythonFilePathInHome, availableProcesses);
                 }
 
-                if (availableProcessesStack.isEmpty()) {
+                int maxDoP = getMaxProcessesPerScript();
+                if (availableProcesses.getRunningProcesses() >= maxDoP) {
+                    try {
+                        this.processDictionaryLock.wait();
+
+                        if (availableProcesses.getRunningProcesses() >= maxDoP) {
+                            continue;
+                        }
+                    } catch (InterruptedException e) {
+                        throw new DqoRuntimeException(e);
+                    }
+                }
+
+                if (availableProcesses.getAvailableProcesses().isEmpty()) {
                     String absolutePythonPath = resolveAbsolutePathToHomeFile(pythonFilePathInHome);
                     PythonVirtualEnv virtualEnv = this.pythonVirtualEnvService.getVirtualEnv();
                     String commandLineText = String.format(
@@ -134,12 +173,14 @@ public class PythonCallerServiceImpl implements PythonCallerService, DisposableB
                     streamingPythonProcess = new StreamingPythonProcess(this.jsonSerializer, commandLineText, this.pythonConfigurationProperties.getPythonScriptTimeoutSeconds());
                     streamingPythonProcess.startProcess(virtualEnv);
                 } else {
-                    streamingPythonProcess = availableProcessesStack.pop();
+                    streamingPythonProcess = availableProcesses.getAvailableProcesses().pop();
                 }
 
                 if (!streamingPythonProcess.isClosed()) {
+                    availableProcesses.incrementRunningProcesses();
                     break; // we can use this process
                 }
+
                 // else, the process was taken out from the pool, but it is already closed, so we are abandoning it
             }
         }
@@ -147,12 +188,19 @@ public class PythonCallerServiceImpl implements PythonCallerService, DisposableB
         try {
             O receiveMessage = streamingPythonProcess.sendReceiveMessage(input, outputType);
             synchronized (this.processDictionaryLock) {
-                availableProcessesStack.add(streamingPythonProcess); // put it back for the next call
+                availableProcesses.getAvailableProcesses().add(streamingPythonProcess); // put it back for the next call
+                availableProcesses.decrementRunningProcesses();
+                this.processDictionaryLock.notify();
             }
             return receiveMessage;
         }
         catch (Exception ex) {
-            // when the process fails, we want to stat a new process
+            // when the process fails, we want to start a new process
+            synchronized (this.processDictionaryLock) {
+                availableProcesses.decrementRunningProcesses();
+                this.processDictionaryLock.notify();
+            }
+
             streamingPythonProcess.close();
             log.error("Python process failed: " + ex.getMessage() + " when running " + pythonFilePathInHome + " Python file", ex);
             throw new PythonExecutionException("Python process failed: " + ex.getMessage() + " when running " + pythonFilePathInHome + " Python file", ex);
@@ -223,8 +271,8 @@ public class PythonCallerServiceImpl implements PythonCallerService, DisposableB
         ArrayList<StreamingPythonProcess> allProcesses = new ArrayList<>();
 
         synchronized (this.processDictionaryLock) {
-            for (Stack<StreamingPythonProcess> processesStack : this.pythonModuleProcesses.values()) {
-                allProcesses.addAll(processesStack);
+            for (PythonScriptProcesses processesStack : this.pythonModuleProcesses.values()) {
+                allProcesses.addAll(processesStack.getAvailableProcesses());
             }
             this.pythonModuleProcesses = null;
         }

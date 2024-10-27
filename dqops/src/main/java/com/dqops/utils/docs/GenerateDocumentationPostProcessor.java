@@ -292,7 +292,7 @@ public class GenerateDocumentationPostProcessor {
         PythonVirtualEnvServiceImpl pythonVirtualEnvService = new PythonVirtualEnvServiceImpl(
                 configurationProperties, createPythonConfiguration(), dqoUserConfigurationProperties);
         PythonCallerServiceImpl pythonCallerService = new PythonCallerServiceImpl(
-                configurationProperties, pythonConfigurationProperties, new JsonSerializerImpl(), pythonVirtualEnvService);
+                configurationProperties, pythonConfigurationProperties, new JsonSerializerImpl(), pythonVirtualEnvService, null);
 
         return pythonCallerService;
     }

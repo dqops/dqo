@@ -21,6 +21,7 @@ import com.dqops.connectors.ConnectionProviderRegistry;
 import com.dqops.connectors.ConnectionProviderRegistryObjectMother;
 import com.dqops.core.configuration.*;
 import com.dqops.core.incidents.IncidentImportQueueServiceStub;
+import com.dqops.core.jobqueue.concurrency.ParallelJobLimitProviderStub;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.core.secrets.SecretValueProviderObjectMother;
 import com.dqops.data.checkresults.factory.CheckResultsTableFactoryImpl;
@@ -130,7 +131,8 @@ public class TableCheckExecutionServiceObjectMother {
                 userErrorLogger,
                 defaultObservabilityConfigurationService,
                 tableErrorSamplerExecutionService,
-                DefaultTimeZoneProviderObjectMother.getDefaultTimeZoneProvider());
+                DefaultTimeZoneProviderObjectMother.getDefaultTimeZoneProvider(),
+                new ParallelJobLimitProviderStub(2));
 
         return tableCheckExecutionService;
     }
