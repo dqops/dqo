@@ -718,6 +718,43 @@ spec:
                     
                 ) AS tab_scan
             ```
+    ??? example "Teradata"
+
+        === "Sensor template for Teradata"
+
+            ```sql+jinja
+            {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
+            SELECT
+                0.0 AS actual_value
+                {{- lib.render_time_dimension_projection('tab_scan') }}
+            FROM
+                (
+                    SELECT
+                        *
+                        {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    FROM {{ lib.render_target_table() }} AS analyzed_table
+                    {{ lib.render_where_clause() }}
+                    QUALIFY ROW_NUMBER() OVER (ORDER BY 1) = 1
+                ) AS tab_scan
+            {% if lib.time_series is not none -%}
+            GROUP BY time_period
+            ORDER BY time_period
+            {%- endif -%}
+            ```
+        === "Rendered SQL for Teradata"
+
+            ```sql
+            SELECT
+                0.0 AS actual_value
+            FROM
+                (
+                    SELECT
+                        *
+                    FROM "<target_schema>"."<target_table>" AS analyzed_table
+                    
+                    QUALIFY ROW_NUMBER() OVER (ORDER BY 1) = 1
+                ) AS tab_scan
+            ```
     ??? example "Trino"
 
         === "Sensor template for Trino"
@@ -1465,6 +1502,43 @@ spec:
                     
                 ) AS tab_scan
             ```
+    ??? example "Teradata"
+
+        === "Sensor template for Teradata"
+
+            ```sql+jinja
+            {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
+            SELECT
+                0.0 AS actual_value
+                {{- lib.render_time_dimension_projection('tab_scan') }}
+            FROM
+                (
+                    SELECT
+                        *
+                        {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    FROM {{ lib.render_target_table() }} AS analyzed_table
+                    {{ lib.render_where_clause() }}
+                    QUALIFY ROW_NUMBER() OVER (ORDER BY 1) = 1
+                ) AS tab_scan
+            {% if lib.time_series is not none -%}
+            GROUP BY time_period
+            ORDER BY time_period
+            {%- endif -%}
+            ```
+        === "Rendered SQL for Teradata"
+
+            ```sql
+            SELECT
+                0.0 AS actual_value
+            FROM
+                (
+                    SELECT
+                        *
+                    FROM "<target_schema>"."<target_table>" AS analyzed_table
+                    
+                    QUALIFY ROW_NUMBER() OVER (ORDER BY 1) = 1
+                ) AS tab_scan
+            ```
     ??? example "Trino"
 
         === "Sensor template for Trino"
@@ -2210,6 +2284,43 @@ spec:
                         *
                     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
                     
+                ) AS tab_scan
+            ```
+    ??? example "Teradata"
+
+        === "Sensor template for Teradata"
+
+            ```sql+jinja
+            {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
+            SELECT
+                0.0 AS actual_value
+                {{- lib.render_time_dimension_projection('tab_scan') }}
+            FROM
+                (
+                    SELECT
+                        *
+                        {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    FROM {{ lib.render_target_table() }} AS analyzed_table
+                    {{ lib.render_where_clause() }}
+                    QUALIFY ROW_NUMBER() OVER (ORDER BY 1) = 1
+                ) AS tab_scan
+            {% if lib.time_series is not none -%}
+            GROUP BY time_period
+            ORDER BY time_period
+            {%- endif -%}
+            ```
+        === "Rendered SQL for Teradata"
+
+            ```sql
+            SELECT
+                0.0 AS actual_value
+            FROM
+                (
+                    SELECT
+                        *
+                    FROM "<target_schema>"."<target_table>" AS analyzed_table
+                    
+                    QUALIFY ROW_NUMBER() OVER (ORDER BY 1) = 1
                 ) AS tab_scan
             ```
     ??? example "Trino"

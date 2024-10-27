@@ -617,7 +617,7 @@ Data source provider type (dialect type).
 
 |&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
 |-----------|-------------|
-|string|bigquery<br/>databricks<br/>mysql<br/>oracle<br/>postgresql<br/>duckdb<br/>presto<br/>redshift<br/>snowflake<br/>spark<br/>sqlserver<br/>trino<br/>hana<br/>db2<br/>mariadb<br/>clickhouse<br/>questdb<br/>|
+|string|bigquery<br/>clickhouse<br/>databricks<br/>db2<br/>duckdb<br/>hana<br/>mariadb<br/>mysql<br/>oracle<br/>postgresql<br/>presto<br/>questdb<br/>redshift<br/>snowflake<br/>spark<br/>sqlserver<br/>teradata<br/>trino<br/>|
 
 ___
 
@@ -652,6 +652,7 @@ Connection model returned by the rest api that is limited only to the basic fiel
 |<span class="no-wrap-code">[`mariadb`](../../reference/yaml/ConnectionYaml.md#mariadbparametersspec)</span>|MariaDB connection parameters.|*[MariaDbParametersSpec](../../reference/yaml/ConnectionYaml.md#mariadbparametersspec)*|
 |<span class="no-wrap-code">[`clickhouse`](../../reference/yaml/ConnectionYaml.md#clickhouseparametersspec)</span>|ClickHouse connection parameters.|*[ClickHouseParametersSpec](../../reference/yaml/ConnectionYaml.md#clickhouseparametersspec)*|
 |<span class="no-wrap-code">[`questdb`](../../reference/yaml/ConnectionYaml.md#questdbparametersspec)</span>|QuestDB connection parameters.|*[QuestDbParametersSpec](../../reference/yaml/ConnectionYaml.md#questdbparametersspec)*|
+|<span class="no-wrap-code">[`teradata`](../../reference/yaml/ConnectionYaml.md#teradataparametersspec)</span>|Teradata connection parameters.|*[TeradataParametersSpec](../../reference/yaml/ConnectionYaml.md#teradataparametersspec)*|
 |<span class="no-wrap-code">[`run_checks_job_template`](./common.md#checksearchfilters)</span>|Configured parameters for the "check run" job that should be pushed to the job queue in order to run all checks within this connection.|*[CheckSearchFilters](./common.md#checksearchfilters)*|
 |<span class="no-wrap-code">[`run_profiling_checks_job_template`](./common.md#checksearchfilters)</span>|Configured parameters for the "check run" job that should be pushed to the job queue in order to run profiling checks within this connection.|*[CheckSearchFilters](./common.md#checksearchfilters)*|
 |<span class="no-wrap-code">[`run_monitoring_checks_job_template`](./common.md#checksearchfilters)</span>|Configured parameters for the "check run" job that should be pushed to the job queue in order to run monitoring checks within this connection.|*[CheckSearchFilters](./common.md#checksearchfilters)*|

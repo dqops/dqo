@@ -33,6 +33,7 @@ if TYPE_CHECKING:
     from ..models.snowflake_parameters_spec import SnowflakeParametersSpec
     from ..models.spark_parameters_spec import SparkParametersSpec
     from ..models.sql_server_parameters_spec import SqlServerParametersSpec
+    from ..models.teradata_parameters_spec import TeradataParametersSpec
     from ..models.trino_parameters_spec import TrinoParametersSpec
 
 
@@ -61,6 +62,7 @@ class ConnectionSpec:
         mariadb (Union[Unset, MariaDbParametersSpec]):
         clickhouse (Union[Unset, ClickHouseParametersSpec]):
         questdb (Union[Unset, QuestDbParametersSpec]):
+        teradata (Union[Unset, TeradataParametersSpec]):
         parallel_jobs_limit (Union[Unset, int]): The concurrency limit for the maximum number of parallel SQL queries
             executed on this connection.
         default_grouping_configuration (Union[Unset, DataGroupingConfigurationSpec]):
@@ -98,6 +100,7 @@ class ConnectionSpec:
     mariadb: Union[Unset, "MariaDbParametersSpec"] = UNSET
     clickhouse: Union[Unset, "ClickHouseParametersSpec"] = UNSET
     questdb: Union[Unset, "QuestDbParametersSpec"] = UNSET
+    teradata: Union[Unset, "TeradataParametersSpec"] = UNSET
     parallel_jobs_limit: Union[Unset, int] = UNSET
     default_grouping_configuration: Union[Unset, "DataGroupingConfigurationSpec"] = (
         UNSET
@@ -184,6 +187,10 @@ class ConnectionSpec:
         if not isinstance(self.questdb, Unset):
             questdb = self.questdb.to_dict()
 
+        teradata: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.teradata, Unset):
+            teradata = self.teradata.to_dict()
+
         parallel_jobs_limit = self.parallel_jobs_limit
         default_grouping_configuration: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.default_grouping_configuration, Unset):
@@ -259,6 +266,8 @@ class ConnectionSpec:
             field_dict["clickhouse"] = clickhouse
         if questdb is not UNSET:
             field_dict["questdb"] = questdb
+        if teradata is not UNSET:
+            field_dict["teradata"] = teradata
         if parallel_jobs_limit is not UNSET:
             field_dict["parallel_jobs_limit"] = parallel_jobs_limit
         if default_grouping_configuration is not UNSET:
@@ -312,6 +321,7 @@ class ConnectionSpec:
         from ..models.snowflake_parameters_spec import SnowflakeParametersSpec
         from ..models.spark_parameters_spec import SparkParametersSpec
         from ..models.sql_server_parameters_spec import SqlServerParametersSpec
+        from ..models.teradata_parameters_spec import TeradataParametersSpec
         from ..models.trino_parameters_spec import TrinoParametersSpec
 
         d = src_dict.copy()
@@ -441,6 +451,13 @@ class ConnectionSpec:
         else:
             questdb = QuestDbParametersSpec.from_dict(_questdb)
 
+        _teradata = d.pop("teradata", UNSET)
+        teradata: Union[Unset, TeradataParametersSpec]
+        if isinstance(_teradata, Unset):
+            teradata = UNSET
+        else:
+            teradata = TeradataParametersSpec.from_dict(_teradata)
+
         parallel_jobs_limit = d.pop("parallel_jobs_limit", UNSET)
 
         _default_grouping_configuration = d.pop("default_grouping_configuration", UNSET)
@@ -514,6 +531,7 @@ class ConnectionSpec:
             mariadb=mariadb,
             clickhouse=clickhouse,
             questdb=questdb,
+            teradata=teradata,
             parallel_jobs_limit=parallel_jobs_limit,
             default_grouping_configuration=default_grouping_configuration,
             schedules=schedules,

@@ -994,6 +994,64 @@ spec:
                     ) / 24.0 / 3600.0 AS actual_value
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
             ```
+    ??? example "Teradata"
+
+        === "Sensor template for Teradata"
+
+            ```sql+jinja
+            {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
+            
+            {% macro render_current_event_diff() -%}
+                {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                (
+                    EXTRACT(DAY FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 86400
+                    + EXTRACT(HOUR FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 3600
+                    + EXTRACT(MINUTE FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 60
+                    + EXTRACT(SECOND FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND))
+                ) / 24.0 / 3600.0
+                {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                DATEDIFF(
+                    CURRENT_DATE,
+                    MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+                )
+                {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                (
+                    EXTRACT(DAY FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 86400
+                    + EXTRACT(HOUR FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 3600
+                    + EXTRACT(MINUTE FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 60
+                    + EXTRACT(SECOND FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND))
+                ) / 24.0 / 3600.0
+                {%- else -%}
+                (
+                    EXTRACT(DAY FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 86400
+                    + EXTRACT(HOUR FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 3600
+                    + EXTRACT(MINUTE FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 60
+                    + EXTRACT(SECOND FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND))
+                ) / 24.0 / 3600.0
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                {{ render_current_event_diff() }} AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Teradata"
+
+            ```sql
+            SELECT
+                (
+                    EXTRACT(DAY FROM ((CURRENT_TIMESTAMP - CAST(MAX(analyzed_table."col_event_timestamp") AS TIMESTAMP)) DAY(4) TO SECOND)) * 86400
+                    + EXTRACT(HOUR FROM ((CURRENT_TIMESTAMP - CAST(MAX(analyzed_table."col_event_timestamp") AS TIMESTAMP)) DAY(4) TO SECOND)) * 3600
+                    + EXTRACT(MINUTE FROM ((CURRENT_TIMESTAMP - CAST(MAX(analyzed_table."col_event_timestamp") AS TIMESTAMP)) DAY(4) TO SECOND)) * 60
+                    + EXTRACT(SECOND FROM ((CURRENT_TIMESTAMP - CAST(MAX(analyzed_table."col_event_timestamp") AS TIMESTAMP)) DAY(4) TO SECOND))
+                ) / 24.0 / 3600.0 AS actual_value
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            ```
     ??? example "Trino"
 
         === "Sensor template for Trino"
@@ -2031,6 +2089,66 @@ Expand the *Configure with data grouping* section to see additional examples for
                 
             
                 
+            ```
+    ??? example "Teradata"
+
+        === "Sensor template for Teradata"
+            ```sql+jinja
+            {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
+            
+            {% macro render_current_event_diff() -%}
+                {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                (
+                    EXTRACT(DAY FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 86400
+                    + EXTRACT(HOUR FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 3600
+                    + EXTRACT(MINUTE FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 60
+                    + EXTRACT(SECOND FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND))
+                ) / 24.0 / 3600.0
+                {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                DATEDIFF(
+                    CURRENT_DATE,
+                    MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+                )
+                {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                (
+                    EXTRACT(DAY FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 86400
+                    + EXTRACT(HOUR FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 3600
+                    + EXTRACT(MINUTE FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 60
+                    + EXTRACT(SECOND FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND))
+                ) / 24.0 / 3600.0
+                {%- else -%}
+                (
+                    EXTRACT(DAY FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 86400
+                    + EXTRACT(HOUR FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 3600
+                    + EXTRACT(MINUTE FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 60
+                    + EXTRACT(SECOND FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND))
+                ) / 24.0 / 3600.0
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                {{ render_current_event_diff() }} AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Teradata"
+            ```sql
+            SELECT
+                (
+                    EXTRACT(DAY FROM ((CURRENT_TIMESTAMP - CAST(MAX(analyzed_table."col_event_timestamp") AS TIMESTAMP)) DAY(4) TO SECOND)) * 86400
+                    + EXTRACT(HOUR FROM ((CURRENT_TIMESTAMP - CAST(MAX(analyzed_table."col_event_timestamp") AS TIMESTAMP)) DAY(4) TO SECOND)) * 3600
+                    + EXTRACT(MINUTE FROM ((CURRENT_TIMESTAMP - CAST(MAX(analyzed_table."col_event_timestamp") AS TIMESTAMP)) DAY(4) TO SECOND)) * 60
+                    + EXTRACT(SECOND FROM ((CURRENT_TIMESTAMP - CAST(MAX(analyzed_table."col_event_timestamp") AS TIMESTAMP)) DAY(4) TO SECOND))
+                ) / 24.0 / 3600.0 AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Trino"
 
@@ -3094,6 +3212,64 @@ spec:
                     ) / 24.0 / 3600.0 AS actual_value
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
             ```
+    ??? example "Teradata"
+
+        === "Sensor template for Teradata"
+
+            ```sql+jinja
+            {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
+            
+            {% macro render_current_event_diff() -%}
+                {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                (
+                    EXTRACT(DAY FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 86400
+                    + EXTRACT(HOUR FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 3600
+                    + EXTRACT(MINUTE FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 60
+                    + EXTRACT(SECOND FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND))
+                ) / 24.0 / 3600.0
+                {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                DATEDIFF(
+                    CURRENT_DATE,
+                    MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+                )
+                {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                (
+                    EXTRACT(DAY FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 86400
+                    + EXTRACT(HOUR FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 3600
+                    + EXTRACT(MINUTE FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 60
+                    + EXTRACT(SECOND FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND))
+                ) / 24.0 / 3600.0
+                {%- else -%}
+                (
+                    EXTRACT(DAY FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 86400
+                    + EXTRACT(HOUR FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 3600
+                    + EXTRACT(MINUTE FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 60
+                    + EXTRACT(SECOND FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND))
+                ) / 24.0 / 3600.0
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                {{ render_current_event_diff() }} AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Teradata"
+
+            ```sql
+            SELECT
+                (
+                    EXTRACT(DAY FROM ((CURRENT_TIMESTAMP - CAST(MAX(analyzed_table."col_event_timestamp") AS TIMESTAMP)) DAY(4) TO SECOND)) * 86400
+                    + EXTRACT(HOUR FROM ((CURRENT_TIMESTAMP - CAST(MAX(analyzed_table."col_event_timestamp") AS TIMESTAMP)) DAY(4) TO SECOND)) * 3600
+                    + EXTRACT(MINUTE FROM ((CURRENT_TIMESTAMP - CAST(MAX(analyzed_table."col_event_timestamp") AS TIMESTAMP)) DAY(4) TO SECOND)) * 60
+                    + EXTRACT(SECOND FROM ((CURRENT_TIMESTAMP - CAST(MAX(analyzed_table."col_event_timestamp") AS TIMESTAMP)) DAY(4) TO SECOND))
+                ) / 24.0 / 3600.0 AS actual_value
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            ```
     ??? example "Trino"
 
         === "Sensor template for Trino"
@@ -4132,6 +4308,66 @@ Expand the *Configure with data grouping* section to see additional examples for
                 
             
                 
+            ```
+    ??? example "Teradata"
+
+        === "Sensor template for Teradata"
+            ```sql+jinja
+            {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
+            
+            {% macro render_current_event_diff() -%}
+                {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                (
+                    EXTRACT(DAY FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 86400
+                    + EXTRACT(HOUR FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 3600
+                    + EXTRACT(MINUTE FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 60
+                    + EXTRACT(SECOND FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND))
+                ) / 24.0 / 3600.0
+                {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                DATEDIFF(
+                    CURRENT_DATE,
+                    MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+                )
+                {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                (
+                    EXTRACT(DAY FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 86400
+                    + EXTRACT(HOUR FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 3600
+                    + EXTRACT(MINUTE FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 60
+                    + EXTRACT(SECOND FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND))
+                ) / 24.0 / 3600.0
+                {%- else -%}
+                (
+                    EXTRACT(DAY FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 86400
+                    + EXTRACT(HOUR FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 3600
+                    + EXTRACT(MINUTE FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 60
+                    + EXTRACT(SECOND FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND))
+                ) / 24.0 / 3600.0
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                {{ render_current_event_diff() }} AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Teradata"
+            ```sql
+            SELECT
+                (
+                    EXTRACT(DAY FROM ((CURRENT_TIMESTAMP - CAST(MAX(analyzed_table."col_event_timestamp") AS TIMESTAMP)) DAY(4) TO SECOND)) * 86400
+                    + EXTRACT(HOUR FROM ((CURRENT_TIMESTAMP - CAST(MAX(analyzed_table."col_event_timestamp") AS TIMESTAMP)) DAY(4) TO SECOND)) * 3600
+                    + EXTRACT(MINUTE FROM ((CURRENT_TIMESTAMP - CAST(MAX(analyzed_table."col_event_timestamp") AS TIMESTAMP)) DAY(4) TO SECOND)) * 60
+                    + EXTRACT(SECOND FROM ((CURRENT_TIMESTAMP - CAST(MAX(analyzed_table."col_event_timestamp") AS TIMESTAMP)) DAY(4) TO SECOND))
+                ) / 24.0 / 3600.0 AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Trino"
 
@@ -5195,6 +5431,64 @@ spec:
                     ) / 24.0 / 3600.0 AS actual_value
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
             ```
+    ??? example "Teradata"
+
+        === "Sensor template for Teradata"
+
+            ```sql+jinja
+            {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
+            
+            {% macro render_current_event_diff() -%}
+                {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                (
+                    EXTRACT(DAY FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 86400
+                    + EXTRACT(HOUR FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 3600
+                    + EXTRACT(MINUTE FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 60
+                    + EXTRACT(SECOND FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND))
+                ) / 24.0 / 3600.0
+                {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                DATEDIFF(
+                    CURRENT_DATE,
+                    MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+                )
+                {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                (
+                    EXTRACT(DAY FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 86400
+                    + EXTRACT(HOUR FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 3600
+                    + EXTRACT(MINUTE FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 60
+                    + EXTRACT(SECOND FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND))
+                ) / 24.0 / 3600.0
+                {%- else -%}
+                (
+                    EXTRACT(DAY FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 86400
+                    + EXTRACT(HOUR FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 3600
+                    + EXTRACT(MINUTE FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 60
+                    + EXTRACT(SECOND FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND))
+                ) / 24.0 / 3600.0
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                {{ render_current_event_diff() }} AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Teradata"
+
+            ```sql
+            SELECT
+                (
+                    EXTRACT(DAY FROM ((CURRENT_TIMESTAMP - CAST(MAX(analyzed_table."col_event_timestamp") AS TIMESTAMP)) DAY(4) TO SECOND)) * 86400
+                    + EXTRACT(HOUR FROM ((CURRENT_TIMESTAMP - CAST(MAX(analyzed_table."col_event_timestamp") AS TIMESTAMP)) DAY(4) TO SECOND)) * 3600
+                    + EXTRACT(MINUTE FROM ((CURRENT_TIMESTAMP - CAST(MAX(analyzed_table."col_event_timestamp") AS TIMESTAMP)) DAY(4) TO SECOND)) * 60
+                    + EXTRACT(SECOND FROM ((CURRENT_TIMESTAMP - CAST(MAX(analyzed_table."col_event_timestamp") AS TIMESTAMP)) DAY(4) TO SECOND))
+                ) / 24.0 / 3600.0 AS actual_value
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            ```
     ??? example "Trino"
 
         === "Sensor template for Trino"
@@ -6233,6 +6527,66 @@ Expand the *Configure with data grouping* section to see additional examples for
                 
             
                 
+            ```
+    ??? example "Teradata"
+
+        === "Sensor template for Teradata"
+            ```sql+jinja
+            {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
+            
+            {% macro render_current_event_diff() -%}
+                {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                (
+                    EXTRACT(DAY FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 86400
+                    + EXTRACT(HOUR FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 3600
+                    + EXTRACT(MINUTE FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 60
+                    + EXTRACT(SECOND FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND))
+                ) / 24.0 / 3600.0
+                {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                DATEDIFF(
+                    CURRENT_DATE,
+                    MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+                )
+                {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                (
+                    EXTRACT(DAY FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 86400
+                    + EXTRACT(HOUR FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 3600
+                    + EXTRACT(MINUTE FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 60
+                    + EXTRACT(SECOND FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND))
+                ) / 24.0 / 3600.0
+                {%- else -%}
+                (
+                    EXTRACT(DAY FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 86400
+                    + EXTRACT(HOUR FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 3600
+                    + EXTRACT(MINUTE FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 60
+                    + EXTRACT(SECOND FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND))
+                ) / 24.0 / 3600.0
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                {{ render_current_event_diff() }} AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Teradata"
+            ```sql
+            SELECT
+                (
+                    EXTRACT(DAY FROM ((CURRENT_TIMESTAMP - CAST(MAX(analyzed_table."col_event_timestamp") AS TIMESTAMP)) DAY(4) TO SECOND)) * 86400
+                    + EXTRACT(HOUR FROM ((CURRENT_TIMESTAMP - CAST(MAX(analyzed_table."col_event_timestamp") AS TIMESTAMP)) DAY(4) TO SECOND)) * 3600
+                    + EXTRACT(MINUTE FROM ((CURRENT_TIMESTAMP - CAST(MAX(analyzed_table."col_event_timestamp") AS TIMESTAMP)) DAY(4) TO SECOND)) * 60
+                    + EXTRACT(SECOND FROM ((CURRENT_TIMESTAMP - CAST(MAX(analyzed_table."col_event_timestamp") AS TIMESTAMP)) DAY(4) TO SECOND))
+                ) / 24.0 / 3600.0 AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Trino"
 

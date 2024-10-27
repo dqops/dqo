@@ -150,6 +150,8 @@ $ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--sqlserver-disable-encr
                 [--sqlserver-database=<database>] [--sqlserver-host=<host>]
                 [--sqlserver-password=<password>] [--sqlserver-port=<port>]
                 [--sqlserver-user=<user>] [-t=<providerType>]
+                [--teradata-host=<host>] [--teradata-password=<password>]
+                [--teradata-port=<port>] [--teradata-user=<user>]
                 [--trino-catalog=<catalog>] [--trino-engine=<trinoEngineType>]
                 [--trino-host=<host>] [--trino-password=<password>]
                 [--trino-port=<port>] [--trino-user=<user>]
@@ -161,6 +163,7 @@ $ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--sqlserver-disable-encr
                 [-O=<String=String>]... [-P=<String=String>]...
                 [-Q=<String=String>]... [-R=<String=String>]...
                 [-S=<String=String>]... [-T=<String=String>]...
+                [-TE=<String=String>]...
 
 ```
 
@@ -241,6 +244,8 @@ dqo> connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                 [--sqlserver-database=<database>] [--sqlserver-host=<host>]
                 [--sqlserver-password=<password>] [--sqlserver-port=<port>]
                 [--sqlserver-user=<user>] [-t=<providerType>]
+                [--teradata-host=<host>] [--teradata-password=<password>]
+                [--teradata-port=<port>] [--teradata-user=<user>]
                 [--trino-catalog=<catalog>] [--trino-engine=<trinoEngineType>]
                 [--trino-host=<host>] [--trino-password=<password>]
                 [--trino-port=<port>] [--trino-user=<user>]
@@ -252,6 +257,7 @@ dqo> connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                 [-O=<String=String>]... [-P=<String=String>]...
                 [-Q=<String=String>]... [-R=<String=String>]...
                 [-S=<String=String>]... [-T=<String=String>]...
+                [-TE=<String=String>]...
 
 ```
 
@@ -348,7 +354,7 @@ All parameters supported by the command are listed below.
 |<div id="connection add--presto-password" class="no-wrap-code">`--presto-password`</div>|Presto database password. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--presto-port" class="no-wrap-code">`--presto-port`</div>|Presto port number| ||
 |<div id="connection add--presto-user" class="no-wrap-code">`--presto-user`</div>|Presto user name. The value can be in the null format to use dynamic substitution.| ||
-|<div id="connection add-t" class="no-wrap-code">`-t`</div><div id="connection add--provider" class="no-wrap-code">`--provider`</div>|Connection provider type| |*bigquery*<br/>*databricks*<br/>*mysql*<br/>*oracle*<br/>*postgresql*<br/>*duckdb*<br/>*presto*<br/>*redshift*<br/>*snowflake*<br/>*spark*<br/>*sqlserver*<br/>*trino*<br/>*hana*<br/>*db2*<br/>*mariadb*<br/>*clickhouse*<br/>*questdb*<br/>|
+|<div id="connection add-t" class="no-wrap-code">`-t`</div><div id="connection add--provider" class="no-wrap-code">`--provider`</div>|Connection provider type| |*bigquery*<br/>*clickhouse*<br/>*databricks*<br/>*db2*<br/>*duckdb*<br/>*hana*<br/>*mariadb*<br/>*mysql*<br/>*oracle*<br/>*postgresql*<br/>*presto*<br/>*questdb*<br/>*redshift*<br/>*snowflake*<br/>*spark*<br/>*sqlserver*<br/>*teradata*<br/>*trino*<br/>|
 |<div id="connection add--questdb-database" class="no-wrap-code">`--questdb-database`</div>|QuestDB database name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--questdb-host" class="no-wrap-code">`--questdb-host`</div>|QuestDB host name| ||
 |<div id="connection add--questdb-password" class="no-wrap-code">`--questdb-password`</div>|QuestDB database password. The value can be in the null format to use dynamic substitution.| ||
@@ -378,6 +384,10 @@ All parameters supported by the command are listed below.
 |<div id="connection add--sqlserver-password" class="no-wrap-code">`--sqlserver-password`</div>|SQL Server database password. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--sqlserver-port" class="no-wrap-code">`--sqlserver-port`</div>|SQL Server port number| ||
 |<div id="connection add--sqlserver-user" class="no-wrap-code">`--sqlserver-user`</div>|SQL Server user name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection add--teradata-host" class="no-wrap-code">`--teradata-host`</div>|Teradata host name| ||
+|<div id="connection add--teradata-password" class="no-wrap-code">`--teradata-password`</div>|Teradata database password. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection add--teradata-port" class="no-wrap-code">`--teradata-port`</div>|Teradata port number| ||
+|<div id="connection add--teradata-user" class="no-wrap-code">`--teradata-user`</div>|Teradata user name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--trino-catalog" class="no-wrap-code">`--trino-catalog`</div>|The Trino catalog that contains the databases and the tables that will be accessed with the driver. Supports also a null configuration with a custom environment variable.| ||
 |<div id="connection add--trino-engine" class="no-wrap-code">`--trino-engine`</div>|Trino engine type.| |*trino*<br/>*athena*<br/>|
 |<div id="connection add--trino-host" class="no-wrap-code">`--trino-host`</div>|Trino host name.| ||
@@ -400,6 +410,7 @@ All parameters supported by the command are listed below.
 |<div id="connection add-R" class="no-wrap-code">`-R`</div>|Redshift additional properties that are added to the JDBC connection string| ||
 |<div id="connection add-S" class="no-wrap-code">`-S`</div>|SQL Server additional properties that are added to the JDBC connection string| ||
 |<div id="connection add-T" class="no-wrap-code">`-T`</div>|Trino additional properties that are added to the JDBC connection string| ||
+|<div id="connection add-TE" class="no-wrap-code">`-TE`</div>|Teradata additional properties that are added to the JDBC connection string.| ||
 
 
 
@@ -550,7 +561,9 @@ $ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--sqlserver-disable-e
                    [--sqlserver-authentication-mode=<authenticationMode>]
                    [--sqlserver-database=<database>] [--sqlserver-host=<host>]
                    [--sqlserver-password=<password>] [--sqlserver-port=<port>]
-                   [--sqlserver-user=<user>] [--trino-catalog=<catalog>]
+                   [--sqlserver-user=<user>] [--teradata-host=<host>]
+                   [--teradata-password=<password>] [--teradata-port=<port>]
+                   [--teradata-user=<user>] [--trino-catalog=<catalog>]
                    [--trino-engine=<trinoEngineType>] [--trino-host=<host>]
                    [--trino-password=<password>] [--trino-port=<port>]
                    [--trino-user=<user>] [-C=<String=String>]...
@@ -561,7 +574,7 @@ $ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--sqlserver-disable-e
                    [-MA=<String=String>]... [-O=<String=String>]...
                    [-P=<String=String>]... [-Q=<String=String>]...
                    [-R=<String=String>]... [-S=<String=String>]...
-                   [-T=<String=String>]...
+                   [-T=<String=String>]... [-TE=<String=String>]...
 
 ```
 
@@ -646,7 +659,9 @@ dqo> connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                    [--sqlserver-authentication-mode=<authenticationMode>]
                    [--sqlserver-database=<database>] [--sqlserver-host=<host>]
                    [--sqlserver-password=<password>] [--sqlserver-port=<port>]
-                   [--sqlserver-user=<user>] [--trino-catalog=<catalog>]
+                   [--sqlserver-user=<user>] [--teradata-host=<host>]
+                   [--teradata-password=<password>] [--teradata-port=<port>]
+                   [--teradata-user=<user>] [--trino-catalog=<catalog>]
                    [--trino-engine=<trinoEngineType>] [--trino-host=<host>]
                    [--trino-password=<password>] [--trino-port=<port>]
                    [--trino-user=<user>] [-C=<String=String>]...
@@ -657,7 +672,7 @@ dqo> connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                    [-MA=<String=String>]... [-O=<String=String>]...
                    [-P=<String=String>]... [-Q=<String=String>]...
                    [-R=<String=String>]... [-S=<String=String>]...
-                   [-T=<String=String>]...
+                   [-T=<String=String>]... [-TE=<String=String>]...
 
 ```
 
@@ -783,6 +798,10 @@ All parameters supported by the command are listed below.
 |<div id="connection update--sqlserver-password" class="no-wrap-code">`--sqlserver-password`</div>|SQL Server database password. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update--sqlserver-port" class="no-wrap-code">`--sqlserver-port`</div>|SQL Server port number| ||
 |<div id="connection update--sqlserver-user" class="no-wrap-code">`--sqlserver-user`</div>|SQL Server user name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update--teradata-host" class="no-wrap-code">`--teradata-host`</div>|Teradata host name| ||
+|<div id="connection update--teradata-password" class="no-wrap-code">`--teradata-password`</div>|Teradata database password. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update--teradata-port" class="no-wrap-code">`--teradata-port`</div>|Teradata port number| ||
+|<div id="connection update--teradata-user" class="no-wrap-code">`--teradata-user`</div>|Teradata user name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update--trino-catalog" class="no-wrap-code">`--trino-catalog`</div>|The Trino catalog that contains the databases and the tables that will be accessed with the driver. Supports also a null configuration with a custom environment variable.| ||
 |<div id="connection update--trino-engine" class="no-wrap-code">`--trino-engine`</div>|Trino engine type.| |*trino*<br/>*athena*<br/>|
 |<div id="connection update--trino-host" class="no-wrap-code">`--trino-host`</div>|Trino host name.| ||
@@ -805,6 +824,7 @@ All parameters supported by the command are listed below.
 |<div id="connection update-R" class="no-wrap-code">`-R`</div>|Redshift additional properties that are added to the JDBC connection string| ||
 |<div id="connection update-S" class="no-wrap-code">`-S`</div>|SQL Server additional properties that are added to the JDBC connection string| ||
 |<div id="connection update-T" class="no-wrap-code">`-T`</div>|Trino additional properties that are added to the JDBC connection string| ||
+|<div id="connection update-TE" class="no-wrap-code">`-TE`</div>|Teradata additional properties that are added to the JDBC connection string.| ||
 
 
 

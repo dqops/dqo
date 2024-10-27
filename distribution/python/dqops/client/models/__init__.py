@@ -2105,6 +2105,8 @@ from .target_column_pattern_spec import TargetColumnPatternSpec
 from .target_rule_severity_level import TargetRuleSeverityLevel
 from .target_table_pattern_spec import TargetTablePatternSpec
 from .temporal_unit import TemporalUnit
+from .teradata_parameters_spec import TeradataParametersSpec
+from .teradata_parameters_spec_properties import TeradataParametersSpecProperties
 from .text_built_in_date_formats import TextBuiltInDateFormats
 from .time_period_gradient import TimePeriodGradient
 from .time_window_filter_parameters import TimeWindowFilterParameters
@@ -3101,6 +3103,8 @@ __all__ = (
     "TargetRuleSeverityLevel",
     "TargetTablePatternSpec",
     "TemporalUnit",
+    "TeradataParametersSpec",
+    "TeradataParametersSpecProperties",
     "TextBuiltInDateFormats",
     "TimePeriodGradient",
     "TimestampColumnsSpec",

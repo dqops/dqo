@@ -29,7 +29,7 @@ The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|<span class="no-wrap-code ">`provider_type`</span>|Database provider type (required).|*enum*|*bigquery*<br/>*databricks*<br/>*mysql*<br/>*oracle*<br/>*postgresql*<br/>*duckdb*<br/>*presto*<br/>*redshift*<br/>*snowflake*<br/>*spark*<br/>*sqlserver*<br/>*trino*<br/>*hana*<br/>*db2*<br/>*mariadb*<br/>*clickhouse*<br/>*questdb*<br/>| | |
+|<span class="no-wrap-code ">`provider_type`</span>|Database provider type (required).|*enum*|*bigquery*<br/>*clickhouse*<br/>*databricks*<br/>*db2*<br/>*duckdb*<br/>*hana*<br/>*mariadb*<br/>*mysql*<br/>*oracle*<br/>*postgresql*<br/>*presto*<br/>*questdb*<br/>*redshift*<br/>*snowflake*<br/>*spark*<br/>*sqlserver*<br/>*teradata*<br/>*trino*<br/>| | |
 |<span class="no-wrap-code ">[`bigquery`](./ConnectionYaml.md#bigqueryparametersspec)</span>|BigQuery connection parameters. Specify parameters in the bigquery section.|*[BigQueryParametersSpec](./ConnectionYaml.md#bigqueryparametersspec)*| | | |
 |<span class="no-wrap-code ">[`snowflake`](./ConnectionYaml.md#snowflakeparametersspec)</span>|Snowflake connection parameters. Specify parameters in the snowflake section or set the url (which is the Snowflake JDBC url).|*[SnowflakeParametersSpec](./ConnectionYaml.md#snowflakeparametersspec)*| | | |
 |<span class="no-wrap-code ">[`postgresql`](./ConnectionYaml.md#postgresqlparametersspec)</span>|PostgreSQL connection parameters. Specify parameters in the postgresql section or set the url (which is the PostgreSQL JDBC url).|*[PostgresqlParametersSpec](./ConnectionYaml.md#postgresqlparametersspec)*| | | |
@@ -47,6 +47,7 @@ The structure of this object is described below
 |<span class="no-wrap-code ">[`mariadb`](./ConnectionYaml.md#mariadbparametersspec)</span>|MariaDB connection parameters. Specify parameters in the mariadb section or set the url (which is the MariaDB JDBC url).|*[MariaDbParametersSpec](./ConnectionYaml.md#mariadbparametersspec)*| | | |
 |<span class="no-wrap-code ">[`clickhouse`](./ConnectionYaml.md#clickhouseparametersspec)</span>|ClickHouse connection parameters. Specify parameters in the clickhouse section or set the url (which is the ClickHouse JDBC url).|*[ClickHouseParametersSpec](./ConnectionYaml.md#clickhouseparametersspec)*| | | |
 |<span class="no-wrap-code ">[`questdb`](./ConnectionYaml.md#questdbparametersspec)</span>|QuestDB connection parameters. Specify parameters in the questdb section or set the url (which is the QuestDB JDBC url).|*[QuestDbParametersSpec](./ConnectionYaml.md#questdbparametersspec)*| | | |
+|<span class="no-wrap-code ">[`teradata`](./ConnectionYaml.md#teradataparametersspec)</span>|Teradata connection parameters. Specify parameters in the teradata section or set the url (which is the Teradata JDBC url).|*[TeradataParametersSpec](./ConnectionYaml.md#teradataparametersspec)*| | | |
 |<span class="no-wrap-code ">`parallel_jobs_limit`</span>|The concurrency limit for the maximum number of parallel SQL queries executed on this connection.|*integer*| | | |
 |<span class="no-wrap-code ">[`default_grouping_configuration`](./ConnectionYaml.md#datagroupingconfigurationspec)</span>|Default data grouping configuration for all tables. The configuration may be overridden on table, column and check level. Data groupings are configured in two cases: (1) the data in the table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for example a table contains data from multiple countries and there is a &#x27;country&#x27; column used for partitioning. a static dimension is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). (2) a static dimension is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). |*[DataGroupingConfigurationSpec](./ConnectionYaml.md#datagroupingconfigurationspec)*| | | |
 |<span class="no-wrap-code ">[`schedules`](./ConnectionYaml.md#cronschedulesspec)</span>|Configuration of the job scheduler that runs data quality checks. The scheduler configuration is divided into types of checks that have different schedules.|*[CronSchedulesSpec](./ConnectionYaml.md#cronschedulesspec)*| | | |
@@ -528,6 +529,24 @@ The structure of this object is described below
 |<span class="no-wrap-code ">`database`</span>|QuestDB database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
 |<span class="no-wrap-code ">`user`</span>|QuestDB user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
 |<span class="no-wrap-code ">`password`</span>|QuestDB database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
+|<span class="no-wrap-code ">`properties`</span>|A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.|*Dict[string, string]*| | | |
+
+
+
+___
+
+## TeradataParametersSpec
+Teradata connection parameters.
+
+
+The structure of this object is described below
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|<span class="no-wrap-code ">`host`</span>|Teradata host name. Supports also a ${TERADATA_HOST} configuration with a custom environment variable.|*string*| | | |
+|<span class="no-wrap-code ">`port`</span>|Teradata port number. The default port is 1025. Supports also a ${TERADATA_PORT} configuration with a custom environment variable.|*string*| | | |
+|<span class="no-wrap-code ">`user`</span>|Teradata user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
+|<span class="no-wrap-code ">`password`</span>|Teradata database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
 |<span class="no-wrap-code ">`properties`</span>|A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.|*Dict[string, string]*| | | |
 
 

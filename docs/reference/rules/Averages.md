@@ -102,6 +102,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     from datetime import datetime
     from typing import Sequence
     import scipy
+    import numpy as np
     
     
     # rule specific parameters object, contains values received from the quality check threshold configuration
@@ -157,7 +158,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         if len(filtered) == 0:
             return RuleExecutionResult()
     
-        filtered_mean = float(scipy.mean(filtered))
+        filtered_mean = float(np.mean(filtered))
     
         upper_bound = filtered_mean * (1.0 + rule_parameters.parameters.max_percent_above / 100.0)
         lower_bound = filtered_mean * (1.0 - rule_parameters.parameters.max_percent_below / 100.0)
@@ -268,6 +269,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     from datetime import datetime
     from typing import Sequence
     import scipy
+    import numpy as np
     
     
     # rule specific parameters object, contains values received from the quality check threshold configuration
@@ -323,7 +325,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         if len(filtered) == 0:
             return RuleExecutionResult()
     
-        filtered_mean = float(scipy.mean(filtered))
+        filtered_mean = float(np.mean(filtered))
     
         upper_bound = filtered_mean * (1.0 + rule_parameters.parameters.max_percent_above / 100.0)
         lower_bound = filtered_mean * (1.0 - rule_parameters.parameters.max_percent_below / 100.0)
@@ -434,6 +436,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     from datetime import datetime
     from typing import Sequence
     import scipy
+    import numpy as np
     
     
     # rule specific parameters object, contains values received from the quality check threshold configuration
@@ -489,7 +492,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         if len(filtered) == 0:
             return RuleExecutionResult()
     
-        filtered_mean = float(scipy.mean(filtered))
+        filtered_mean = float(np.mean(filtered))
     
         upper_bound = filtered_mean * (1.0 + rule_parameters.parameters.max_percent_above / 100.0)
         lower_bound = filtered_mean * (1.0 - rule_parameters.parameters.max_percent_below / 100.0)
@@ -598,6 +601,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     from datetime import datetime
     from typing import Sequence
     import scipy
+    import numpy as np
     
     
     # rule specific parameters object, contains values received from the quality check threshold configuration
@@ -653,7 +657,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         if len(filtered) == 0:
             return RuleExecutionResult()
     
-        filtered_mean = float(scipy.mean(filtered))
+        filtered_mean = float(np.mean(filtered))
     
         upper_bound = filtered_mean * (1.0 + rule_parameters.parameters.max_percent_above / 100.0)
         lower_bound = filtered_mean * (1.0 - rule_parameters.parameters.max_percent_below / 100.0)
@@ -755,6 +759,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     from datetime import datetime
     from typing import Sequence
     import scipy
+    import numpy as np
     
     
     # rule specific parameters object, contains values received from the quality check threshold configuration
@@ -808,7 +813,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         if len(filtered) == 0:
             return RuleExecutionResult()
     
-        filtered_mean = float(scipy.mean(filtered))
+        filtered_mean = float(np.mean(filtered))
     
         upper_bound = filtered_mean * (1.0 + rule_parameters.parameters.max_percent_within / 100.0)
         lower_bound = filtered_mean * (1.0 - rule_parameters.parameters.max_percent_within / 100.0)
@@ -910,6 +915,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     from datetime import datetime
     from typing import Sequence
     import scipy
+    import numpy as np
     
     
     # rule specific parameters object, contains values received from the quality check threshold configuration
@@ -963,7 +969,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         if len(filtered) == 0:
             return RuleExecutionResult()
     
-        filtered_mean = float(scipy.mean(filtered))
+        filtered_mean = float(np.mean(filtered))
     
         upper_bound = filtered_mean * (1.0 + rule_parameters.parameters.max_percent_within / 100.0)
         lower_bound = filtered_mean * (1.0 - rule_parameters.parameters.max_percent_within / 100.0)
@@ -1065,6 +1071,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     from datetime import datetime
     from typing import Sequence
     import scipy
+    import numpy as np
     
     
     # rule specific parameters object, contains values received from the quality check threshold configuration
@@ -1118,7 +1125,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         if len(filtered) == 0:
             return RuleExecutionResult()
     
-        filtered_mean = float(scipy.mean(filtered))
+        filtered_mean = float(np.mean(filtered))
     
         upper_bound = filtered_mean * (1.0 + rule_parameters.parameters.max_percent_within / 100.0)
         lower_bound = filtered_mean * (1.0 - rule_parameters.parameters.max_percent_within / 100.0)

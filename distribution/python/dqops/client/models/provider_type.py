@@ -18,6 +18,7 @@ class ProviderType(str, Enum):
     SNOWFLAKE = "snowflake"
     SPARK = "spark"
     SQLSERVER = "sqlserver"
+    TERADATA = "teradata"
     TRINO = "trino"
 
     def __str__(self) -> str:

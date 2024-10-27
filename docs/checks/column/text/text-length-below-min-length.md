@@ -736,6 +736,40 @@ spec:
                 ) AS actual_value
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
             ```
+    ??? example "Teradata"
+
+        === "Sensor template for Teradata"
+
+            ```sql+jinja
+            {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
+            SELECT
+                SUM(
+                    CASE
+                        WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS VARCHAR(4096))) < {{(parameters.min_length)}}
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Teradata"
+
+            ```sql
+            SELECT
+                SUM(
+                    CASE
+                        WHEN LENGTH(CAST(analyzed_table."target_column" AS VARCHAR(4096))) < 5
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            ```
     ??? example "Trino"
 
         === "Sensor template for Trino"
@@ -1493,6 +1527,42 @@ Expand the *Configure with data grouping* section to see additional examples for
                 
             
                 
+            ```
+    ??? example "Teradata"
+
+        === "Sensor template for Teradata"
+            ```sql+jinja
+            {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
+            SELECT
+                SUM(
+                    CASE
+                        WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS VARCHAR(4096))) < {{(parameters.min_length)}}
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Teradata"
+            ```sql
+            SELECT
+                SUM(
+                    CASE
+                        WHEN LENGTH(CAST(analyzed_table."target_column" AS VARCHAR(4096))) < 5
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Trino"
 
@@ -2276,6 +2346,40 @@ spec:
                 ) AS actual_value
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
             ```
+    ??? example "Teradata"
+
+        === "Sensor template for Teradata"
+
+            ```sql+jinja
+            {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
+            SELECT
+                SUM(
+                    CASE
+                        WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS VARCHAR(4096))) < {{(parameters.min_length)}}
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Teradata"
+
+            ```sql
+            SELECT
+                SUM(
+                    CASE
+                        WHEN LENGTH(CAST(analyzed_table."target_column" AS VARCHAR(4096))) < 5
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            ```
     ??? example "Trino"
 
         === "Sensor template for Trino"
@@ -3034,6 +3138,42 @@ Expand the *Configure with data grouping* section to see additional examples for
                 
             
                 
+            ```
+    ??? example "Teradata"
+
+        === "Sensor template for Teradata"
+            ```sql+jinja
+            {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
+            SELECT
+                SUM(
+                    CASE
+                        WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS VARCHAR(4096))) < {{(parameters.min_length)}}
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Teradata"
+            ```sql
+            SELECT
+                SUM(
+                    CASE
+                        WHEN LENGTH(CAST(analyzed_table."target_column" AS VARCHAR(4096))) < 5
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Trino"
 
@@ -3817,6 +3957,40 @@ spec:
                 ) AS actual_value
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
             ```
+    ??? example "Teradata"
+
+        === "Sensor template for Teradata"
+
+            ```sql+jinja
+            {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
+            SELECT
+                SUM(
+                    CASE
+                        WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS VARCHAR(4096))) < {{(parameters.min_length)}}
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Teradata"
+
+            ```sql
+            SELECT
+                SUM(
+                    CASE
+                        WHEN LENGTH(CAST(analyzed_table."target_column" AS VARCHAR(4096))) < 5
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            ```
     ??? example "Trino"
 
         === "Sensor template for Trino"
@@ -4575,6 +4749,42 @@ Expand the *Configure with data grouping* section to see additional examples for
                 
             
                 
+            ```
+    ??? example "Teradata"
+
+        === "Sensor template for Teradata"
+            ```sql+jinja
+            {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
+            SELECT
+                SUM(
+                    CASE
+                        WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS VARCHAR(4096))) < {{(parameters.min_length)}}
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Teradata"
+            ```sql
+            SELECT
+                SUM(
+                    CASE
+                        WHEN LENGTH(CAST(analyzed_table."target_column" AS VARCHAR(4096))) < 5
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Trino"
 
@@ -5444,6 +5654,44 @@ spec:
             
                 
             ```
+    ??? example "Teradata"
+
+        === "Sensor template for Teradata"
+
+            ```sql+jinja
+            {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
+            SELECT
+                SUM(
+                    CASE
+                        WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS VARCHAR(4096))) < {{(parameters.min_length)}}
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Teradata"
+
+            ```sql
+            SELECT
+                SUM(
+                    CASE
+                        WHEN LENGTH(CAST(analyzed_table."target_column" AS VARCHAR(4096))) < 5
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
+                CAST(analyzed_table."date_column" AS DATE) AS time_period,
+                CAST(CAST(analyzed_table."date_column" AS DATE) AS TIMESTAMP) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "Trino"
 
         === "Sensor template for Trino"
@@ -6258,6 +6506,44 @@ Expand the *Configure with data grouping* section to see additional examples for
             ORDER BY level_1, level_2CAST(analyzed_table.[date_column] AS date)
             
                 
+            ```
+    ??? example "Teradata"
+
+        === "Sensor template for Teradata"
+            ```sql+jinja
+            {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
+            SELECT
+                SUM(
+                    CASE
+                        WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS VARCHAR(4096))) < {{(parameters.min_length)}}
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Teradata"
+            ```sql
+            SELECT
+                SUM(
+                    CASE
+                        WHEN LENGTH(CAST(analyzed_table."target_column" AS VARCHAR(4096))) < 5
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                CAST(analyzed_table."date_column" AS DATE) AS time_period,
+                CAST(CAST(analyzed_table."date_column" AS DATE) AS TIMESTAMP) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
     ??? example "Trino"
 
@@ -7131,6 +7417,44 @@ spec:
             
                 
             ```
+    ??? example "Teradata"
+
+        === "Sensor template for Teradata"
+
+            ```sql+jinja
+            {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
+            SELECT
+                SUM(
+                    CASE
+                        WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS VARCHAR(4096))) < {{(parameters.min_length)}}
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Teradata"
+
+            ```sql
+            SELECT
+                SUM(
+                    CASE
+                        WHEN LENGTH(CAST(analyzed_table."target_column" AS VARCHAR(4096))) < 5
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
+                TRUNC(CAST(analyzed_table."date_column" AS DATE), 'MM') AS time_period,
+                CAST(TRUNC(CAST(analyzed_table."date_column" AS DATE), 'MM') AS TIMESTAMP) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "Trino"
 
         === "Sensor template for Trino"
@@ -7945,6 +8269,44 @@ Expand the *Configure with data grouping* section to see additional examples for
             ORDER BY level_1, level_2DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1)
             
                 
+            ```
+    ??? example "Teradata"
+
+        === "Sensor template for Teradata"
+            ```sql+jinja
+            {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
+            SELECT
+                SUM(
+                    CASE
+                        WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS VARCHAR(4096))) < {{(parameters.min_length)}}
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Teradata"
+            ```sql
+            SELECT
+                SUM(
+                    CASE
+                        WHEN LENGTH(CAST(analyzed_table."target_column" AS VARCHAR(4096))) < 5
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                TRUNC(CAST(analyzed_table."date_column" AS DATE), 'MM') AS time_period,
+                CAST(TRUNC(CAST(analyzed_table."date_column" AS DATE), 'MM') AS TIMESTAMP) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
     ??? example "Trino"
 

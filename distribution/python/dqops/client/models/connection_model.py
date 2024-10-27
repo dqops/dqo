@@ -33,6 +33,7 @@ if TYPE_CHECKING:
     from ..models.statistics_collector_search_filters import (
         StatisticsCollectorSearchFilters,
     )
+    from ..models.teradata_parameters_spec import TeradataParametersSpec
     from ..models.trino_parameters_spec import TrinoParametersSpec
 
 
@@ -70,6 +71,7 @@ class ConnectionModel:
         mariadb (Union[Unset, MariaDbParametersSpec]):
         clickhouse (Union[Unset, ClickHouseParametersSpec]):
         questdb (Union[Unset, QuestDbParametersSpec]):
+        teradata (Union[Unset, TeradataParametersSpec]):
         run_checks_job_template (Union[Unset, CheckSearchFilters]): Target data quality checks filter, identifies which
             checks on which tables and columns should be executed.
         run_profiling_checks_job_template (Union[Unset, CheckSearchFilters]): Target data quality checks filter,
@@ -115,6 +117,7 @@ class ConnectionModel:
     mariadb: Union[Unset, "MariaDbParametersSpec"] = UNSET
     clickhouse: Union[Unset, "ClickHouseParametersSpec"] = UNSET
     questdb: Union[Unset, "QuestDbParametersSpec"] = UNSET
+    teradata: Union[Unset, "TeradataParametersSpec"] = UNSET
     run_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
     run_profiling_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
     run_monitoring_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
@@ -208,6 +211,10 @@ class ConnectionModel:
         if not isinstance(self.questdb, Unset):
             questdb = self.questdb.to_dict()
 
+        teradata: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.teradata, Unset):
+            teradata = self.teradata.to_dict()
+
         run_checks_job_template: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.run_checks_job_template, Unset):
             run_checks_job_template = self.run_checks_job_template.to_dict()
@@ -297,6 +304,8 @@ class ConnectionModel:
             field_dict["clickhouse"] = clickhouse
         if questdb is not UNSET:
             field_dict["questdb"] = questdb
+        if teradata is not UNSET:
+            field_dict["teradata"] = teradata
         if run_checks_job_template is not UNSET:
             field_dict["run_checks_job_template"] = run_checks_job_template
         if run_profiling_checks_job_template is not UNSET:
@@ -360,6 +369,7 @@ class ConnectionModel:
         from ..models.statistics_collector_search_filters import (
             StatisticsCollectorSearchFilters,
         )
+        from ..models.teradata_parameters_spec import TeradataParametersSpec
         from ..models.trino_parameters_spec import TrinoParametersSpec
 
         d = src_dict.copy()
@@ -497,6 +507,13 @@ class ConnectionModel:
         else:
             questdb = QuestDbParametersSpec.from_dict(_questdb)
 
+        _teradata = d.pop("teradata", UNSET)
+        teradata: Union[Unset, TeradataParametersSpec]
+        if isinstance(_teradata, Unset):
+            teradata = UNSET
+        else:
+            teradata = TeradataParametersSpec.from_dict(_teradata)
+
         _run_checks_job_template = d.pop("run_checks_job_template", UNSET)
         run_checks_job_template: Union[Unset, CheckSearchFilters]
         if isinstance(_run_checks_job_template, Unset):
@@ -603,6 +620,7 @@ class ConnectionModel:
             mariadb=mariadb,
             clickhouse=clickhouse,
             questdb=questdb,
+            teradata=teradata,
             run_checks_job_template=run_checks_job_template,
             run_profiling_checks_job_template=run_profiling_checks_job_template,
             run_monitoring_checks_job_template=run_monitoring_checks_job_template,
