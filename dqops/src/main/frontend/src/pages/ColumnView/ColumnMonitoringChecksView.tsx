@@ -18,37 +18,32 @@ import { setActiveFirstLevelUrl } from '../../redux/actions/source.actions';
 import { IRootState } from '../../redux/reducers';
 import {
   getFirstLevelActiveTab,
-  getFirstLevelState,
-  getSecondLevelTab
+  getFirstLevelState
 } from '../../redux/selectors';
 import { CheckResultOverviewApi } from '../../services/apiClient';
 import { CheckTypes, ROUTES } from '../../shared/routes';
 import { useDecodedParams } from '../../utils';
 import ColumnActionGroup from './ColumnActionGroup';
 
-const initTabs = [
+const premiumTabs = [
   {
-    label: 'Observability status',
-    value: 'observability-status'
-  },
-  {
-    label: 'Daily checkpoints',
+    label: 'Daily partitions',
     value: 'daily'
   },
   {
-    label: 'Monthly checkpoints',
+    label: 'Monthly partitions',
     value: 'monthly'
   }
 ];
 
-const freeInitTabs = [
+const constansTabs = [
   {
     label: 'Observability status',
     value: 'observability-status'
   },
   {
-    label: 'Daily checkpoints',
-    value: 'daily'
+    label: 'Data quality check editor',
+    value: 'check-editor'
   }
 ];
 
@@ -68,7 +63,7 @@ const ColumnMonitoringChecksView = () => {
     schema: string;
     table: string;
     column: string;
-    tab: 'observability-status' | 'daily' | 'monthly';
+    tab: 'observability-status' | 'check-editor';
   } = useDecodedParams();
   const dispatch = useActionDispatch();
   const history = useHistory();
@@ -82,7 +77,6 @@ const ColumnMonitoringChecksView = () => {
     loading
   } = useSelector(getFirstLevelState(checkTypes));
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
-  const activeTab = getSecondLevelTab(checkTypes, tab);
   const isPremiumAcount =
     userProfile &&
     userProfile.license_type &&
@@ -91,23 +85,19 @@ const ColumnMonitoringChecksView = () => {
   const [checkResultsOverview, setCheckResultsOverview] = useState<
     CheckResultsOverviewDataModel[]
   >([]);
-  const [tabs, setTabs] = useState(isPremiumAcount ? initTabs : freeInitTabs);
-
+  const [tabs, setTabs] = useState(constansTabs);
+  const [secondTab, setSecondTab] = useState('daily');
   const getCheckOverview = () => {
     CheckResultOverviewApi.getColumnMonitoringChecksOverview(
       connection,
       schema,
       table,
       column,
-      tab === 'daily' ? 'daily' : 'monthly'
+      secondTab === 'daily' ? 'daily' : 'monthly'
     ).then((res) => {
       setCheckResultsOverview(res.data);
     });
   };
-
-  useEffect(() => {
-    setTabs(isPremiumAcount ? initTabs : freeInitTabs);
-  }, [userProfile]);
 
   useEffect(() => {
     dispatch(
@@ -133,7 +123,7 @@ const ColumnMonitoringChecksView = () => {
   }, [checkTypes, firstLevelActiveTab, connection, schema, table, column]);
 
   const onUpdate = async () => {
-    if (tab === 'daily') {
+    if (secondTab === 'daily') {
       if (!dailyMonitoring || !isUpdatedDailyMonitoring) return;
 
       await dispatch(
@@ -261,8 +251,17 @@ const ColumnMonitoringChecksView = () => {
           className="w-full overflow-hidden max-w-full"
         />
       </div>
+      {isPremiumAcount && tab === 'check-editor' && (
+        <div className="border-b border-gray-300 pt-2">
+          <Tabs
+            tabs={premiumTabs}
+            activeTab={secondTab}
+            onChange={setSecondTab}
+          />
+        </div>
+      )}
       {tab === 'observability-status' && <ObservabilityStatus />}
-      {tab === 'daily' && (
+      {tab === 'check-editor' && secondTab === 'daily' && (
         <DataQualityChecks
           onUpdate={onUpdate}
           checksUI={dailyMonitoring}
@@ -272,7 +271,7 @@ const ColumnMonitoringChecksView = () => {
           loading={loading}
         />
       )}
-      {tab === 'monthly' && (
+      {tab === 'check-editor' && secondTab === 'monthly' && (
         <DataQualityChecks
           onUpdate={onUpdate}
           checksUI={monthlyMonitoring}

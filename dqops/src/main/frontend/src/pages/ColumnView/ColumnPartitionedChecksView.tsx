@@ -25,11 +25,7 @@ import { CheckTypes, ROUTES } from '../../shared/routes';
 import { useDecodedParams } from '../../utils';
 import ColumnActionGroup from './ColumnActionGroup';
 
-const initTabs = [
-  {
-    label: 'Observability status',
-    value: 'observability-status'
-  },
+const premiumTabs = [
   {
     label: 'Daily partitions',
     value: 'daily'
@@ -40,14 +36,14 @@ const initTabs = [
   }
 ];
 
-const freeInitTabs = [
+const constansTabs = [
   {
     label: 'Observability status',
     value: 'observability-status'
   },
   {
-    label: 'Daily checkpoints',
-    value: 'daily'
+    label: 'Data quality check editor',
+    value: 'check-editor'
   }
 ];
 
@@ -65,7 +61,7 @@ const ColumnPartitionedChecksView = () => {
     schema: string;
     table: string;
     column: string;
-    tab: 'observability-status' | 'daily' | 'monthly';
+    tab: 'observability-status' | 'check-editor';
   } = useDecodedParams();
 
   const dispatch = useActionDispatch();
@@ -77,7 +73,8 @@ const ColumnPartitionedChecksView = () => {
     userProfile.license_type &&
     userProfile.license_type?.toLowerCase() !== 'free' &&
     !userProfile.trial_period_expires_at;
-  const [tabs, setTabs] = useState(isPremiumAcount ? initTabs : freeInitTabs);
+  const [tabs, setTabs] = useState(constansTabs);
+  const [secondTab, setSecondTab] = useState('daily');
 
   const {
     dailyPartitionedChecks,
@@ -92,17 +89,13 @@ const ColumnPartitionedChecksView = () => {
     CheckResultsOverviewDataModel[]
   >([]);
 
-  useEffect(() => {
-    setTabs(isPremiumAcount ? initTabs : freeInitTabs);
-  }, [userProfile]);
-
   const getCheckOverview = () => {
     CheckResultOverviewApi.getColumnPartitionedChecksOverview(
       connection,
       schema,
       table,
       column,
-      tab === 'daily' ? 'daily' : 'monthly'
+      secondTab === 'daily' ? 'daily' : 'monthly'
     ).then((res) => {
       setCheckResultsOverview(res.data);
     });
@@ -129,10 +122,18 @@ const ColumnPartitionedChecksView = () => {
         column
       )
     );
-  }, [checkTypes, firstLevelActiveTab, connection, schema, column, table]);
+  }, [
+    checkTypes,
+    firstLevelActiveTab,
+    connection,
+    schema,
+    column,
+    table,
+    secondTab
+  ]);
 
   const onUpdate = async () => {
-    if (tab === 'daily') {
+    if (secondTab === 'daily') {
       if (!dailyPartitionedChecks || !isUpdatedDailyPartitionedChecks) return;
 
       await dispatch(
@@ -259,9 +260,18 @@ const ColumnPartitionedChecksView = () => {
       <div className="border-b border-gray-300">
         <Tabs tabs={tabs} activeTab={tab} onChange={onChangeTab} />
       </div>
+      {isPremiumAcount && tab === 'check-editor' && (
+        <div className="border-b border-gray-300 pt-2">
+          <Tabs
+            tabs={premiumTabs}
+            activeTab={secondTab}
+            onChange={setSecondTab}
+          />
+        </div>
+      )}
       {tab === 'observability-status' && <ObservabilityStatus />}
 
-      {tab === 'daily' && (
+      {tab === 'check-editor' && secondTab === 'daily' && (
         <DataQualityChecks
           onUpdate={onUpdate}
           checksUI={dailyPartitionedChecks}
@@ -271,7 +281,7 @@ const ColumnPartitionedChecksView = () => {
           loading={loading}
         />
       )}
-      {tab === 'monthly' && (
+      {tab === 'check-editor' && secondTab === 'monthly' && (
         <DataQualityChecks
           onUpdate={onUpdate}
           checksUI={monthlyPartitionedChecks}
