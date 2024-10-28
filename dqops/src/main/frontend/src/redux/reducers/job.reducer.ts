@@ -182,6 +182,26 @@ const schemaReducer = (state = initialState, action: any) => {
       };
       const jobList = { ...state.jobList };
       let notificationCount = state.notificationCount;
+
+      // filtering out finished jobs
+      const filterFinishedJobs = (parentId: number) => {
+        const finishedJobs = job_dictionary_state[parentId].childs?.filter(
+          (x) =>
+            x.status === 'finished' ||
+            x.status === 'cancelled' ||
+            x.status === 'failed'
+        );
+        if (finishedJobs?.length > 10) {
+          delete job_dictionary_state[finishedJobs?.[0].jobId?.jobId ?? ''];
+
+          jobList[parentId] = jobList[parentId].filter(
+            (x) => x !== (finishedJobs?.[0].jobId?.jobId ?? '')
+          );
+          notificationCount--;
+          return;
+        }
+      };
+
       jobChanges.forEach((jobChange: DqoJobChangeModel) => {
         if (!jobChange.jobId?.jobId) return;
 
@@ -224,6 +244,9 @@ const schemaReducer = (state = initialState, action: any) => {
           const childIndex = job_dictionary_state[parentId].childs.findIndex(
             (child) => child.jobId?.jobId === jobId
           );
+
+          filterFinishedJobs(parentId);
+
           job_dictionary_state[parentId].childs[childIndex] = childState;
           job_dictionary_state[jobId] = childState;
         } else {
@@ -233,29 +256,7 @@ const schemaReducer = (state = initialState, action: any) => {
             const childState = jobChange.updatedModel ?? {};
             job_dictionary_state[parentId].childs.push(childState);
 
-            // filter out finished jobs
-            if (
-              job_dictionary_state[parentId].childs?.filter(
-                (x) =>
-                  x.status === 'finished' ||
-                  x.status === 'cancelled' ||
-                  x.status === 'failed'
-              )?.length > 10
-            ) {
-              job_dictionary_state[parentId].childs.map((child) => {
-                if (
-                  child.status === 'finished' ||
-                  child.status === 'cancelled' ||
-                  child.status === 'failed'
-                ) {
-                  delete job_dictionary_state[child.jobId?.jobId ?? ''];
-                  jobList[parentId] = jobList[parentId].filter(
-                    (x) => x !== (child.jobId?.jobId ?? '')
-                  );
-                  return;
-                }
-              });
-            }
+            filterFinishedJobs(parentId);
 
             jobList[parentId].push(String(jobId));
             job_dictionary_state[jobId] = { ...childState } as any;
