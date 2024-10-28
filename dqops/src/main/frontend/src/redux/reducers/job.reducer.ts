@@ -276,6 +276,7 @@ const schemaReducer = (state = initialState, action: any) => {
       if (lastRefreshExceeded) {
         Object.keys(job_dictionary_state).forEach((key) => {
           if (
+            job_dictionary_state[key]?.statusChangedAt && 
             nowDate.diff(job_dictionary_state[key].statusChangedAt, 'minutes') >
             30
           ) {
