@@ -30,17 +30,15 @@ We will verify the data of `bigquery-public-data.fcc_political_ads.content_info`
 [false_percent](../../checks/column/bool/false-percent.md) column check.
 Our goal is to verify that the percentage of false boolean values on `invalidOcr` column does not fall below 99%. 
 
-In this example, we will set three minimum percentage thresholds levels for the check:
+In this example, we will set three minimum percentage threshold level for the check:
 
-- warning: 99.0%
-- error: 98.0%
-- fatal: 95.0%
+- fatal: 99.0%
 
 If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/definition-of-data-quality-checks/index.md).
 
 **VALUE**
 
-If the percentage of data that is available for transcription drops below 99%, a warning alert will be triggered.
+If the percentage of data that is available for transcription drops below 99%, a fatal error alert will be triggered.
 
 ## Data structure
 
@@ -68,7 +66,7 @@ A detailed explanation of [how to start DQOps platform and run the example is de
 
 To navigate to a list of checks prepared in the example using the [user interface](../../dqo-concepts/dqops-user-interface-overview.md):
 
-![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-false-percent-checks1.png){ loading=lazy; width="1200px" }
+![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-false-percent-checks2.png){ loading=lazy; width="1200px" }
 
 1. Go to the **Monitoring** section.
 
@@ -80,7 +78,7 @@ To navigate to a list of checks prepared in the example using the [user interfac
     On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../data-sources/index.md).
 
 
-3. Select the **Daily checks** tab.
+3. Select the **Data quality check editor** tab.
 
     This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../dqo-concepts/dqops-user-interface-overview.md#check-editor).
 
@@ -91,21 +89,22 @@ Run the activated check using the **Run check** button.
 
 You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
 
-![Run check](https://dqops.com/docs/images/examples/daily-false-percent-run-checks1.png){ loading=lazy; width="1200px" }
+![Run check](https://dqops.com/docs/images/examples/daily-false-percent-run-checks2.png){ loading=lazy; width="1200px" }
 
 
 ### **View detailed check results**
 
 Access the detailed results by clicking the **Results** button. The results should be similar to the one below.
 
-![False-percent check results](https://dqops.com/docs/images/examples/daily-false-percent-check-results1.png){ loading=lazy; width="1200px" }
+![False-percent check results](https://dqops.com/docs/images/examples/daily-false-percent-check-results2.png){ loading=lazy; width="1200px" }
 
-Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
+Within the Results window, you will see four categories: **Check results**, **Sensor readouts**, **Execution errors**, and **Error sampling**.
 The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
 The Sensor readouts category displays the values obtained by the sensors from the data source.
 The Execution errors category displays any error that occurred during the check's execution.
+The Error sampling category displays examples of invalid values in the column.
 
-The actual value in this example is 99%, which is above the minimum threshold level set in the warning (99%).
+The actual value in this example is 99.9%, which is above the minimum threshold level set in the warning (99%).
 The check gives a correct result (notice the green square to the left of the check name).
 
 
@@ -116,31 +115,6 @@ of the user interface.
 
 Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
 
-### **Review the results on the data quality dashboards**
-
-To review the results on the [data quality dashboards](../../working-with-dqo/review-the-data-quality-results-on-dashboards.md)
-go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. 
-
-Below you can see the results displayed on the **Current column status** dashboard located in the Current status group. 
-
-This dashboard allows data engineers and data owners to quickly evaluate the data quality of monitored
-columns. The dashboards display a color-coded status that indicates the severity level detected by run
-checks. When the status is green, it means that the monitored column has no data quality issues. However, if the status
-is yellow, orange, or red, it indicates that there were some issues detected. The dashboard also displays the number
-of detected issues per severity threshold, making it easier to identify and address tables and columns with issues.
-    
-This dashboard allow filtering data by:
-    
-* time frame,
-* connection,
-* schema,
-* data quality dimension,
-* check category,
-* data group,
-* table,
-* column.
-
-![False-percent check results on the Current column status dashboard](https://dqops.com/docs/images/examples/daily-false-percent-check-results-on-current-column-status-dashboard.png){ loading=lazy; width="1200px" }
 
 ## Change a schedule at the connection level
 
@@ -149,7 +123,7 @@ table, or individual check.
 
 After importing new tables, DQOps sets the schedule for 12:00 P.M. (noon) every day. Follow the steps below to change the schedule.
 
-![Change a schedule at the connection level](https://dqops.com/docs/images/examples/change-schedule-for-connection.png){ loading=lazy; width="1200px" }
+![Change a schedule at the connection level](https://dqops.com/docs/images/examples/change-schedule-for-connection2.png){ loading=lazy; width="1200px" }
 
 1. Navigate to the **Data Source** section.
 
@@ -178,17 +152,15 @@ You might also want to check the [Running checks with a scheduler](../data-quali
 
 The YAML configuration file stores both the table details and checks configurations. 
 
-In this example, we have set three minimum percentage thresholds levels for the check:
+In this example, we have set the minimum percentage threshold level for the check:
 
-- warning: 99.0%
-- error: 98.0%
-- fatal: 95.0%
+- fatal: 99.0%
 
 The highlighted fragments in the YAML file below represent the segment where the monitoring `daily_false_percent` check is configured.
 
 If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/definition-of-data-quality-checks/index.md).
 
-```yaml hl_lines="16-29"
+```yaml hl_lines="16-25"
 apiVersion: dqo/v1
 kind: table
 spec:
@@ -212,87 +184,13 @@ spec:
         daily:
           bool:
             daily_false_percent:
-              warning:
-                min_percent: 99.0
-              error:
-                min_percent: 98.0
               fatal:
-                min_percent: 95.0
-```
-
-## Run the checks in the example using the DQOps Shell
-
-A detailed explanation of [how to start DQOps platform and run the example is described here](../index.md#running-the-use-cases). 
-
-To execute the check prepared in the example, run the following command in DQOps Shell:
-
-``` 
-check run
-```
-
-Review the results which should be similar to the one below.
-The check shows a correct results what means that the percentage of false values in the `invalidOcr` column exceeds 99%.
-
-```
-Check evaluation summary per table:
-+-----------------+------------------------------+------+--------------+-------------+--------+------+------------+----------------+
-|Connection       |Table                         |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
-+-----------------+------------------------------+------+--------------+-------------+--------+------+------------+----------------+
-|fcc_political_ads|fcc_political_ads.content_info|1     |1             |1            |0       |0     |0           |0               |
-+-----------------+------------------------------+------+--------------+-------------+--------+------+------------+----------------+
-```
-
-For a more detailed insight of how the check is run, you can initiate the check in debug mode by executing the 
-following command:
-
-```
-check run --mode=debug
-```
-
-In the debug mode you can view the SQL query (sensor) executed in the check.
-
-```
-**************************************************
-Executing SQL on connection fcc_political_ads (bigquery)
-SQL to be executed on the connection:
-SELECT
-    CASE
-        WHEN COUNT(*) = 0 THEN 100.0
-        ELSE 100.0 * SUM(
-            CASE
-                WHEN NOT analyzed_table.`invalidOcr`
-                    THEN 1
-                ELSE 0
-            END
-        ) / COUNT(*)
-    END AS actual_value,
-    CURRENT_TIMESTAMP() AS time_period,
-    TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
-FROM `bigquery-public-data`.`fcc_political_ads`.`content_info` AS analyzed_table
-GROUP BY time_period, time_period_utc
-ORDER BY time_period, time_period_utc
-**************************************************
-```
-
-You can also view the results returned by the sensor. The actual value in this example is 99.95%, which exceeds the 
-minimal threshold level set in the warning (99%).
-
-```
-Finished executing a sensor for a check false_percent on the table fcc_political_ads.content_info using a sensor 
-definition column/bool/false_percent, sensor result count: 1
-
-Results returned by the sensor:
-+----------------+------------------------+------------------------+
-|actual_value    |time_period             |time_period_utc         |
-+----------------+------------------------+------------------------+
-|99.9540159411404|2023-04-26T09:06:53.386Z|2023-04-26T09:06:53.386Z|
-+----------------+------------------------+------------------------+
-**************************************************
+                min_percent: 99.0
 ```
 
 In this example, we have demonstrated how to use DQOps to verify the reasonability of data in a column.
 By using the [false_percent](../../checks/column/bool/false-percent.md) column check, we can monitor that the percentage
-of false boolean values does not fall below a set threshold. If it does, you will get a warning, error or fatal result.
+of false boolean values does not fall below a set threshold. If it does, you will get a fatal result.
 
 ## Next steps
 
