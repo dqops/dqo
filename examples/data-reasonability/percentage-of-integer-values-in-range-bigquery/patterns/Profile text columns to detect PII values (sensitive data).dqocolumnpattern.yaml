@@ -1,0 +1,12 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/ColumnLevelDataQualityPolicyYaml-schema.json
+apiVersion: dqo/v1
+kind: default_column_checks
+spec:
+  priority: 1000
+  description: "Activates data profiling checks on all text columns to detect if they\
+    \ contain sensitive data (emails, phone numbers). Enabling this policy allows\
+    \ the data quality rule miner to set up PII checks when sensitive values are identified."
+  profiling_checks:
+    pii:
+      profile_contains_usa_phone_percent: {}
+      profile_contains_email_percent: {}
