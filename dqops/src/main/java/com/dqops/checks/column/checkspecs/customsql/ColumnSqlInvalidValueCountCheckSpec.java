@@ -22,7 +22,7 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.comparison.MaxCountRule0ErrorParametersSpec;
 import com.dqops.rules.comparison.MaxCountRule0WarningParametersSpec;
 import com.dqops.rules.comparison.MaxCountRule100ParametersSpec;
-import com.dqops.sensors.column.customsql.ColumnSqlConditionFailedCountSensorParametersSpec;
+import com.dqops.sensors.column.customsql.ColumnSqlInvalidValueCountSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -44,7 +44,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class ColumnSqlInvalidValueCountCheckSpec
-        extends AbstractCheckSpec<ColumnSqlConditionFailedCountSensorParametersSpec, MaxCountRule0WarningParametersSpec, MaxCountRule0ErrorParametersSpec, MaxCountRule100ParametersSpec> {
+        extends AbstractCheckSpec<ColumnSqlInvalidValueCountSensorParametersSpec, MaxCountRule0WarningParametersSpec, MaxCountRule0ErrorParametersSpec, MaxCountRule100ParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnSqlInvalidValueCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -53,7 +53,7 @@ public class ColumnSqlInvalidValueCountCheckSpec
     @JsonPropertyDescription("Sensor parameters with the custom SQL query, using a {column} placeholder to reference the current column.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnSqlConditionFailedCountSensorParametersSpec parameters = new ColumnSqlConditionFailedCountSensorParametersSpec();
+    private ColumnSqlInvalidValueCountSensorParametersSpec parameters = new ColumnSqlInvalidValueCountSensorParametersSpec();
 
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning when a given number of rows failed the custom SQL condition (expression). The warning is considered as a passed data quality check.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -75,7 +75,7 @@ public class ColumnSqlInvalidValueCountCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public ColumnSqlConditionFailedCountSensorParametersSpec getParameters() {
+    public ColumnSqlInvalidValueCountSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -83,7 +83,7 @@ public class ColumnSqlInvalidValueCountCheckSpec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnSqlConditionFailedCountSensorParametersSpec parameters) {
+    public void setParameters(ColumnSqlInvalidValueCountSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");
