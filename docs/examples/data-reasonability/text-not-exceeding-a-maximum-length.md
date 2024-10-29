@@ -32,7 +32,7 @@ If you want to learn more about checks and threshold levels, please refer to the
 
 **VALUE**
 
-If the string length exceed the range 0.0 - 30.0, en error alert will be triggered.
+If the string length exceed the range 0.0 - 30.0, an error alert will be triggered.
 
 ## Data structure
 
@@ -59,7 +59,7 @@ A detailed explanation of [how to start DQOps platform and run the example is de
 
 To navigate to a list of checks prepared in the example using the [user interface](../../dqo-concepts/dqops-user-interface-overview.md):
 
-![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-text-max-length-checks2.png){ loading=lazy; width="1200px" }
+![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-text-max-length-checks3.png){ loading=lazy; width="1200px" }
 
 1. Go to the **Monitoring** section.
 
@@ -71,7 +71,7 @@ To navigate to a list of checks prepared in the example using the [user interfac
     On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../data-sources/index.md).
 
 
-3. Select the **Daily checks** tab.
+3. Select the **Data quality check editor** tab.
 
     This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../dqo-concepts/dqops-user-interface-overview.md#check-editor).
 
@@ -82,19 +82,20 @@ Run the activated check using the **Run check** button.
 
 You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
 
-![Run check](https://dqops.com/docs/images/examples/daily-text-max-length-run-checks2.png){ loading=lazy; width="1200px" }
+![Run check](https://dqops.com/docs/images/examples/daily-text-max-length-run-checks3.png){ loading=lazy; width="1200px" }
 
 
 ### **View detailed check results**
 
 Access the detailed results by clicking the **Results** button. The results should be similar to the one below.
 
-![Text max length check results](https://dqops.com/docs/images/examples/daily-text-max-length-checks-results3.png){ loading=lazy; width="1200px" }
+![Text max length check results](https://dqops.com/docs/images/examples/daily-text-max-length-checks-results4.png){ loading=lazy; width="1200px" }
 
-Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
+Within the Results window, you will see four categories: **Check results**, **Sensor readouts**, **Execution errors**, and **Error sampling**.
 The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
 The Sensor readouts category displays the values obtained by the sensors from the data source.
 The Execution errors category displays any error that occurred during the check's execution.
+The Error sampling category displays examples of invalid values in the column.
 
 The actual value in this example is 31, which is above the range threshold level set in the error field (0 - 30).
 The check result in an error issue (notice the orange square to the left of the check name).
@@ -106,30 +107,6 @@ Synchronize the results with your DQOps cloud account using the **Synchronize** 
 of the user interface.
 
 Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
-
-### **Review the results on the data quality dashboards**
-
-To review the results on the [data quality dashboards](../../working-with-dqo/review-the-data-quality-results-on-dashboards.md)
-go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. 
-
-Below you can see the results displayed on the **Highest issue severity per column and day** dashboard located in the Highest issue severity per day group.
-This dashboard allows for reviewing and filtering a summary number of issues that arise
-from data quality checks per column and day. This dashboard helps evaluate the areas with the highest number of data 
-quality issues that should be addressed. It also allows to review how the issue severity changed per day of the month.
-
-These dashboards allow filtering data by:
-    
-* current and previous month,
-* connection,
-* schema,
-* data group,
-* data quality dimension,
-* check category,
-* check name,
-* table,
-* column.
-
-![String-max-length check results on Highest issue severity per column and day dashboard](https://dqops.com/docs/images/examples/daily-string-max-length-checks-results-on-highest-issue-severuty-dashboard.png){ loading=lazy; width="1200px" }
 
 ## Change a schedule at the connection level
 
@@ -212,72 +189,9 @@ spec:
         nullable: true
 ```
 
-## Run the checks in the example using the DQOps Shell
-
-A detailed explanation of [how to start DQOps platform and run the example is described here](../index.md#running-the-use-cases).
-
-To execute the check prepared in the example, run the following command in DQOps Shell:
-
-``` 
-check run
-```
-
-Review the results which should be similar to the one below.
-The number of the valid string length in the `measure_name` column is above 30.0 and the check raised an error.
-
-```
-Check evaluation summary per table:
-+-----------------------+---------------------------+------+--------------+-------------+--------+------+------------+----------------+
-|Connection             |Table                      |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
-+-----------------------+---------------------------+------+--------------+-------------+--------+------+------------+----------------+
-|america_health_rankings|america_health_rankings.ahr|1     |1             |0            |0       |1     |0           |0               |
-+-----------------------+---------------------------+------+--------------+-------------+--------+------+------------+----------------+
-```
-
-For a more detailed insight of how the check is run, you can initiate the check in debug mode by executing the
-following command:
-
-```
-check run --mode=debug
-```
-
-In the debug mode you can view the SQL query (sensor) executed in the check.
-
-```
-**************************************************
-Executing SQL on connection america_health_rankings (bigquery)
-SQL to be executed on the connection:
-SELECT
-    MAX(
-        LENGTH(analyzed_table.`measure_name`)
-    ) AS actual_value,
-    CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
-    TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
-FROM `bigquery-public-data`.`america_health_rankings`.`ahr` AS analyzed_table
-GROUP BY time_period, time_period_utc
-ORDER BY time_period, time_period_utc
-**************************************************
-```
-
-You can also see the results returned by the sensor. The actual value in this example is 31, which is above the maximum
-threshold level set in the error (30.0).
-
-```
-**************************************************
-Finished executing a sensor for a check daily_text_max_length on the table america_health_rankings.ahr using a sensor
- definition column/text/text_max_length, sensor result count: 1
-
-Results returned by the sensor:
-+------------+-----------+--------------------+
-|actual_value|time_period|time_period_utc     |
-+------------+-----------+--------------------+
-|31          |2024-02-14 |2024-02-14T00:00:00Z|
-+------------+-----------+--------------------+
-```
-
 In this example, we have demonstrated how to use DQOps to verify the reasonability of data in a column.
 By using the [text_max_length](../../checks/column/text/text-max-length.md) column check, we can monitor that 
-the length of the text in a column does not exceed the length in a set range. If it does, you will get a warning, error or fatal result.
+the length of the text in a column does not exceed the length in a set range. If it does, you will get an error result.
 
 ## Next steps
 

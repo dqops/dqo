@@ -1,0 +1,17 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/ColumnLevelDataQualityPolicyYaml-schema.json
+apiVersion: dqo/v1
+kind: default_column_checks
+spec:
+  priority: 1000
+  description: Monitors the sum and average (mean) aggregated values of numeric values
+    and raises a data quality issue when the value changes too much between daily
+    partitions.
+  partitioned_checks:
+    daily:
+      anomaly:
+        daily_partition_sum_anomaly:
+          warning:
+            anomaly_percent: 0.05
+        daily_partition_mean_anomaly:
+          warning:
+            anomaly_percent: 0.05
