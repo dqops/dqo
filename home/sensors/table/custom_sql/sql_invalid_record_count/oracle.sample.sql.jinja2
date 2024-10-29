@@ -1,0 +1,8 @@
+{% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+SELECT
+    sampling_table.actual_value
+FROM (
+    {{ parameters.sql_query | replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}
+) sampling_table
+WHERE ROWNUM <= {{ error_sampling.total_samples_limit }}
+

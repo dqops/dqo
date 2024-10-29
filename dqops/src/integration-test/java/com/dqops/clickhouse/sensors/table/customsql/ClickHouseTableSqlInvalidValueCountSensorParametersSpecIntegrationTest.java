@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.redshift.sensors.table.customsql;
+package com.dqops.clickhouse.sensors.table.customsql;
 
 import com.dqops.checks.CheckTimeScale;
-import com.dqops.checks.table.checkspecs.customsql.TableSqlConditionFailedCheckSpec;
+import com.dqops.checks.table.checkspecs.customsql.TableSqlInvalidRecordCountCheckSpec;
+import com.dqops.clickhouse.BaseClickHouseIntegrationTest;
 import com.dqops.connectors.ProviderType;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
@@ -24,12 +25,12 @@ import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.SensorExecutionRunParametersObjectMother;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
-import com.dqops.redshift.BaseRedshiftIntegrationTest;
 import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
-import com.dqops.sensors.table.customsql.TableSqlConditionFailedCountSensorParametersSpec;
+import com.dqops.sensors.table.customsql.TableSqlInvalidRecordCountSensorParametersSpec;
+import com.dqops.testutils.ValueConverter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,27 +39,31 @@ import tech.tablesaw.api.Table;
 
 
 @SpringBootTest
-public class TableSqlConditionFailedCountSensorParametersSpecIntegrationTest extends BaseRedshiftIntegrationTest {
-    private TableSqlConditionFailedCountSensorParametersSpec sut;
+public class ClickHouseTableSqlInvalidValueCountSensorParametersSpecIntegrationTest extends BaseClickHouseIntegrationTest {
+    private TableSqlInvalidRecordCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private TableSqlConditionFailedCheckSpec checkSpec;
+    private TableSqlInvalidRecordCountCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
     void setUp() {
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_average_delay, ProviderType.redshift);
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.string_test_data, ProviderType.clickhouse);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.sut = new TableSqlConditionFailedCountSensorParametersSpec();
-        this.checkSpec = new TableSqlConditionFailedCheckSpec();
+        this.sut = new TableSqlInvalidRecordCountSensorParametersSpec();
+        this.checkSpec = new TableSqlInvalidRecordCountCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
     @Test
-    void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
-        this.sut.setSqlCondition("length("
-                +"\""+this.sampleTableMetadata.getTableSpec().getColumns().getAt(0).getColumnName()+"\""
-                +") > 3");
+    void runSensor_onNullData_thenReturnsValues() {
+        String csvFileName = SampleCsvFileNames.only_nulls;
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(
+                csvFileName, ProviderType.clickhouse);
+        IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
+        this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
+
+        this.sut.setSqlQuery("SELECT string_nulls AS actual_value FROM {table} AS analyzed_table WHERE string_nulls IS NOT NULL");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForProfilingCheck(
                 sampleTableMetadata, this.checkSpec);
@@ -68,14 +73,27 @@ public class TableSqlConditionFailedCountSensorParametersSpecIntegrationTest ext
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(13L, resultTable.column(0).get(0));
+        Assertions.assertEquals(0.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
+    }
+
+    @Test
+    void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
+        this.sut.setSqlQuery("SELECT null_placeholder AS actual_value FROM {table} AS analyzed_table WHERE null_placeholder = 'married'");
+
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForProfilingCheck(
+                sampleTableMetadata, this.checkSpec);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(16L, ValueConverter.toLong(resultTable.column(0).get(0)));
     }
 
     @Test
     void runSensor_whenSensorExecutedMonitoringDaily_thenReturnsValues() {
-        this.sut.setSqlCondition("length("
-                +"\""+this.sampleTableMetadata.getTableSpec().getColumns().getAt(0).getColumnName()+"\""
-                +") > 3");
+        this.sut.setSqlQuery("SELECT null_placeholder AS actual_value FROM {table} AS analyzed_table WHERE null_placeholder = 'married'");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForMonitoringCheck(
                 sampleTableMetadata, this.checkSpec, CheckTimeScale.daily);
@@ -85,14 +103,12 @@ public class TableSqlConditionFailedCountSensorParametersSpecIntegrationTest ext
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(13L, resultTable.column(0).get(0));
+        Assertions.assertEquals(16L, ValueConverter.toLong(resultTable.column(0).get(0)));
     }
 
     @Test
     void runSensor_whenSensorExecutedMonitoringMonthly_thenReturnsValues() {
-        this.sut.setSqlCondition("length("
-                +"\""+this.sampleTableMetadata.getTableSpec().getColumns().getAt(0).getColumnName()+"\""
-                +") > 3");
+        this.sut.setSqlQuery("SELECT null_placeholder AS actual_value FROM {table} AS analyzed_table WHERE null_placeholder = 'married'");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForMonitoringCheck(
                 sampleTableMetadata, this.checkSpec, CheckTimeScale.monthly);
@@ -102,14 +118,12 @@ public class TableSqlConditionFailedCountSensorParametersSpecIntegrationTest ext
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(13L, resultTable.column(0).get(0));
+        Assertions.assertEquals(16L, ValueConverter.toLong(resultTable.column(0).get(0)));
     }
 
     @Test
-    void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues2() {
-        this.sut.setSqlCondition("length("
-                +"\""+this.sampleTableMetadata.getTableSpec().getColumns().getAt(0).getColumnName()+"\""
-                +") > 3");
+    void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
+        this.sut.setSqlQuery("SELECT null_placeholder AS actual_value FROM {table} AS analyzed_table WHERE null_placeholder = 'married'");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForPartitionedCheck(
                 sampleTableMetadata, this.checkSpec, CheckTimeScale.daily, "date2");
@@ -117,16 +131,14 @@ public class TableSqlConditionFailedCountSensorParametersSpecIntegrationTest ext
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(10, resultTable.rowCount());
+        Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(3L, resultTable.column(0).get(0));
+        Assertions.assertEquals(16L, ValueConverter.toLong(resultTable.column(0).get(0)));
     }
 
     @Test
-    void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues2() {
-        this.sut.setSqlCondition("length("
-                +"\""+this.sampleTableMetadata.getTableSpec().getColumns().getAt(0).getColumnName()+"\""
-                +") > 3");
+    void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
+        this.sut.setSqlQuery("SELECT null_placeholder AS actual_value FROM {table} AS analyzed_table WHERE null_placeholder = 'married'");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForPartitionedCheck(
                 sampleTableMetadata, this.checkSpec,CheckTimeScale.monthly, "date2");
@@ -136,6 +148,6 @@ public class TableSqlConditionFailedCountSensorParametersSpecIntegrationTest ext
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(13L, resultTable.column(0).get(0));
+        Assertions.assertEquals(16L, ValueConverter.toLong(resultTable.column(0).get(0)));
     }
 }

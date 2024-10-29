@@ -37,7 +37,7 @@ import tech.tablesaw.api.Table;
 
 
 @SpringBootTest
-public class TableSqlAggregatedExpressionSensorParametersSpecIntegrationTest extends BaseRedshiftIntegrationTest {
+public class RedshiftTableSqlAggregatedExpressionSensorParametersSpecIntegrationTest extends BaseRedshiftIntegrationTest {
     private TableSqlAggregatedExpressionSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private TableSqlAggregateExpressionCheckSpec checkSpec;

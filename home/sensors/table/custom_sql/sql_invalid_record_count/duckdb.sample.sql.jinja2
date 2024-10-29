@@ -1,0 +1,7 @@
+{% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+SELECT
+    sampling_table.actual_value
+FROM (
+    {{ parameters.sql_query | replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}
+) AS sampling_table
+LIMIT {{ error_sampling.samples_limit }}
