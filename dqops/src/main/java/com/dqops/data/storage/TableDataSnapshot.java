@@ -542,7 +542,8 @@ public class TableDataSnapshot {
         LocalDate startMonth = startDate == null ? null : LocalDateTimeTruncateUtility.truncateMonth(startDate);
         LocalDate endMonth = endDate == null ? null : LocalDateTimeTruncateUtility.truncateMonth(endDate);
         this.ensureNRecentMonthsAreLoaded(startMonth, endMonth, Integer.MAX_VALUE);
-        if (this.loadedMonthlyPartitions == null) {
+        if (this.loadedMonthlyPartitions == null || this.loadedMonthlyPartitions.isEmpty() ||
+                this.firstLoadedMonth == null || this.lastLoadedMonth == null) {
             // No data to delete
             return;
         }

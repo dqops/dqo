@@ -56,7 +56,7 @@ and profiling data by running default data profiling checks. Simply click on the
 Follow the link for more information [how to review Data statistics](collecting-basic-data-statistics.md).
 
 ## Run automatically activated monitoring checks
-To run automatically activated monitoring checks, go to the **Monitoring checks** section, select the table of interest from
+To run [automatically activated monitoring checks](../dqo-concepts/data-observability.md#automatic-activation-of-checks), go to the **Monitoring checks** section, select the table of interest from
 the tree view on the left and the **Data quality checks editor** tab. 
 
 The main workspace on the right will show the [Check editor](../dqo-concepts/dqops-user-interface-overview.md#check-editor).
@@ -70,73 +70,74 @@ been activated manually, the toggle button will have a darker green color.
 
 Similarly, you can view the column checks. Just select the column of interest from the tree view on the left. 
 
-![Default table checks](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/default-column-checks2.png){ loading=lazy; width="1200px" }
+![Automatically activated column checks](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/automatically-activated-column-checks1.png){ loading=lazy; width="1200px" }
 
-## Verify schedule configuration
+To run a single check, click the **Run** button next to the specific check's name. If you want to run the check for the 
+entire table, click the **Run** button located in the upper left corner of the check editor table.
 
-With DQOps, you can easily customize when checks are run by setting schedules. You can set schedules for an entire connection,
-table, or individual check. When you import a new table, DQOPs automatically set the schedule to run check daily at 12:00 a.m.
-
-To verify and modify the current schedule, go to **Data Source** section, select the data source of interest from the tree view on the left,
-and click on the **Schedule** tab on the main workspace. You can modify the schedule for each type of checks separately
-
-![Default schedule](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/default-schedule2.png){ loading=lazy; width="1200px" }
-
-## Run default checks
-
-To run checks, navigate to the check editor: go to the **Profiling** or **Monitoring Checks** section, select a table or column from the
-tree view on the left, click on the Profiling checks or Daily Checks.
-
-![Navigating to the check editor](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/navigate-to-the-check-editor2.png){ loading=lazy; width="1200px" }
-
-
-
-The right side of the table allows setting different threshold levels (severity levels). [Learn more about threshold levels ](../dqo-concepts/definition-of-data-quality-checks/index.md#issue-severity-levels)
-
-On the left of the name of each check, there are several buttons and icons that allows you to:
-
-- Activate and deactivate checks by using the Switch button,
-- Disable checks,
-- Access check **Settings**,
-- Check schedule status,
-- Run data quality checks,
-- View detailed results for Checks, Sensor readouts, and Execution errors
-- View detailed information about check,
-- Check the results of the run check shown as a color square
-      - Green for a correct result
-      - Yellow for a warning
-      - Orange for an error
-      - Red for a fatal error
-      - Black for execution error.
-
-To run the check, just click on the **Run check** button.
-
-![Run the profiling check](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/run-profiling-check2.png){ loading=lazy; width="1200px" }
+![Run automatically activated table checks](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/run-automatically-activated-table-checks1.png){ loading=lazy; width="1200px" }
 
 You can also run all checks activated on connection or table. Click on the three dot icon next to the name of connection
 or table and click on the **Run checks** option.
 
-![Run all checks activated on connection](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/run-all-checks-activated-on-connection2.png){ loading=lazy; width="1200px" }
+![Run all checks activated on connection](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/run-all-checks-activated-on-table1.png){ loading=lazy; width="600px" }
+
+A dialog box will appear where you can modify different options or simply click the **Run checks** button.
+
+![Run all checks dialog box](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/run-all-checks-dialog-box3.png){ loading=lazy; width="1000px" }
+
+Follow the link for [more information about running data quality checks](run-data-quality-checks.md).  
+
+## Review the detailed check results
+
+The check results are shown as a color square next to the name of the check.
+
+- Green for a correct result
+- Yellow for a warning
+- Orange for an error
+- Red for a fatal error
+- Black for execution error.
+
+Hover over the square to view more details.
+
+To access the detailed results click on the **Results** button.
+
+![Review check results](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/review-check-results3.png){ loading=lazy; width="1200px" }
+
+Within the Results window, you will see four tabs: **Check results**, **Sensor readouts**, **Execution errors** and **Error sampling**.
+
+- The **Check results** tab shows the severity level that result from the verification of sensor readouts by set rule thresholds.
+- The **Sensor readouts** tab displays the values obtained by the sensors from the data source.
+- The **Execution errors** tab displays any error that occurred during the check's execution.
+- The **Error sampling** tab allows you to view representative examples of data that fail to meet specified data quality criteria.
+
+## Review the Table quality status
+
+The Table quality status is a summary of the results of the executed checks, grouped by check category or data quality dimension.
+You can access it by clicking on the **Table quality status** tab on the table level. 
+
+![Review the table quality status](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/review-table-quality-status1.png){ loading=lazy; width="1200px" }
+
+Read more [about the Table quality status in the User interface section](../dqo-concepts/dqops-user-interface-overview.md#table-quality-status). 
 
 
-A dialog box will appear where you can modify different options or simply click the **Run checks** button. 
+## Configure more checks using the rule miner
 
-![Run all checks dialog box](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/run-all-checks-dialog-box2.png){ loading=lazy; width="1000px" }
+DQOps automates the process of configuring data quality checks with its [rule mining engine](../dqo-concepts/data-quality-rule-mining.md). The engine
+analyzes data collected from basic statistics, sample values to propose check configurations for detecting common data quality issues.
+It also suggests checks that will pass for the current data and serve as a baseline for detecting changes in data distribution over time.
 
+You can find more information about [the data quality rule mining in the concept section](../dqo-concepts/data-quality-rule-mining.md).
 
+## Verify schedule configuration
 
-## Review the check results
+With DQOps, you can easily customize when checks are run by setting schedules. You can set schedules for an entire connection,
+table, or individual check.
 
-To access the results click on the **Results** button.
+To verify and modify the current schedule, go to **Data Source** section, select the data source of interest from the tree view on the left,
+and click on the **Schedule** tab on the main workspace. You can modify the schedule for each type of checks separately
 
-![Review check results](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/review-check-results2.png){ loading=lazy; width="1200px" }
-
-
-Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
-The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
-The Sensor readouts category displays the values obtained by the sensors from the data source.
-The Execution errors category displays any error that occurred during the check's execution.
-
+![Default schedule](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/default-schedule3.png){ loading=lazy; width="1200px" }
 
 ## Review the Incidents 
 
