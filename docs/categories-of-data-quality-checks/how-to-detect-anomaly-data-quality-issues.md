@@ -15,9 +15,14 @@ have changed.
 !!! note "Anomaly detection with AI"
 
     The free version of DQOps uses a machine-learning algorithm that detects anomalies by calculating the Z-score over rolling quadrilles.
-    This algorithm does not detect seasonality and will not accurately detect seasonal patterns in your data, such as volume drops during weekends.
-    
+    This algorithm does not detect seasonality and will not accurately detect seasonal patterns in your data, such as volume drops during weekends
+    or drop in the number of distinct values as illustrated below.
+
+    ![Anomaly detection with z-score in free version](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/anomaly-detection-free-version-with-z-score1.png){ loading=lazy; width="1000px" }
+
     The commercial version of DQOps uses an advanced AI algorithm that considers seasonality and predicts anomalies accurately, reducing alert fatigue and minimizing false positives.
+    
+    ![Anomaly detection with ai in comercial version](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/anomaly-detection-with-ai1.png){ loading=lazy; width="1000px" }
     
     Please [get in touch with DQOps sales](https://dqops.com/contact-us/) for more information.
 
