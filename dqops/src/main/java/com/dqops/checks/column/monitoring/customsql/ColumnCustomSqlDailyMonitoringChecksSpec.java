@@ -47,6 +47,7 @@ public class ColumnCustomSqlDailyMonitoringChecksSpec extends AbstractCheckCateg
             put("daily_sql_condition_failed_on_column", o -> o.dailySqlConditionFailedOnColumn);
             put("daily_sql_condition_passed_percent_on_column", o -> o.dailySqlConditionPassedPercentOnColumn);
             put("daily_sql_aggregate_expression_on_column", o -> o.dailySqlAggregateExpressionOnColumn);
+            put("daily_sql_invalid_value_count_on_column", o -> o.dailySqlInvalidValueCountOnColumn);
             put("daily_import_custom_result_on_column", o -> o.dailyImportCustomResultOnColumn);
         }
     };
@@ -61,6 +62,12 @@ public class ColumnCustomSqlDailyMonitoringChecksSpec extends AbstractCheckCateg
 
     @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the expected range. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnSqlAggregateExpressionCheckSpec dailySqlAggregateExpressionOnColumn;
+
+    @JsonPropertyDescription("Runs a custom query that retrieves invalid values found in a column and returns the number of them," +
+            " and raises an issue if too many failures were detected. " +
+            "This check is used for setting testing queries or ready queries used by users in their own systems (legacy SQL queries). " +
+            "For example, when this check is applied on a column, the condition can verify that the column has lower value than 18 using an SQL expression: `{alias}.{column} < 18`.")
+    private ColumnSqlConditionFailedCheckSpec dailySqlInvalidValueCountOnColumn;
 
     @JsonPropertyDescription("Runs a custom query that retrieves a result of a data quality check performed in the data engineering, whose result (the severity level) is pulled from a separate table.")
     private ColumnSqlImportCustomResultCheckSpec dailyImportCustomResultOnColumn;
@@ -118,6 +125,24 @@ public class ColumnCustomSqlDailyMonitoringChecksSpec extends AbstractCheckCateg
         this.setDirtyIf(!Objects.equals(this.dailySqlAggregateExpressionOnColumn, dailySqlAggregateExpressionOnColumn));
         this.dailySqlAggregateExpressionOnColumn = dailySqlAggregateExpressionOnColumn;
         propagateHierarchyIdToField(dailySqlAggregateExpressionOnColumn, "daily_sql_aggregate_expression_on_column");
+    }
+
+    /**
+     * Returns a check specification.
+     * @return New check specification.
+     */
+    public ColumnSqlConditionFailedCheckSpec getDailySqlInvalidValueCountOnColumn() {
+        return dailySqlInvalidValueCountOnColumn;
+    }
+
+    /**
+     * Sets a new check specification.
+     * @param dailySqlInvalidValueCountOnColumn Check specification.
+     */
+    public void setDailySqlInvalidValueCountOnColumn(ColumnSqlConditionFailedCheckSpec dailySqlInvalidValueCountOnColumn) {
+        this.setDirtyIf(!Objects.equals(this.dailySqlInvalidValueCountOnColumn, dailySqlInvalidValueCountOnColumn));
+        this.dailySqlInvalidValueCountOnColumn = dailySqlInvalidValueCountOnColumn;
+        propagateHierarchyIdToField(dailySqlInvalidValueCountOnColumn, "daily_sql_invalid_value_count_on_column");
     }
 
     /**

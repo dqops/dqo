@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.snowflake.sensors.table.customsql;
+package com.dqops.db2.sensors.table.customsql;
 
 import com.dqops.checks.CheckTimeScale;
-import com.dqops.checks.table.checkspecs.customsql.TableSqlConditionPassedPercentCheckSpec;
+import com.dqops.checks.table.checkspecs.customsql.TableSqlInvalidRecordCountCheckSpec;
 import com.dqops.connectors.ProviderType;
+import com.dqops.db2.BaseDb2IntegrationTest;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
@@ -28,8 +29,8 @@ import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
-import com.dqops.sensors.table.customsql.TableSqlConditionPassedPercentSensorParametersSpec;
-import com.dqops.snowflake.BaseSnowflakeIntegrationTest;
+import com.dqops.sensors.table.customsql.TableSqlInvalidRecordCountSensorParametersSpec;
+import com.dqops.testutils.ValueConverter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,27 +39,32 @@ import tech.tablesaw.api.Table;
 
 
 @SpringBootTest
-public class TableSqlConditionPassedPercentSensorParametersSpecIntegrationTest extends BaseSnowflakeIntegrationTest {
-    private TableSqlConditionPassedPercentSensorParametersSpec sut;
+public class Db2TableSqlInvalidValueCountSensorParametersSpecIntegrationTest extends BaseDb2IntegrationTest {
+    private TableSqlInvalidRecordCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private TableSqlConditionPassedPercentCheckSpec checkSpec;
+    private TableSqlInvalidRecordCountCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
     void setUp() {
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_average_delay, ProviderType.snowflake);
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.string_test_data, ProviderType.db2);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.sut = new TableSqlConditionPassedPercentSensorParametersSpec();
-        this.checkSpec = new TableSqlConditionPassedPercentCheckSpec();
+        this.sut = new TableSqlInvalidRecordCountSensorParametersSpec();
+        this.checkSpec = new TableSqlInvalidRecordCountCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
     @Test
-    void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
-        this.sut.setSqlCondition("length("
-                +"\""+this.sampleTableMetadata.getTableSpec().getColumns().getAt(0).getColumnName()+"\""
-                +") < 3");
+    void runSensor_onNullData_thenReturnsValues() {
+        String csvFileName = SampleCsvFileNames.only_nulls;
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(
+                csvFileName, ProviderType.db2);
+        IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
+        this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
+
+        this.sut.setSqlQuery("SELECT \"string_nulls\" AS actual_value FROM {table} AS analyzed_table WHERE \"string_nulls\" IS NOT NULL");
+
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForProfilingCheck(
                 sampleTableMetadata, this.checkSpec);
 
@@ -67,14 +73,28 @@ public class TableSqlConditionPassedPercentSensorParametersSpecIntegrationTest e
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(0.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
+    }
+
+    @Test
+    void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
+        this.sut.setSqlQuery("SELECT \"null_placeholder\" AS actual_value FROM {table} AS analyzed_table WHERE \"null_placeholder\" = 'married'");
+
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForProfilingCheck(
+                sampleTableMetadata, this.checkSpec);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(16L, ValueConverter.toLong(resultTable.column(0).get(0)));
     }
 
     @Test
     void runSensor_whenSensorExecutedMonitoringDaily_thenReturnsValues() {
-        this.sut.setSqlCondition("length("
-                +"\""+this.sampleTableMetadata.getTableSpec().getColumns().getAt(0).getColumnName()+"\""
-                +") < 3");
+        this.sut.setSqlQuery("SELECT \"null_placeholder\" AS actual_value FROM {table} AS analyzed_table WHERE \"null_placeholder\" = 'married'");
+
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForMonitoringCheck(
                 sampleTableMetadata, this.checkSpec, CheckTimeScale.daily);
 
@@ -83,14 +103,13 @@ public class TableSqlConditionPassedPercentSensorParametersSpecIntegrationTest e
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals( 100.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(16L, ValueConverter.toLong(resultTable.column(0).get(0)));
     }
 
     @Test
     void runSensor_whenSensorExecutedMonitoringMonthly_thenReturnsValues() {
-        this.sut.setSqlCondition("length("
-                +"\""+this.sampleTableMetadata.getTableSpec().getColumns().getAt(0).getColumnName()+"\""
-                +") < 3");
+        this.sut.setSqlQuery("SELECT \"null_placeholder\" AS actual_value FROM {table} AS analyzed_table WHERE \"null_placeholder\" = 'married'");
+
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForMonitoringCheck(
                 sampleTableMetadata, this.checkSpec, CheckTimeScale.monthly);
 
@@ -99,30 +118,27 @@ public class TableSqlConditionPassedPercentSensorParametersSpecIntegrationTest e
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(16L, ValueConverter.toLong(resultTable.column(0).get(0)));
     }
 
     @Test
-    void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues2() {
-        this.sut.setSqlCondition("length("
-                +"\""+this.sampleTableMetadata.getTableSpec().getColumns().getAt(0).getColumnName()+"\""
-                +") < 3");
+    void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
+        this.sut.setSqlQuery("SELECT \"null_placeholder\" AS actual_value FROM {table} AS analyzed_table WHERE \"null_placeholder\" = 'married'");
+
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForPartitionedCheck(
                 sampleTableMetadata, this.checkSpec, CheckTimeScale.daily, "date2");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(10, resultTable.rowCount());
+        Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(16L, ValueConverter.toLong(resultTable.column(0).get(0)));
     }
 
     @Test
-    void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues2() {
-        this.sut.setSqlCondition("length("
-                +"\""+this.sampleTableMetadata.getTableSpec().getColumns().getAt(0).getColumnName()+"\""
-                +") < 3");
+    void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
+        this.sut.setSqlQuery("SELECT \"null_placeholder\" AS actual_value FROM {table} AS analyzed_table WHERE \"null_placeholder\" = 'married'");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForPartitionedCheck(
                 sampleTableMetadata, this.checkSpec,CheckTimeScale.monthly, "date2");
@@ -132,6 +148,6 @@ public class TableSqlConditionPassedPercentSensorParametersSpecIntegrationTest e
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals( 100.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(16L, ValueConverter.toLong(resultTable.column(0).get(0)));
     }
 }
