@@ -1,34 +1,76 @@
+import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
 import { TopIncidentsModel } from '../../api';
+import Button from '../../components/Button';
+import Loader from '../../components/Loader';
 import RadioButton from '../../components/RadioButton';
+import SvgIcon from '../../components/SvgIcon';
 import { IncidentsApi } from '../../services/apiClient';
 import GlobalIncidentsDashboard from './GlobalIncidentDashboard/GlobalIncidentsDashboard';
-import Button from '../../components/Button';
-import SvgIcon from '../../components/SvgIcon';
-import clsx from 'clsx';
 import SummaryTable from './Summary/SummaryTable';
 
-export default function index() {
+export default function Index() {
   const [incidents, setIncidents] = useState<TopIncidentsModel>({});
-  const [groupingField, setGroupingField] = useState<
-    'category' | 'dimension'
-  >('category');
+  const [groupingField, setGroupingField] = useState<'category' | 'dimension'>(
+    'category'
+  );
   const [loading, setLoading] = useState<boolean>(false);
 
-  const getIncidents = async (status?: string, groupBy?: string) => {
+  const getIncidents = async () => {
     setLoading(true);
-    const response = await IncidentsApi.findTopIncidentsGrouped(undefined, groupingField)
-    .then( (response) => { setIncidents(response.data); } )
-    .finally(() => setLoading(false));
-  }
+    await IncidentsApi.findTopIncidentsGrouped(undefined, groupingField)
+      .then((response) => {
+        const data = response.data;
+
+        // Sort data before updating the state
+        const sortedData = Object.entries(data.topIncidents || {})
+          .filter(([, value]) => value.length !== 0)
+          .sort(([, valueA], [, valueB]) => {
+            if (
+              groupingField === 'category' &&
+              valueA[0]?.checkCategory &&
+              valueB[0]?.checkCategory
+            ) {
+              return valueA[0]?.checkCategory.localeCompare(
+                valueB[0]?.checkCategory
+              );
+            }
+            if (
+              groupingField === 'dimension' &&
+              valueA[0]?.qualityDimension &&
+              valueB[0]?.qualityDimension
+            ) {
+              return valueA[0]?.qualityDimension.localeCompare(
+                valueB[0]?.qualityDimension
+              );
+            }
+            return 0;
+          });
+
+        // Convert back to an object and set in state
+        setIncidents({
+          ...response.data,
+          topIncidents: Object.fromEntries(sortedData)
+        });
+      })
+      .finally(() => setLoading(false));
+  };
 
   useEffect(() => {
-    getIncidents(undefined, groupingField);
+    getIncidents();
   }, [groupingField]);
+
+  if (loading && Object.keys(incidents).length === 0) {
+    return (
+      <div className="flex justify-center h-50">
+        <Loader isFull={false} className="w-8 h-8 fill-green-700" />
+      </div>
+    );
+  }
 
   return (
     <div>
-      <div className='flex items-center justify-between'>
+      <div className="flex items-center justify-between">
         <div className="flex pb-2 pt-6 pl-4 gap-x-5 items-center">
           <div className="text-sm pl-1">Group incidents by: </div>
           <RadioButton
@@ -53,16 +95,20 @@ export default function index() {
             />
           }
           className="mr-8 pr-0 pl-3 mt-3"
-          onClick={() =>
-            getIncidents(undefined, groupingField)
-          }
+          onClick={() => getIncidents()}
         />
       </div>
       <SummaryTable incidents={incidents} />
-      <GlobalIncidentsDashboard
-        incidents={incidents}
-        groupBy={groupingField}
-      />
+      {loading ? (
+        <div className="flex justify-center h-50">
+          <Loader isFull={false} className="w-8 h-8 fill-green-700" />
+        </div>
+      ) : (
+        <GlobalIncidentsDashboard
+          incidents={incidents}
+          groupBy={groupingField}
+        />
+      )}
     </div>
   );
 }
