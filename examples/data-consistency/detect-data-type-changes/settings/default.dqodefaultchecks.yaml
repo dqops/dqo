@@ -1,0 +1,81 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/DefaultObservabilityChecksYaml-schema.json
+apiVersion: dqo/v1
+kind: default_checks
+spec:
+  profiling:
+    table:
+      volume:
+        profile_row_count:
+          warning:
+            min_count: 1
+      schema:
+        profile_column_count: {}
+    column:
+      nulls:
+        profile_nulls_count:
+          warning:
+            max_count: 0
+        profile_nulls_percent: {}
+        profile_not_nulls_count:
+          warning:
+            min_count: 1
+  monitoring_daily:
+    table:
+      volume:
+        daily_row_count:
+          warning:
+            min_count: 1
+        daily_row_count_anomaly:
+          warning:
+            anomaly_percent: 1.0
+        daily_row_count_change:
+          warning:
+            max_percent: 10.0
+      availability:
+        daily_table_availability:
+          warning:
+            max_failures: 0
+      schema:
+        daily_column_count: {}
+        daily_column_count_changed:
+          warning: {}
+        daily_column_list_changed:
+          warning: {}
+        daily_column_list_or_order_changed:
+          warning: {}
+        daily_column_types_changed:
+          warning: {}
+    column:
+      nulls:
+        daily_nulls_count: {}
+        daily_nulls_percent: {}
+        daily_nulls_percent_anomaly:
+          warning:
+            anomaly_percent: 1.0
+        daily_not_nulls_count:
+          warning:
+            min_count: 1
+        daily_not_nulls_percent: {}
+        daily_nulls_percent_change_1_day:
+          warning:
+            max_percent: 10.0
+            exact_day: true
+      uniqueness:
+        daily_distinct_count_anomaly:
+          warning:
+            anomaly_percent: 1.0
+      anomaly:
+        daily_sum_anomaly:
+          warning:
+            anomaly_percent: 1.0
+        daily_mean_anomaly:
+          warning:
+            anomaly_percent: 1.0
+      datatype:
+        daily_detected_datatype_in_text_changed:
+          warning: {}
+      schema:
+        daily_column_exists:
+          warning: {}
+        daily_column_type_changed:
+          warning: {}

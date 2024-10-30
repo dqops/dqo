@@ -1,0 +1,78 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  incremental_time_window:
+    daily_partitioning_recent_days: 7
+    monthly_partitioning_recent_months: 1
+  columns:
+    date:
+      type_snapshot:
+        column_type: DATE
+        nullable: true
+      monitoring_checks:
+        daily:
+          datatype:
+            daily_detected_datatype_in_text:
+              error:
+                expected_datatype: dates
+            daily_detected_datatype_in_text_changed:
+              error: {}
+          schema:
+            daily_column_type_changed:
+              warning: {}
+    price:
+      type_snapshot:
+        column_type: DOUBLE
+        nullable: true
+    bedrooms:
+      type_snapshot:
+        column_type: BIGINT
+        nullable: true
+    grade:
+      type_snapshot:
+        column_type: BIGINT
+        nullable: true
+    has_basement:
+      type_snapshot:
+        column_type: BOOLEAN
+        nullable: true
+    living_in_m2:
+      type_snapshot:
+        column_type: DOUBLE
+        nullable: true
+    renovated:
+      type_snapshot:
+        column_type: BOOLEAN
+        nullable: true
+    nice_view:
+      type_snapshot:
+        column_type: BOOLEAN
+        nullable: true
+    perfect_condition:
+      type_snapshot:
+        column_type: BOOLEAN
+        nullable: true
+    real_bathrooms:
+      type_snapshot:
+        column_type: BIGINT
+        nullable: true
+    has_lavatory:
+      type_snapshot:
+        column_type: BOOLEAN
+        nullable: true
+    single_floor:
+      type_snapshot:
+        column_type: BOOLEAN
+        nullable: true
+    month:
+      type_snapshot:
+        column_type: BIGINT
+        nullable: true
+    quartile_zone:
+      type_snapshot:
+        column_type: BIGINT
+        nullable: true
+  file_format:
+    file_paths:
+    - ..\..\..\dqops\sampledata\house_price_prediction_treated_dataset.csv
