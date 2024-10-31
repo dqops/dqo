@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/ColumnLevelDataQualityPolicyYaml-schema.json
+apiVersion: dqo/v1
+kind: default_column_checks
+spec:
+  priority: 1000
+  description: Detects when the values stored in a text column change their type.
+    This policy should be activated on raw tables in the landing zones for table that
+    store all values (also numeric an dates) in text columns.
+  monitoring_checks:
+    daily:
+      datatype:
+        daily_detected_datatype_in_text_changed:
+          warning: {}
+  partitioned_checks:
+    daily:
+      datatype:
+        daily_partition_detected_datatype_in_text_changed:
+          warning: {}
