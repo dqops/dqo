@@ -116,6 +116,7 @@ nav:
           - Detect empty or incomplete tables: "examples/data-completeness/detect-empty-or-incomplete-tables.md"
       - Data consistency:
           - Percentage of rows having only accepted values: "examples/data-consistency/percentage-of-rows-with-a-text-found-in-set.md"
+          - Detect data type changes in the landing zone tables: "examples/data-consistency/detect-data-type-changes.md"
       - Data reasonability:
           - Percentage of false boolean values: "examples/data-reasonability/percentage-of-false-values.md"
           - Percentage of values in range: "examples/data-reasonability/percentage-of-integer-values-in-range.md"

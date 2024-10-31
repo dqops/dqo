@@ -1,6 +1,6 @@
 date,price,bedrooms,grade,has_basement,living_in_m2,renovated,nice_view,perfect_condition,real_bathrooms,has_lavatory,single_floor,month,quartile_zone
-2014-09-26,305000.0,2,1,False,76.18046,False,False,True,1,False,True,9,2
-2014-05-14,498000.0,3,2,True,210.88981,False,False,False,2,True,True,5,2
+2014-09-26,305000.0,1,1,False,76.18046,False,False,True,1,False,True,9,2
+2014-05-14,498000.0,2,2,True,210.88981,False,False,False,2,True,True,5,2
 2015-03-23,590000.0,2,4,False,262.91549,False,False,False,2,True,False,3,2
 2014-07-15,775000.0,3,3,False,159.79316,False,False,False,1,True,False,7,3
 2015-04-14,350000.0,2,1,False,92.903,False,False,False,1,True,True,4,3
@@ -6699,3 +6699,4 @@ date,price,bedrooms,grade,has_basement,living_in_m2,renovated,nice_view,perfect_
 2014-06-18,264000.0,3,2,True,169.08346,False,False,False,1,True,True,6,1
 2015-02-02,612125.0,1,2,True,155.14801,False,False,False,1,True,True,2,4
 2014-10-17,190000.0,2,1,False,117.05778,False,False,False,1,False,True,10,2
+2014-10-17,190001.0,2,1,False,117.05779,False,False,False,1,False,True,10,2

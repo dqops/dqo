@@ -40,7 +40,7 @@ FROM `dqo-ai-testing`.`kaggle_student_performance`.`maths` AS analyzed_table
 
 In this example, we will set the minimum percent thresholds levels for the check (a minimum accepted percentage of valid rows):
 
-- error: 98&
+- error: 98%
 
 If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/definition-of-data-quality-checks/index.md).
 
