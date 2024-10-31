@@ -73,7 +73,7 @@ export default function TableQualityStatusColumnCategory({
       schema,
       table,
       column,
-      checkTypes === CheckTypes.PROFILING ? 'advanced' : timeScale ?? 'daily'
+      checkTypes === CheckTypes.PROFILING ? 'advanced' : 'check-editor'
     );
     const value = ROUTES.COLUMN_LEVEL_VALUE(
       checkTypes,

@@ -85,9 +85,7 @@ export const IncidentIssueRow = ({
         columnName,
         checkType === CheckTypes.PROFILING
           ? 'advanced'
-          : timeGradient === CheckResultEntryModelTimeGradientEnum.month
-          ? 'monthly'
-          : 'daily'
+          : 'observability-status'
       );
       value = ROUTES.COLUMN_LEVEL_VALUE(
         checkType,
@@ -105,9 +103,7 @@ export const IncidentIssueRow = ({
         table,
         checkType === CheckTypes.PROFILING
           ? 'advanced'
-          : timeGradient === CheckResultEntryModelTimeGradientEnum.month
-          ? 'monthly'
-          : 'daily'
+          : 'observability-status'
       );
       value = ROUTES.TABLE_LEVEL_VALUE(checkType, connection, schema, table);
       label = table;
