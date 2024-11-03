@@ -76,6 +76,8 @@ const ConnectionLayout = ({ route }: ConnectionLayoutProps) => {
 
   const handleChange = (tab: TabOption) => {
     dispatch(setActiveFirstLevelTab(checkTypes, tab.value));
+    dispatch(setIsTabChanged(true));
+
     if (tab.url && tab.url !== location.pathname) {
       history.push(tab.url);
     }
@@ -156,12 +158,12 @@ const ConnectionLayout = ({ route }: ConnectionLayoutProps) => {
     }
   };
   useEffect(() => {
+    setIsTabChanged(false);
     if (activeTab) {
       const activeUrl = pageTabs.find((item) => item.value === activeTab)?.url;
       getChecksConfigurated(activeUrl ?? activeTab);
 
       if (activeUrl && activeUrl !== location.pathname && isTabChanged) {
-        setIsTabChanged(false);
         history.push(activeUrl);
         return;
       }
@@ -196,7 +198,7 @@ const ConnectionLayout = ({ route }: ConnectionLayoutProps) => {
         );
       }
     }
-  }, [location.pathname, isTabChanged]);
+  }, [location.pathname, isTabChanged, activeTab]);
 
   // TODO Aleksy: fix checkIfTabCouldExist function with opening tabs with url.
 

@@ -34,10 +34,10 @@ public class RuleEvaluationResult {
     private final DoubleColumn expectedValueColumn;
     private final IntColumn severityColumn;
     private final LongColumn incidentHashColumn;
-    private final TextColumn referenceConnectionColumn;
-    private final TextColumn referenceSchemaColumn;
-    private final TextColumn referenceTableColumn;
-    private final TextColumn referenceColumnColumn;
+    private final StringColumn referenceConnectionColumn;
+    private final StringColumn referenceSchemaColumn;
+    private final StringColumn referenceTableColumn;
+    private final StringColumn referenceColumnColumn;
     private final BooleanColumn includeInKpiColumn;
     private final BooleanColumn includeInSlaColumn;
 
@@ -67,10 +67,10 @@ public class RuleEvaluationResult {
         this.expectedValueColumn = TableColumnUtility.getOrAddDoubleColumn(ruleResultsTable, SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME, addColumWhenMissing);
 		this.severityColumn = TableColumnUtility.getOrAddIntColumn(ruleResultsTable, CheckResultsColumnNames.SEVERITY_COLUMN_NAME, addColumWhenMissing);
         this.incidentHashColumn = TableColumnUtility.getOrAddLongColumn(ruleResultsTable, CheckResultsColumnNames.INCIDENT_HASH_COLUMN_NAME, addColumWhenMissing);
-        this.referenceConnectionColumn = TableColumnUtility.getOrAddTextColumn(ruleResultsTable, CheckResultsColumnNames.REFERENCE_CONNECTION_COLUMN_NAME, addColumWhenMissing);
-        this.referenceSchemaColumn = TableColumnUtility.getOrAddTextColumn(ruleResultsTable, CheckResultsColumnNames.REFERENCE_SCHEMA_COLUMN_NAME, addColumWhenMissing);
-        this.referenceTableColumn = TableColumnUtility.getOrAddTextColumn(ruleResultsTable, CheckResultsColumnNames.REFERENCE_TABLE_COLUMN_NAME, addColumWhenMissing);
-        this.referenceColumnColumn = TableColumnUtility.getOrAddTextColumn(ruleResultsTable, CheckResultsColumnNames.REFERENCE_COLUMN_COLUMN_NAME, addColumWhenMissing);
+        this.referenceConnectionColumn = TableColumnUtility.getOrAddStringColumn(ruleResultsTable, CheckResultsColumnNames.REFERENCE_CONNECTION_COLUMN_NAME, addColumWhenMissing);
+        this.referenceSchemaColumn = TableColumnUtility.getOrAddStringColumn(ruleResultsTable, CheckResultsColumnNames.REFERENCE_SCHEMA_COLUMN_NAME, addColumWhenMissing);
+        this.referenceTableColumn = TableColumnUtility.getOrAddStringColumn(ruleResultsTable, CheckResultsColumnNames.REFERENCE_TABLE_COLUMN_NAME, addColumWhenMissing);
+        this.referenceColumnColumn = TableColumnUtility.getOrAddStringColumn(ruleResultsTable, CheckResultsColumnNames.REFERENCE_COLUMN_COLUMN_NAME, addColumWhenMissing);
         this.includeInKpiColumn = TableColumnUtility.getOrAddBooleanColumn(ruleResultsTable, CheckResultsColumnNames.INCLUDE_IN_KPI_COLUMN_NAME, addColumWhenMissing);
         this.includeInSlaColumn = TableColumnUtility.getOrAddBooleanColumn(ruleResultsTable, CheckResultsColumnNames.INCLUDE_IN_SLA_COLUMN_NAME, addColumWhenMissing);
 		this.fatalLowerBoundColumn = TableColumnUtility.getOrAddDoubleColumn(ruleResultsTable, CheckResultsColumnNames.FATAL_LOWER_BOUND_COLUMN_NAME, addColumWhenMissing);
@@ -121,7 +121,7 @@ public class RuleEvaluationResult {
      * Returns the column that stores the name of a reference connection name for accuracy checks.
      * @return Reference connection name column.
      */
-    public TextColumn getReferenceConnectionColumn() {
+    public StringColumn getReferenceConnectionColumn() {
         return referenceConnectionColumn;
     }
 
@@ -129,7 +129,7 @@ public class RuleEvaluationResult {
      * Returns the column that stores the name of a reference schema name for accuracy checks.
      * @return Reference schema name column.
      */
-    public TextColumn getReferenceSchemaColumn() {
+    public StringColumn getReferenceSchemaColumn() {
         return referenceSchemaColumn;
     }
 
@@ -137,7 +137,7 @@ public class RuleEvaluationResult {
      * Returns the column that stores the name of a reference table name for accuracy checks.
      * @return Reference table name column.
      */
-    public TextColumn getReferenceTableColumn() {
+    public StringColumn getReferenceTableColumn() {
         return referenceTableColumn;
     }
 
@@ -145,7 +145,7 @@ public class RuleEvaluationResult {
      * Returns the column that stores the name of a reference column name for accuracy checks.
      * @return Reference column name column.
      */
-    public TextColumn getReferenceColumnColumn() {
+    public StringColumn getReferenceColumnColumn() {
         return referenceColumnColumn;
     }
 

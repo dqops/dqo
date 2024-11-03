@@ -1,8 +1,8 @@
 ---
-title: How to activate data observability for SAP HANA
+title: How to set up data quality monitoring and data observability for IBM DB2
 ---
-# How to activate data observability for IBM DB2
-Read this guide to learn how to connect DQOps to IBM DB2 from the UI, command-line interface, or directly in YAML files, and activate monitoring.
+# How to set up data quality monitoring and data observability for IBM DB2
+Data observability and data monitoring for IBM Db2. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
 
 ## Overview
 
@@ -35,17 +35,17 @@ After navigating to the IBM DB2 connection settings, you will need to fill in it
 
 ![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-db2.png){ loading=lazy; }
 
-| SAP HANA connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                               | 
-|------------------------------|------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Connection name              |                                          | The name of the connection that will be created in DQOps. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters. |
-| Parallel jobs limit          |                                          | A limit on the number of jobs that can run simultaneously. Leave empty to disable the limit.                                                                                                                                              |
-| DB2 platform type            | `db2_platform_type`                      | DB2 platform type - either LUW or z/OS. Supports also a ${DB2_PLATFORM} configuration with a custom environment variable.                                                                                                                 |
-| Host                         | `host`                                   | IBM DB2 host name. Supports also a ${DB2_HOST} configuration with a custom environment variable.                                                                                                                                          |
-| Port                         | `port`                                   | IBM DB2 port number. The default port is 50000. Supports also a ${DB2_PORT} configuration with a custom environment variable.                                                                                                             |
-| Database                     | `database`                               | IBM DB2 database name. Supports also a ${DB2_DATABASE} configuration with a custom environment variable.                                                                                                                        |
-| User name                    | `user`                                   | IBM DB2 user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                               |
-| Password                     | `password`                               | IBM DB2 database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                       |
-| JDBC connection property     |                                          | Optional setting. DQOps supports using JDBC driver to access SAP HANA.                                                                                                                                                                    |
+| IBM DB2 connection settings     | Property name in YAML configuration file | Description                                                                                                                                                                                                                               | 
+|--------------------------|------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Connection name          |                                          | The name of the connection that will be created in DQOps. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters. |
+| Parallel jobs limit      |                                          | A limit on the number of jobs that can run simultaneously. Leave empty to disable the limit.                                                                                                                                              |
+| DB2 platform type        | `db2_platform_type`                      | DB2 platform type - either LUW or z/OS. Supports also a ${DB2_PLATFORM} configuration with a custom environment variable.                                                                                                                 |
+| Host                     | `host`                                   | IBM DB2 host name. Supports also a ${DB2_HOST} configuration with a custom environment variable.                                                                                                                                          |
+| Port                     | `port`                                   | IBM DB2 port number. The default port is 50000. Supports also a ${DB2_PORT} configuration with a custom environment variable.                                                                                                             |
+| Database                 | `database`                               | IBM DB2 database name. Supports also a ${DB2_DATABASE} configuration with a custom environment variable.                                                                                                                        |
+| User name                | `user`                                   | IBM DB2 user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                               |
+| Password                 | `password`                               | IBM DB2 database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                       |
+| JDBC connection property |                                          | Optional setting. DQOps supports using JDBC driver to access IBM DB2.                                                                                                                                                                    |
     
 DQOps allows you to dynamically replace properties in connection settings with environment variables. To use it, simply
 change "clear text" to ${ENV_VAR} using the drop-down menu at the end of the variable entry field and type your variable.
@@ -89,8 +89,8 @@ and profiling data by running default data profiling checks. Simply click on the
 
 !!! info "Automatically activated checks"
 
-    Once new tables are imported, DQOps automatically activates [profiling and monitoring checks](../dqo-concepts/definition-of-data-quality-checks/index.md).
-    These checks include row count, table availability, and checks detecting schema changes. The profiling checks are scheduled 
+    Once new tables are imported, DQOps automatically activates [profiling and monitoring checks](../dqo-concepts/definition-of-data-quality-checks/index.md) which are which are pre-enabled by [data quality policies](../dqo-concepts/data-observability.md#automatic-activation-of-checks).
+    These checks detect volume anomalies, data freshness anomalies, empty tables, table availability, schema changes, anomalies in the count of distinct values, and null percent anomalies. The profiling checks are scheduled 
     to run at 1:00 a.m. on the 1st day of every month, and the monitoring checks are scheduled to run daily at 12:00 p.m.
     
     [**Profiling checks**](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md) are designed to assess
@@ -101,7 +101,7 @@ and profiling data by running default data profiling checks. Simply click on the
     standard checks that monitor the data quality of a table or column. They can also be referred to as **Data Observability** checks.
     These checks capture a single data quality result for the entire table or column.
 
-## Add a SAP HANA connection using DQOps Shell
+## Add an IBM DB2 connection using DQOps Shell
 
 To add a connection run the following command in DQOps Shell.
 
@@ -115,20 +115,24 @@ Fill in the data you will be asked for.
 Connection name (--name): connection1
 Database provider type (--provider):
  [ 1] bigquery
- [ 2] databricks
- [ 3] mysql
- [ 4] oracle
- [ 5] postgresql
- [ 6] duckdb
- [ 7] presto
- [ 8] redshift
- [ 9] snowflake
- [10] spark
- [11] sqlserver
- [12] trino
- [13] hana
- [14] db2
-Please enter one of the [] values: 14
+ [ 2] clickhouse
+ [ 3] databricks
+ [ 4] db2
+ [ 5] duckdb
+ [ 6] hana
+ [ 7] mariadb
+ [ 8] mysql
+ [ 9] oracle
+ [10] postgresql
+ [11] presto
+ [12] questdb
+ [13] redshift
+ [14] snowflake
+ [15] spark
+ [16] sqlserver
+ [17] teradata
+ [18] trino
+Please enter one of the [] values: 4
 DB2 platform type (--db2-platform):
  [ 1] luw
  [ 2] zos
@@ -176,7 +180,7 @@ character can be used at the beginning, middle, or end of the name.
 Connection configurations are stored in the YAML files in the `./sources` folder. The name of the connection is also
 the name of the folder where the configuration file is stored.
 
-Below is a sample YAML file showing an example configuration of a SAP HANA data source connection.
+Below is a sample YAML file showing an example configuration of a IBM DB2 data source connection.
 
 ``` yaml
 apiVersion: dqo/v1

@@ -323,6 +323,14 @@ A column-level check that calculates a given SQL aggregate expression on a colum
 
 
 
+### [sql invalid value count on column](./custom_sql/sql-invalid-value-count-on-column.md)
+A column-level check that uses a custom SQL query that return invalid values from column.
+ This check is used for setting testing queries or ready queries used by users in their own systems (legacy SQL queries).
+ Use the {table} token to reference the tested table, and the {column} to reference the column that is tested.
+ For example, when this check is applied on a column. The condition can find invalid values in the column which have values lower than 18 using an SQL query: &#x60;SELECT {column} FROM {table} WHERE {column} &lt; 18&#x60;.
+
+
+
 ### [import custom result on column](./custom_sql/import-custom-result-on-column.md)
 Column level check that uses a custom SQL SELECT statement to retrieve a result of running a custom data quality check on a column by a custom
  data quality check, hardcoded in the data pipeline. The result is retrieved by querying a separate **logging table**, whose schema is not fixed.

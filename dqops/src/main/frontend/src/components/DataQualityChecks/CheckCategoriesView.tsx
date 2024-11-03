@@ -200,7 +200,10 @@ const CheckCategoriesView = ({
               tuple[0].configured ||
               tuple[0].default_check ||
               isAlreadyDeleted ||
-              isFiltered
+              isFiltered ||
+              checkResultsOverview.find(
+                (item) => item.checkHash === tuple[0].check_hash
+              )
           )
           .map((tuple) => (
             <CheckListItem

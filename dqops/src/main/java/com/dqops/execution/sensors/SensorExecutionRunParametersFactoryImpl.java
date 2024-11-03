@@ -52,6 +52,7 @@ import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -95,6 +96,7 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
      * @param userTimeWindowFilters Optional user provided time window filters to analyze a time range of data or recent months/days.
      *                             When not provided, the defaults are copied from the table's incremental time window configuration for a matching partition time scale.
      * @param dialectSettings Dialect settings.
+     * @param tableYamlLastModified The timestamp when the table YAML was last modified.
      * @return Sensor execution run parameters.
      */
     @Override
@@ -109,7 +111,8 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
                                                                TableComparisonConfigurationSpec tableComparisonConfigurationSpec,
                                                                TimeSeriesConfigurationSpec timeSeriesConfigurationSpec,
                                                                TimeWindowFilterParameters userTimeWindowFilters,
-                                                               ProviderDialectSettings dialectSettings) {
+                                                               ProviderDialectSettings dialectSettings,
+                                                               Instant tableYamlLastModified) {
         SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(userHome);
 
         ConnectionSpec expandedConnection = connection.expandAndTrim(this.secretValueProvider, secretValueLookupContext);
@@ -151,12 +154,23 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
         exactCheckSearchFilters.setCheckName(check.getCheckName());
         exactCheckSearchFilters.setSensorName(effectiveSensorRuleNames.getSensorName());
 
+        Instant checkConfiguredAt = tableYamlLastModified;
+        if (check.getPolicyLastModified() != null) {
+            if (tableYamlLastModified == null) {
+                checkConfiguredAt = check.getPolicyLastModified();
+            } else {
+                if (check.getPolicyLastModified().isAfter(tableYamlLastModified)) {
+                    checkConfiguredAt = check.getPolicyLastModified();
+                }
+            }
+        }
+
         int rowCountLimit = checkType == CheckType.partitioned ? this.sensorLimitsConfigurationProperties.getSensorReadoutLimitPartitioned() :
                 this.sensorLimitsConfigurationProperties.getSensorReadoutLimit();
         return new SensorExecutionRunParameters(expandedConnection, expandedTable, expandedColumn,
                 check, null, effectiveSensorRuleNames, checkType, timeSeries, timeWindowFilterParameters,
                 dataGroupingConfiguration, tableComparisonConfigurationSpec, null, sensorParameters, dialectSettings, exactCheckSearchFilters,
-                rowCountLimit, this.sensorLimitsConfigurationProperties.isFailOnSensorReadoutLimitExceeded(), null);
+                rowCountLimit, this.sensorLimitsConfigurationProperties.isFailOnSensorReadoutLimitExceeded(), null, checkConfiguredAt);
     }
 
     /**
@@ -212,7 +226,7 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
                 dataGroupingConfigurationSpec, null, null, sensorParameters, dialectSettings, null,
                 this.sensorLimitsConfigurationProperties.getSensorReadoutLimit(),
                 false,  // statistics is opportunistic, we do not fail, we just collect something for data groups
-                null);
+                null, null);
     }
 
     /**
@@ -328,7 +342,7 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
         return new SensorExecutionRunParameters(expandedConnection, expandedTable, expandedColumn,
                 check, null, effectiveSensorRuleNames, checkType, timeSeries, timeWindowFilterParameters,
                 dataGroupingConfiguration, null, null, sensorParameters, dialectSettings, exactCheckSearchFilters,
-                rowCountLimit, this.sensorLimitsConfigurationProperties.isFailOnSensorReadoutLimitExceeded(), errorSamplingRenderParameters);
+                rowCountLimit, this.sensorLimitsConfigurationProperties.isFailOnSensorReadoutLimitExceeded(), errorSamplingRenderParameters, null);
     }
 
     /**

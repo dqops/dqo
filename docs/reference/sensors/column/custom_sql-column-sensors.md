@@ -46,6 +46,14 @@ The templates used to generate the SQL query for each data source supported by D
                             | replace('{schema_name}', target_table.schema_name)
                             | replace('{column_name}', column_name) }}
     ```
+=== "ClickHouse"
+
+    ```sql+jinja
+    {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+    {{ parameters.sql_query | replace('{table_name}', target_table.table_name)
+                            | replace('{schema_name}', target_table.schema_name)
+                            | replace('{column_name}', column_name) }}
+    ```
 === "Databricks"
 
     ```sql+jinja
@@ -74,6 +82,14 @@ The templates used to generate the SQL query for each data source supported by D
 
     ```sql+jinja
     {% import '/dialects/hana.sql.jinja2' as lib with context -%}
+    {{ parameters.sql_query | replace('{table_name}', target_table.table_name)
+                            | replace('{schema_name}', target_table.schema_name)
+                            | replace('{column_name}', column_name) }}
+    ```
+=== "MariaDB"
+
+    ```sql+jinja
+    {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
     {{ parameters.sql_query | replace('{table_name}', target_table.table_name)
                             | replace('{schema_name}', target_table.schema_name)
                             | replace('{column_name}', column_name) }}
@@ -110,6 +126,14 @@ The templates used to generate the SQL query for each data source supported by D
                             | replace('{schema_name}', target_table.schema_name)
                             | replace('{column_name}', column_name) }}
     ```
+=== "QuestDB"
+
+    ```sql+jinja
+    {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+    {{ parameters.sql_query | replace('{table_name}', target_table.table_name)
+                            | replace('{schema_name}', target_table.schema_name)
+                            | replace('{column_name}', column_name) }}
+    ```
 === "Redshift"
 
     ```sql+jinja
@@ -138,6 +162,14 @@ The templates used to generate the SQL query for each data source supported by D
 
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    {{ parameters.sql_query | replace('{table_name}', target_table.table_name)
+                            | replace('{schema_name}', target_table.schema_name)
+                            | replace('{column_name}', column_name) }}
+    ```
+=== "Teradata"
+
+    ```sql+jinja
+    {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
     {{ parameters.sql_query | replace('{table_name}', target_table.table_name)
                             | replace('{schema_name}', target_table.schema_name)
                             | replace('{column_name}', column_name) }}
@@ -195,6 +227,20 @@ The templates used to generate the SQL query for each data source supported by D
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "ClickHouse"
+
+    ```sql+jinja
+    {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+    SELECT
+        ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
+            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "Databricks"
 
     ```sql+jinja
@@ -259,6 +305,20 @@ The templates used to generate the SQL query for each data source supported by D
             {{- lib.render_time_dimension_projection('original_table') }}
         FROM {{ lib.render_target_table() }} original_table
     ) analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "MariaDB"
+
+    ```sql+jinja
+    {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+    SELECT
+        ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
+            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
@@ -331,6 +391,26 @@ The templates used to generate the SQL query for each data source supported by D
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "QuestDB"
+
+    ```sql+jinja
+    {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+    SELECT
+        ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
+            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM(
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+    ) analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "Redshift"
 
     ```sql+jinja
@@ -377,6 +457,20 @@ The templates used to generate the SQL query for each data source supported by D
 
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    SELECT
+        ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
+            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Teradata"
+
+    ```sql+jinja
+    {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
     SELECT
         ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
             replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value
@@ -459,6 +553,27 @@ The templates used to generate the SQL query for each data source supported by D
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "ClickHouse"
+
+    ```sql+jinja
+    {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                AND NOT ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "Databricks"
 
     ```sql+jinja
@@ -551,6 +666,27 @@ The templates used to generate the SQL query for each data source supported by D
             {{- lib.render_time_dimension_projection('original_table') }}
         FROM {{ lib.render_target_table() }} original_table
     ) analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "MariaDB"
+
+    ```sql+jinja
+    {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                AND NOT ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
@@ -651,6 +787,33 @@ The templates used to generate the SQL query for each data source supported by D
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "QuestDB"
+
+    ```sql+jinja
+    {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+    SELECT
+        COALESCE(SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                AND NOT ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
+                    THEN 1
+                ELSE 0
+            END
+        ), 0) AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM(
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+    ) analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "Redshift"
 
     ```sql+jinja
@@ -718,6 +881,27 @@ The templates used to generate the SQL query for each data source supported by D
 
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                AND NOT ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Teradata"
+
+    ```sql+jinja
+    {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
             CASE
@@ -817,6 +1001,30 @@ The templates used to generate the SQL query for each data source supported by D
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "ClickHouse"
+
+    ```sql+jinja
+    {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT ({{ lib.render_target_column('analyzed_table')}}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                    AND NOT ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table')}})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "Databricks"
 
     ```sql+jinja
@@ -921,6 +1129,30 @@ The templates used to generate the SQL query for each data source supported by D
             {{- lib.render_time_dimension_projection('original_table') }}
         FROM {{ lib.render_target_table() }} original_table
     ) analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "MariaDB"
+
+    ```sql+jinja
+    {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT ({{ lib.render_target_column('analyzed_table')}}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                    AND NOT ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table')}})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
@@ -1023,6 +1255,34 @@ The templates used to generate the SQL query for each data source supported by D
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM (
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+    ) analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "QuestDB"
+
+    ```sql+jinja
+    {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+    SELECT
+        COALESCE(100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                    AND NOT ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table')}}), 100.0)
+        AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM(
         SELECT
             original_table.*
             {{- lib.render_data_grouping_projections('original_table') }}
@@ -1130,6 +1390,30 @@ The templates used to generate the SQL query for each data source supported by D
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "Teradata"
+
+    ```sql+jinja
+    {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT ({{ lib.render_target_column('analyzed_table')}}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                    AND NOT ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table')}})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "Trino"
 
     ```sql+jinja
@@ -1195,6 +1479,27 @@ The templates used to generate the SQL query for each data source supported by D
 
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                        replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "ClickHouse"
+
+    ```sql+jinja
+    {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
             CASE
@@ -1304,6 +1609,27 @@ The templates used to generate the SQL query for each data source supported by D
             {{- lib.render_time_dimension_projection('original_table') }}
         FROM {{ lib.render_target_table() }} original_table
     ) analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "MariaDB"
+
+    ```sql+jinja
+    {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                        replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
@@ -1404,6 +1730,33 @@ The templates used to generate the SQL query for each data source supported by D
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "QuestDB"
+
+    ```sql+jinja
+    {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                        replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM(
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+    ) analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "Redshift"
 
     ```sql+jinja
@@ -1488,6 +1841,27 @@ The templates used to generate the SQL query for each data source supported by D
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "Teradata"
+
+    ```sql+jinja
+    {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                        replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "Trino"
 
     ```sql+jinja
@@ -1550,6 +1924,30 @@ The templates used to generate the SQL query for each data source supported by D
 
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
+                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "ClickHouse"
+
+    ```sql+jinja
+    {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
@@ -1674,6 +2072,30 @@ The templates used to generate the SQL query for each data source supported by D
             {{- lib.render_time_dimension_projection('original_table') }}
         FROM {{ lib.render_target_table() }} original_table
     ) analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "MariaDB"
+
+    ```sql+jinja
+    {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
+                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
@@ -1776,6 +2198,34 @@ The templates used to generate the SQL query for each data source supported by D
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM (
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+    ) analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "QuestDB"
+
+    ```sql+jinja
+    {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+    SELECT
+        COALESCE(100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
+                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }}), 100.0)
+        AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM(
         SELECT
             original_table.*
             {{- lib.render_data_grouping_projections('original_table') }}
@@ -1882,6 +2332,30 @@ The templates used to generate the SQL query for each data source supported by D
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "Teradata"
+
+    ```sql+jinja
+    {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
+                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "Trino"
 
     ```sql+jinja
@@ -1911,6 +2385,217 @@ The templates used to generate the SQL query for each data source supported by D
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
+    ```
+___
+
+
+
+## sql invalid value count
+Column level sensor that uses a custom SQL query to count rows of invalid values.
+
+**Sensor summary**
+
+The sql invalid value count sensor is documented below.
+
+| Target | Category | Full sensor name | Source code on GitHub |
+|--------|----------|------------------|-----------------------|
+| column | custom_sql | <span class="no-wrap-code">`column/custom_sql/sql_invalid_value_count`</span> | [*sensors/column/custom_sql*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/custom_sql/) |
+
+
+**Sensor parameters**
+
+| Field name | Description | Allowed data type | Required | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|<span class="no-wrap-code">`sql_query`</span>|SQL query that returns invalid values. The expression can use {table} and {column} placeholder that are replaced with a full table name and the analyzed column name.|*string*|:material-check-bold:||
+
+
+
+
+
+
+**Jinja2 SQL templates**
+
+The templates used to generate the SQL query for each data source supported by DQOps is shown below.
+
+=== "BigQuery"
+
+    ```sql+jinja
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT(*) as actual_value
+    FROM (
+        {{ parameters.sql_query | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}
+    ) AS analyzed_table
+    ```
+=== "ClickHouse"
+
+    ```sql+jinja
+    {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT(*) as actual_value
+    FROM (
+        {{ parameters.sql_query | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}
+    ) AS analyzed_table
+    ```
+=== "Databricks"
+
+    ```sql+jinja
+    {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT(*) as actual_value
+    FROM (
+        {{ parameters.sql_query | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}
+    ) AS analyzed_table
+    ```
+=== "DB2"
+
+    ```sql+jinja
+    {% import '/dialects/db2.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT(*) as actual_value
+    FROM (
+        {{ parameters.sql_query | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}
+    ) AS analyzed_table
+    ```
+=== "DuckDB"
+
+    ```sql+jinja
+    {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT(*) as actual_value
+    FROM (
+        {{ parameters.sql_query | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}
+    ) AS analyzed_table
+    ```
+=== "HANA"
+
+    ```sql+jinja
+    {% import '/dialects/hana.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT(*) as actual_value
+    FROM (
+        {{ parameters.sql_query | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}
+    ) AS analyzed_table
+    ```
+=== "MariaDB"
+
+    ```sql+jinja
+    {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT(*) as actual_value
+    FROM (
+        {{ parameters.sql_query | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}
+    ) AS analyzed_table
+    ```
+=== "MySQL"
+
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT(*) as actual_value
+    FROM (
+        {{ parameters.sql_query | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}
+    ) AS analyzed_table
+    ```
+=== "Oracle"
+
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT(*) as actual_value
+    FROM (
+        {{ parameters.sql_query | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}
+    ) analyzed_table
+    ```
+=== "PostgreSQL"
+
+    ```sql+jinja
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT(*) as actual_value
+    FROM (
+        {{ parameters.sql_query | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}
+    ) AS analyzed_table
+    ```
+=== "Presto"
+
+    ```sql+jinja
+    {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT(*) as actual_value
+    FROM (
+        {{ parameters.sql_query | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}
+    ) AS analyzed_table
+    ```
+=== "QuestDB"
+
+    ```sql+jinja
+    {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT(*) as actual_value
+    FROM (
+        {{ parameters.sql_query | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}
+    ) AS analyzed_table
+    ```
+=== "Redshift"
+
+    ```sql+jinja
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT(*) as actual_value
+    FROM (
+        {{ parameters.sql_query | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}
+    ) AS analyzed_table
+    ```
+=== "Snowflake"
+
+    ```sql+jinja
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT(*) as actual_value
+    FROM (
+        {{ parameters.sql_query | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}
+    ) AS analyzed_table
+    ```
+=== "Spark"
+
+    ```sql+jinja
+    {% import '/dialects/spark.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT(*) as actual_value
+    FROM (
+        {{ parameters.sql_query | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}
+    ) AS analyzed_table
+    ```
+=== "SQL Server"
+
+    ```sql+jinja
+    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT(*) as actual_value
+    FROM (
+        {{ parameters.sql_query | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}
+    ) AS analyzed_table
+    ```
+=== "Teradata"
+
+    ```sql+jinja
+    {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT(*) as actual_value
+    FROM (
+        {{ parameters.sql_query | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}
+    ) AS analyzed_table
+    ```
+=== "Trino"
+
+    ```sql+jinja
+    {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT(*) as actual_value
+    FROM (
+        {{ parameters.sql_query | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}
+    ) AS analyzed_table
     ```
 ___
 

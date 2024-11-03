@@ -20,6 +20,7 @@ import com.dqops.core.configuration.DqoConfigurationProperties;
 import com.dqops.core.configuration.DqoConfigurationPropertiesObjectMother;
 import com.dqops.core.configuration.DqoUserConfigurationProperties;
 import com.dqops.core.configuration.DqoUserConfigurationPropertiesObjectMother;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.metadata.storage.localfiles.HomeType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,8 +44,8 @@ public class HomeLocationFindServiceImplTests extends BaseTest {
     }
 
     @Test
-    void getUserHomePath_whenUserHomeConfigured_thenReturnsUserHome() {
-        String userHomePath = this.sut.getUserHomePath();
+    void getRootUserHomePath_whenUserHomeConfigured_thenReturnsUserHome() {
+        String userHomePath = this.sut.getRootUserHomePath();
         Assertions.assertNotNull(userHomePath);
         Assertions.assertTrue(Path.of(userHomePath).isAbsolute());
         Assertions.assertTrue(Files.exists(Path.of(userHomePath)));
@@ -60,13 +61,13 @@ public class HomeLocationFindServiceImplTests extends BaseTest {
 
     @Test
     void getHomePath_whenUserHome_thenReturnsUserHome() {
-        String userHomePath = this.sut.getHomePath(HomeType.USER_HOME);
+        String userHomePath = this.sut.getHomePath(HomeType.USER_HOME, UserDomainIdentity.LOCAL_INSTANCE_ADMIN_IDENTITY);
         Assertions.assertEquals(Path.of(this.userConfigurationProperties.getHome()).toAbsolutePath().normalize().toString(), userHomePath);
     }
 
     @Test
     void getHomePath_whenUDqoHome_thenReturnsDqoHome() {
-        String dqoHomePath = this.sut.getHomePath(HomeType.DQO_HOME);
+        String dqoHomePath = this.sut.getHomePath(HomeType.DQO_HOME, UserDomainIdentity.LOCAL_INSTANCE_ADMIN_IDENTITY);
         Assertions.assertEquals(Path.of(this.dqoConfigurationProperties.getHome()).toAbsolutePath().normalize().toString(), dqoHomePath);
     }
 }

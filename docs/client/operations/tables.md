@@ -616,11 +616,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
         ```
         [ {
-		  "difference" : 0
+		  "difference" : 0,
+		  "similarity_pct" : 0.0
 		}, {
-		  "difference" : 0
+		  "difference" : 0,
+		  "similarity_pct" : 0.0
 		}, {
-		  "difference" : 0
+		  "difference" : 0,
+		  "similarity_pct" : 0.0
 		} ]
         ```
     
@@ -653,9 +656,18 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
         ```
         [
-			SimilarTableModel(difference=0),
-			SimilarTableModel(difference=0),
-			SimilarTableModel(difference=0)
+			SimilarTableModel(
+				difference=0,
+				similarity_pct=0.0
+			),
+			SimilarTableModel(
+				difference=0,
+				similarity_pct=0.0
+			),
+			SimilarTableModel(
+				difference=0,
+				similarity_pct=0.0
+			)
 		]
         ```
     
@@ -689,9 +701,18 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
         ```
         [
-			SimilarTableModel(difference=0),
-			SimilarTableModel(difference=0),
-			SimilarTableModel(difference=0)
+			SimilarTableModel(
+				difference=0,
+				similarity_pct=0.0
+			),
+			SimilarTableModel(
+				difference=0,
+				similarity_pct=0.0
+			),
+			SimilarTableModel(
+				difference=0,
+				similarity_pct=0.0
+			)
 		]
         ```
     
@@ -728,9 +749,18 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
         ```
         [
-			SimilarTableModel(difference=0),
-			SimilarTableModel(difference=0),
-			SimilarTableModel(difference=0)
+			SimilarTableModel(
+				difference=0,
+				similarity_pct=0.0
+			),
+			SimilarTableModel(
+				difference=0,
+				similarity_pct=0.0
+			),
+			SimilarTableModel(
+				difference=0,
+				similarity_pct=0.0
+			)
 		]
         ```
     
@@ -767,9 +797,18 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
         ```
         [
-			SimilarTableModel(difference=0),
-			SimilarTableModel(difference=0),
-			SimilarTableModel(difference=0)
+			SimilarTableModel(
+				difference=0,
+				similarity_pct=0.0
+			),
+			SimilarTableModel(
+				difference=0,
+				similarity_pct=0.0
+			),
+			SimilarTableModel(
+				difference=0,
+				similarity_pct=0.0
+			)
 		]
         ```
     

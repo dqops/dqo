@@ -241,7 +241,7 @@ public class BigQuerySqlRunnerImpl implements BigQuerySqlRunner {
                 case STRUCT:
                 case ARRAY:
                 case GEOGRAPHY:
-                    columns.add(tech.tablesaw.api.TextColumn.create(field.getName()));
+                    columns.add(tech.tablesaw.api.StringColumn.create(field.getName()));
                     break;
                 case TIMESTAMP:
                     columns.add(tech.tablesaw.api.InstantColumn.create(field.getName()));

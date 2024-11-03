@@ -21,6 +21,9 @@ if TYPE_CHECKING:
     from ..models.table_sql_import_custom_result_check_spec import (
         TableSqlImportCustomResultCheckSpec,
     )
+    from ..models.table_sql_invalid_record_count_check_spec import (
+        TableSqlInvalidRecordCountCheckSpec,
+    )
 
 
 T = TypeVar("T", bound="TableCustomSqlProfilingChecksSpec")
@@ -36,6 +39,7 @@ class TableCustomSqlProfilingChecksSpec:
         profile_sql_condition_failed_on_table (Union[Unset, TableSqlConditionFailedCheckSpec]):
         profile_sql_condition_passed_percent_on_table (Union[Unset, TableSqlConditionPassedPercentCheckSpec]):
         profile_sql_aggregate_expression_on_table (Union[Unset, TableSqlAggregateExpressionCheckSpec]):
+        profile_sql_invalid_record_count_on_table (Union[Unset, TableSqlInvalidRecordCountCheckSpec]):
         profile_import_custom_result_on_table (Union[Unset, TableSqlImportCustomResultCheckSpec]):
     """
 
@@ -48,6 +52,9 @@ class TableCustomSqlProfilingChecksSpec:
     ] = UNSET
     profile_sql_aggregate_expression_on_table: Union[
         Unset, "TableSqlAggregateExpressionCheckSpec"
+    ] = UNSET
+    profile_sql_invalid_record_count_on_table: Union[
+        Unset, "TableSqlInvalidRecordCountCheckSpec"
     ] = UNSET
     profile_import_custom_result_on_table: Union[
         Unset, "TableSqlImportCustomResultCheckSpec"
@@ -79,6 +86,12 @@ class TableCustomSqlProfilingChecksSpec:
                 self.profile_sql_aggregate_expression_on_table.to_dict()
             )
 
+        profile_sql_invalid_record_count_on_table: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_sql_invalid_record_count_on_table, Unset):
+            profile_sql_invalid_record_count_on_table = (
+                self.profile_sql_invalid_record_count_on_table.to_dict()
+            )
+
         profile_import_custom_result_on_table: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.profile_import_custom_result_on_table, Unset):
             profile_import_custom_result_on_table = (
@@ -101,6 +114,10 @@ class TableCustomSqlProfilingChecksSpec:
         if profile_sql_aggregate_expression_on_table is not UNSET:
             field_dict["profile_sql_aggregate_expression_on_table"] = (
                 profile_sql_aggregate_expression_on_table
+            )
+        if profile_sql_invalid_record_count_on_table is not UNSET:
+            field_dict["profile_sql_invalid_record_count_on_table"] = (
+                profile_sql_invalid_record_count_on_table
             )
         if profile_import_custom_result_on_table is not UNSET:
             field_dict["profile_import_custom_result_on_table"] = (
@@ -125,6 +142,9 @@ class TableCustomSqlProfilingChecksSpec:
         )
         from ..models.table_sql_import_custom_result_check_spec import (
             TableSqlImportCustomResultCheckSpec,
+        )
+        from ..models.table_sql_invalid_record_count_check_spec import (
+            TableSqlInvalidRecordCountCheckSpec,
         )
 
         d = src_dict.copy()
@@ -182,6 +202,21 @@ class TableCustomSqlProfilingChecksSpec:
                 )
             )
 
+        _profile_sql_invalid_record_count_on_table = d.pop(
+            "profile_sql_invalid_record_count_on_table", UNSET
+        )
+        profile_sql_invalid_record_count_on_table: Union[
+            Unset, TableSqlInvalidRecordCountCheckSpec
+        ]
+        if isinstance(_profile_sql_invalid_record_count_on_table, Unset):
+            profile_sql_invalid_record_count_on_table = UNSET
+        else:
+            profile_sql_invalid_record_count_on_table = (
+                TableSqlInvalidRecordCountCheckSpec.from_dict(
+                    _profile_sql_invalid_record_count_on_table
+                )
+            )
+
         _profile_import_custom_result_on_table = d.pop(
             "profile_import_custom_result_on_table", UNSET
         )
@@ -202,6 +237,7 @@ class TableCustomSqlProfilingChecksSpec:
             profile_sql_condition_failed_on_table=profile_sql_condition_failed_on_table,
             profile_sql_condition_passed_percent_on_table=profile_sql_condition_passed_percent_on_table,
             profile_sql_aggregate_expression_on_table=profile_sql_aggregate_expression_on_table,
+            profile_sql_invalid_record_count_on_table=profile_sql_invalid_record_count_on_table,
             profile_import_custom_result_on_table=profile_import_custom_result_on_table,
         )
 

@@ -22,6 +22,7 @@ import com.dqops.core.dqocloud.client.DqoCloudApiClientFactory;
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.synchronization.contract.DqoRoot;
 import com.dqops.core.synchronization.fileexchange.TargetTableModifiedPartitions;
+import com.dqops.utils.exceptions.DqoRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -87,6 +88,12 @@ public class DqoCloudWarehouseServiceImpl implements DqoCloudWarehouseService {
         }
 
         String targetTableName = targetTableModifiedPartitions.getTargetTable().toString();
-        tenantDataWarehouseApi.refreshNativeTable(refreshTableRequest, userIdentity.getTenantOwner(), userIdentity.getTenantId(), targetTableName);
+        try {
+            tenantDataWarehouseApi.refreshNativeTable(refreshTableRequest, userIdentity.getTenantOwner(), userIdentity.getTenantId(), targetTableName);
+        }
+        catch (Exception ex) {
+            throw new DqoRuntimeException("Failed to refresh a table in the data warehouse, table: " + targetTableModifiedPartitions.getTargetTable() + ", error: " +
+                    ex.getMessage(), ex);
+        }
     }
 }

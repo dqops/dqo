@@ -14,12 +14,8 @@ spec:
         daily:
           uniqueness:
             daily_duplicate_percent:
-              warning:
-                max_percent: 1.0
               error:
-                max_percent: 2.0
-              fatal:
-                max_percent: 5.0
+                max_percent: 1.0
     source:
       type_snapshot:
         column_type: STRING

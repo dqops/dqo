@@ -31,13 +31,11 @@ import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import com.dqops.connectors.ConnectionProviderRegistry;
 import com.dqops.connectors.ConnectionProviderRegistryObjectMother;
 import com.dqops.connectors.ProviderType;
-import com.dqops.core.configuration.DqoErrorSamplingConfigurationProperties;
-import com.dqops.core.configuration.DqoLoggingUserErrorsConfigurationProperties;
-import com.dqops.core.configuration.DqoSensorLimitsConfigurationProperties;
-import com.dqops.core.configuration.DqoSensorLimitsConfigurationPropertiesObjectMother;
+import com.dqops.core.configuration.*;
 import com.dqops.core.jobqueue.DqoJobQueueObjectMother;
 import com.dqops.core.jobqueue.DqoQueueJobFactoryImpl;
 import com.dqops.core.jobqueue.JobCancellationTokenObjectMother;
+import com.dqops.core.jobqueue.concurrency.ParallelJobLimitProviderStub;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.principal.DqoUserPrincipalObjectMother;
 import com.dqops.data.errors.normalization.ErrorsNormalizationService;
@@ -57,7 +55,9 @@ import com.dqops.execution.CheckExecutionContextObjectMother;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.checks.CheckExecutionServiceImpl;
 import com.dqops.execution.checks.CheckExecutionSummary;
+import com.dqops.execution.checks.RunChecksTarget;
 import com.dqops.execution.checks.TableCheckExecutionServiceImpl;
+import com.dqops.execution.checks.ruleeval.RuleEvaluationSchedulerProviderObjectMother;
 import com.dqops.execution.checks.ruleeval.RuleEvaluationService;
 import com.dqops.execution.checks.ruleeval.RuleEvaluationServiceImpl;
 import com.dqops.execution.checks.scheduled.ScheduledTargetChecksFindService;
@@ -65,6 +65,7 @@ import com.dqops.execution.checks.scheduled.ScheduledTargetChecksFindServiceImpl
 import com.dqops.execution.errorsampling.TableErrorSamplerExecutionServiceImpl;
 import com.dqops.execution.rules.DataQualityRuleRunnerObjectMother;
 import com.dqops.execution.rules.finder.RuleDefinitionFindServiceObjectMother;
+import com.dqops.execution.rules.training.RuleModelTrainingQueueImpl;
 import com.dqops.execution.sensors.DataQualitySensorRunnerImpl;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionRunParametersFactory;
@@ -146,7 +147,7 @@ public class CheckExecutionServiceImplTests extends BaseTest {
         RuleEvaluationService ruleEvaluationService = new RuleEvaluationServiceImpl(
                 DataQualityRuleRunnerObjectMother.getDefault(),
                 RuleDefinitionFindServiceObjectMother.getRuleDefinitionFindService(),
-                defaultTimeZoneProvider);
+                defaultTimeZoneProvider, new RuleModelTrainingQueueImpl(), new DqoPythonConfigurationProperties());
 
         CommonTableNormalizationService commonTableNormalizationService = new CommonTableNormalizationServiceImpl();
         ErrorsNormalizationService errorsNormalizationService = new ErrorsNormalizationServiceImpl(
@@ -195,7 +196,9 @@ public class CheckExecutionServiceImplTests extends BaseTest {
                 userErrorLogger,
                 defaultObservabilityConfigurationService,
                 tableErrorSamplerExecutionService,
-                DefaultTimeZoneProviderObjectMother.getDefaultTimeZoneProvider());
+                DefaultTimeZoneProviderObjectMother.getDefaultTimeZoneProvider(),
+                new ParallelJobLimitProviderStub(2),
+                RuleEvaluationSchedulerProviderObjectMother.getDefault());
 
         this.sut = new CheckExecutionServiceImpl(
                 hierarchyNodeTreeSearcher,
@@ -224,17 +227,17 @@ public class CheckExecutionServiceImplTests extends BaseTest {
 
         CheckExecutionSummary profilingSummary = this.sut.executeChecks(
                 this.executionContext, profilingFilters, null, false, this.progressListener, true,
-                false, null, JobCancellationTokenObjectMother.createDummyJobCancellationToken(), principal);
+                RunChecksTarget.sensors_and_rules, false, null, JobCancellationTokenObjectMother.createDummyJobCancellationToken(), principal);
         CheckExecutionSummary monitoringSummary = this.sut.executeChecks(
                 this.executionContext, monitoringFilters, null, false, this.progressListener, true,
-                false, null, JobCancellationTokenObjectMother.createDummyJobCancellationToken(), principal);
+                RunChecksTarget.sensors_and_rules, false, null, JobCancellationTokenObjectMother.createDummyJobCancellationToken(), principal);
         CheckExecutionSummary partitionedSummary = this.sut.executeChecks(
                 this.executionContext, partitionedFilters, null, false, this.progressListener, true,
-                false, null, JobCancellationTokenObjectMother.createDummyJobCancellationToken(), principal);
+                RunChecksTarget.sensors_and_rules, false, null, JobCancellationTokenObjectMother.createDummyJobCancellationToken(), principal);
 
         CheckExecutionSummary allSummary = this.sut.executeChecks(
                 this.executionContext, allFilters, null, false, this.progressListener, true,
-                false, null, JobCancellationTokenObjectMother.createDummyJobCancellationToken(), principal);
+                RunChecksTarget.sensors_and_rules, false, null, JobCancellationTokenObjectMother.createDummyJobCancellationToken(), principal);
 
         Assertions.assertEquals(0, partitionedSummary.getTotalChecksExecutedCount());
         Assertions.assertEquals(2, profilingSummary.getTotalChecksExecutedCount());

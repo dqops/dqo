@@ -12,7 +12,7 @@ review the results of the checks on data quality dashboards, which provide a com
 
 ## Import a new table
 
-To import tables, you first need to have added connection. You can check [supported data sources and a guide how to add a new
+To import tables, you first need to have an added connection. You can check [supported data sources and a guide on how to add a new
 connection here](../data-sources/index.md). 
 
 To import source schemas and tables:
@@ -21,25 +21,28 @@ To import source schemas and tables:
 2. Select the connection from the tree view on the left
 3. Click on the **Import metadata** button on the right. 
 
-    ![Importing metadata](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/importing-metadata.png){ loading=lazy; width="1200px" }
+    ![Importing metadata](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/importing-metadata2.png){ loading=lazy; width="1200px" }
 
 4. Select the source schema name you want to import by clicking on the **Import tables** button.
 
-    ![Importing schemas](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/importing-schemas.png){ loading=lazy; width="1200px" }
+    ![Importing schemas](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/importing-schemas2.png){ loading=lazy; width="1200px" }
 
 5. Select the tables you want to import or import all tables using the buttons in the upper right corner.
 
-    ![Importing tables](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/importing-tables.png){ loading=lazy; width="1200px" }
+    ![Importing tables](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/importing-tables2.png){ loading=lazy; width="1200px" }
+
+## Start data quality assessment
+DQOps simplifies the data quality assessment process, which is a routine activity for data governance and quality teams.
 
 Upon import, you will receive information that a new tables have been imported. You can then begin collecting basic statistics
 and profiling data by running default data profiling checks. Simply click on the **Start profiling** button to initiate this process.
 
-![Collect basic statistics and profile data with default profiling checks](https://dqops.com/docs/images/getting-started/collect-basic-statistics-and-profile-data.png)
+![Collect basic statistics and profile data with default profiling checks](https://dqops.com/docs/images/getting-started/collect-basic-statistics-and-profile-data.png){ loading=lazy; width="800px" }
 
 !!! info "Automatically activated checks"
 
-    Once new tables are imported, DQOps automatically activates [profiling and monitoring checks](../dqo-concepts/definition-of-data-quality-checks/index.md).
-    These checks include row count, table availability, and checks detecting schema changes. The profiling checks are scheduled 
+    Once new tables are imported, DQOps automatically activates [profiling and monitoring checks](../dqo-concepts/definition-of-data-quality-checks/index.md) which are which are pre-enabled by [data quality policies](../dqo-concepts/data-observability.md#automatic-activation-of-checks).
+    These checks detect volume anomalies, data freshness anomalies, empty tables, table availability, schema changes, anomalies in the count of distinct values, and null percent anomalies. The profiling checks are scheduled 
     to run at 1:00 a.m. on the 1st day of every month, and the monitoring checks are scheduled to run daily at 12:00 p.m.
     
     [**Profiling checks**](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md) are designed to assess
@@ -50,101 +53,139 @@ and profiling data by running default data profiling checks. Simply click on the
     standard checks that monitor the data quality of a table or column. They can also be referred to as **Data Observability** checks.
     These checks capture a single data quality result for the entire table or column.
 
-## Verify activation of the default checks 
+Follow the link for more information on [how to review Data statistics](collecting-basic-data-statistics.md).
 
-To verify the activation of the default checks, go to the **Monitoring checks** section, select the table of interest from
-the tree view on the left and the **Daily checks** tab. The main workspace on the right will show the check editor.
-The toggle button next to the name of the activated default checks will have a light green color. If the check has
+## Run automatically activated monitoring checks
+To run [automatically activated monitoring checks](../dqo-concepts/data-observability.md#automatic-activation-of-checks), go to the **Monitoring checks** section, select the table of interest from
+the tree view on the left and the **Data quality checks editor** tab. 
+
+The main workspace on the right will show the [Check editor](../dqo-concepts/dqops-user-interface-overview.md#check-editor).
+The table with data quality checks contains a list of checks divided into different data quality subcategories that you
+can expand and collapse by clicking on an arrow. [Learn more about the different check subcategories.](../dqo-concepts/definition-of-data-quality-checks/index.md)
+
+The toggle button next to the name of the automatically activated checks will have a light green color. If the check has
 been activated manually, the toggle button will have a darker green color.
 
-![Default table checks](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/default-table-checks3.png){ loading=lazy; width="1200px" }
+![Automatically activated table checks](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/automatically-activated-table-checks1.png){ loading=lazy; width="1200px" }
 
 Similarly, you can view the column checks. Just select the column of interest from the tree view on the left. 
 
-![Default table checks](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/default-column-checks2.png){ loading=lazy; width="1200px" }
+![Automatically activated column checks](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/automatically-activated-column-checks1.png){ loading=lazy; width="1200px" }
+
+To run a single check, click the **Run** button next to the specific check's name. If you want to run the check for the 
+entire table, click the **Run** button located in the upper left corner of the check editor table.
+
+![Run automatically activated table checks](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/run-automatically-activated-table-checks1.png){ loading=lazy; width="1200px" }
+
+You can also run all checks activated on the connection or table. Click on the three-dot icon next to the name of connection
+or table and click on the **Run checks** option.
+
+![Run all checks activated on connection](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/run-all-checks-activated-on-table1.png){ loading=lazy; width="600px" }
+
+A dialog box will appear where you can modify different options or simply click the **Run checks** button.
+
+![Run all checks dialog box](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/run-all-checks-dialog-box3.png){ loading=lazy; width="1000px" }
+
+Follow the link for [more information about running data quality checks](run-data-quality-checks.md).  
+
+## Review the detailed check results
+
+The check results are shown as a color square next to the name of the check.
+
+- Green for a correct result
+- Yellow for a warning
+- Orange for an error
+- Red for a fatal error
+- Black for execution error.
+
+Hover over the square to view more details.
+
+To access the detailed results, click on the **Results** button.
+
+![Review check results](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/review-check-results3.png){ loading=lazy; width="1200px" }
+
+Within the Results window, you will see four tabs: **Check results**, **Sensor readouts**, **Execution errors**, and **Error sampling**.
+
+- The **Check results** tab shows the severity level that result from the verification of sensor readouts by set rule thresholds.
+- The **Sensor readouts** tab displays the values obtained by the sensors from the data source.
+- The **Execution errors** tab displays any error that occurred during the check's execution.
+- The **Error sampling** tab allows you to view representative examples of data that fail to meet specified data quality criteria.
+
+## Review the Table quality status
+
+The **Table quality status** is a summary of the results of the executed checks, grouped by check category or data quality dimension.
+You can access it by clicking on the **Table quality status** tab on the table level. 
+
+![Review the table quality status](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/review-table-quality-status1.png){ loading=lazy; width="1200px" }
+
+Read more [about the Table quality status in the User interface section](../dqo-concepts/dqops-user-interface-overview.md#table-quality-status). 
+
+## Review the Observability status
+
+The **Observability Status** offers a quick overview of issues related to schema changes, volume anomalies, 
+and freshness anomalies at the table level. It also highlights distinct count and null percentage anomalies at the column level.
+
+Additionally, the screen summarizes data quality issues for the selected table or columns.
+
+The number of elements on the screen depends on which checks have been activated. Please note that it may take a
+couple of days to collect data for anomaly detection checks.
+
+Below is an example of the **Observability Status** screen at the table level in the **Monitoring Section**.
+
+![Table-level Observability status](https://dqops.com/docs/images/concepts/data-observability/table-level-observability-status1.png){ loading=lazy; width="1200px" }
+
+For more information, please visit the [data observability documentation](../dqo-concepts/data-observability.md#observability-status-in-ui).
+
+
+## Configure more checks using the rule miner
+
+DQOps automates the process of configuring data quality checks with its [rule mining engine](../dqo-concepts/data-quality-rule-mining.md). The engine
+analyzes data collected from basic statistics and sample values to propose check configurations for detecting common data quality issues.
+It also suggests checks that will pass for the current data and serve as a baseline for detecting changes in data distribution over time.
+
+You can find more information about [data quality rule mining in the concept section](../dqo-concepts/data-quality-rule-mining.md).
 
 ## Verify schedule configuration
 
 With DQOps, you can easily customize when checks are run by setting schedules. You can set schedules for an entire connection,
-table, or individual check. When you import a new table, DQOPs automatically set the schedule to run check daily at 12:00 a.m.
+table, or individual check.
 
 To verify and modify the current schedule, go to **Data Source** section, select the data source of interest from the tree view on the left,
-and click on the **Schedule** tab on the main workspace. You can modify the schedule for each type of checks separately
+and click on the **Schedule** tab on the main workspace. You can modify the schedule for each type of check separately.
 
-![Default schedule](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/default-schedule2.png){ loading=lazy; width="1200px" }
+![Default schedule](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/default-schedule3.png){ loading=lazy; width="1200px" }
 
-## Run default checks
+## Review the Incidents
 
-To run checks, navigate to the check editor: go to the **Profiling** or **Monitoring Checks** section, select a table or column from the
-tree view on the left, click on the Profiling checks or Daily Checks.
+With the help of DQOps, you can conveniently keep track of the issues that arise during data quality monitoring. 
+DQOps groups issues into incidents.
 
-![Navigating to the check editor](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/navigate-to-the-check-editor2.png){ loading=lazy; width="1200px" }
+The **Incidents summary** screen, provides a quick overview of all incidents within your environment. You can access it by
+clicking on the DQOps logo and selecting the **Incidents summary** tab.
 
-The table with data quality checks contains a list of checks divided into different data quality subcategories that you
-can expand and collapse by clicking on an arrow. [Learn more about the different check subcategories.](../dqo-concepts/definition-of-data-quality-checks/index.md)
+![Incidents summary](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/incidents-summary1.png){ loading=lazy; width="1200px" }
 
-The right side of the table allows setting different threshold levels (severity levels). [Learn more about threshold levels ](../dqo-concepts/definition-of-data-quality-checks/index.md#issue-severity-levels)
+The **Incidents** section provides a more detailed view of the Incidents and allows you to view and filter them, 
+as well as manage their status.
 
-On the left of the name of each check, there are several buttons and icons that allows you to:
-
-- Activate and deactivate checks by using the Switch button,
-- Disable checks,
-- Access check **Settings**,
-- Check schedule status,
-- Run data quality checks,
-- View detailed results for Checks, Sensor readouts, and Execution errors
-- View detailed information about check,
-- Check the results of the run check shown as a color square
-      - Green for a correct result
-      - Yellow for a warning
-      - Orange for an error
-      - Red for a fatal error
-      - Black for execution error.
-
-To run the check, just click on the **Run check** button.
-
-![Run the profiling check](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/run-profiling-check2.png){ loading=lazy; width="1200px" }
-
-You can also run all checks activated on connection or table. Click on the three dot icon next to the name of connection
-or table and click on the **Run checks** option.
-
-![Run all checks activated on connection](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/run-all-checks-activated-on-connection2.png){ loading=lazy; width="1200px" }
+![Navigating to the Incidents section](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/navigating-to-incidents-section2.png){ loading=lazy; width="1200px" }
 
 
-A dialog box will appear where you can modify different options or simply click the **Run checks** button. 
-
-![Run all checks dialog box](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/run-all-checks-dialog-box2.png){ loading=lazy; width="1000px" }
-
-
-
-## Review the check results
-
-To access the results click on the **Results** button.
-
-![Review check results](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/review-check-results2.png){ loading=lazy; width="1200px" }
-
-
-Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
-The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
-The Sensor readouts category displays the values obtained by the sensors from the data source.
-The Execution errors category displays any error that occurred during the check's execution.
-
-
-## Review the Incidents 
-
-With the help of DQOps, you can conveniently keep track of the issues that arise during data quality monitoring.
-The Incidents section aggregates these issues into incident and allows you to view and filter them, as well as manage their status.
-
-To review the if incidents go to the **Incidents** section. On the left side of this section, there is a list displaying
-the connections and the number of incidents that have occurred for each one. On the right panel, you can view incidents 
+On the left side of the **Incidents** section, there is a list displaying
+the connections and the number of incidents that have occurred for each one. On the right panel, you can view incidents
 for the connections you have selected, and you can filter, sort, and view detailed information about the incidents.
 
-![Navigating to the Incidents section](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/navigating-to-incidents-section.png){ loading=lazy; width="1200px" }
-
-We can see that we have one incident with 10 data quality issues. To review more details click on the link in the
+We can see that we have one incident with 1 data quality issue. To review more details, click on the link in the
 **Data quality issue grouping** column.
 
-![Incidents details](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/incidents-details.png){ loading=lazy; width="1200px" }
+![Incidents details](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/incidents-details2.png){ loading=lazy; width="1200px" }
+
+The upper right corner of the Incident details screen provides access to several helpful actions:
+
+- **Disable checks for the incident**: This button allows you to temporarily disable the check responsible for the incident. Disabling a check can be useful when you are actively working to resolve the underlying issue.
+- **Reconfigure rule thresholds**: Clicking on this button will decrease the rule threshold for the data quality check that caused the incident by 30% to reduce the number of data quality issues.
+- **Change incident configuration**: This button opens the **Incident configuration** screen for the table where the incident originated. This allows you to manage incident settings, such as grouping and severity levels.
+- **Configure notification for this incident**: This button allows you to create new or modify existing notification for this incident.
 
 Read the full [description of the Incidents section here](managing-data-quality-incidents-with-dqops.md).
 
@@ -152,20 +193,33 @@ Read the full [description of the Incidents section here](managing-data-quality-
 ## Configure notifications
 
 DQOps can send alert notifications whenever a new incident is created or modified. Notifications allow you to monitor 
-data in real-time and receive alerts when active data quality checks detects an issue.
+data in real-time and receive alerts when active data quality checks detect an issue.
 
-### **Configure Webhooks**
+You can create or edit notification filters to receive notifications for specific data quality incidents.
+To do this, click on the envelope icon located in the top right corner of the incident details screen.
 
-To configure Webhooks, follow these steps:
+![Configure notification filter](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/configure-notificaiton-filter2.png){ loading=lazy; width="1200px" }
 
-1. Go to the **Data Sources** section.
-2. Select the relevant data source.
-3. Select the **Incidents And Notifications** tab.
-4. Enter the Webhooks URL in the specified input fields and save your changes using the **Save** button.
+The action after clicking on the envelope icon will depend on whether the incident matches any existing incident
+[notification filters](../dqo-concepts/grouping-data-quality-issues-to-incidents.md#notification-filters).
 
-![Configuring webhooks](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/configuring-webhooks.png){ loading=lazy; width="1200px" }
+**Adding a new notification filter**.
 
-Follow the link for [more information about Webhooks](../integrations/webhooks/index.md). 
+If no notification has ever been configured for the incident, you will see a popup message informing you to create a new notification configuration.
+
+![Configure incident popup](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/configure-incident-popup.png){ loading=lazy; width="600px" }
+
+Once approved, you will be redirected to the page to create the new incident notification filter.
+The configuration form will be partially filled based on the incident's data. The details of the filter configuration can be
+found in the section [Notification filters](../dqo-concepts/grouping-data-quality-issues-to-incidents.md#notification-filters) below.
+
+![New notification filter](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/new-notification-filter2.png){ loading=lazy; width="1200px" }
+
+**Editing an existing notification filter**
+
+If the notification matches an existing filter, a screen with this filter will open, and you can edit the filter's settings.
+
+Learn more about the [configuration of the notification filtering in the Concept section](../dqo-concepts/grouping-data-quality-issues-to-incidents.md#incident-notifications)
 
 
 ### **Configure Slack notifications**

@@ -38,17 +38,15 @@ SELECT
 FROM `dqo-ai-testing`.`kaggle_student_performance`.`maths` AS analyzed_table
 ```
 
-In this example, we will set three minimum percent thresholds levels for the check (a minimum accepted percentage of valid rows):
+In this example, we will set the minimum percent thresholds levels for the check (a minimum accepted percentage of valid rows):
 
-- warning: 99
-- error: 98
-- fatal: 95
+- error: 98%
 
 If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/definition-of-data-quality-checks/index.md).
 
 **VALUE**
 
-If the percent of text values from a set fall below 99%, a warning alert will be triggered.
+If the percent of text values from a set fall below 98%, an error alert will be triggered.
 
 ## Data structure
 
@@ -84,7 +82,7 @@ A detailed explanation of [how to start DQOps platform and run the example is de
 To navigate to a list of checks prepared in the example using the [user interface](../../dqo-concepts/dqops-user-interface-overview.md):
 
 
-![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-string-in-set-percent-checks1.png){ loading=lazy; width="1200px" }
+![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-string-in-set-percent-checks2.png){ loading=lazy; width="1200px" }
 
 1. Go to the **Monitoring** section.
 
@@ -96,7 +94,7 @@ To navigate to a list of checks prepared in the example using the [user interfac
     On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../data-sources/index.md).
 
 
-3. Select the **Daily checks** tab.
+3. Select the **Daily checkpoints** tab.
 
     This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../dqo-concepts/dqops-user-interface-overview.md#check-editor).
 
@@ -110,22 +108,23 @@ Run the activated check using the **Run check** button.
 
 You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
 
-![Run check](https://dqops.com/docs/images/examples/daily-string-in-set-percent-run-check1.png){ loading=lazy; width="1200px" }
+![Run check](https://dqops.com/docs/images/examples/daily-string-in-set-percent-run-check2.png){ loading=lazy; width="1200px" }
 
 
 ### **View detailed check results**
 
 Access the detailed results by clicking the **Results** button. The results should be similar to the one below.
 
-![String-in-set-percent check results](https://dqops.com/docs/images/examples/daily-string-in-set-percent-check-results1.png){ loading=lazy; width="1200px" }
+![String-in-set-percent check results](https://dqops.com/docs/images/examples/daily-string-in-set-percent-check-results2.png){ loading=lazy; width="1200px" }
 
-Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
+Within the Results window, you will see four categories: **Check results**, **Sensor readouts**, **Execution errors**, and **Error sampling**.
 The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
 The Sensor readouts category displays the values obtained by the sensors from the data source.
 The Execution errors category displays any error that occurred during the check's execution.
+The Error sampling category displays examples of invalid values in the column.
 
-The actual value in this example is 40%, which is below the minimum threshold level set in the warning (99%).
-The check gives a fatal result (notice the red square to the left of the check name).
+The actual value in this example is 40%, which is below the minimum threshold level set in the error (98%).
+The check gives an error result (notice the orange square to the left of the check name).
 
 
 ### **Synchronize the results with the cloud account**
@@ -135,31 +134,6 @@ of the user interface.
 
 Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
 
-### **Review the results on the data quality dashboards**
-
-To review the results on the [data quality dashboards](../../working-with-dqo/review-the-data-quality-results-on-dashboards.md)
-go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. 
-
-Below you can see the results displayed on the **Current data quality checks results** dashboard located in the Check results group. This dashboard
-displays all executed checks run on tables and columns and allows reviewing their set parameters, as well as actual and expected values.
-
-This dashboard allows filtering data by:
-    
-* time window (from last 7 days to last 6 months)
-* connection,
-* schema,
-* data group,
-* data quality dimension,
-* check category,
-* stages,
-* priorities,
-* table,
-* column,
-* check name,
-* issue severity.
-
-![String-in-set-percent check results on Current data quality checks results dashboard](https://dqops.com/docs/images/examples/daily-string-in-set-percent-check-results-on-current-results-dashboard.png){ loading=lazy; width="1200px" }
-
 ## Change a schedule at the connection level
 
 With DQOps, you can easily customize when checks are run by setting schedules. You can set schedules for an entire connection,
@@ -167,7 +141,7 @@ table, or individual check.
 
 After importing new tables, DQOps sets the schedule for 12:00 P.M. (noon) every day. Follow the steps below to change the schedule.
 
-![Change a schedule at the connection level](https://dqops.com/docs/images/examples/change-schedule-for-connection.png){ loading=lazy; width="1200px" }
+![Change a schedule at the connection level](https://dqops.com/docs/images/examples/change-schedule-for-connection2.png){ loading=lazy; width="1200px" }
 
 1. Navigate to the **Data Source** section.
 
@@ -196,123 +170,47 @@ You might also want to check the [Running checks with a scheduler](../data-quali
 
 The YAML configuration file stores both the table details and checks configurations.
 
-In this example, we have set three minimum percent thresholds levels for the check:
+In this example, we have set the minimum percent threshold level for the check:
 
-- warning: 99
-- error: 98
-- fatal: 95
+- error: 98%
 
 The highlighted fragments in the YAML file below represent the segment where the monitoring `daily_text_found_in_set_percent` check is configured.
 
 If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/definition-of-data-quality-checks/index.md).
 
-```yaml hl_lines="12-30"
+```yaml hl_lines="12-26"
 apiVersion: dqo/v1
 kind: table
 spec:
-  incremental_time_window:
-    daily_partitioning_recent_days: 7
-    monthly_partitioning_recent_months: 1
-  columns:
-    school:
-      type_snapshot:
-        column_type: STRING
-        nullable: true
-    Fjob:
-      type_snapshot:
-        column_type: STRING
-        nullable: true
-      monitoring_checks:
-        daily:
-          accepted_values:
-            daily_text_found_in_set_percent:
-              parameters:
-                expected_values:
-                - services
-                - at_home
-                - teacher
-              warning:
-                min_percent: 99.0
-              error:
-                min_percent: 98.0
-              fatal:
-                min_percent: 95.0
-```
-
-## Run the checks in the example using the DQOps Shell
-
-A detailed explanation of [how to start DQOps platform and run the example is described here](../index.md#running-the-use-cases).
-
-To execute the check prepared in the example, run the following command in DQOps Shell:
-
-``` 
-check run
-```
-
-Review the results which should be similar to the one below.
-The percent of text values set in the `Fjob` column is below 95% and the check gives a fatal error.
-
-```
-Check evaluation summary per table:
-+-------------+--------------------------------+------+--------------+-------------+--------+------+------------+----------------+
-|Connection   |Table                           |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
-+-------------+--------------------------------+------+--------------+-------------+--------+------+------------+----------------+
-|text_in_set|kaggle_student_performance.maths|1     |1             |0            |0       |0     |1           |0               |
-+-------------+--------------------------------+------+--------------+-------------+--------+------+------------+----------------+
-```
-
-For a more detailed insight of how the check is run, you can initiate the check in debug mode by executing the
-following command:
-
-```
-check run --mode=debug
-```
-
-In the debug mode you can view the SQL query (sensor) executed in the check.
-
-```
-**************************************************
-Executing SQL on connection text_in_set (bigquery)
-SQL to be executed on the connection:
-SELECT
-    CASE
-        WHEN COUNT(*) = 0 THEN 100.0
-        ELSE 100.0 * SUM(
-            CASE
-                WHEN analyzed_table.`Fjob` IN ('services', 'at_home', 'teacher')
-                    THEN 1
-                ELSE 0
-            END
-        ) / COUNT(*)
-    END AS actual_value,
-    CURRENT_TIMESTAMP() AS time_period,
-    TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
-FROM `dqo-ai-testing`.`kaggle_student_performance`.`maths` AS analyzed_table
-GROUP BY time_period, time_period_utc
-ORDER BY time_period, time_period_utc
-**************************************************
-```
-
-You can also see the results returned by the sensor. The actual value in this example is 40.806045340050375, which is below the minimum 
-threshold level set in the warning (99).
-
-```
-**************************************************
-Finished executing a sensor for a check text_found_in_set_percent on the table kaggle_student_performance.maths using a sensor definition column/accepted_values/text_found_in_set_percent, sensor result count: 1
-
-Results returned by the sensor:
-+------------------+------------------------+------------------------+
-|actual_value      |time_period             |time_period_utc         |
-+------------------+------------------------+------------------------+
-|40.806045340050375|2023-05-23T09:49:20.472Z|2023-05-23T09:49:20.472Z|
-+------------------+------------------------+------------------------+
-**************************************************
+   incremental_time_window:
+      daily_partitioning_recent_days: 7
+      monthly_partitioning_recent_months: 1
+   columns:
+      school:
+         type_snapshot:
+            column_type: STRING
+            nullable: true
+      Fjob:
+         type_snapshot:
+            column_type: STRING
+            nullable: true
+         monitoring_checks:
+            daily:
+               accepted_values:
+                  daily_text_found_in_set_percent:
+                     parameters:
+                        expected_values:
+                           - services
+                           - at_home
+                           - teacher
+                     error:
+                        min_percent: 98.0
 ```
 
 In this example, we have demonstrated how to use DQOps to verify the consistency of data in a column.
 By using the [text_found_in_set_percent](../../checks/column/accepted_values/text-found-in-set-percent.md) column check,
 we can monitor that the percentage of string values from a set in a column does not fall below the minimum accepted percentage.
-If it does, you will get a warning, error or fatal result.
+If it does, you will get an error result.
 
 ## Next steps
 

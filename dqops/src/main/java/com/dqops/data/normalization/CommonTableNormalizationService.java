@@ -38,7 +38,7 @@ public interface CommonTableNormalizationService {
      * @param rowCount Number of rows in the result table or 1 when the table is null.
      * @return Array of data grouping dimension level columns that were found.
      */
-    TextColumn[] extractAndNormalizeDataGroupingDimensionColumns(Table resultsTable, DataGroupingConfigurationSpec dataGroupingConfigurationSpec, int rowCount);
+    StringColumn[] extractAndNormalizeDataGroupingDimensionColumns(Table resultsTable, DataGroupingConfigurationSpec dataGroupingConfigurationSpec, int rowCount);
 
     /**
      * Calculates a data_grouping_hash hash from all the data stream level columns. Returns 0 when there are no grouping dimension levels.
@@ -48,7 +48,7 @@ public interface CommonTableNormalizationService {
      * @param rowIndex               Row index to calculate.
      * @return Data grouping hash.
      */
-    long calculateDataGroupingHashForRow(TextColumn[] dataGroupingLevelColumns, DataGroupingConfigurationSpec dataGroupingConfigurationSpec, int rowIndex);
+    long calculateDataGroupingHashForRow(StringColumn[] dataGroupingLevelColumns, DataGroupingConfigurationSpec dataGroupingConfigurationSpec, int rowIndex);
 
     /**
      * Creates and calculates a data_grouping_hash column from all grouping_level_X columns (grouping_level_1, grouping_level_2, ..., grouping_level_9).
@@ -58,7 +58,7 @@ public interface CommonTableNormalizationService {
      * @param rowCount               Count of rows to process.
      * @return Data grouping hash column.
      */
-    LongColumn createDataGroupingHashColumn(TextColumn[] dataGroupingLevelColumns, DataGroupingConfigurationSpec dataGroupingConfigurationSpec, int rowCount);
+    LongColumn createDataGroupingHashColumn(StringColumn[] dataGroupingLevelColumns, DataGroupingConfigurationSpec dataGroupingConfigurationSpec, int rowCount);
 
     /**
      * Calculates a data_grouping_name name from all the data grouping level columns. Returns 0 when there are no data grouping levels.
@@ -67,7 +67,7 @@ public interface CommonTableNormalizationService {
      * @param rowIndex               Row index to calculate.
      * @return Data grouping name.
      */
-    String calculateDataGroupingNameForRow(TextColumn[] dataGroupingLevelColumns, int rowIndex);
+    String calculateDataGroupingNameForRow(StringColumn[] dataGroupingLevelColumns, int rowIndex);
 
     /**
      * Creates and calculates a data_grouping_name column from all grouping_level_X columns (grouping_level_1, grouping_level_2, ..., grouping_level_9).
@@ -77,7 +77,7 @@ public interface CommonTableNormalizationService {
      * @param rowCount               Count of rows to process.
      * @return Data grouping name column.
      */
-    TextColumn createDataGroupingNameColumn(TextColumn[] dataGroupingLevelColumns, int rowCount);
+    StringColumn createDataGroupingNameColumn(StringColumn[] dataGroupingLevelColumns, int rowCount);
 
     /**
      * Creates and populates a time_series_uuid column that is a hash of the check hash (or profiler hash) and the data_group_hash and uniquely identifies a time series.
@@ -89,11 +89,11 @@ public interface CommonTableNormalizationService {
      * @param rowCount                   Row count.
      * @return Time series uuid column, filled with values.
      */
-    TextColumn createTimeSeriesUuidColumn(LongColumn sortedDataGroupingHashColumn,
-                                          long checkOrProfilerHash,
-                                          long tableHash,
-                                          long columnHash,
-                                          int rowCount);
+    StringColumn createTimeSeriesUuidColumn(LongColumn sortedDataGroupingHashColumn,
+                                            long checkOrProfilerHash,
+                                            long tableHash,
+                                            long columnHash,
+                                            int rowCount);
 
     /**
      * Creates and fills the "id" column by combining hashes.
@@ -106,12 +106,12 @@ public interface CommonTableNormalizationService {
      * @param rowCount                   Row count.
      * @return ID column, filled with values.
      */
-    TextColumn createStatisticsRowIdColumn(LongColumn sortedDataGroupingHashColumn,
-                                           DateTimeColumn sortedTimePeriodColumn,
-                                           long checkHash,
-                                           long tableHash,
-                                           long columnHash,
-                                           int rowCount);
+    StringColumn createSensorReadoutRowIdColumn(LongColumn sortedDataGroupingHashColumn,
+                                                DateTimeColumn sortedTimePeriodColumn,
+                                                long checkHash,
+                                                long tableHash,
+                                                long columnHash,
+                                                int rowCount);
 
     /**
      * Creates and fills the "id" column by combining hashes for the error table.
@@ -124,12 +124,12 @@ public interface CommonTableNormalizationService {
      * @param rowCount                   Row count.
      * @return ID column, filled with values.
      */
-    TextColumn createErrorRowIdColumn(LongColumn sortedDataGroupingHashColumn,
-                                      TextColumn errorMessageColumn,
-                                      long checkHash,
-                                      long tableHash,
-                                      long columnHash,
-                                      int rowCount);
+    StringColumn createErrorRowIdColumn(LongColumn sortedDataGroupingHashColumn,
+                                        StringColumn errorMessageColumn,
+                                        long checkHash,
+                                        long tableHash,
+                                        long columnHash,
+                                        int rowCount);
 
     /**
      * Creates and fills the "id" column by combining hashes.
@@ -145,13 +145,13 @@ public interface CommonTableNormalizationService {
      * @param rowCount                   Row count.
      * @return ID column, filled with values.
      */
-    TextColumn createStatisticsRowIdColumn(LongColumn sortedDataGroupingHashColumn,
-                                           InstantColumn sortedTimePeriodColumn,
-                                           IntColumn sampleIndexColumn,
-                                           long collectorHash,
-                                           long tableHash,
-                                           long columnHash,
-                                           int rowCount);
+    StringColumn createStatisticsRowIdColumn(LongColumn sortedDataGroupingHashColumn,
+                                             InstantColumn sortedTimePeriodColumn,
+                                             IntColumn sampleIndexColumn,
+                                             long collectorHash,
+                                             long tableHash,
+                                             long columnHash,
+                                             int rowCount);
 
     /**
      * Creates and fills the "id" column by combining hashes.
@@ -167,11 +167,11 @@ public interface CommonTableNormalizationService {
      * @param rowCount                   Row count.
      * @return ID column, filled with values.
      */
-    TextColumn createErrorSampleRowIdColumn(LongColumn sortedDataGroupingHashColumn,
-                                            DateTimeColumn sortedTimePeriodColumn,
-                                            IntColumn sampleIndexColumn,
-                                            long checkHash,
-                                            long tableHash,
-                                            long columnHash,
-                                            int rowCount);
+    StringColumn createErrorSampleRowIdColumn(LongColumn sortedDataGroupingHashColumn,
+                                              DateTimeColumn sortedTimePeriodColumn,
+                                              IntColumn sampleIndexColumn,
+                                              long checkHash,
+                                              long tableHash,
+                                              long columnHash,
+                                              int rowCount);
 }

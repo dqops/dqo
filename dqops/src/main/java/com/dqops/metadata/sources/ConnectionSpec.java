@@ -18,18 +18,22 @@ package com.dqops.metadata.sources;
 import com.dqops.connectors.ConnectionProviderSpecificParameters;
 import com.dqops.connectors.ProviderType;
 import com.dqops.connectors.bigquery.BigQueryParametersSpec;
+import com.dqops.connectors.clickhouse.ClickHouseParametersSpec;
 import com.dqops.connectors.databricks.DatabricksParametersSpec;
 import com.dqops.connectors.db2.Db2ParametersSpec;
 import com.dqops.connectors.duckdb.DuckdbParametersSpec;
 import com.dqops.connectors.hana.HanaParametersSpec;
+import com.dqops.connectors.mariadb.MariaDbParametersSpec;
 import com.dqops.connectors.mysql.MysqlParametersSpec;
 import com.dqops.connectors.oracle.OracleParametersSpec;
 import com.dqops.connectors.postgresql.PostgresqlParametersSpec;
 import com.dqops.connectors.presto.PrestoParametersSpec;
+import com.dqops.connectors.questdb.QuestDbParametersSpec;
 import com.dqops.connectors.redshift.RedshiftParametersSpec;
 import com.dqops.connectors.snowflake.SnowflakeParametersSpec;
 import com.dqops.connectors.spark.SparkParametersSpec;
 import com.dqops.connectors.sqlserver.SqlServerParametersSpec;
+import com.dqops.connectors.teradata.TeradataParametersSpec;
 import com.dqops.connectors.trino.TrinoParametersSpec;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
@@ -86,6 +90,10 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
             put("databricks", o -> o.databricks);
             put("hana", o -> o.hana);
             put("db2", o -> o.db2);
+            put("mariadb", o -> o.mariadb);
+            put("clickhouse", o -> o.clickhouse);
+            put("questdb", o -> o.questdb);
+            put("teradata", o -> o.teradata);
 
             put("labels", o -> o.labels);
             put("schedules", o -> o.schedules);
@@ -180,6 +188,30 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private Db2ParametersSpec db2;
+
+    @CommandLine.Mixin // fill properties from CLI command line arguments
+    @JsonPropertyDescription("MariaDB connection parameters. Specify parameters in the mariadb section or set the url (which is the MariaDB JDBC url).")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private MariaDbParametersSpec mariadb;
+
+    @CommandLine.Mixin // fill properties from CLI command line arguments
+    @JsonPropertyDescription("ClickHouse connection parameters. Specify parameters in the clickhouse section or set the url (which is the ClickHouse JDBC url).")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ClickHouseParametersSpec clickhouse;
+
+    @CommandLine.Mixin // fill properties from CLI command line arguments
+    @JsonPropertyDescription("QuestDB connection parameters. Specify parameters in the questdb section or set the url (which is the QuestDB JDBC url).")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private QuestDbParametersSpec questdb;
+
+    @CommandLine.Mixin // fill properties from CLI command line arguments
+    @JsonPropertyDescription("Teradata connection parameters. Specify parameters in the teradata section or set the url (which is the Teradata JDBC url).")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TeradataParametersSpec teradata;
 
     @JsonPropertyDescription("The concurrency limit for the maximum number of parallel SQL queries executed on this connection.")
     private Integer parallelJobsLimit;
@@ -537,6 +569,78 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
     }
 
     /**
+     * Returns the connection parameters for MariaDB.
+     * @return MariaDB connection parameters.
+     */
+    public MariaDbParametersSpec getMariadb() {
+        return mariadb;
+    }
+
+    /**
+     * Sets the MariaDB connection parameters.
+     * @param mariadb New MariaDB connection parameters.
+     */
+    public void setMariadb(MariaDbParametersSpec mariadb) {
+        setDirtyIf(!Objects.equals(this.mariadb, mariadb));
+        this.mariadb = mariadb;
+        propagateHierarchyIdToField(mariadb, "mariadb");
+    }
+
+    /**
+     * Returns the connection parameters for ClickHouse.
+     * @return ClickHouse connection parameters.
+     */
+    public ClickHouseParametersSpec getClickhouse() {
+        return clickhouse;
+    }
+
+    /**
+     * Sets the ClickHouse connection parameters.
+     * @param clickhouse New ClickHouse connection parameters.
+     */
+    public void setClickhouse(ClickHouseParametersSpec clickhouse) {
+        setDirtyIf(!Objects.equals(this.clickhouse, clickhouse));
+        this.clickhouse = clickhouse;
+        propagateHierarchyIdToField(clickhouse, "clickhouse");
+    }
+
+    /**
+     * Returns the connection parameters for QuestDB.
+     * @return QuestDB connection parameters.
+     */
+    public QuestDbParametersSpec getQuestdb() {
+        return questdb;
+    }
+
+    /**
+     * Sets the QuestDB connection parameters.
+     * @param questdb New QuestDB connection parameters.
+     */
+    public void setQuestdb(QuestDbParametersSpec questdb) {
+        setDirtyIf(!Objects.equals(this.questdb, questdb));
+        this.questdb = questdb;
+        propagateHierarchyIdToField(questdb, "questdb");
+    }
+
+    /**
+     * Returns the connection parameters for Teradata.
+     * @return Teradata connection parameters.
+     */
+    public TeradataParametersSpec getTeradata() {
+        return teradata;
+    }
+
+    /**
+     * Sets the Teradata connection parameters.
+     * @param teradata New Teradata connection parameters.
+     */
+    public void setTeradata(TeradataParametersSpec teradata) {
+        setDirtyIf(!Objects.equals(this.teradata, teradata));
+        this.teradata = teradata;
+        propagateHierarchyIdToField(teradata, "teradata");
+    }
+
+    /**
      * Returns the configuration of schedules for each type of check.
      * @return Configuration of schedules for each type of checks.
      */
@@ -777,6 +881,18 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
             }
             if (cloned.db2 != null) {
                 cloned.db2 = cloned.db2.expandAndTrim(secretValueProvider, secretValueLookupContext);
+            }
+            if (cloned.mariadb != null) {
+                cloned.mariadb = cloned.mariadb.expandAndTrim(secretValueProvider, secretValueLookupContext);
+            }
+            if (cloned.clickhouse != null) {
+                cloned.clickhouse = cloned.clickhouse.expandAndTrim(secretValueProvider, secretValueLookupContext);
+            }
+            if (cloned.questdb != null) {
+                cloned.questdb = cloned.questdb.expandAndTrim(secretValueProvider, secretValueLookupContext);
+            }
+            if (cloned.teradata != null) {
+                cloned.teradata = cloned.teradata.expandAndTrim(secretValueProvider, secretValueLookupContext);
             }
             if (cloned.incidentGrouping != null) {
                 cloned.incidentGrouping = cloned.incidentGrouping.expandAndTrim(secretValueProvider, secretValueLookupContext);

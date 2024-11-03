@@ -57,6 +57,20 @@ The templates used to generate the SQL query for each data source supported by D
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     ```
+=== "ClickHouse"
+
+    ```sql+jinja
+    {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        (SELECT
+            AVG(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+        FROM {{ lib.render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
 === "Databricks"
 
     ```sql+jinja
@@ -127,6 +141,28 @@ The templates used to generate the SQL query for each data source supported by D
         (SELECT
             AVG(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
         FROM {{ lib.render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
+=== "MariaDB"
+
+    ```sql+jinja
+    {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+      {{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            AVG(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
         ) AS expected_value,
         AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -223,6 +259,29 @@ The templates used to generate the SQL query for each data source supported by D
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     ```
+=== "QuestDB"
+
+    ```sql+jinja
+    {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+       {{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    WITH referenced_data AS (
+        SELECT AVG(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }}) AS expected_value
+        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+    )
+    SELECT referenced_data.expected_value AS expected_value,
+        AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    CROSS JOIN referenced_data
+    {{- lib.render_where_clause() -}}
+    ```
 === "Redshift"
 
     ```sql+jinja
@@ -314,6 +373,28 @@ The templates used to generate the SQL query for each data source supported by D
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     ```
+=== "Teradata"
+
+    ```sql+jinja
+    {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+       {{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            AVG(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
 === "Trino"
 
     ```sql+jinja
@@ -390,6 +471,20 @@ The templates used to generate the SQL query for each data source supported by D
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     ```
+=== "ClickHouse"
+
+    ```sql+jinja
+    {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        (SELECT
+            MAX(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+        FROM {{ lib.render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        MAX({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
 === "Databricks"
 
     ```sql+jinja
@@ -459,6 +554,28 @@ The templates used to generate the SQL query for each data source supported by D
         (SELECT
             MAX(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
         FROM {{ lib.render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        MAX({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
+=== "MariaDB"
+
+    ```sql+jinja
+    {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+       {{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            MAX(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
         ) AS expected_value,
         MAX({{ lib.render_target_column('analyzed_table')}}) AS actual_value
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -554,6 +671,29 @@ The templates used to generate the SQL query for each data source supported by D
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     ```
+=== "QuestDB"
+
+    ```sql+jinja
+    {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+       {{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    WITH referenced_data AS (
+        SELECT MAX(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }}) AS expected_value
+        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+    )
+    SELECT referenced_data.expected_value AS expected_value,
+        MAX({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    CROSS JOIN referenced_data
+    {{- lib.render_where_clause() -}}
+    ```
 === "Redshift"
 
     ```sql+jinja
@@ -628,6 +768,28 @@ The templates used to generate the SQL query for each data source supported by D
     {%- macro render_referenced_table(referenced_table) -%}
     {%- if referenced_table.find(".") < 0 -%}
        {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            MAX(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        MAX({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
+=== "Teradata"
+
+    ```sql+jinja
+    {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+       {{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
     {%- else -%}
        {{ referenced_table }}
     {%- endif -%}
@@ -718,6 +880,20 @@ The templates used to generate the SQL query for each data source supported by D
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     ```
+=== "ClickHouse"
+
+    ```sql+jinja
+    {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        (SELECT
+            MIN(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+        FROM {{ lib.render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
 === "Databricks"
 
     ```sql+jinja
@@ -788,6 +964,28 @@ The templates used to generate the SQL query for each data source supported by D
         (SELECT
             MIN(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
         FROM {{ lib.render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
+=== "MariaDB"
+
+    ```sql+jinja
+    {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+       {{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            MIN(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
         ) AS expected_value,
         MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -884,6 +1082,29 @@ The templates used to generate the SQL query for each data source supported by D
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     ```
+=== "QuestDB"
+
+    ```sql+jinja
+    {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+       {{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    WITH referenced_data AS (
+        SELECT MIN(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }}) AS expected_value
+        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+    )
+    SELECT referenced_data.expected_value AS expected_value,
+        MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    CROSS JOIN referenced_data
+    {{- lib.render_where_clause() -}}
+    ```
 === "Redshift"
 
     ```sql+jinja
@@ -958,6 +1179,28 @@ The templates used to generate the SQL query for each data source supported by D
     {%- macro render_referenced_table(referenced_table) -%}
     {%- if referenced_table.find(".") < 0 -%}
        {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            MIN(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
+=== "Teradata"
+
+    ```sql+jinja
+    {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+       {{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
     {%- else -%}
        {{ referenced_table }}
     {%- endif -%}
@@ -1048,6 +1291,20 @@ The templates used to generate the SQL query for each data source supported by D
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     ```
+=== "ClickHouse"
+
+    ```sql+jinja
+    {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        (SELECT
+            COUNT(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+        FROM {{ lib.render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        COUNT({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
 === "Databricks"
 
     ```sql+jinja
@@ -1118,6 +1375,28 @@ The templates used to generate the SQL query for each data source supported by D
         (SELECT
             COUNT(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
         FROM {{ lib.render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        COUNT({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
+=== "MariaDB"
+
+    ```sql+jinja
+    {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+       {{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            COUNT(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
         ) AS expected_value,
         COUNT({{ lib.render_target_column('analyzed_table')}}) AS actual_value
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1214,6 +1493,29 @@ The templates used to generate the SQL query for each data source supported by D
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     ```
+=== "QuestDB"
+
+    ```sql+jinja
+    {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+       {{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    WITH referenced_data AS (
+        SELECT COUNT(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }}) AS expected_value
+        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+    )
+    SELECT referenced_data.expected_value AS expected_value,
+        COUNT({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    CROSS JOIN referenced_data
+    {{- lib.render_where_clause() -}}
+    ```
 === "Redshift"
 
     ```sql+jinja
@@ -1302,6 +1604,28 @@ The templates used to generate the SQL query for each data source supported by D
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     ```
+=== "Teradata"
+
+    ```sql+jinja
+    {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+       {{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            COUNT(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        COUNT({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
 === "Trino"
 
     ```sql+jinja
@@ -1364,6 +1688,28 @@ The templates used to generate the SQL query for each data source supported by D
     {%- macro render_referenced_table(referenced_table) -%}
     {%- if referenced_table.find(".") < 0 -%}
        {{ lib.quote_identifier(lib.macro_project_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            SUM(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        SUM({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
+=== "ClickHouse"
+
+    ```sql+jinja
+    {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+       {{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
     {%- else -%}
        {{ referenced_table }}
     {%- endif -%}
@@ -1449,6 +1795,28 @@ The templates used to generate the SQL query for each data source supported by D
         (SELECT
             SUM(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
         FROM {{ lib.render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        SUM({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
+=== "MariaDB"
+
+    ```sql+jinja
+    {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+      {{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            SUM(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
         ) AS expected_value,
         SUM({{ lib.render_target_column('analyzed_table')}}) AS actual_value
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1546,6 +1914,29 @@ The templates used to generate the SQL query for each data source supported by D
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     ```
+=== "QuestDB"
+
+    ```sql+jinja
+    {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+       {{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    WITH referenced_data AS (
+        SELECT SUM(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }}) as expected_value
+        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+    )
+    SELECT referenced_data.expected_value AS expected_value,
+        SUM({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    CROSS JOIN referenced_data
+    {{- lib.render_where_clause() -}}
+    ```
 === "Redshift"
 
     ```sql+jinja
@@ -1620,6 +2011,28 @@ The templates used to generate the SQL query for each data source supported by D
     {%- macro render_referenced_table(referenced_table) -%}
     {%- if referenced_table.find(".") < 0 -%}
        {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            SUM(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        SUM({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
+=== "Teradata"
+
+    ```sql+jinja
+    {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+       {{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
     {%- else -%}
        {{ referenced_table }}
     {%- endif -%}

@@ -20,7 +20,7 @@ type TMultiChecksTable = {
   filterParameters: IFilterTemplate;
   selectedCheckModel: CheckModel;
   searchChecks: () => void;
-  timeScale: 'daily' | 'monthly'
+  timeScale: 'daily' | 'monthly';
 };
 type TCheckDefRouting =
   | {
@@ -39,9 +39,9 @@ export default function MultiChecksTable({
 }: TMultiChecksTable) {
   const {
     checkTypes,
-    connection, 
+    connection,
     schema
-  }: { checkTypes: CheckTypes, connection: string, schema: string} =
+  }: { checkTypes: CheckTypes; connection: string; schema: string } =
     useDecodedParams();
   const [selectedData, setSelectedData] = useState<CheckTemplate[]>([]);
   const [action, setAction] = useState<'bulkEnabled' | 'bulkDisabled'>();
@@ -71,6 +71,7 @@ export default function MultiChecksTable({
     let url = '';
     let value;
     if (!filterParameters.checkCategory || !filterParameters.checkName) return;
+    console.log('filterParameters', filterParameters);
     switch (checkTypes) {
       case CheckTypes.PROFILING:
         url = ROUTES.TABLE_PROFILING_UI_FILTER(
@@ -81,11 +82,13 @@ export default function MultiChecksTable({
           filterParameters.checkCategory,
           filterParameters.checkName
         );
-        value = ROUTES.TABLE_PROFILING_VALUE(
+        value = ROUTES.TABLE_PROFILING_UI_FILTER(
           checkTypes,
           connection,
           schema,
-          table
+          table,
+          filterParameters.checkCategory,
+          filterParameters.checkName
         );
         break;
       case CheckTypes.PARTITIONED:
@@ -98,11 +101,14 @@ export default function MultiChecksTable({
           filterParameters.checkCategory,
           filterParameters.checkName
         );
-        value = ROUTES.TABLE_PARTITIONED_VALUE(
+        value = ROUTES.TABLE_PARTITIONED_UI_FILTER(
           checkTypes,
           connection,
           schema,
-          table
+          table,
+          timeScale,
+          filterParameters.checkCategory,
+          filterParameters.checkName
         );
         break;
       case CheckTypes.MONITORING:
@@ -115,11 +121,14 @@ export default function MultiChecksTable({
           filterParameters.checkCategory,
           filterParameters.checkName
         );
-        value = ROUTES.TABLE_MONITORING_VALUE(
+        value = ROUTES.TABLE_MONITORING_UI_FILTER(
           checkTypes,
           connection,
           schema,
-          table
+          table,
+          timeScale,
+          filterParameters.checkCategory,
+          filterParameters.checkName
         );
         break;
     }
@@ -128,7 +137,7 @@ export default function MultiChecksTable({
         url,
         value,
         state: {},
-        label: table
+        label: filterParameters.checkName
       })
     );
     history.push(url);
@@ -149,12 +158,14 @@ export default function MultiChecksTable({
           filterParameters.checkCategory,
           filterParameters.checkName
         );
-        value = ROUTES.COLUMN_PROFILING_VALUE(
+        value = ROUTES.COLUMN_PROFILING_UI_FILTER(
           checkTypes,
           connection,
           schema,
           table,
-          column
+          column,
+          filterParameters.checkCategory,
+          filterParameters.checkName
         );
         break;
       case CheckTypes.PARTITIONED:
@@ -168,12 +179,15 @@ export default function MultiChecksTable({
           filterParameters.checkCategory,
           filterParameters.checkName
         );
-        value = ROUTES.COLUMN_PARTITIONED_VALUE(
+        value = ROUTES.COLUMN_PARTITIONED_UI_FILTER(
           checkTypes,
           connection,
           schema,
           table,
-          column
+          column,
+          timeScale,
+          filterParameters.checkCategory,
+          filterParameters.checkName
         );
         break;
       case CheckTypes.MONITORING:
@@ -187,12 +201,15 @@ export default function MultiChecksTable({
           filterParameters.checkCategory,
           filterParameters.checkName
         );
-        value = ROUTES.COLUMN_MONITORING_VALUE(
+        value = ROUTES.COLUMN_MONITORING_UI_FILTER(
           checkTypes,
           connection,
           schema,
           table,
-          column
+          column,
+          timeScale,
+          filterParameters.checkCategory,
+          filterParameters.checkName
         );
         break;
     }
@@ -201,7 +218,7 @@ export default function MultiChecksTable({
         url,
         value,
         state: {},
-        label: table
+        label: filterParameters.checkName
       })
     );
     history.push(url);
@@ -257,7 +274,7 @@ export default function MultiChecksTable({
           setSelectedData([]);
         }}
         onChangeLoading={onChangeLoading}
-        timeScale = {timeScale}
+        timeScale={timeScale}
       />
     </div>
   );

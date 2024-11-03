@@ -41,6 +41,19 @@ The templates used to generate the SQL query for each data source supported by D
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "ClickHouse"
+
+    ```sql+jinja
+    {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+    SELECT
+        MAX({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "Databricks"
 
     ```sql+jinja
@@ -101,6 +114,19 @@ The templates used to generate the SQL query for each data source supported by D
             {{- lib.render_time_dimension_projection('original_table') }}
         FROM {{ lib.render_target_table() }} original_table
     ) analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "MariaDB"
+
+    ```sql+jinja
+    {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+    SELECT
+        MAX({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
@@ -169,6 +195,25 @@ The templates used to generate the SQL query for each data source supported by D
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "QuestDB"
+
+    ```sql+jinja
+    {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+    SELECT
+        MAX({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM(
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+    ) analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "Redshift"
 
     ```sql+jinja
@@ -212,6 +257,19 @@ The templates used to generate the SQL query for each data source supported by D
 
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    SELECT
+        MAX({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Teradata"
+
+    ```sql+jinja
+    {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
     SELECT
         MAX({{ lib.render_target_column('analyzed_table')}}) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -278,6 +336,19 @@ The templates used to generate the SQL query for each data source supported by D
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "ClickHouse"
+
+    ```sql+jinja
+    {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+    SELECT
+        MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "Databricks"
 
     ```sql+jinja
@@ -338,6 +409,19 @@ The templates used to generate the SQL query for each data source supported by D
             {{- lib.render_time_dimension_projection('original_table') }}
         FROM {{ lib.render_target_table() }} original_table
     ) analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "MariaDB"
+
+    ```sql+jinja
+    {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+    SELECT
+        MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
@@ -406,6 +490,25 @@ The templates used to generate the SQL query for each data source supported by D
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "QuestDB"
+
+    ```sql+jinja
+    {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+    SELECT
+        MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM(
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+    ) analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "Redshift"
 
     ```sql+jinja
@@ -449,6 +552,19 @@ The templates used to generate the SQL query for each data source supported by D
 
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    SELECT
+        MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Teradata"
+
+    ```sql+jinja
+    {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
     SELECT
         MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}

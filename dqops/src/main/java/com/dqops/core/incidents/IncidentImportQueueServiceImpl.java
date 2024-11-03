@@ -364,7 +364,7 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
             InstantColumn executedAtColumn = newCheckResults.instantColumn(CheckResultsColumnNames.EXECUTED_AT_COLUMN_NAME);
             DateTimeColumn timePeriodColumn = newCheckResults.dateTimeColumn(CheckResultsColumnNames.TIME_PERIOD_COLUMN_NAME);
             LongColumn checkResultIncidentHashColumn = newCheckResults.longColumn(CheckResultsColumnNames.INCIDENT_HASH_COLUMN_NAME);
-            TextColumn checkTypeColumn = newCheckResults.textColumn(CheckResultsColumnNames.CHECK_TYPE_COLUMN_NAME);
+            StringColumn checkTypeColumn = newCheckResults.stringColumn(CheckResultsColumnNames.CHECK_TYPE_COLUMN_NAME);
             Selection selectionOfMonitoringCheckResults = checkTypeColumn.isEqualTo(CheckType.monitoring.getDisplayName());
             Selection selectionOfPartitionedCheckResults = checkTypeColumn.isEqualTo(CheckType.partitioned.getDisplayName());
             Selection selectionOfIssuesAboveMinSeverity = severityColumn.isGreaterThanOrEqualTo(minimumSeverityLevel);
@@ -403,7 +403,7 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
             IntColumn highestSeverityNewIncidentsColumn = this.allNewIncidentRows.intColumn(IncidentsColumnNames.HIGHEST_SEVERITY_COLUMN_NAME);
             InstantColumn lastSeenNewIncidentsColumn = this.allNewIncidentRows.instantColumn(IncidentsColumnNames.LAST_SEEN_COLUMN_NAME);
             InstantColumn incidentUntilNewIncidentsColumn = this.allNewIncidentRows.instantColumn(IncidentsColumnNames.INCIDENT_UNTIL_COLUMN_NAME);
-            TextColumn statusNewIncidentsColumn = this.allNewIncidentRows.textColumn(IncidentsColumnNames.STATUS_COLUMN_NAME);
+            StringColumn statusNewIncidentsColumn = this.allNewIncidentRows.stringColumn(IncidentsColumnNames.STATUS_COLUMN_NAME);
 
             int[] issuesRowIndexes = selectionOfAllNewAlerts.toArray();
             for (int i = 0; i < issuesRowIndexes.length; i++) {
@@ -462,7 +462,7 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
                         int existingIncidentRowIndex = rowIndexesOfOldIncidents.getInt(ri);
                         InstantColumn existingIncidentsFirstSeenColumn = this.allExistingIncidentRows.instantColumn(IncidentsColumnNames.FIRST_SEEN_COLUMN_NAME);
                         InstantColumn existingIncidentsIncidentUntilColumn = this.allExistingIncidentRows.instantColumn(IncidentsColumnNames.INCIDENT_UNTIL_COLUMN_NAME);
-                        TextColumn existingIncidentsStatusColumn = this.allExistingIncidentRows.textColumn(IncidentsColumnNames.STATUS_COLUMN_NAME);
+                        StringColumn existingIncidentsStatusColumn = this.allExistingIncidentRows.stringColumn(IncidentsColumnNames.STATUS_COLUMN_NAME);
 
                         if (!executedAt.isBefore(existingIncidentsFirstSeenColumn.get(existingIncidentRowIndex)) &&
                             !executedAt.isAfter(existingIncidentsIncidentUntilColumn.get(existingIncidentRowIndex)) &&
@@ -648,12 +648,12 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
             }
 
             String newStatusString = incidentStatusChangeParameters.getNewIncidentStatus().name();
-            Selection newRowsIncidentIdSelection = this.allNewIncidentRows.textColumn(IncidentsColumnNames.ID_COLUMN_NAME)
+            Selection newRowsIncidentIdSelection = this.allNewIncidentRows.stringColumn(IncidentsColumnNames.ID_COLUMN_NAME)
                     .isEqualTo(incidentStatusChangeParameters.getIncidentId());
             if (!newRowsIncidentIdSelection.isEmpty()) {
                 // the updated row has other updates awaiting
                 int newRowIndex = newRowsIncidentIdSelection.get(0);
-                TextColumn newRowStatusColumn = this.allNewIncidentRows.textColumn(IncidentsColumnNames.STATUS_COLUMN_NAME);
+                StringColumn newRowStatusColumn = this.allNewIncidentRows.stringColumn(IncidentsColumnNames.STATUS_COLUMN_NAME);
                 String currentStatus = newRowStatusColumn.get(newRowIndex);
                 if (!Objects.equals(currentStatus, newStatusString)) {
                     newRowStatusColumn.set(newRowIndex, newStatusString);
@@ -666,7 +666,7 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
                     return IncidentNotificationMessage.fromIncidentRow(messageParameters);
                 }
             } else if (this.allExistingIncidentRows != null) {
-                Selection existingRowsIncidentIdSelection = this.allExistingIncidentRows.textColumn(IncidentsColumnNames.ID_COLUMN_NAME)
+                Selection existingRowsIncidentIdSelection = this.allExistingIncidentRows.stringColumn(IncidentsColumnNames.ID_COLUMN_NAME)
                         .isEqualTo(incidentStatusChangeParameters.getIncidentId());
                 if (existingRowsIncidentIdSelection.isEmpty()) {
                     // incident not found, skipping because changing the status is a background async operation that is not returning the result
@@ -688,7 +688,7 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
                     this.newIncidentByHashRowIndexes.put(incidentHash, new IntArrayList(new int[] { targetNewIncidentsRowIndex }));
                 }
 
-                TextColumn newRowStatusColumn = this.allNewIncidentRows.textColumn(IncidentsColumnNames.STATUS_COLUMN_NAME);
+                StringColumn newRowStatusColumn = this.allNewIncidentRows.stringColumn(IncidentsColumnNames.STATUS_COLUMN_NAME);
                 String currentStatus = newRowStatusColumn.get(targetNewIncidentsRowIndex);
                 if (!Objects.equals(currentStatus, newStatusString)) {
                     newRowStatusColumn.set(targetNewIncidentsRowIndex, newStatusString);
@@ -727,15 +727,15 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
                 this.existingIncidentByHashRowIndexes = findIncidentRowIndexes(this.allExistingIncidentRows);
             }
 
-            Selection newRowsIncidentIdSelection = this.allNewIncidentRows.textColumn(IncidentsColumnNames.ID_COLUMN_NAME)
+            Selection newRowsIncidentIdSelection = this.allNewIncidentRows.stringColumn(IncidentsColumnNames.ID_COLUMN_NAME)
                     .isEqualTo(incidentIssueUrlChangeParameters.getIncidentId());
             if (!newRowsIncidentIdSelection.isEmpty()) {
                 // the updated row has other updates awaiting
                 int newRowIndex = newRowsIncidentIdSelection.get(0);
-                TextColumn newRowIssueUrlColumn = this.allNewIncidentRows.textColumn(IncidentsColumnNames.ISSUE_URL_COLUMN_NAME);
+                StringColumn newRowIssueUrlColumn = this.allNewIncidentRows.stringColumn(IncidentsColumnNames.ISSUE_URL_COLUMN_NAME);
                 newRowIssueUrlColumn.set(newRowIndex, incidentIssueUrlChangeParameters.getNewIssueUrl());
             } else if (this.allExistingIncidentRows != null) {
-                Selection existingRowsIncidentIdSelection = this.allExistingIncidentRows.textColumn(IncidentsColumnNames.ID_COLUMN_NAME)
+                Selection existingRowsIncidentIdSelection = this.allExistingIncidentRows.stringColumn(IncidentsColumnNames.ID_COLUMN_NAME)
                         .isEqualTo(incidentIssueUrlChangeParameters.getIncidentId());
                 if (existingRowsIncidentIdSelection.isEmpty()) {
                     // incident not found, skipping because changing the status is a background async operation that is not returning the result
@@ -757,7 +757,7 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
                     this.newIncidentByHashRowIndexes.put(incidentHash, new IntArrayList(new int[] { targetNewIncidentsRowIndex }));
                 }
 
-                TextColumn newRowIssueUrlColumn = this.allNewIncidentRows.textColumn(IncidentsColumnNames.ISSUE_URL_COLUMN_NAME);
+                StringColumn newRowIssueUrlColumn = this.allNewIncidentRows.stringColumn(IncidentsColumnNames.ISSUE_URL_COLUMN_NAME);
                 newRowIssueUrlColumn.set(targetNewIncidentsRowIndex, incidentIssueUrlChangeParameters.getNewIssueUrl());
             }
         }

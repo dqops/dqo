@@ -99,9 +99,9 @@ public class DataCliServiceImpl implements DataCliService {
         Iterable<ParquetPartitionId> partitionIds = partitionMap.keySet().stream().sorted().collect(Collectors.toList());
 
         Table resultTable = Table.create().addColumns(
-                TextColumn.create("Data type"),
-                TextColumn.create("Connection"),
-                TextColumn.create("Table"),
+                StringColumn.create("Data type"),
+                StringColumn.create("Connection"),
+                StringColumn.create("Table"),
                 DateColumn.create("Month"),
                 IntColumn.create("Affected rows"),
                 BooleanColumn.create("Partition deleted"));

@@ -90,14 +90,20 @@ public class CheckResultsSnapshotTests extends BaseTest {
         Row row1 = sourceTable.appendRow();
         normalizedResults.getActualValueColumn().set(row1.getRowNumber(), 10.5);
         normalizedResults.getTimePeriodColumn().set(row1.getRowNumber(), LocalDateTime.of(2022, 1, 10, 14, 10, 55));
+        normalizedResults.getIdColumn().set(row1.getRowNumber(), "1");
+        normalizedResults.getConnectionHashColumn().set(row1.getRowNumber(), 1L);
 
         Row row2 = sourceTable.appendRow();
         normalizedResults.getActualValueColumn().set(row2.getRowNumber(), 20.5);
         normalizedResults.getTimePeriodColumn().set(row2.getRowNumber(), LocalDateTime.of(2022, 2, 10, 14, 20, 55));
+        normalizedResults.getIdColumn().set(row2.getRowNumber(), "2");
+        normalizedResults.getConnectionHashColumn().set(row2.getRowNumber(), 1L);
 
         Row row3 = sourceTable.appendRow();
         normalizedResults.getActualValueColumn().set(row3.getRowNumber(), 30.5);
         normalizedResults.getTimePeriodColumn().set(row3.getRowNumber(), LocalDateTime.of(2022, 3, 10, 14, 30, 55));
+        normalizedResults.getIdColumn().set(row3.getRowNumber(), "3");
+        normalizedResults.getConnectionHashColumn().set(row3.getRowNumber(), 1L);
 
         CheckResultsSnapshot tempSut = new CheckResultsSnapshot(this.userDomainIdentity, "conn", tableName, this.parquetStorageService, sourceTable);
         tempSut.save();

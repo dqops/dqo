@@ -107,10 +107,10 @@ public class TableMergeUtility {
         Column<?> newResultIdColumn = newResults.column(idColumName);
         Instant now = Instant.now();
 //        InstantColumn currentResultsCreatedAtColumn = currentResults.instantColumn(CommonColumnNames.CREATED_AT_COLUMN_NAME);
-//        TextColumn currentResultsCreatedByColumn = currentResults.textColumn(CommonColumnNames.CREATED_BY_COLUMN_NAME);
+//        StringColumn currentResultsCreatedByColumn = currentResults.stringColumn(CommonColumnNames.CREATED_BY_COLUMN_NAME);
         InstantColumn newResultsCreatedAtColumn = newResults.instantColumn(CommonColumnNames.CREATED_AT_COLUMN_NAME);
         InstantColumn newResultsUpdatedAtColumn = newResults.instantColumn(CommonColumnNames.UPDATED_AT_COLUMN_NAME);
-        TextColumn newResultsUpdatedByColumn = newResults.textColumn(CommonColumnNames.UPDATED_BY_COLUMN_NAME);
+        StringColumn newResultsUpdatedByColumn = newResults.stringColumn(CommonColumnNames.UPDATED_BY_COLUMN_NAME);
 
         Table resultTable = null;
 
@@ -118,20 +118,20 @@ public class TableMergeUtility {
         Selection newResultsThatAreUpdates = null;
         Map<Object, Integer> currentKeysToRowIndexesInCurrentData = null;
 
-        if (currentIdColumn instanceof TextColumn) {
-            TextColumn currentIdColumnString = (TextColumn) currentIdColumn;
+        if (currentIdColumn instanceof StringColumn) {
+            StringColumn currentIdColumnString = (StringColumn) currentIdColumn;
             currentKeysToRowIndexesInCurrentData = TableColumnUtility.mapValuesToRowIndexes(currentIdColumnString);
             Set<String> idsInCurrentResults = currentIdColumnString.asSet();
-            TextColumn newResultIdTextColumn = (TextColumn) newResultIdColumn;
+            StringColumn newResultIdTextColumn = (StringColumn) newResultIdColumn;
             List<String> idsInNewResultsStrings = newResultIdTextColumn.asList();
             Selection notInSelection = currentIdColumnString.isNotIn(idsInNewResultsStrings);
 
             if (notInSelection.size() < currentIdColumnString.size()) {
-                resultTable = currentResults.where(notInSelection);
+                resultTable = TableCopyUtility.copyTableFiltered(currentResults, notInSelection);
                 newResultsThatAreUpdates = newResultIdTextColumn.isIn(idsInCurrentResults);
             }
             else {
-                resultTable = currentResults.copy();
+                resultTable = TableCopyUtility.fastTableCopy(currentResults);
             }
         }
         else if (currentIdColumn instanceof LongColumn) {
@@ -143,11 +143,11 @@ public class TableMergeUtility {
             Selection notInSelection = currentIdColumnLong.isNotIn(idsInNewResultsLong);
 
             if (notInSelection.size() < currentIdColumnLong.size()) {
-                resultTable = currentResults.where(notInSelection);
+                resultTable = TableCopyUtility.copyTableFiltered(currentResults, notInSelection);
                 newResultsThatAreUpdates = newResultsIdColumnLong.isIn(idsInCurrentResultsLong);
             }
             else {
-                resultTable = currentResults.copy();
+                resultTable = TableCopyUtility.fastTableCopy(currentResults);
             }
         } else {
             throw new DqoRuntimeException("Unsupported column type " + newResultIdColumn.type());

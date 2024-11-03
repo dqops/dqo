@@ -31,6 +31,7 @@ The parameters passed to the rule are shown below.
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |<span class="no-wrap-code">`anomaly_percent`</span>|The probability (in percent) that the current sensor readout (measure) is an anomaly, because the value is outside the regular range of previous readouts. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation.|*double*|:material-check-bold:||
+|<span class="no-wrap-code">`use_ai`</span>|Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution.|*boolean*| ||
 
 
 
@@ -62,9 +63,17 @@ The rule definition YAML file *percentile/anomaly_differencing_percentile_moving
           \ but at least 30 readouts must exist to run the calculation."
         data_type: double
         required: true
-        default_value: 0.5
+        default_value: 0.05
+      - field_name: use_ai
+        display_name: use_ai
+        help_text: "Use an AI model to predict anomalies. WARNING: anomaly detection by\
+          \ AI models is not supported in an open-source distribution of DQOps. Please\
+          \ contact DQOps support to upgrade your instance to a closed-source DQOps distribution."
+        data_type: boolean
+        display_hint: requires_paid_version
       parameters:
         degrees_of_freedom: 5
+        ai_degrees_of_freedom: 8
     ```
 
 
@@ -75,6 +84,7 @@ The rule definition YAML file *percentile/anomaly_differencing_percentile_moving
 | Parameters name | Value |
 |-----------------|-------|
 |*degrees_of_freedom*|5|
+|*ai_degrees_of_freedom*|8|
 
 
 
@@ -87,7 +97,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
     ``` { .python linenums="1" }
     #
-    # Copyright © 2023 DQOps (support@dqops.com)
+    # Copyright © 2024 DQOps (support@dqops.com)
     #
     # Licensed under the Apache License, Version 2.0 (the "License");
     # you may not use this file except in compliance with the License.
@@ -107,6 +117,8 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     import numpy as np
     import scipy
     import scipy.stats
+    from lib.anomalies.data_preparation import convert_historic_data_differencing, average_forecast
+    from lib.anomalies.anomaly_detection import detect_upper_bound_anomaly, detect_lower_bound_anomaly, detect_anomaly
     
     
     # rule specific parameters object, contains values received from the quality check threshold configuration
@@ -115,8 +127,8 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
     
     class HistoricDataPoint:
-        timestamp_utc: datetime
-        local_datetime: datetime
+        timestamp_utc_epoch: int
+        local_datetime_epoch: int
         back_periods_index: int
         sensor_readout: float
         expected_value: float
@@ -135,7 +147,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     class RuleExecutionRunParameters:
         actual_value: float
         parameters: AnomalyDifferencingPercentileMovingAverageRuleParametersSpec
-        time_period_local: datetime
+        time_period_local_epoch: int
         previous_readouts: Sequence[HistoricDataPoint]
         time_window: RuleTimeWindowSettingsSpec
         configuration_parameters: AnomalyConfigurationParameters
@@ -182,85 +194,95 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         differences_std = float(scipy.stats.tstd(differences))
         differences_median = np.median(differences)
         differences_median_float = float(differences_median)
-        degrees_of_freedom = float(rule_parameters.configuration_parameters.degrees_of_freedom)
-        tail = rule_parameters.parameters.anomaly_percent / 100.0
+        tail = rule_parameters.parameters.anomaly_percent / 100.0 / 2
     
         last_readout = float(filtered[-1])
         actual_difference = rule_parameters.actual_value - last_readout
     
         if float(differences_std) == 0:
-            return RuleExecutionResult(actual_difference == differences_median_float,
+            return RuleExecutionResult(None if actual_difference == differences_median_float else False,
                                        last_readout + differences_median_float, last_readout + differences_median_float,
                                        last_readout + differences_median_float)
     
         if all(difference > 0 for difference in differences_list):
             # using a 0-based calculation (scale from 0)
-            upper_median_multiples_array = [(difference / differences_median_float - 1.0) for difference
-                                            in differences_list if difference >= differences_median_float]
-            upper_multiples = np.array(upper_median_multiples_array, dtype=float)
-            upper_multiples_median = np.median(upper_multiples)
-            upper_multiples_std = scipy.stats.tstd(upper_multiples)
+            anomaly_data = convert_historic_data_differencing(rule_parameters.previous_readouts,
+                                                 lambda readout: (readout / differences_median_float - 1.0 if readout >= differences_median_float else
+                                                                  (-1.0 / (readout / differences_median_float)) + 1.0))
+            threshold_upper_multiple, threshold_lower_multiple, forecast_multiple = detect_anomaly(historic_data=anomaly_data, median=0.0,
+                                                                                                   tail=tail, parameters=rule_parameters)
     
-            if float(upper_multiples_std) == 0:
-                threshold_upper = differences_median_float
-            else:
-                # Assumption: the historical data follows t-student distribution
-                upper_readout_distribution = scipy.stats.t(df=degrees_of_freedom, loc=upper_multiples_median, scale=upper_multiples_std)
-                threshold_upper_multiple = float(upper_readout_distribution.ppf(1 - tail))
+            passed = True
+            if threshold_upper_multiple is not None:
                 threshold_upper = (threshold_upper_multiple + 1.0) * differences_median_float
-    
-            lower_median_multiples_array = [(-1.0 / (difference / differences_median_float)) for difference
-                                            in differences_list if difference <= differences_median_float if difference != 0]
-            lower_multiples = np.array(lower_median_multiples_array, dtype=float)
-            lower_multiples_median = np.median(lower_multiples)
-            lower_multiples_std = scipy.stats.tstd(lower_multiples)
-    
-            if float(lower_multiples_std) == 0:
-                threshold_lower = differences_median_float
+                passed = actual_difference <= threshold_upper
             else:
-                # Assumption: the historical data follows t-student distribution
-                lower_readout_distribution = scipy.stats.t(df=degrees_of_freedom, loc=lower_multiples_median, scale=lower_multiples_std)
-                threshold_lower_multiple = float(lower_readout_distribution.ppf(tail))
-                threshold_lower = differences_median_float * (-1.0 / threshold_lower_multiple)
+                threshold_upper = None
     
-            passed = threshold_lower <= actual_difference <= threshold_upper
+            if threshold_lower_multiple is not None:
+                threshold_lower = differences_median_float * (-1.0 / (threshold_lower_multiple - 1.0))
+                passed = passed and threshold_lower <= actual_difference
+            else:
+                threshold_lower = None
     
-            expected_value = last_readout + differences_median_float
-            lower_bound = last_readout + threshold_lower
-            upper_bound = last_readout + threshold_upper
+            if forecast_multiple is not None:
+                if forecast_multiple >= 0:
+                    forecast = (forecast_multiple + 1.0) * differences_median_float
+                else:
+                    forecast = differences_median_float * (-1.0 / (forecast_multiple - 1.0))
+            else:
+                forecast = differences_median_float
+    
+            if forecast is not None:
+                expected_value = last_readout + forecast
+            else:
+                expected_value = None
+    
+            if threshold_lower is not None:
+                lower_bound = last_readout + threshold_lower
+            else:
+                lower_bound = None
+    
+            if threshold_upper is not None:
+                upper_bound = last_readout + threshold_upper
+            else:
+                upper_bound = None
             return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
     
         else:
             # using unrestricted method for both positive and negative values
-            upper_half_filtered = [difference for difference in differences_list if difference >= differences_median_float]
-            upper_half = np.array(upper_half_filtered, dtype=float)
-            upper_half_median = np.median(upper_half)
-            upper_half_std = scipy.stats.tstd(upper_half)
+            anomaly_data = convert_historic_data_differencing(rule_parameters.previous_readouts,
+                                                              lambda readout: readout)
+            threshold_upper_result, threshold_lower_result, forecast = detect_anomaly(historic_data=anomaly_data, median=differences_median_float,
+                                                                                      tail=tail, parameters=rule_parameters)
     
-            if float(upper_half_std) == 0:
-                threshold_upper = differences_median_float
+            passed = True
+            if threshold_upper_result is not None:
+                threshold_upper = threshold_upper_result
+                passed = actual_difference <= threshold_upper
             else:
-                # Assumption: the historical data follows t-student distribution
-                upper_readout_distribution = scipy.stats.t(df=degrees_of_freedom, loc=upper_half_median, scale=upper_half_std)
-                threshold_upper = float(upper_readout_distribution.ppf(1 - tail))
+                threshold_upper = None
     
-            lower_half_list = [difference for difference in differences_list if difference <= differences_median_float]
-            lower_half = np.array(lower_half_list, dtype=float)
-            lower_half_median = np.median(lower_half)
-            lower_half_std = scipy.stats.tstd(lower_half)
-    
-            if float(lower_half_std) == 0:
-                threshold_lower = differences_median_float
+            if threshold_lower_result is not None:
+                threshold_lower = threshold_lower_result
+                passed = passed and threshold_lower <= actual_difference
             else:
-                # Assumption: the historical data follows t-student distribution
-                lower_readout_distribution = scipy.stats.t(df=degrees_of_freedom, loc=lower_half_median, scale=lower_half_std)
-                threshold_lower = float(lower_readout_distribution.ppf(tail))
+                threshold_lower = None
     
-            passed = threshold_lower <= actual_difference <= threshold_upper
+            if forecast is not None:
+                expected_value = last_readout + forecast
+            else:
+                expected_value = None
     
-            expected_value = last_readout + differences_median_float
-            lower_bound = last_readout + threshold_lower
-            upper_bound = last_readout + threshold_upper
+            if threshold_lower is not None:
+                lower_bound = last_readout + threshold_lower
+            else:
+                lower_bound = None
+    
+            if threshold_upper is not None:
+                upper_bound = last_readout + threshold_upper
+            else:
+                upper_bound = None
             return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
     
     ```
@@ -293,6 +315,7 @@ The parameters passed to the rule are shown below.
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |<span class="no-wrap-code">`anomaly_percent`</span>|The probability (in percent) that the current sensor readout (measure) is an anomaly, because the value is outside the regular range of previous readouts. The default time window of 30 periods (days, etc.) is required, but at least 10 readouts must exist to run the calculation.|*double*|:material-check-bold:||
+|<span class="no-wrap-code">`use_ai`</span>|Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution.|*boolean*| ||
 
 
 
@@ -324,9 +347,17 @@ The rule definition YAML file *percentile/anomaly_differencing_percentile_moving
           \ but at least 10 readouts must exist to run the calculation."
         data_type: double
         required: true
-        default_value: 0.5
+        default_value: 0.05
+      - field_name: use_ai
+        display_name: use_ai
+        help_text: "Use an AI model to predict anomalies. WARNING: anomaly detection by\
+          \ AI models is not supported in an open-source distribution of DQOps. Please\
+          \ contact DQOps support to upgrade your instance to a closed-source DQOps distribution."
+        data_type: boolean
+        display_hint: requires_paid_version
       parameters:
         degrees_of_freedom: 5
+        ai_degrees_of_freedom: 8
     ```
 
 
@@ -337,6 +368,7 @@ The rule definition YAML file *percentile/anomaly_differencing_percentile_moving
 | Parameters name | Value |
 |-----------------|-------|
 |*degrees_of_freedom*|5|
+|*ai_degrees_of_freedom*|8|
 
 
 
@@ -349,7 +381,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
     ``` { .python linenums="1" }
     #
-    # Copyright © 2023 DQOps (support@dqops.com)
+    # Copyright © 2024 DQOps (support@dqops.com)
     #
     # Licensed under the Apache License, Version 2.0 (the "License");
     # you may not use this file except in compliance with the License.
@@ -365,10 +397,12 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     #
     
     from datetime import datetime
-    from typing import Sequence
+    from typing import Sequence, Dict
     import numpy as np
     import scipy
     import scipy.stats
+    from lib.anomalies.data_preparation import convert_historic_data_differencing, average_forecast
+    from lib.anomalies.anomaly_detection import detect_upper_bound_anomaly, detect_lower_bound_anomaly, detect_anomaly
     
     
     # rule specific parameters object, contains values received from the quality check threshold configuration
@@ -377,8 +411,8 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
     
     class HistoricDataPoint:
-        timestamp_utc: datetime
-        local_datetime: datetime
+        timestamp_utc_epoch: int
+        local_datetime_epoch: int
         back_periods_index: int
         sensor_readout: float
         expected_value: float
@@ -397,7 +431,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     class RuleExecutionRunParameters:
         actual_value: float
         parameters: AnomalyDifferencingPercentileMovingAverageRuleParametersSpec
-        time_period_local: datetime
+        time_period_local_epoch: int
         previous_readouts: Sequence[HistoricDataPoint]
         time_window: RuleTimeWindowSettingsSpec
         configuration_parameters: AnomalyConfigurationParameters
@@ -444,85 +478,95 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         differences_std = float(scipy.stats.tstd(differences))
         differences_median = np.median(differences)
         differences_median_float = float(differences_median)
-        degrees_of_freedom = float(rule_parameters.configuration_parameters.degrees_of_freedom)
-        tail = rule_parameters.parameters.anomaly_percent / 100.0
+        tail = rule_parameters.parameters.anomaly_percent / 100.0 / 2
     
         last_readout = float(filtered[-1])
         actual_difference = rule_parameters.actual_value - last_readout
     
         if float(differences_std) == 0:
-            return RuleExecutionResult(actual_difference == differences_median_float,
+            return RuleExecutionResult(None if actual_difference == differences_median_float else False,
                                        last_readout + differences_median_float, last_readout + differences_median_float,
                                        last_readout + differences_median_float)
     
         if all(difference > 0 for difference in differences_list):
             # using a 0-based calculation (scale from 0)
-            upper_median_multiples_array = [(difference / differences_median_float - 1.0) for difference
-                                            in differences_list if difference >= differences_median_float]
-            upper_multiples = np.array(upper_median_multiples_array, dtype=float)
-            upper_multiples_median = np.median(upper_multiples)
-            upper_multiples_std = scipy.stats.tstd(upper_multiples)
+            anomaly_data = convert_historic_data_differencing(rule_parameters.previous_readouts,
+                                                              lambda readout: (readout / differences_median_float - 1.0 if readout >= differences_median_float else
+                                                                               (-1.0 / (readout / differences_median_float)) + 1.0))
+            threshold_upper_multiple, threshold_lower_multiple, forecast_multiple = detect_anomaly(historic_data=anomaly_data, median=0.0,
+                                                                                                   tail=tail, parameters=rule_parameters)
     
-            if float(upper_multiples_std) == 0:
-                threshold_upper = differences_median_float
-            else:
-                # Assumption: the historical data follows t-student distribution
-                upper_readout_distribution = scipy.stats.t(df=degrees_of_freedom, loc=upper_multiples_median, scale=upper_multiples_std)
-                threshold_upper_multiple = float(upper_readout_distribution.ppf(1 - tail))
+            passed = True
+            if threshold_upper_multiple is not None:
                 threshold_upper = (threshold_upper_multiple + 1.0) * differences_median_float
-    
-            lower_median_multiples_array = [(-1.0 / (difference / differences_median_float)) for difference
-                                            in differences_list if difference <= differences_median_float if difference != 0]
-            lower_multiples = np.array(lower_median_multiples_array, dtype=float)
-            lower_multiples_median = np.median(lower_multiples)
-            lower_multiples_std = scipy.stats.tstd(lower_multiples)
-    
-            if float(lower_multiples_std) == 0:
-                threshold_lower = differences_median_float
+                passed = actual_difference <= threshold_upper
             else:
-                # Assumption: the historical data follows t-student distribution
-                lower_readout_distribution = scipy.stats.t(df=degrees_of_freedom, loc=lower_multiples_median, scale=lower_multiples_std)
-                threshold_lower_multiple = float(lower_readout_distribution.ppf(tail))
-                threshold_lower = differences_median_float * (-1.0 / threshold_lower_multiple)
+                threshold_upper = None
     
-            passed = threshold_lower <= actual_difference <= threshold_upper
+            if threshold_lower_multiple is not None:
+                threshold_lower = differences_median_float * (-1.0 / (threshold_lower_multiple - 1.0))
+                passed = passed and threshold_lower <= actual_difference
+            else:
+                threshold_lower = None
     
-            expected_value = last_readout + differences_median_float
-            lower_bound = last_readout + threshold_lower
-            upper_bound = last_readout + threshold_upper
+            if forecast_multiple is not None:
+                if forecast_multiple >= 0:
+                    forecast = (forecast_multiple + 1.0) * differences_median_float
+                else:
+                    forecast = differences_median_float * (-1.0 / (forecast_multiple - 1.0))
+            else:
+                forecast = differences_median_float
+    
+            if forecast is not None:
+                expected_value = last_readout + forecast
+            else:
+                expected_value = None
+    
+            if threshold_lower is not None:
+                lower_bound = last_readout + threshold_lower
+            else:
+                lower_bound = None
+    
+            if threshold_upper is not None:
+                upper_bound = last_readout + threshold_upper
+            else:
+                upper_bound = None
             return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
     
         else:
             # using unrestricted method for both positive and negative values
-            upper_half_filtered = [difference for difference in differences_list if difference >= differences_median_float]
-            upper_half = np.array(upper_half_filtered, dtype=float)
-            upper_half_median = np.median(upper_half)
-            upper_half_std = scipy.stats.tstd(upper_half)
+            anomaly_data = convert_historic_data_differencing(rule_parameters.previous_readouts,
+                                                              lambda readout: readout)
+            threshold_upper_result, threshold_lower_result, forecast = detect_anomaly(historic_data=anomaly_data, median=differences_median_float,
+                                                                                      tail=tail, parameters=rule_parameters)
     
-            if float(upper_half_std) == 0:
-                threshold_upper = differences_median_float
+            passed = True
+            if threshold_upper_result is not None:
+                threshold_upper = threshold_upper_result
+                passed = actual_difference <= threshold_upper
             else:
-                # Assumption: the historical data follows t-student distribution
-                upper_readout_distribution = scipy.stats.t(df=degrees_of_freedom, loc=upper_half_median, scale=upper_half_std)
-                threshold_upper = float(upper_readout_distribution.ppf(1 - tail))
+                threshold_upper = None
     
-            lower_half_list = [difference for difference in differences_list if difference <= differences_median_float]
-            lower_half = np.array(lower_half_list, dtype=float)
-            lower_half_median = np.median(lower_half)
-            lower_half_std = scipy.stats.tstd(lower_half)
-    
-            if float(lower_half_std) == 0:
-                threshold_lower = differences_median_float
+            if threshold_lower_result is not None:
+                threshold_lower = threshold_lower_result
+                passed = passed and threshold_lower <= actual_difference
             else:
-                # Assumption: the historical data follows t-student distribution
-                lower_readout_distribution = scipy.stats.t(df=degrees_of_freedom, loc=lower_half_median, scale=lower_half_std)
-                threshold_lower = float(lower_readout_distribution.ppf(tail))
+                threshold_lower = None
     
-            passed = threshold_lower <= actual_difference <= threshold_upper
+            if forecast is not None:
+                expected_value = last_readout + forecast
+            else:
+                expected_value = None
     
-            expected_value = last_readout + differences_median_float
-            lower_bound = last_readout + threshold_lower
-            upper_bound = last_readout + threshold_upper
+            if threshold_lower is not None:
+                lower_bound = last_readout + threshold_lower
+            else:
+                lower_bound = None
+    
+            if threshold_upper is not None:
+                upper_bound = last_readout + threshold_upper
+            else:
+                upper_bound = None
             return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
     
     ```
@@ -552,6 +596,7 @@ The parameters passed to the rule are shown below.
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |<span class="no-wrap-code">`anomaly_percent`</span>|The probability (in percent) that the current daily row count is an anomaly because the value is outside the regular range of previous partition volume measures. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation.|*double*|:material-check-bold:||
+|<span class="no-wrap-code">`use_ai`</span>|Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution.|*boolean*| ||
 
 
 
@@ -583,9 +628,17 @@ The rule definition YAML file *percentile/anomaly_partition_row_count.dqorule.ya
           \ used, but at least 30 readouts must exist to run the calculation."
         data_type: double
         required: true
-        default_value: 0.5
+        default_value: 0.05
+      - field_name: use_ai
+        display_name: use_ai
+        help_text: "Use an AI model to predict anomalies. WARNING: anomaly detection by\
+          \ AI models is not supported in an open-source distribution of DQOps. Please\
+          \ contact DQOps support to upgrade your instance to a closed-source DQOps distribution."
+        data_type: boolean
+        display_hint: requires_paid_version
       parameters:
         degrees_of_freedom: 5
+        ai_degrees_of_freedom: 8
     ```
 
 
@@ -596,6 +649,7 @@ The rule definition YAML file *percentile/anomaly_partition_row_count.dqorule.ya
 | Parameters name | Value |
 |-----------------|-------|
 |*degrees_of_freedom*|5|
+|*ai_degrees_of_freedom*|8|
 
 
 
@@ -608,7 +662,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
     ``` { .python linenums="1" }
     #
-    # Copyright © 2023 DQOps (support@dqops.com)
+    # Copyright © 2024 DQOps (support@dqops.com)
     #
     # Licensed under the Apache License, Version 2.0 (the "License");
     # you may not use this file except in compliance with the License.
@@ -628,6 +682,8 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     import numpy as np
     import scipy
     import scipy.stats
+    from lib.anomalies.data_preparation import convert_historic_data_stationary, average_forecast
+    from lib.anomalies.anomaly_detection import detect_upper_bound_anomaly, detect_lower_bound_anomaly, detect_anomaly
     
     
     # rule specific parameters object, contains values received from the quality check threshold configuration
@@ -636,8 +692,8 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
     
     class HistoricDataPoint:
-        timestamp_utc: datetime
-        local_datetime: datetime
+        timestamp_utc_epoch: int
+        local_datetime_epoch: int
         back_periods_index: int
         sensor_readout: float
         expected_value: float
@@ -656,7 +712,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     class RuleExecutionRunParameters:
         actual_value: float
         parameters: AnomalyPartitionRowCountRuleParametersSpec
-        time_period_local: datetime
+        time_period_local_epoch: int
         previous_readouts: Sequence[HistoricDataPoint]
         time_window: RuleTimeWindowSettingsSpec
         configuration_parameters: AnomalyConfigurationParameters
@@ -704,43 +760,39 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         filtered_std = scipy.stats.tstd(filtered)
     
         if float(filtered_std) == 0:
-            return RuleExecutionResult(rule_parameters.actual_value == filtered_median_float,
+            return RuleExecutionResult(None if rule_parameters.actual_value == filtered_median_float else False,
                                        filtered_median_float, filtered_median_float, filtered_median_float)
     
-        degrees_of_freedom = float(rule_parameters.configuration_parameters.degrees_of_freedom)
-        tail = rule_parameters.parameters.anomaly_percent / 100.0
+        tail = rule_parameters.parameters.anomaly_percent / 100.0 / 2.0
     
-        upper_median_multiples_array = [(readout / filtered_median_float - 1.0) for readout in extracted
-                                        if readout >= filtered_median_float]
-        upper_multiples = np.array(upper_median_multiples_array, dtype=float)
-        upper_multiples_median = np.median(upper_multiples)
-        upper_multiples_std = scipy.stats.tstd(upper_multiples)
+        anomaly_data = convert_historic_data_stationary(rule_parameters.previous_readouts,
+                                             lambda readout: (readout / filtered_median_float - 1.0 if readout >= filtered_median_float else
+                                                              (-1.0 / (readout / filtered_median_float)) + 1.0))
+        threshold_upper_multiple, threshold_lower_multiple, forecast_multiple = detect_anomaly(historic_data=anomaly_data, median=0.0,
+                                                                                               tail=tail, parameters=rule_parameters)
     
-        if float(upper_multiples_std) == 0:
-            threshold_upper = filtered_median_float
-        else:
-            # Assumption: the historical data follows t-student distribution
-            upper_readout_distribution = scipy.stats.t(df=degrees_of_freedom, loc=upper_multiples_median, scale=upper_multiples_std)
-            threshold_upper_multiple = float(upper_readout_distribution.ppf(1 - tail))
+        passed = True
+        if threshold_upper_multiple is not None:
             threshold_upper = (threshold_upper_multiple + 1.0) * filtered_median_float
-    
-        lower_median_multiples_array = [(-1.0 / (readout / filtered_median_float)) for readout in extracted
-                                        if readout <= filtered_median_float if readout != 0]
-        lower_multiples = np.array(lower_median_multiples_array, dtype=float)
-        lower_multiples_median = np.median(lower_multiples)
-        lower_multiples_std = scipy.stats.tstd(lower_multiples)
-    
-        if float(lower_multiples_std) == 0:
-            threshold_lower = filtered_median_float
+            passed = rule_parameters.actual_value <= threshold_upper
         else:
-            # Assumption: the historical data follows t-student distribution
-            lower_readout_distribution = scipy.stats.t(df=degrees_of_freedom, loc=lower_multiples_median, scale=lower_multiples_std)
-            threshold_lower_multiple = float(lower_readout_distribution.ppf(tail))
-            threshold_lower = filtered_median_float * (-1.0 / threshold_lower_multiple)
+            threshold_upper = None
     
-        passed = threshold_lower <= rule_parameters.actual_value <= threshold_upper
+        if threshold_lower_multiple is not None:
+            threshold_lower = filtered_median_float * (-1.0 / (threshold_lower_multiple - 1.0))
+            passed = passed and threshold_lower <= rule_parameters.actual_value
+        else:
+            threshold_lower = None
     
-        expected_value = filtered_median_float
+        if forecast_multiple is not None:
+            if forecast_multiple >= 0:
+                forecast = (forecast_multiple + 1.0) * filtered_median_float
+            else:
+                forecast = filtered_median_float * (-1.0 / (forecast_multiple - 1.0))
+        else:
+            forecast = filtered_median_float
+    
+        expected_value = forecast
         lower_bound = threshold_lower
         upper_bound = threshold_upper
         return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
@@ -772,6 +824,7 @@ The parameters passed to the rule are shown below.
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |<span class="no-wrap-code">`anomaly_percent`</span>|The probability (in percent) that the count of values (records) is an anomaly because the value is outside the regular range of counts. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation.|*double*|:material-check-bold:||
+|<span class="no-wrap-code">`use_ai`</span>|Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution.|*boolean*| ||
 
 
 
@@ -803,9 +856,17 @@ The rule definition YAML file *percentile/anomaly_stationary_count_values.dqorul
           \ must exist to run the calculation."
         data_type: double
         required: true
-        default_value: 0.5
+        default_value: 0.05
+      - field_name: use_ai
+        display_name: use_ai
+        help_text: "Use an AI model to predict anomalies. WARNING: anomaly detection by\
+          \ AI models is not supported in an open-source distribution of DQOps. Please\
+          \ contact DQOps support to upgrade your instance to a closed-source DQOps distribution."
+        data_type: boolean
+        display_hint: requires_paid_version
       parameters:
         degrees_of_freedom: 5
+        ai_degrees_of_freedom: 8
     ```
 
 
@@ -816,6 +877,7 @@ The rule definition YAML file *percentile/anomaly_stationary_count_values.dqorul
 | Parameters name | Value |
 |-----------------|-------|
 |*degrees_of_freedom*|5|
+|*ai_degrees_of_freedom*|8|
 
 
 
@@ -828,7 +890,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
     ``` { .python linenums="1" }
     #
-    # Copyright © 2023 DQOps (support@dqops.com)
+    # Copyright © 2024 DQOps (support@dqops.com)
     #
     # Licensed under the Apache License, Version 2.0 (the "License");
     # you may not use this file except in compliance with the License.
@@ -848,6 +910,8 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     import numpy as np
     import scipy
     import scipy.stats
+    from lib.anomalies.data_preparation import convert_historic_data_stationary, average_forecast
+    from lib.anomalies.anomaly_detection import detect_upper_bound_anomaly, detect_lower_bound_anomaly, detect_anomaly
     
     
     # rule specific parameters object, contains values received from the quality check threshold configuration
@@ -856,8 +920,8 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
     
     class HistoricDataPoint:
-        timestamp_utc: datetime
-        local_datetime: datetime
+        timestamp_utc_epoch: int
+        local_datetime_epoch: int
         back_periods_index: int
         sensor_readout: float
         expected_value: float
@@ -876,7 +940,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     class RuleExecutionRunParameters:
         actual_value: float
         parameters: AnomalyPartitionDistinctCountRuleParametersSpec
-        time_period_local: datetime
+        time_period_local_epoch: int
         previous_readouts: Sequence[HistoricDataPoint]
         time_window: RuleTimeWindowSettingsSpec
         configuration_parameters: AnomalyConfigurationParameters
@@ -925,44 +989,41 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         filtered_std = scipy.stats.tstd(filtered)
     
         if float(filtered_std) == 0:
-            return RuleExecutionResult(rule_parameters.actual_value == filtered_median_float or
-                                       (rule_parameters.actual_value == 0 and 0 in all_extracted),
+            return RuleExecutionResult(None if (rule_parameters.actual_value == filtered_median_float or
+                                       (rule_parameters.actual_value == 0 and 0 in all_extracted)) else False,
                                        filtered_median_float, filtered_median_float if 0 not in all_extracted else 0,
                                        filtered_median_float)
     
-        degrees_of_freedom = float(rule_parameters.configuration_parameters.degrees_of_freedom)
-        tail = rule_parameters.parameters.anomaly_percent / 100.0
+        tail = rule_parameters.parameters.anomaly_percent / 100.0 / 2.0
     
-        upper_median_multiples_array = [(readout / filtered_median_float - 1.0) for readout in extracted if readout >= filtered_median_float]
-        upper_multiples = np.array(upper_median_multiples_array, dtype=float)
-        upper_multiples_median = np.median(upper_multiples)
-        upper_multiples_std = scipy.stats.tstd(upper_multiples)
+        anomaly_data = convert_historic_data_stationary(rule_parameters.previous_readouts,
+                                             lambda readout: (readout / filtered_median_float - 1.0 if readout >= filtered_median_float else
+                                                             (-1.0 / (readout / filtered_median_float)) + 1.0))
+        threshold_upper_multiple, threshold_lower_multiple, forecast_multiple = detect_anomaly(historic_data=anomaly_data, median=0.0,
+                                                                                               tail=tail, parameters=rule_parameters)
     
-        if float(upper_multiples_std) == 0:
-            threshold_upper = filtered_median_float
-        else:
-            # Assumption: the historical data follows t-student distribution
-            upper_readout_distribution = scipy.stats.t(df=degrees_of_freedom, loc=upper_multiples_median, scale=upper_multiples_std)
-            threshold_upper_multiple = float(upper_readout_distribution.ppf(1 - tail))
+        passed = True
+        if threshold_upper_multiple is not None:
             threshold_upper = (threshold_upper_multiple + 1.0) * filtered_median_float
-    
-        lower_median_multiples_array = [(-1.0 / (readout / filtered_median_float)) for readout in extracted
-                                        if readout <= filtered_median_float if readout != 0]
-        lower_multiples = np.array(lower_median_multiples_array, dtype=float)
-        lower_multiples_median = np.median(lower_multiples)
-        lower_multiples_std = scipy.stats.tstd(lower_multiples)
-    
-        if float(lower_multiples_std) == 0:
-            threshold_lower = filtered_median_float
+            passed = rule_parameters.actual_value <= threshold_upper
         else:
-            # Assumption: the historical data follows t-student distribution
-            lower_readout_distribution = scipy.stats.t(df=degrees_of_freedom, loc=lower_multiples_median, scale=lower_multiples_std)
-            threshold_lower_multiple = float(lower_readout_distribution.ppf(tail))
-            threshold_lower = filtered_median_float * (-1.0 / threshold_lower_multiple)
+            threshold_upper = None
     
-        passed = threshold_lower <= rule_parameters.actual_value <= threshold_upper
+        if threshold_lower_multiple is not None:
+            threshold_lower = filtered_median_float * (-1.0 / (threshold_lower_multiple - 1.0))
+            passed = passed and threshold_lower <= rule_parameters.actual_value
+        else:
+            threshold_lower = None
     
-        expected_value = filtered_median_float
+        if forecast_multiple is not None:
+            if forecast_multiple >= 0:
+                forecast = (forecast_multiple + 1.0) * filtered_median_float
+            else:
+                forecast = filtered_median_float * (-1.0 / (forecast_multiple - 1.0))
+        else:
+            forecast = filtered_median_float
+    
+        expected_value = forecast
         lower_bound = threshold_lower
         upper_bound = threshold_upper
         return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
@@ -994,6 +1055,7 @@ The parameters passed to the rule are shown below.
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |<span class="no-wrap-code">`anomaly_percent`</span>|The probability (in percent) that the current percentage value is an anomaly because the value is outside the regular range of captured percentage measures. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation.|*double*|:material-check-bold:||
+|<span class="no-wrap-code">`use_ai`</span>|Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution.|*boolean*| ||
 
 
 
@@ -1025,9 +1087,17 @@ The rule definition YAML file *percentile/anomaly_stationary_percent_values.dqor
           \ but at least 30 readouts must exist to run the calculation."
         data_type: double
         required: true
-        default_value: 0.5
+        default_value: 0.05
+      - field_name: use_ai
+        display_name: use_ai
+        help_text: "Use an AI model to predict anomalies. WARNING: anomaly detection by\
+          \ AI models is not supported in an open-source distribution of DQOps. Please\
+          \ contact DQOps support to upgrade your instance to a closed-source DQOps distribution."
+        data_type: boolean
+        display_hint: requires_paid_version
       parameters:
         degrees_of_freedom: 5
+        ai_degrees_of_freedom: 8
     ```
 
 
@@ -1038,6 +1108,7 @@ The rule definition YAML file *percentile/anomaly_stationary_percent_values.dqor
 | Parameters name | Value |
 |-----------------|-------|
 |*degrees_of_freedom*|5|
+|*ai_degrees_of_freedom*|8|
 
 
 
@@ -1070,6 +1141,8 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     import numpy as np
     import scipy
     import scipy.stats
+    from lib.anomalies.data_preparation import convert_historic_data_stationary, average_forecast
+    from lib.anomalies.anomaly_detection import detect_upper_bound_anomaly, detect_lower_bound_anomaly
     
     
     # rule specific parameters object, contains values received from the quality check threshold configuration
@@ -1078,8 +1151,8 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
     
     class HistoricDataPoint:
-        timestamp_utc: datetime
-        local_datetime: datetime
+        timestamp_utc_epoch: int
+        local_datetime_epoch: int
         back_periods_index: int
         sensor_readout: float
         expected_value: float
@@ -1098,7 +1171,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     class RuleExecutionRunParameters:
         actual_value: float
         parameters: AnomalyPercentageValueRuleParametersSpec
-        time_period_local: datetime
+        time_period_local_epoch: int
         previous_readouts: Sequence[HistoricDataPoint]
         time_window: RuleTimeWindowSettingsSpec
         configuration_parameters: AnomalyConfigurationParameters
@@ -1147,55 +1220,53 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         filtered_std = scipy.stats.tstd(filtered)
     
         if float(filtered_std) == 0.0:
-            return RuleExecutionResult(rule_parameters.actual_value == filtered_median_float or
+            return RuleExecutionResult(None if (rule_parameters.actual_value == filtered_median_float or
                                        (rule_parameters.actual_value == 0.0 and 0.0 in all_extracted) or
-                                       (rule_parameters.actual_value == 100.0 and 100.0 in all_extracted),
+                                       (rule_parameters.actual_value == 100.0 and 100.0 in all_extracted)) else False,
                                        filtered_median_float,
                                        filtered_median_float if 0.0 not in all_extracted else 0.0,
                                        filtered_median_float if 100.0 not in all_extracted else 100.0)
     
-        degrees_of_freedom = float(rule_parameters.configuration_parameters.degrees_of_freedom)
-        tail = rule_parameters.parameters.anomaly_percent / 100.0
+        tail = rule_parameters.parameters.anomaly_percent / 100.0 / 2.0
+        passed = True
     
         if 100.0 in all_extracted:
             threshold_upper = 100.0
+            forecast_upper = filtered_median_float
         else:
-            upper_median_multiples_array = [1.0 / (1.0 - readout / 100.0) for readout in extracted
-                                            if readout >= filtered_median_float]
-            upper_multiples = np.array(upper_median_multiples_array, dtype=float)
-            upper_multiples_median = np.median(upper_multiples)
-            upper_multiples_std = scipy.stats.tstd(upper_multiples)
+            anomaly_data_upper = convert_historic_data_stationary(rule_parameters.previous_readouts,
+                                                                  lambda readout: 1.0 / (1.0 - readout / 100.0))
+            threshold_upper_multiple, forecast_upper_multiple = detect_upper_bound_anomaly(historic_data=anomaly_data_upper,
+                                                                  median=1.0 / (1.0 - filtered_median_float / 100.0),
+                                                                  tail=tail, parameters=rule_parameters)
     
-            if float(upper_multiples_std) == 0.0:
-                threshold_upper = filtered_median_float
-            else:
-                # Assumption: the historical data follows t-student distribution
-                upper_readout_distribution = scipy.stats.t(df=degrees_of_freedom, loc=upper_multiples_median,
-                                                           scale=upper_multiples_std)
-                threshold_upper_multiple = float(upper_readout_distribution.ppf(1 - tail))
+            if threshold_upper_multiple is not None:
                 threshold_upper = 100.0 - 100.0 * (1.0 / threshold_upper_multiple)
+                forecast_upper = 100.0 - 100.0 * (1.0 / forecast_upper_multiple)
+                passed = rule_parameters.actual_value <= threshold_upper
+            else:
+                threshold_upper = None
+                forecast_upper = None
     
         if 0.0 in all_extracted:
             threshold_lower = 0.0
+            forecast_lower = filtered_median_float
         else:
-            lower_median_multiples_array = [(-1.0 / (readout / filtered_median_float)) for readout in extracted
-                                            if readout <= filtered_median_float]
-            lower_multiples = np.array(lower_median_multiples_array, dtype=float)
-            lower_multiples_median = np.median(lower_multiples)
-            lower_multiples_std = scipy.stats.tstd(lower_multiples)
+            anomaly_data_lower = convert_historic_data_stationary(rule_parameters.previous_readouts,
+                                                                  lambda readout: (-1.0 / (readout / filtered_median_float)))
+            threshold_lower_multiple, forecast_lower_multiple = detect_lower_bound_anomaly(historic_data=anomaly_data_lower,
+                                                                  median=-1.0,
+                                                                  tail=tail, parameters=rule_parameters)
     
-            if float(lower_multiples_std) == 0.0:
-                threshold_lower = filtered_median_float
-            else:
-                # Assumption: the historical data follows t-student distribution
-                lower_readout_distribution = scipy.stats.t(df=degrees_of_freedom, loc=lower_multiples_median,
-                                                           scale=lower_multiples_std)
-                threshold_lower_multiple = float(lower_readout_distribution.ppf(tail))
+            if threshold_lower_multiple is not None:
                 threshold_lower = filtered_median_float * (-1.0 / threshold_lower_multiple)
+                forecast_lower = filtered_median_float * (-1.0 / forecast_lower_multiple)
+                passed = passed and threshold_lower <= rule_parameters.actual_value
+            else:
+                threshold_lower = None
+                forecast_lower = None
     
-        passed = threshold_lower <= rule_parameters.actual_value <= threshold_upper
-    
-        expected_value = filtered_median_float
+        expected_value = average_forecast(forecast_upper, forecast_lower)
         lower_bound = threshold_lower
         upper_bound = threshold_upper
         return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
@@ -1228,6 +1299,7 @@ The parameters passed to the rule are shown below.
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |<span class="no-wrap-code">`anomaly_percent`</span>|The probability (in percent) that the current sensor readout (measure) is an anomaly, because the value is outside the regular range of previous readouts. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation.|*double*|:material-check-bold:||
+|<span class="no-wrap-code">`use_ai`</span>|Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution.|*boolean*| ||
 
 
 
@@ -1259,9 +1331,17 @@ The rule definition YAML file *percentile/anomaly_stationary_percentile_moving_a
           \ but at least 30 readouts must exist to run the calculation."
         data_type: double
         required: true
-        default_value: 0.5
+        default_value: 0.05
+      - field_name: use_ai
+        display_name: use_ai
+        help_text: "Use an AI model to predict anomalies. WARNING: anomaly detection by\
+          \ AI models is not supported in an open-source distribution of DQOps. Please\
+          \ contact DQOps support to upgrade your instance to a closed-source DQOps distribution."
+        data_type: boolean
+        display_hint: requires_paid_version
       parameters:
         degrees_of_freedom: 5
+        ai_degrees_of_freedom: 8
     ```
 
 
@@ -1272,6 +1352,7 @@ The rule definition YAML file *percentile/anomaly_stationary_percentile_moving_a
 | Parameters name | Value |
 |-----------------|-------|
 |*degrees_of_freedom*|5|
+|*ai_degrees_of_freedom*|8|
 
 
 
@@ -1284,7 +1365,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
     ``` { .python linenums="1" }
     #
-    # Copyright © 2023 DQOps (support@dqops.com)
+    # Copyright © 2024 DQOps (support@dqops.com)
     #
     # Licensed under the Apache License, Version 2.0 (the "License");
     # you may not use this file except in compliance with the License.
@@ -1304,6 +1385,8 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     import numpy as np
     import scipy
     import scipy.stats
+    from lib.anomalies.data_preparation import convert_historic_data_stationary, average_forecast
+    from lib.anomalies.anomaly_detection import detect_upper_bound_anomaly, detect_lower_bound_anomaly, detect_anomaly
     
     
     # rule specific parameters object, contains values received from the quality check threshold configuration
@@ -1312,8 +1395,8 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
     
     class HistoricDataPoint:
-        timestamp_utc: datetime
-        local_datetime: datetime
+        timestamp_utc_epoch: int
+        local_datetime_epoch: int
         back_periods_index: int
         sensor_readout: float
         expected_value: float
@@ -1332,7 +1415,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     class RuleExecutionRunParameters:
         actual_value: float
         parameters: AnomalyStationaryPercentileMovingAverageRuleParametersSpec
-        time_period_local: datetime
+        time_period_local_epoch: int
         previous_readouts: Sequence[HistoricDataPoint]
         time_window: RuleTimeWindowSettingsSpec
         configuration_parameters: AnomalyConfigurationParameters
@@ -1380,76 +1463,65 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         filtered_std = scipy.stats.tstd(filtered)
     
         if float(filtered_std) == 0:
-            return RuleExecutionResult(rule_parameters.actual_value == filtered_median_float,
+            return RuleExecutionResult(None if rule_parameters.actual_value == filtered_median_float else False,
                                        filtered_median_float, filtered_median_float, filtered_median_float)
     
-        degrees_of_freedom = float(rule_parameters.configuration_parameters.degrees_of_freedom)
-        tail = rule_parameters.parameters.anomaly_percent / 100.0
+        tail = rule_parameters.parameters.anomaly_percent / 100.0 / 2.0
     
         if all(readout > 0 for readout in extracted):
             # using a 0-based calculation (scale from 0)
-            upper_median_multiples_array = [(readout / filtered_median_float - 1.0) for readout in extracted if readout >= filtered_median_float]
-            upper_multiples = np.array(upper_median_multiples_array, dtype=float)
-            upper_multiples_median = np.median(upper_multiples)
-            upper_multiples_std = scipy.stats.tstd(upper_multiples)
+            anomaly_data = convert_historic_data_stationary(rule_parameters.previous_readouts,
+                                                 lambda readout: (readout / filtered_median_float - 1.0 if readout >= filtered_median_float else
+                                                                  (-1.0 / (readout / filtered_median_float)) + 1.0))
+            threshold_upper_multiple, threshold_lower_multiple, forecast_multiple = detect_anomaly(historic_data=anomaly_data, median=0.0,
+                                                                                                   tail=tail, parameters=rule_parameters)
     
-            if float(upper_multiples_std) == 0:
-                threshold_upper = filtered_median_float
-            else:
-                # Assumption: the historical data follows t-student distribution
-                upper_readout_distribution = scipy.stats.t(df=degrees_of_freedom, loc=upper_multiples_median, scale=upper_multiples_std)
-                threshold_upper_multiple = float(upper_readout_distribution.ppf(1 - tail))
+            passed = True
+            if threshold_upper_multiple is not None:
                 threshold_upper = (threshold_upper_multiple + 1.0) * filtered_median_float
-    
-            lower_median_multiples_array = [(-1.0 / (readout / filtered_median_float)) for readout in extracted if readout <= filtered_median_float if readout != 0]
-            lower_multiples = np.array(lower_median_multiples_array, dtype=float)
-            lower_multiples_median = np.median(lower_multiples)
-            lower_multiples_std = scipy.stats.tstd(lower_multiples)
-    
-            if float(lower_multiples_std) == 0:
-                threshold_lower = filtered_median_float
+                passed = rule_parameters.actual_value <= threshold_upper
             else:
-                # Assumption: the historical data follows t-student distribution
-                lower_readout_distribution = scipy.stats.t(df=degrees_of_freedom, loc=lower_multiples_median, scale=lower_multiples_std)
-                threshold_lower_multiple = float(lower_readout_distribution.ppf(tail))
-                threshold_lower = filtered_median_float * (-1.0 / threshold_lower_multiple)
+                threshold_upper = None
     
-            passed = threshold_lower <= rule_parameters.actual_value <= threshold_upper
+            if threshold_lower_multiple is not None:
+                threshold_lower = filtered_median_float * (-1.0 / (threshold_lower_multiple - 1.0))
+                passed = passed and threshold_lower <= rule_parameters.actual_value
+            else:
+                threshold_lower = None
     
-            expected_value = filtered_median_float
+            if forecast_multiple is not None:
+                if forecast_multiple >= 0:
+                    forecast = (forecast_multiple + 1.0) * filtered_median_float
+                else:
+                    forecast = filtered_median_float * (-1.0 / (forecast_multiple - 1.0))
+            else:
+                forecast = filtered_median_float
+    
+            expected_value = forecast
             lower_bound = threshold_lower
             upper_bound = threshold_upper
             return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
     
         else:
             # using unrestricted method
-            upper_half_filtered = [readout for readout in extracted if readout >= filtered_median_float]
-            upper_half = np.array(upper_half_filtered, dtype=float)
-            upper_half_median = np.median(upper_half)
-            upper_half_std = scipy.stats.tstd(upper_half)
+            anomaly_data = convert_historic_data_stationary(rule_parameters.previous_readouts, lambda readout: readout)
+            threshold_upper_result, threshold_lower_result, forecast = detect_anomaly(historic_data=anomaly_data, median=filtered_median_float,
+                                                                                      tail=tail, parameters=rule_parameters)
     
-            if float(upper_half_std) == 0:
-                threshold_upper = filtered_median_float
+            passed = True
+            if threshold_upper_result is not None:
+                threshold_upper = threshold_upper_result
+                passed = rule_parameters.actual_value <= threshold_upper
             else:
-                # Assumption: the historical data follows t-student distribution
-                upper_readout_distribution = scipy.stats.t(df=degrees_of_freedom, loc=upper_half_median, scale=upper_half_std)
-                threshold_upper = float(upper_readout_distribution.ppf(1 - tail))
+                threshold_upper = None
     
-            lower_half_list = [readout for readout in extracted if readout <= filtered_median_float]
-            lower_half = np.array(lower_half_list, dtype=float)
-            lower_half_median = np.median(lower_half)
-            lower_half_std = scipy.stats.tstd(lower_half)
-    
-            if float(lower_half_std) == 0:
-                threshold_lower = filtered_median_float
+            if threshold_lower_result is not None:
+                threshold_lower = threshold_lower_result
+                passed = passed and threshold_lower <= rule_parameters.actual_value
             else:
-                # Assumption: the historical data follows t-student distribution
-                lower_readout_distribution = scipy.stats.t(df=degrees_of_freedom, loc=lower_half_median, scale=lower_half_std)
-                threshold_lower = float(lower_readout_distribution.ppf(tail))
+                threshold_lower = None
     
-            passed = threshold_lower <= rule_parameters.actual_value <= threshold_upper
-    
-            expected_value = filtered_median_float
+            expected_value = forecast
             lower_bound = threshold_lower
             upper_bound = threshold_upper
             return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
@@ -1482,6 +1554,7 @@ The parameters passed to the rule are shown below.
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |<span class="no-wrap-code">`anomaly_percent`</span>|The probability (in percent) that the current sensor readout (measure) is an anomaly, because the value is outside the regular range of previous readouts. The default time window of 30 periods (days, etc.) is required, but at least 10 readouts must exist to run the calculation.|*double*|:material-check-bold:||
+|<span class="no-wrap-code">`use_ai`</span>|Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution.|*boolean*| ||
 
 
 
@@ -1513,9 +1586,17 @@ The rule definition YAML file *percentile/anomaly_stationary_percentile_moving_a
           \ but at least 10 readouts must exist to run the calculation."
         data_type: double
         required: true
-        default_value: 0.5
+        default_value: 0.05
+      - field_name: use_ai
+        display_name: use_ai
+        help_text: "Use an AI model to predict anomalies. WARNING: anomaly detection by\
+          \ AI models is not supported in an open-source distribution of DQOps. Please\
+          \ contact DQOps support to upgrade your instance to a closed-source DQOps distribution."
+        data_type: boolean
+        display_hint: requires_paid_version
       parameters:
         degrees_of_freedom: 5
+        ai_degrees_of_freedom: 8
     ```
 
 
@@ -1526,6 +1607,7 @@ The rule definition YAML file *percentile/anomaly_stationary_percentile_moving_a
 | Parameters name | Value |
 |-----------------|-------|
 |*degrees_of_freedom*|5|
+|*ai_degrees_of_freedom*|8|
 
 
 
@@ -1538,7 +1620,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
     ``` { .python linenums="1" }
     #
-    # Copyright © 2023 DQOps (support@dqops.com)
+    # Copyright © 2024 DQOps (support@dqops.com)
     #
     # Licensed under the Apache License, Version 2.0 (the "License");
     # you may not use this file except in compliance with the License.
@@ -1558,6 +1640,8 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     import numpy as np
     import scipy
     import scipy.stats
+    from lib.anomalies.data_preparation import convert_historic_data_stationary, average_forecast
+    from lib.anomalies.anomaly_detection import detect_upper_bound_anomaly, detect_lower_bound_anomaly, detect_anomaly
     
     
     # rule specific parameters object, contains values received from the quality check threshold configuration
@@ -1566,8 +1650,8 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
     
     class HistoricDataPoint:
-        timestamp_utc: datetime
-        local_datetime: datetime
+        timestamp_utc_epoch: int
+        local_datetime_epoch: int
         back_periods_index: int
         sensor_readout: float
         expected_value: float
@@ -1582,14 +1666,11 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         degrees_of_freedom: float
     
     
+    # rule execution parameters, contains the sensor value (actual_value) and the rule parameters
     class RuleExecutionRunParameters:
-        """
-        Rule execution parameters, contains the sensor value (actual_value) and the rule parameters
-        """
-    
         actual_value: float
         parameters: AnomalyStationaryPercentileMovingAverageRuleParametersSpec
-        time_period_local: datetime
+        time_period_local_epoch: int
         previous_readouts: Sequence[HistoricDataPoint]
         time_window: RuleTimeWindowSettingsSpec
         configuration_parameters: AnomalyConfigurationParameters
@@ -1637,76 +1718,65 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         filtered_std = scipy.stats.tstd(filtered)
     
         if float(filtered_std) == 0:
-            return RuleExecutionResult(rule_parameters.actual_value == filtered_median_float,
+            return RuleExecutionResult(None if rule_parameters.actual_value == filtered_median_float else False,
                                        filtered_median_float, filtered_median_float, filtered_median_float)
     
-        degrees_of_freedom = float(rule_parameters.configuration_parameters.degrees_of_freedom)
-        tail = rule_parameters.parameters.anomaly_percent / 100.0
+        tail = rule_parameters.parameters.anomaly_percent / 100.0 / 2.0
     
         if all(readout > 0 for readout in extracted):
             # using a 0-based calculation (scale from 0)
-            upper_median_multiples_array = [(readout / filtered_median_float - 1.0) for readout in extracted if readout >= filtered_median_float]
-            upper_multiples = np.array(upper_median_multiples_array, dtype=float)
-            upper_multiples_median = np.median(upper_multiples)
-            upper_multiples_std = scipy.stats.tstd(upper_multiples)
+            anomaly_data = convert_historic_data_stationary(rule_parameters.previous_readouts,
+                                                            lambda readout: (readout / filtered_median_float - 1.0 if readout >= filtered_median_float else
+                                                                             (-1.0 / (readout / filtered_median_float)) + 1.0))
+            threshold_upper_multiple, threshold_lower_multiple, forecast_multiple = detect_anomaly(historic_data=anomaly_data, median=0.0,
+                                                                                                   tail=tail, parameters=rule_parameters)
     
-            if float(upper_multiples_std) == 0:
-                threshold_upper = filtered_median_float
-            else:
-                # Assumption: the historical data follows t-student distribution
-                upper_readout_distribution = scipy.stats.t(df=degrees_of_freedom, loc=upper_multiples_median, scale=upper_multiples_std)
-                threshold_upper_multiple = float(upper_readout_distribution.ppf(1 - tail))
+            passed = True
+            if threshold_upper_multiple is not None:
                 threshold_upper = (threshold_upper_multiple + 1.0) * filtered_median_float
-    
-            lower_median_multiples_array = [(-1.0 / (readout / filtered_median_float)) for readout in extracted if readout <= filtered_median_float if readout != 0]
-            lower_multiples = np.array(lower_median_multiples_array, dtype=float)
-            lower_multiples_median = np.median(lower_multiples)
-            lower_multiples_std = scipy.stats.tstd(lower_multiples)
-    
-            if float(lower_multiples_std) == 0:
-                threshold_lower = filtered_median_float
+                passed = rule_parameters.actual_value <= threshold_upper
             else:
-                # Assumption: the historical data follows t-student distribution
-                lower_readout_distribution = scipy.stats.t(df=degrees_of_freedom, loc=lower_multiples_median, scale=lower_multiples_std)
-                threshold_lower_multiple = float(lower_readout_distribution.ppf(tail))
-                threshold_lower = filtered_median_float * (-1.0 / threshold_lower_multiple)
+                threshold_upper = None
     
-            passed = threshold_lower <= rule_parameters.actual_value <= threshold_upper
+            if threshold_lower_multiple is not None:
+                threshold_lower = filtered_median_float * (-1.0 / (threshold_lower_multiple - 1.0))
+                passed = passed and threshold_lower <= rule_parameters.actual_value
+            else:
+                threshold_lower = None
     
-            expected_value = filtered_median_float
+            if forecast_multiple is not None:
+                if forecast_multiple >= 0:
+                    forecast = (forecast_multiple + 1.0) * filtered_median_float
+                else:
+                    forecast = filtered_median_float * (-1.0 / (forecast_multiple - 1.0))
+            else:
+                forecast = filtered_median_float
+    
+            expected_value = forecast
             lower_bound = threshold_lower
             upper_bound = threshold_upper
             return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
     
         else:
             # using unrestricted method
-            upper_half_filtered = [readout for readout in extracted if readout >= filtered_median_float]
-            upper_half = np.array(upper_half_filtered, dtype=float)
-            upper_half_median = np.median(upper_half)
-            upper_half_std = scipy.stats.tstd(upper_half)
+            anomaly_data = convert_historic_data_stationary(rule_parameters.previous_readouts, lambda readout: readout)
+            threshold_upper_result, threshold_lower_result, forecast = detect_anomaly(historic_data=anomaly_data, median=filtered_median_float,
+                                                                                      tail=tail, parameters=rule_parameters)
     
-            if float(upper_half_std) == 0:
-                threshold_upper = filtered_median_float
+            passed = True
+            if threshold_upper_result is not None:
+                threshold_upper = threshold_upper_result
+                passed = rule_parameters.actual_value <= threshold_upper
             else:
-                # Assumption: the historical data follows t-student distribution
-                upper_readout_distribution = scipy.stats.t(df=degrees_of_freedom, loc=upper_half_median, scale=upper_half_std)
-                threshold_upper = float(upper_readout_distribution.ppf(1 - tail))
+                threshold_upper = None
     
-            lower_half_list = [readout for readout in extracted if readout <= filtered_median_float]
-            lower_half = np.array(lower_half_list, dtype=float)
-            lower_half_median = np.median(lower_half)
-            lower_half_std = scipy.stats.tstd(lower_half)
-    
-            if float(lower_half_std) == 0:
-                threshold_lower = filtered_median_float
+            if threshold_lower_result is not None:
+                threshold_lower = threshold_lower_result
+                passed = passed and threshold_lower <= rule_parameters.actual_value
             else:
-                # Assumption: the historical data follows t-student distribution
-                lower_readout_distribution = scipy.stats.t(df=degrees_of_freedom, loc=lower_half_median, scale=lower_half_std)
-                threshold_lower = float(lower_readout_distribution.ppf(tail))
+                threshold_lower = None
     
-            passed = threshold_lower <= rule_parameters.actual_value <= threshold_upper
-    
-            expected_value = filtered_median_float
+            expected_value = forecast
             lower_bound = threshold_lower
             upper_bound = threshold_upper
             return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
@@ -1738,6 +1808,7 @@ The parameters passed to the rule are shown below.
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |<span class="no-wrap-code">`anomaly_percent`</span>|The probability (in percent) that the current data delay is an anomaly because the value is outside the regular range of previous delays. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation.|*double*|:material-check-bold:||
+|<span class="no-wrap-code">`use_ai`</span>|Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution.|*boolean*| ||
 
 
 
@@ -1770,8 +1841,16 @@ The rule definition YAML file *percentile/anomaly_timeliness_delay.dqorule.yaml*
         data_type: double
         required: true
         default_value: 0.5
+      - field_name: use_ai
+        display_name: use_ai
+        help_text: "Use an AI model to predict anomalies. WARNING: anomaly detection by\
+          \ AI models is not supported in an open-source distribution of DQOps. Please\
+          \ contact DQOps support to upgrade your instance to a closed-source DQOps distribution."
+        data_type: boolean
+        display_hint: requires_paid_version
       parameters:
         degrees_of_freedom: 5
+        ai_degrees_of_freedom: 8
     ```
 
 
@@ -1782,6 +1861,7 @@ The rule definition YAML file *percentile/anomaly_timeliness_delay.dqorule.yaml*
 | Parameters name | Value |
 |-----------------|-------|
 |*degrees_of_freedom*|5|
+|*ai_degrees_of_freedom*|8|
 
 
 
@@ -1794,7 +1874,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
     ``` { .python linenums="1" }
     #
-    # Copyright © 2023 DQOps (support@dqops.com)
+    # Copyright © 2024 DQOps (support@dqops.com)
     #
     # Licensed under the Apache License, Version 2.0 (the "License");
     # you may not use this file except in compliance with the License.
@@ -1814,6 +1894,8 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     import numpy as np
     import scipy
     import scipy.stats
+    from lib.anomalies.data_preparation import convert_historic_data_stationary, average_forecast
+    from lib.anomalies.anomaly_detection import detect_upper_bound_anomaly, detect_lower_bound_anomaly
     
     
     # rule specific parameters object, contains values received from the quality check threshold configuration
@@ -1822,8 +1904,8 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
     
     class HistoricDataPoint:
-        timestamp_utc: datetime
-        local_datetime: datetime
+        timestamp_utc_epoch: int
+        local_datetime_epoch: int
         back_periods_index: int
         sensor_readout: float
         expected_value: float
@@ -1842,7 +1924,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     class RuleExecutionRunParameters:
         actual_value: float
         parameters: AnomalyTimelinessDelayRuleParametersSpec
-        time_period_local: datetime
+        time_period_local_epoch: int
         previous_readouts: Sequence[HistoricDataPoint]
         time_window: RuleTimeWindowSettingsSpec
         configuration_parameters: AnomalyConfigurationParameters
@@ -1890,31 +1972,25 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         filtered_std = scipy.stats.tstd(filtered)
     
         if float(filtered_std) == 0:
-            return RuleExecutionResult(rule_parameters.actual_value == filtered_median_float,
+            return RuleExecutionResult(None if rule_parameters.actual_value == filtered_median_float else False,
                                        filtered_median_float, 0.0, filtered_median_float)
     
-        degrees_of_freedom = float(rule_parameters.configuration_parameters.degrees_of_freedom)
         tail = rule_parameters.parameters.anomaly_percent / 100.0
     
-        upper_median_multiples_array = [(readout / filtered_median_float - 1.0) for readout in extracted if readout >= filtered_median_float]
-        upper_multiples = np.array(upper_median_multiples_array, dtype=float)
-        upper_multiples_median = np.median(upper_multiples)
-        upper_multiples_std = scipy.stats.tstd(upper_multiples)
+        anomaly_data = convert_historic_data_stationary(rule_parameters.previous_readouts, lambda readout: readout)
+        threshold_upper_multiple, forecast_upper_multiple = detect_upper_bound_anomaly(historic_data=anomaly_data, median=filtered_median_float,
+                                                              tail=tail, parameters=rule_parameters)
     
-        if float(upper_multiples_std) == 0:
-            threshold_upper = filtered_median_float
+        passed = True
+        if threshold_upper_multiple is not None:
+            threshold_upper = threshold_upper_multiple
+            forecast_upper = forecast_upper_multiple
+            passed = rule_parameters.actual_value <= threshold_upper
         else:
-            # Assumption: the historical data follows t-student distribution
-            upper_readout_distribution = scipy.stats.t(df=degrees_of_freedom, loc=upper_multiples_median, scale=upper_multiples_std)
-            threshold_upper_multiple = float(upper_readout_distribution.ppf(1 - tail))
-            threshold_upper = (threshold_upper_multiple + 1.0) * filtered_median_float
+            threshold_upper = None
     
-        threshold_lower = 0.0  # always, our target is to have a delay of 0.0 days
-    
-        passed = threshold_lower <= rule_parameters.actual_value <= threshold_upper
-    
-        expected_value = filtered_median_float
-        lower_bound = threshold_lower
+        expected_value = forecast_upper
+        lower_bound = 0.0  # always, our target is to have a delay of 0.0 days
         upper_bound = threshold_upper
         return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
     
@@ -2034,8 +2110,8 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
     
     class HistoricDataPoint:
-        timestamp_utc: datetime
-        local_datetime: datetime
+        timestamp_utc_epoch: int
+        local_datetime_epoch: int
         back_periods_index: int
         sensor_readout: float
         expected_value: float
@@ -2050,7 +2126,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     class RuleExecutionRunParameters:
         actual_value: float
         parameters: PercentileMovingRuleParametersSpec
-        time_period_local: datetime
+        time_period_local_epoch: int
         previous_readouts: Sequence[HistoricDataPoint]
         time_window: RuleTimeWindowSettingsSpec
     
@@ -2230,8 +2306,8 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
     
     class HistoricDataPoint:
-        timestamp_utc: datetime
-        local_datetime: datetime
+        timestamp_utc_epoch: int
+        local_datetime_epoch: int
         back_periods_index: int
         sensor_readout: float
         expected_value: float
@@ -2246,7 +2322,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     class RuleExecutionRunParameters:
         actual_value: float
         parameters: PercentileMovingRuleParametersSpec
-        time_period_local: datetime
+        time_period_local_epoch: int
         previous_readouts: Sequence[HistoricDataPoint]
         time_window: RuleTimeWindowSettingsSpec
     
@@ -2426,8 +2502,8 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
     
     class HistoricDataPoint:
-        timestamp_utc: datetime
-        local_datetime: datetime
+        timestamp_utc_epoch: int
+        local_datetime_epoch: int
         back_periods_index: int
         sensor_readout: float
         expected_value: float
@@ -2442,7 +2518,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     class RuleExecutionRunParameters:
         actual_value: float
         parameters: PercentileMovingRuleParametersSpec
-        time_period_local: datetime
+        time_period_local_epoch: int
         previous_readouts: Sequence[HistoricDataPoint]
         time_window: RuleTimeWindowSettingsSpec
     
@@ -2506,6 +2582,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         lower_bound = last_readout + threshold_lower if threshold_lower is not None else None
         upper_bound = last_readout + threshold_upper if threshold_upper is not None else None
         return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
+    
     ```
 
 
@@ -2621,8 +2698,8 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
     
     class HistoricDataPoint:
-        timestamp_utc: datetime
-        local_datetime: datetime
+        timestamp_utc_epoch: int
+        local_datetime_epoch: int
         back_periods_index: int
         sensor_readout: float
         expected_value: float
@@ -2637,7 +2714,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     class RuleExecutionRunParameters:
         actual_value: float
         parameters: PercentileMovingRuleParametersSpec
-        time_period_local: datetime
+        time_period_local_epoch: int
         previous_readouts: Sequence[HistoricDataPoint]
         time_window: RuleTimeWindowSettingsSpec
     
@@ -2813,8 +2890,8 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
     
     class HistoricDataPoint:
-        timestamp_utc: datetime
-        local_datetime: datetime
+        timestamp_utc_epoch: int
+        local_datetime_epoch: int
         back_periods_index: int
         sensor_readout: float
         expected_value: float
@@ -2829,7 +2906,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     class RuleExecutionRunParameters:
         actual_value: float
         parameters: PercentileMovingRuleParametersSpec
-        time_period_local: datetime
+        time_period_local_epoch: int
         previous_readouts: Sequence[HistoricDataPoint]
         time_window: RuleTimeWindowSettingsSpec
     
@@ -3005,8 +3082,8 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
     
     class HistoricDataPoint:
-        timestamp_utc: datetime
-        local_datetime: datetime
+        timestamp_utc_epoch: int
+        local_datetime_epoch: int
         back_periods_index: int
         sensor_readout: float
         expected_value: float
@@ -3021,7 +3098,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     class RuleExecutionRunParameters:
         actual_value: float
         parameters: PercentileMovingRuleParametersSpec
-        time_period_local: datetime
+        time_period_local_epoch: int
         previous_readouts: Sequence[HistoricDataPoint]
         time_window: RuleTimeWindowSettingsSpec
     

@@ -62,6 +62,8 @@ class DqoUserProfileModel:
             ENTERPRISE license of DQOps.
         can_synchronize_to_data_catalog (Union[Unset, bool]): User can synchronize data to a data catalog. The instance
             must be configured correctly and the user must have at least an EDITOR role.
+        can_use_ai_anomaly_detection (Union[Unset, bool]): The DQOps instance is a paid version with advanced AI anomaly
+            prediction.
     """
 
     user: Union[Unset, str] = UNSET
@@ -95,6 +97,7 @@ class DqoUserProfileModel:
     can_change_own_password: Union[Unset, bool] = UNSET
     can_use_data_domains: Union[Unset, bool] = UNSET
     can_synchronize_to_data_catalog: Union[Unset, bool] = UNSET
+    can_use_ai_anomaly_detection: Union[Unset, bool] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -134,6 +137,7 @@ class DqoUserProfileModel:
         can_change_own_password = self.can_change_own_password
         can_use_data_domains = self.can_use_data_domains
         can_synchronize_to_data_catalog = self.can_synchronize_to_data_catalog
+        can_use_ai_anomaly_detection = self.can_use_ai_anomaly_detection
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -206,6 +210,8 @@ class DqoUserProfileModel:
             field_dict["can_synchronize_to_data_catalog"] = (
                 can_synchronize_to_data_catalog
             )
+        if can_use_ai_anomaly_detection is not UNSET:
+            field_dict["can_use_ai_anomaly_detection"] = can_use_ai_anomaly_detection
 
         return field_dict
 
@@ -285,6 +291,8 @@ class DqoUserProfileModel:
             "can_synchronize_to_data_catalog", UNSET
         )
 
+        can_use_ai_anomaly_detection = d.pop("can_use_ai_anomaly_detection", UNSET)
+
         dqo_user_profile_model = cls(
             user=user,
             tenant=tenant,
@@ -317,6 +325,7 @@ class DqoUserProfileModel:
             can_change_own_password=can_change_own_password,
             can_use_data_domains=can_use_data_domains,
             can_synchronize_to_data_catalog=can_synchronize_to_data_catalog,
+            can_use_ai_anomaly_detection=can_use_ai_anomaly_detection,
         )
 
         dqo_user_profile_model.additional_properties = d

@@ -49,6 +49,27 @@ The templates used to generate the SQL query for each data source supported by D
     ORDER BY time_period
     {%- endif -%}
     ```
+=== "ClickHouse"
+
+    ```sql+jinja
+    {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+    SELECT
+        0.0 AS actual_value
+        {{- lib.render_time_dimension_projection('tab_scan') }}
+    FROM
+        (
+            SELECT
+                *
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{ lib.render_where_clause() }}
+            LIMIT 1
+        ) AS tab_scan
+    {% if lib.time_series is not none -%}
+    GROUP BY time_period
+    ORDER BY time_period
+    {%- endif -%}
+    ```
 === "Databricks"
 
     ```sql+jinja
@@ -118,6 +139,27 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/hana.sql.jinja2' as lib with context -%}
     SELECT
         CAST(0.0 AS DOUBLE) AS actual_value
+        {{- lib.render_time_dimension_projection('tab_scan') }}
+    FROM
+        (
+            SELECT
+                *
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{ lib.render_where_clause() }}
+            LIMIT 1
+        ) AS tab_scan
+    {% if lib.time_series is not none -%}
+    GROUP BY time_period
+    ORDER BY time_period
+    {%- endif -%}
+    ```
+=== "MariaDB"
+
+    ```sql+jinja
+    {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+    SELECT
+        0.0 AS actual_value
         {{- lib.render_time_dimension_projection('tab_scan') }}
     FROM
         (
@@ -220,6 +262,27 @@ The templates used to generate the SQL query for each data source supported by D
     ORDER BY time_period
     {%- endif -%}
     ```
+=== "QuestDB"
+
+    ```sql+jinja
+    {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+    SELECT
+        0.0 AS actual_value
+        {{- lib.render_time_dimension_projection('tab_scan') }}
+    FROM
+        (
+            SELECT
+                *
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{ lib.render_where_clause() }}
+            LIMIT 1
+        ) AS tab_scan
+    {% if lib.time_series is not none -%}
+    GROUP BY time_period
+    ORDER BY time_period
+    {%- endif -%}
+    ```
 === "Redshift"
 
     ```sql+jinja
@@ -296,6 +359,27 @@ The templates used to generate the SQL query for each data source supported by D
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{ lib.render_where_clause() }}
         ) AS tab_scan
+    ```
+=== "Teradata"
+
+    ```sql+jinja
+    {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
+    SELECT
+        0.0 AS actual_value
+        {{- lib.render_time_dimension_projection('tab_scan') }}
+    FROM
+        (
+            SELECT
+                *
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{ lib.render_where_clause() }}
+            QUALIFY ROW_NUMBER() OVER (ORDER BY 1) = 1
+        ) AS tab_scan
+    {% if lib.time_series is not none -%}
+    GROUP BY time_period
+    ORDER BY time_period
+    {%- endif -%}
     ```
 === "Trino"
 

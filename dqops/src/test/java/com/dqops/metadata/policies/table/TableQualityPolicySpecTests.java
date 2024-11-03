@@ -55,7 +55,7 @@ public class TableQualityPolicySpecTests extends BaseTest {
 
     @Test
     public void applyOnTable_whenNoDefaultChecks_thenDoesNothing() {
-        this.sut.applyOnTable(targetTable, this.dialectSettings);
+        this.sut.applyOnTable(targetTable, this.dialectSettings, null);
     }
 
     @Test
@@ -65,7 +65,7 @@ public class TableQualityPolicySpecTests extends BaseTest {
         TableVolumeProfilingChecksSpec volumeDefaults = new TableVolumeProfilingChecksSpec();
         tableDefaults.setVolume(volumeDefaults);
         volumeDefaults.setProfileRowCountAnomaly(new TableRowCountAnomalyDifferencingCheckSpec());
-        this.sut.applyOnTable(targetTable, this.dialectSettings);
+        this.sut.applyOnTable(targetTable, this.dialectSettings, null);
 
         Assertions.assertNotNull(targetTable.getProfilingChecks().getVolume().getProfileRowCountAnomaly());
     }
@@ -77,7 +77,7 @@ public class TableQualityPolicySpecTests extends BaseTest {
         TableVolumeDailyMonitoringChecksSpec volumeDefaults = new TableVolumeDailyMonitoringChecksSpec();
         tableDefaults.setVolume(volumeDefaults);
         volumeDefaults.setDailyRowCountAnomaly(new TableRowCountAnomalyDifferencingCheckSpec());
-        this.sut.applyOnTable(targetTable, this.dialectSettings);
+        this.sut.applyOnTable(targetTable, this.dialectSettings, null);
 
         Assertions.assertNotNull(targetTable.getMonitoringChecks().getDaily().getVolume().getDailyRowCountAnomaly());
     }
@@ -89,7 +89,7 @@ public class TableQualityPolicySpecTests extends BaseTest {
         TableVolumeMonthlyMonitoringChecksSpec volumeDefaults = new TableVolumeMonthlyMonitoringChecksSpec();
         tableDefaults.setVolume(volumeDefaults);
         volumeDefaults.setMonthlyRowCount(new TableRowCountCheckSpec());
-        this.sut.applyOnTable(targetTable, this.dialectSettings);
+        this.sut.applyOnTable(targetTable, this.dialectSettings, null);
 
         Assertions.assertNotNull(targetTable.getMonitoringChecks().getMonthly().getVolume().getMonthlyRowCount());
     }

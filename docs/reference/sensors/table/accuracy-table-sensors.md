@@ -56,6 +56,20 @@ The templates used to generate the SQL query for each data source supported by D
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     ```
+=== "ClickHouse"
+
+    ```sql+jinja
+    {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        (SELECT
+            COUNT(*)
+        FROM {{ lib.render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        COUNT(*) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
 === "Databricks"
 
     ```sql+jinja
@@ -101,6 +115,28 @@ The templates used to generate the SQL query for each data source supported by D
         (SELECT
             COUNT(*)
         FROM {{ lib.render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        COUNT(*) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
+=== "MariaDB"
+
+    ```sql+jinja
+    {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+       {{ lib.quote_identifier(lib.macro_project_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            COUNT(*)
+        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
         ) AS expected_value,
         COUNT(*) AS actual_value
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -169,6 +205,28 @@ The templates used to generate the SQL query for each data source supported by D
         FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
         ) AS expected_value,
         COUNT(*) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
+=== "QuestDB"
+
+    ```sql+jinja
+    {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            COUNT()
+        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        COUNT() AS actual_value
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     ```
@@ -257,6 +315,28 @@ The templates used to generate the SQL query for each data source supported by D
         FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
         ) AS expected_value,
         COUNT_BIG(*) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
+=== "Teradata"
+
+    ```sql+jinja
+    {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            COUNT(*)
+        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        COUNT(*) AS actual_value
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     ```

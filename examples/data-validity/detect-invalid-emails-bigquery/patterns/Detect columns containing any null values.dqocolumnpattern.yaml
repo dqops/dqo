@@ -1,0 +1,20 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/ColumnLevelDataQualityPolicyYaml-schema.json
+apiVersion: dqo/v1
+kind: default_column_checks
+spec:
+  priority: 1000
+  disabled: true
+  description: Detects columns containing any null values using both monitoring checks
+    and daily partitioned checks.
+  monitoring_checks:
+    daily:
+      nulls:
+        daily_nulls_count:
+          warning:
+            max_count: 0
+  partitioned_checks:
+    daily:
+      nulls:
+        daily_partition_nulls_count:
+          warning:
+            max_count: 0

@@ -45,10 +45,10 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
      * @return Array of data grouping dimension level columns that were found.
      */
     @Override
-    public TextColumn[] extractAndNormalizeDataGroupingDimensionColumns(Table resultsTable,
-                                                                        DataGroupingConfigurationSpec dataGroupingConfigurationSpec,
-                                                                        int rowCount) {
-        TextColumn[] dataGroupingLevelColumns = new TextColumn[9]; // we support 9 data stream levels, we store them at their respective indexes shifted 1 value down (0-based array)
+    public StringColumn[] extractAndNormalizeDataGroupingDimensionColumns(Table resultsTable,
+                                                                          DataGroupingConfigurationSpec dataGroupingConfigurationSpec,
+                                                                          int rowCount) {
+        StringColumn[] dataGroupingLevelColumns = new StringColumn[9]; // we support 9 data stream levels, we store them at their respective indexes shifted 1 value down (0-based array)
 
         for (int levelIndex = 1; levelIndex <= 9; levelIndex++) {
             String dataGroupingLevelColumnName = CommonColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + levelIndex;
@@ -57,7 +57,7 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
                 if (dataGroupingConfigurationSpec != null && dataGroupingConfigurationSpec.getLevel(levelIndex) != null) {
                     DataGroupingDimensionSpec dataGroupingDimensionSpec = dataGroupingConfigurationSpec.getLevel(levelIndex);
                     if (dataGroupingDimensionSpec.getSource() == DataGroupingDimensionSource.tag && !Strings.isNullOrEmpty(dataGroupingDimensionSpec.getTag())) {
-                        TextColumn tagColumn = TextColumn.create(dataGroupingLevelColumnName, rowCount);
+                        StringColumn tagColumn = StringColumn.create(dataGroupingLevelColumnName, rowCount);
                         tagColumn.setMissingTo(dataGroupingDimensionSpec.getTag());
                         dataGroupingLevelColumns[levelIndex - 1] = tagColumn;
                     }
@@ -65,14 +65,14 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
                 continue;
             }
 
-            if (existingDataGroupingLevelColumn instanceof TextColumn) {
-                TextColumn stringExistingGroupingLevelCol = (TextColumn)existingDataGroupingLevelColumn;
+            if (existingDataGroupingLevelColumn instanceof StringColumn) {
+                StringColumn stringExistingGroupingLevelCol = (StringColumn)existingDataGroupingLevelColumn;
                 dataGroupingLevelColumns[levelIndex - 1] = stringExistingGroupingLevelCol.copy();
                 continue;
             }
 
             @SuppressWarnings("SpellCheckingInspection")
-            TextColumn stringifiedColumn = TableColumnUtility.convertToTextColumn(existingDataGroupingLevelColumn);
+            StringColumn stringifiedColumn = TableColumnUtility.convertToStringColumn(existingDataGroupingLevelColumn);
             dataGroupingLevelColumns[levelIndex - 1] = stringifiedColumn;
         }
 
@@ -87,7 +87,7 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
      * @return Data grouping hash.
      */
     @Override
-    public long calculateDataGroupingHashForRow(TextColumn[] dataGroupingLevelColumns,
+    public long calculateDataGroupingHashForRow(StringColumn[] dataGroupingLevelColumns,
                                                 DataGroupingConfigurationSpec dataGroupingConfigurationSpec,
                                                 int rowIndex) {
         if (dataGroupingConfigurationSpec == null || dataGroupingConfigurationSpec.countConfiguredLevels() == 0) {
@@ -113,7 +113,7 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
                 continue;
             }
 
-            TextColumn dataGroupingLevelColumn = dataGroupingLevelColumns[i];
+            StringColumn dataGroupingLevelColumn = dataGroupingLevelColumns[i];
             if (dataGroupingLevelColumn == null) {
                 continue;
             }
@@ -142,7 +142,7 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
      * @return Data stream hash column.
      */
     @Override
-    public LongColumn createDataGroupingHashColumn(TextColumn[] dataGroupingLevelColumns,
+    public LongColumn createDataGroupingHashColumn(StringColumn[] dataGroupingLevelColumns,
                                                    DataGroupingConfigurationSpec dataGroupingConfigurationSpec,
                                                    int rowCount) {
         LongColumn dataGroupingHashColumn = LongColumn.create(CommonColumnNames.DATA_GROUP_HASH_COLUMN_NAME, rowCount);
@@ -162,11 +162,11 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
      * @return Data stream name.
      */
     @Override
-    public String calculateDataGroupingNameForRow(TextColumn[] dataGroupingLevelColumns, int rowIndex) {
+    public String calculateDataGroupingNameForRow(StringColumn[] dataGroupingLevelColumns, int rowIndex) {
         int notNullColumnCount = 0;
         int lastNotNullColumn = -1;
         for (int i = 0; i < dataGroupingLevelColumns.length ; i++) {
-            TextColumn dataStreamLevelColumn = dataGroupingLevelColumns[i];
+            StringColumn dataStreamLevelColumn = dataGroupingLevelColumns[i];
             if (dataStreamLevelColumn != null) {
                 notNullColumnCount++;
                 lastNotNullColumn = i;
@@ -184,7 +184,7 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
                 sb.append(" / ");
             }
 
-            TextColumn levelColumn = dataGroupingLevelColumns[i];
+            StringColumn levelColumn = dataGroupingLevelColumns[i];
             if (levelColumn == null) {
                 continue;
             }
@@ -206,8 +206,8 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
      * @return Data grouping name column.
      */
     @Override
-    public TextColumn createDataGroupingNameColumn(TextColumn[] dataGroupingLevelColumns, int rowCount) {
-        TextColumn dataGroupingNameColumn = TextColumn.create(CommonColumnNames.DATA_GROUP_NAME_COLUMN_NAME, rowCount);
+    public StringColumn createDataGroupingNameColumn(StringColumn[] dataGroupingLevelColumns, int rowCount) {
+        StringColumn dataGroupingNameColumn = StringColumn.create(CommonColumnNames.DATA_GROUP_NAME_COLUMN_NAME, rowCount);
 
         for (int i = 0; i < rowCount ; i++) {
             String dataGroupingName = calculateDataGroupingNameForRow(dataGroupingLevelColumns, i);
@@ -227,12 +227,12 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
      * @return Time series uuid column, filled with values.
      */
     @Override
-    public TextColumn createTimeSeriesUuidColumn(LongColumn sortedDataGroupingHashColumn,
-                                                 long checkOrProfilerHash,
-                                                 long tableHash,
-                                                 long columnHash,
-                                                 int rowCount) {
-        TextColumn timeSeriesUuidColumn = TextColumn.create(CommonColumnNames.TIME_SERIES_ID_COLUMN_NAME, rowCount);
+    public StringColumn createTimeSeriesUuidColumn(LongColumn sortedDataGroupingHashColumn,
+                                                   long checkOrProfilerHash,
+                                                   long tableHash,
+                                                   long columnHash,
+                                                   int rowCount) {
+        StringColumn timeSeriesUuidColumn = StringColumn.create(CommonColumnNames.TIME_SERIES_ID_COLUMN_NAME, rowCount);
 
         for (int i = 0; i < rowCount ; i++) {
             Long dataGroupingHash = sortedDataGroupingHashColumn.get(i);
@@ -255,13 +255,13 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
      * @return ID column, filled with values.
      */
     @Override
-    public TextColumn createStatisticsRowIdColumn(LongColumn sortedDataGroupingHashColumn,
-                                                  DateTimeColumn sortedTimePeriodColumn,
-                                                  long checkHash,
-                                                  long tableHash,
-                                                  long columnHash,
-                                                  int rowCount) {
-        TextColumn idColumn = TextColumn.create(CommonColumnNames.ID_COLUMN_NAME, rowCount);
+    public StringColumn createSensorReadoutRowIdColumn(LongColumn sortedDataGroupingHashColumn,
+                                                       DateTimeColumn sortedTimePeriodColumn,
+                                                       long checkHash,
+                                                       long tableHash,
+                                                       long columnHash,
+                                                       int rowCount) {
+        StringColumn idColumn = StringColumn.create(CommonColumnNames.ID_COLUMN_NAME, rowCount);
 
         for (int i = 0; i < rowCount ; i++) {
             Long dataGroupingHash = sortedDataGroupingHashColumn.get(i);
@@ -287,13 +287,13 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
      * @return ID column, filled with values.
      */
     @Override
-    public TextColumn createErrorRowIdColumn(LongColumn sortedDataGroupingHashColumn,
-                                             TextColumn errorMessageColumn,
-                                             long checkHash,
-                                             long tableHash,
-                                             long columnHash,
-                                             int rowCount) {
-        TextColumn idColumn = TextColumn.create(CommonColumnNames.ID_COLUMN_NAME, rowCount);
+    public StringColumn createErrorRowIdColumn(LongColumn sortedDataGroupingHashColumn,
+                                               StringColumn errorMessageColumn,
+                                               long checkHash,
+                                               long tableHash,
+                                               long columnHash,
+                                               int rowCount) {
+        StringColumn idColumn = StringColumn.create(CommonColumnNames.ID_COLUMN_NAME, rowCount);
 
         for (int i = 0; i < rowCount ; i++) {
             Long dataGroupingHash = sortedDataGroupingHashColumn.get(i);
@@ -320,14 +320,14 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
      * @return ID column, filled with values.
      */
     @Override
-    public TextColumn createStatisticsRowIdColumn(LongColumn sortedDataGroupingHashColumn,
-                                                  InstantColumn sortedTimePeriodColumn,
-                                                  IntColumn sampleIndexColumn,
-                                                  long collectorHash,
-                                                  long tableHash,
-                                                  long columnHash,
-                                                  int rowCount) {
-        TextColumn idColumn = TextColumn.create(CommonColumnNames.ID_COLUMN_NAME, rowCount);
+    public StringColumn createStatisticsRowIdColumn(LongColumn sortedDataGroupingHashColumn,
+                                                    InstantColumn sortedTimePeriodColumn,
+                                                    IntColumn sampleIndexColumn,
+                                                    long collectorHash,
+                                                    long tableHash,
+                                                    long columnHash,
+                                                    int rowCount) {
+        StringColumn idColumn = StringColumn.create(CommonColumnNames.ID_COLUMN_NAME, rowCount);
         Map<UUID, Integer> idsGenerated = new LinkedHashMap<>();
 
         for (int i = 0; i < rowCount ; i++) {
@@ -370,14 +370,14 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
      * @return ID column, filled with values.
      */
     @Override
-    public TextColumn createErrorSampleRowIdColumn(LongColumn sortedDataGroupingHashColumn,
-                                                   DateTimeColumn collectedAtColumn,
-                                                   IntColumn sampleIndexColumn,
-                                                   long collectorHash,
-                                                   long tableHash,
-                                                   long columnHash,
-                                                   int rowCount) {
-        TextColumn idColumn = TextColumn.create(CommonColumnNames.ID_COLUMN_NAME, rowCount);
+    public StringColumn createErrorSampleRowIdColumn(LongColumn sortedDataGroupingHashColumn,
+                                                     DateTimeColumn collectedAtColumn,
+                                                     IntColumn sampleIndexColumn,
+                                                     long collectorHash,
+                                                     long tableHash,
+                                                     long columnHash,
+                                                     int rowCount) {
+        StringColumn idColumn = StringColumn.create(CommonColumnNames.ID_COLUMN_NAME, rowCount);
         Map<UUID, Integer> idsGenerated = new LinkedHashMap<>();
 
         for (int i = 0; i < rowCount ; i++) {

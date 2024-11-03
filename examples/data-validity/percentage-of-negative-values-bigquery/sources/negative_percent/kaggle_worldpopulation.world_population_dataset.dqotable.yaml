@@ -39,11 +39,7 @@ spec:
           numeric:
             daily_negative_values_percent:
               warning:
-                max_percent: 45.0
-              error:
-                max_percent: 55.0
-              fatal:
-                max_percent: 60.0
+                max_percent: 50.0
     Fert__Rate:
       type_snapshot:
         column_type: STRING

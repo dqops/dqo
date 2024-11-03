@@ -27,7 +27,7 @@
 	</parent>
 	<groupId>com.dqops</groupId>
 	<artifactId>dqo-dqops</artifactId>
-    <version>1.9.0</version>  <!-- DQOps Version, do not touch (changed automatically) -->
+    <version>1.10.0</version>  <!-- DQOps Version, do not touch (changed automatically) -->
 	<packaging>jar</packaging>
 	<name>dqo-dqops</name>
 	<description>DQOps Data Quality Operations Center</description>
@@ -36,7 +36,7 @@
 		<tablesaw.version>0.43.1</tablesaw.version>
 		<license.licenseName>apache_v2</license.licenseName>
 		<npm.build.script>build</npm.build.script>
-		<duckdb.version>1.1.1</duckdb.version>
+		<duckdb.version>1.1.2</duckdb.version>
 	</properties>
 
 	<licenses>
@@ -474,6 +474,12 @@
 			<groupId>org.keycloak</groupId>
 			<artifactId>keycloak-admin-client</artifactId>
 			<version>26.0.0</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.jboss.logging</groupId>
+					<artifactId>commons-logging-jboss-logging</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<!-- JDBC driver dependencies, make sure that they are the same as those in the lib/pom.xml file, because they are distributed in a separate folder -->
@@ -481,21 +487,21 @@
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 		</dependency>
-<!--		<dependency>-->
-<!--			<groupId>org.mariadb.jdbc</groupId>-->
-<!--			<artifactId>mariadb-java-client</artifactId>-->
-<!--			<scope>provided</scope>-->
-<!--			<exclusions>-->
-<!--				<exclusion>-->
-<!--					<groupId>org.slf4j</groupId>-->
-<!--					<artifactId>slf4j-api</artifactId>-->
-<!--				</exclusion>-->
-<!--				<exclusion>-->
-<!--					<groupId>org.slf4j</groupId>-->
-<!--					<artifactId>jcl-over-slf4j</artifactId>-->
-<!--				</exclusion>-->
-<!--			</exclusions>-->
-<!--		</dependency>-->
+		<dependency>
+			<groupId>org.mariadb.jdbc</groupId>
+			<artifactId>mariadb-java-client</artifactId>
+			<version>3.4.1</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>jcl-over-slf4j</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
@@ -745,6 +751,23 @@
 		<dependency>
 			<groupId>org.testcontainers</groupId>
 			<artifactId>db2</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>mariadb</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>clickhouse</artifactId>
+			<version>1.20.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>questdb</artifactId>
+			<version>1.20.2</version>
 			<scope>test</scope>
 		</dependency>
     </dependencies>
@@ -1458,6 +1481,16 @@
 					<groupId>com.ibm.db2</groupId>
 					<artifactId>jcc</artifactId>
 					<version>11.5.9.0</version>
+				</dependency>
+				<dependency>
+					<groupId>com.clickhouse</groupId>
+					<artifactId>clickhouse-jdbc</artifactId>
+					<version>0.6.5</version>
+				</dependency>
+				<dependency>
+					<groupId>com.teradata.jdbc</groupId>
+					<artifactId>terajdbc</artifactId>
+					<version>20.00.00.34</version>
 				</dependency>
 			</dependencies>
 		</profile>

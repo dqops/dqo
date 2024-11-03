@@ -27,6 +27,7 @@ import tech.tablesaw.api.Table;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.Arrays;
 
 @SpringBootTest
@@ -66,7 +67,8 @@ public class HistoricDataPointTimeSeriesCollectorTests extends BaseTest {
 
         for(int i = 0; i < 14; i++) {
             Assertions.assertEquals(106.0 + i, dataPoints[i].getSensorReadout());
-            Assertions.assertEquals(LocalDateTime.of(2022, 1, i + 6, 0, 0, 0), dataPoints[i].getLocalDatetime());
+            Assertions.assertEquals(LocalDateTime.of(2022, 1, i + 6, 0, 0, 0),
+                    LocalDateTime.ofEpochSecond(dataPoints[i].getLocalDatetimeEpoch(), 0, ZoneOffset.UTC));
             Assertions.assertEquals(-(14 - i), dataPoints[i].getBackPeriodsIndex());
         }
     }
@@ -93,7 +95,8 @@ public class HistoricDataPointTimeSeriesCollectorTests extends BaseTest {
             }
             else {
                 Assertions.assertEquals(106.0 + i, dataPoints[i].getSensorReadout(), "At index: " + i);
-                Assertions.assertEquals(LocalDateTime.of(2022, 1, i + 6, 0, 0, 0), dataPoints[i].getLocalDatetime());
+                Assertions.assertEquals(LocalDateTime.of(2022, 1, i + 6, 0, 0, 0),
+                        LocalDateTime.ofEpochSecond(dataPoints[i].getLocalDatetimeEpoch(), 0, ZoneOffset.UTC));
                 Assertions.assertEquals(-(14 - i), dataPoints[i].getBackPeriodsIndex());
             }
         }
@@ -119,7 +122,8 @@ public class HistoricDataPointTimeSeriesCollectorTests extends BaseTest {
 
         for(int i = 10; i < 14; i++) {
             Assertions.assertEquals(106.0 + i, dataPoints[i].getSensorReadout());
-            Assertions.assertEquals(LocalDateTime.of(2022, 1, i + 6, 0, 0, 0), dataPoints[i].getLocalDatetime());
+            Assertions.assertEquals(LocalDateTime.of(2022, 1, i + 6, 0, 0, 0),
+                    LocalDateTime.ofEpochSecond(dataPoints[i].getLocalDatetimeEpoch(), 0, ZoneOffset.UTC));
             Assertions.assertEquals(-(14 - i), dataPoints[i].getBackPeriodsIndex());
         }
     }
@@ -153,7 +157,8 @@ public class HistoricDataPointTimeSeriesCollectorTests extends BaseTest {
 
         for(int i = 4; i < 14; i++) {
             Assertions.assertEquals(101.0 + i - 4, dataPoints[i].getSensorReadout());
-            Assertions.assertEquals(LocalDateTime.of(2022, 1, i - 4 + 1, 0, 0, 0), dataPoints[i].getLocalDatetime());
+            Assertions.assertEquals(LocalDateTime.of(2022, 1, i - 4 + 1, 0, 0, 0),
+                    LocalDateTime.ofEpochSecond(dataPoints[i].getLocalDatetimeEpoch(), 0, ZoneOffset.UTC));
             Assertions.assertEquals(-(14 - i), dataPoints[i].getBackPeriodsIndex());
         }
     }
@@ -174,7 +179,8 @@ public class HistoricDataPointTimeSeriesCollectorTests extends BaseTest {
 
         for(int i = 1; i < 14; i++) {
             Assertions.assertEquals(101.0 + i + 5, dataPoints[i].getSensorReadout());
-            Assertions.assertEquals(LocalDateTime.of(2022, 1, i + 5 + 1, 0, 0, 0), dataPoints[i].getLocalDatetime());
+            Assertions.assertEquals(LocalDateTime.of(2022, 1, i + 5 + 1, 0, 0, 0),
+                    LocalDateTime.ofEpochSecond(dataPoints[i].getLocalDatetimeEpoch(), 0, ZoneOffset.UTC));
             Assertions.assertEquals(-(14 - i), dataPoints[i].getBackPeriodsIndex());
         }
     }

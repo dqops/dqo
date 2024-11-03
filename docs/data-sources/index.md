@@ -84,9 +84,9 @@ DQOps supports the following data sources.
     <p>Azure Synapse Analytics</p>
   </a>
 
-  <a href="bigquery/" class="four-divs-element">
-    <img src="https://dqops.com/docs/images/data-sources/bigquery.svg">
-    <p>Google BigQuery</p>
+  <a href="clickhouse/" class="four-divs-element">
+    <img src="https://dqops.com/docs/images/data-sources/clickhouse.svg">
+    <p>ClickHouse</p>
   </a>
 
   <a href="mysql/" class="four-divs-element">
@@ -119,7 +119,12 @@ DQOps supports the following data sources.
     <p>Databricks</p>
   </a>
 
-  <a href="Db2/" class="four-divs-element">
+  <a href="bigquery/" class="four-divs-element">
+    <img src="https://dqops.com/docs/images/data-sources/bigquery.svg">
+    <p>Google BigQuery</p>
+  </a>
+
+  <a href="db2/" class="four-divs-element">
     <img src="https://dqops.com/docs/images/data-sources/ibm-db2.svg">
     <p>IBM Db2</p>
   </a>
@@ -145,17 +150,17 @@ DQOps supports the following data sources.
   </a>
 
   <a href="mysql/" class="four-divs-element">
-    <img src="https://dqops.com/docs/images/data-sources/maria-db.svg">
+    <img src="https://dqops.com/docs/images/data-sources/maria-db2.svg">
     <p>MariaDB</p>
   </a>
 
   <a href="sql-server/" class="four-divs-element">
-    <img src="https://dqops.com/docs/images/data-sources/mssql-server.svg">
+    <img src="https://dqops.com/docs/images/data-sources/sql-server.svg">
     <p>Microsoft SQL Server</p>
   </a>
 
   <a href="mysql/" class="four-divs-element">
-    <img src="https://dqops.com/docs/images/data-sources/mysql.svg">
+    <img src="https://dqops.com/docs/images/data-sources/mysql2.svg">
     <p>MySQL</p>
   </a>
 
@@ -165,7 +170,7 @@ DQOps supports the following data sources.
   </a>
 
   <a href="mysql/" class="four-divs-element">
-    <img src="https://dqops.com/docs/images/data-sources/percona-server.svg">
+    <img src="https://dqops.com/docs/images/data-sources/percona-server2.svg">
     <p>Percona Server for MySQL</p>
   </a>
 
@@ -184,8 +189,13 @@ DQOps supports the following data sources.
     <p>Presto</p>
   </a>
 
+  <a href="QuestDB/" class="four-divs-element">
+    <img src="https://dqops.com/docs/images/data-sources/questdb.svg">
+    <p>QuestDb</p>
+  </a>
+
   <a href="hana/" class="four-divs-element">
-    <img src="https://dqops.com/docs/images/data-sources/sap-hana.svg">
+    <img src="https://dqops.com/docs/images/data-sources/sap-hana2.svg">
     <p>SAP HANA</p>
   </a>
 
@@ -202,6 +212,16 @@ DQOps supports the following data sources.
   <a href="spark/" class="four-divs-element">
     <img src="https://dqops.com/docs/images/data-sources/spark.svg">
     <p>Spark</p>
+  </a>
+
+  <a href="teradata/" class="four-divs-element">
+    <img src="https://dqops.com/docs/images/data-sources/teradata.svg">
+    <p>Teradata</p>
+  </a>
+
+  <a href="timescale/" class="four-divs-element">
+    <img src="https://dqops.com/docs/images/data-sources/timescale.svg">
+    <p>Timescale</p>
   </a>
 
   <a href="trino/" class="four-divs-element">

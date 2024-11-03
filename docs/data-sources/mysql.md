@@ -1,8 +1,8 @@
 ---
-title: How to activate data observability for MySQL
+title: How to set up data quality monitoring and data observability for MySQL
 ---
-# How to activate data observability for MySQL
-Read this guide to learn how to connect DQOps to MySQL from the UI, command-line interface, or directly in YAML files, and activate monitoring.
+# How to set up data quality monitoring and data observability for MySQL
+Data observability and data monitoring for MySQL. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
 
 ## Overview
 
@@ -42,13 +42,13 @@ After navigating to the MySQL connection settings, you will need to fill in its 
 |---------------------------|------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Connection name           |                                          | The name of the connection that will be created in DQO. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters. |
 | Parallel jobs limit       |                                          | A limit on the number of jobs that can run simultaneously. Leave empty to disable the limit.                                                                                                                                            |
-| Engine Type               | mysql_engine_type                        | MySQL engine type. Supports also a ${MYSQL_ENGINE} configuration with a custom environment variable.                                                                                                                                    |
-| Host                      | host                                     | MySQL host name. Supports also a ${MYSQL_HOST} configuration with a custom environment variable.                                                                                                                                        |
-| Port                      | port                                     | MySQL port name. The default port is 3306 Supports also a ${MYSQL_PORT} configuration with a custom environment variable.                                                                                                               |
-| Database                  | database                                 | MySQL database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                           |
-| User name                 | user                                     | MySQL user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                               |
-| Password                  | password                                 | MySQL database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                       |
-| sslmode                   | ssl_mode                                 | MySQL connection sslmode parameter. [See the MySQL documentation for more information about using sslMode parameter.](https://dev.mysql.com/doc/connector-j/8.1/en/connector-j-connp-props-security.html#cj-conn-prop_sslMode)          |
+| Engine Type               | `mysql_engine_type`                        | MySQL engine type. Supports also a ${MYSQL_ENGINE} configuration with a custom environment variable.                                                                                                                                    |
+| Host                      | `host`                                     | MySQL host name. Supports also a ${MYSQL_HOST} configuration with a custom environment variable.                                                                                                                                        |
+| Port                      | `port`                                     | MySQL port name. The default port is 3306 Supports also a ${MYSQL_PORT} configuration with a custom environment variable.                                                                                                               |
+| Database                  | `database`                                 | MySQL database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                           |
+| User name                 | `user`                                     | MySQL user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                               |
+| Password                  | `password`                                 | MySQL database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                       |
+| sslmode                   | `ssl_mode`                                 | MySQL connection sslmode parameter. [See the MySQL documentation for more information about using sslMode parameter.](https://dev.mysql.com/doc/connector-j/8.1/en/connector-j-connp-props-security.html#cj-conn-prop_sslMode)          |
 | JDBC connection property  |                                          | Optional setting. DQOps supports using JDBC driver to access MySQL. [JDBC Concepts.](https://dev.mysql.com/doc/connector-j/8.0/en/connector-j-usagenotes-basic.html).                                                                   |
     
 DQOps allows you to dynamically replace properties in connection settings with environment variables. To use it, simply
@@ -93,8 +93,8 @@ and profiling data by running default data profiling checks. Simply click on the
 
 !!! info "Automatically activated checks"
 
-    Once new tables are imported, DQOps automatically activates [profiling and monitoring checks](../dqo-concepts/definition-of-data-quality-checks/index.md).
-    These checks include row count, table availability, and checks detecting schema changes. The profiling checks are scheduled 
+    Once new tables are imported, DQOps automatically activates [profiling and monitoring checks](../dqo-concepts/definition-of-data-quality-checks/index.md) which are which are pre-enabled by [data quality policies](../dqo-concepts/data-observability.md#automatic-activation-of-checks).
+    These checks detect volume anomalies, data freshness anomalies, empty tables, table availability, schema changes, anomalies in the count of distinct values, and null percent anomalies. The profiling checks are scheduled 
     to run at 1:00 a.m. on the 1st day of every month, and the monitoring checks are scheduled to run daily at 12:00 p.m.
     
     [**Profiling checks**](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md) are designed to assess
@@ -119,18 +119,24 @@ Fill in the data you will be asked for.
 Connection name (--name): connection1
 Database provider type (--provider): 
  [ 1] bigquery
- [ 2] databricks
- [ 3] mysql
- [ 4] oracle
- [ 5] postgresql
- [ 6] duckdb
- [ 7] presto
- [ 8] redshift
- [ 9] snowflake
- [10] spark
- [11] sqlserver
- [12] trino
-Please enter one of the [] values: 3
+ [ 2] clickhouse
+ [ 3] databricks
+ [ 4] db2
+ [ 5] duckdb
+ [ 6] hana
+ [ 7] mariadb
+ [ 8] mysql
+ [ 9] oracle
+ [10] postgresql
+ [11] presto
+ [12] questdb
+ [13] redshift
+ [14] snowflake
+ [15] spark
+ [16] sqlserver
+ [17] teradata
+ [18] trino
+Please enter one of the [] values: 8
 MySQL engine type (--mysql-engine):
  [ 1] mysql
  [ 2] singlestoredb

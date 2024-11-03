@@ -24,6 +24,7 @@ import { ReactComponent as ChevronDownSvg } from './svg/chevron-down.svg';
 import { ReactComponent as ChevronLeftSvg } from './svg/chevron-left.svg';
 import { ReactComponent as ChevronRightSvg } from './svg/chevron-right.svg';
 import { ReactComponent as ChevronUpSvg } from './svg/chevron-up.svg';
+import { ReactComponent as ClickHouseSvg } from './svg/clickhouse.svg';
 import { ReactComponent as ClockOffSvg } from './svg/clock-off.svg';
 import { ReactComponent as ClockSvg } from './svg/clock.svg';
 import { ReactComponent as ClosedFolderSvg } from './svg/close-folder.svg';
@@ -43,7 +44,6 @@ import { ReactComponent as DataSourcesSvg } from './svg/data_sources.svg';
 import { ReactComponent as DataSourcesWhite } from './svg/data_sources_white.svg';
 import { ReactComponent as DatabaseSvg } from './svg/database.svg';
 import { ReactComponent as DatabricksSvg } from './svg/databricks.svg';
-import { ReactComponent as Db2Svg } from './svg/ibm-db2.svg';
 import { ReactComponent as DefinitionsPoliciesSvg } from './svg/definitions-policies.svg';
 import { ReactComponent as DefinitionsRulesSvg } from './svg/definitions-rules.svg';
 import { ReactComponent as DefinitionsSensorsSvg } from './svg/definitions-sensors.svg';
@@ -63,9 +63,11 @@ import { ReactComponent as FolderSvg } from './svg/folder.svg';
 import { ReactComponent as Funnel } from './svg/funnel.svg';
 import { ReactComponent as GoogleSvg } from './svg/google.svg';
 import { ReactComponent as GridSvg } from './svg/grid.svg';
+import { ReactComponent as GroupingSvg } from './svg/grouping.svg';
 import { ReactComponent as HelpCircleSvg } from './svg/help-circle.svg';
 import { ReactComponent as HourglassSvg } from './svg/hourglass.svg';
 import { ReactComponent as HouseSvg } from './svg/house.svg';
+import { ReactComponent as Db2Svg } from './svg/ibm-db2.svg';
 import { ReactComponent as IcebergBigSvg } from './svg/iceberg-logo-big.svg';
 import { ReactComponent as IcebergSvg } from './svg/iceberg-logo.svg';
 import { ReactComponent as IncidentsSvg } from './svg/incidents.svg';
@@ -93,6 +95,8 @@ import { ReactComponent as PlaySvg } from './svg/play.svg';
 import { ReactComponent as PostgreSQLSvg } from './svg/postgresql.svg';
 import { ReactComponent as PrestoSvg } from './svg/presto.svg';
 import { ReactComponent as ProfilingSvg } from './svg/profiling.svg';
+import { ReactComponent as QuestDbSvg } from './svg/questdb.svg';
+import { ReactComponent as TeradataSvg } from './svg/teradata.svg';
 import { ReactComponent as QuestionmarkSvg } from './svg/question-mark.svg';
 import { ReactComponent as QueueSvg } from './svg/queue.svg';
 import { ReactComponent as RectangleListSvg } from './svg/rectangle-list.svg';
@@ -115,6 +119,7 @@ import { ReactComponent as SuccessSvg } from './svg/success.svg';
 import { ReactComponent as SyncSvg } from './svg/sync.svg';
 import { ReactComponent as TableCheckSvg } from './svg/table-check.svg';
 import { ReactComponent as TableSvg } from './svg/table.svg';
+import { ReactComponent as TimescaleSvg } from './svg/timescale.svg';
 import { ReactComponent as TrinoSvg } from './svg/trino.svg';
 import { ReactComponent as UploadSvg } from './svg/upload.svg';
 import { ReactComponent as UserAddSvg } from './svg/user-add.svg';
@@ -124,6 +129,7 @@ import { ReactComponent as UserSvg } from './svg/user.svg';
 import { ReactComponent as UsersSvg } from './svg/users.svg';
 import { ReactComponent as WaitingSvg } from './svg/waiting.svg';
 import { ReactComponent as WarningGenericSvg } from './svg/warning-generic.svg';
+import { ReactComponent as WarningOrange } from './svg/warning-orange.svg';
 import { ReactComponent as WarningSvg } from './svg/warning.svg';
 import { ReactComponent as WebhooksSvg } from './svg/webhooks.svg';
 import { ReactComponent as XCircleSvg } from './svg/x-circle.svg';
@@ -149,7 +155,7 @@ const iconsMap: any = {
   'user-circle': UserCircleSvg,
   users: UsersSvg,
   'x-circle': XCircleSvg,
-  bigquery: BigQuerySvg,
+  googlebigquery: BigQuerySvg,
   'bigquery-big': BigQueryBigSvg,
   snowflake: SnowflakeSvg,
   info: InfoSvg,
@@ -263,7 +269,13 @@ const iconsMap: any = {
   definitions_policies: DefinitionsPoliciesSvg,
   domain: DomainSvg,
   password_change: PasswordChange,
-  ibm_db2: Db2Svg
+  ibmdb2: Db2Svg,
+  grouping: GroupingSvg,
+  clickhouse: ClickHouseSvg,
+  warning_orange: WarningOrange,
+  timescale: TimescaleSvg,
+  questdb: QuestDbSvg,
+  teradata: TeradataSvg,
 };
 
 interface SvgIconProps {

@@ -17,6 +17,7 @@ interface IScheduleViewProps {
   schedule?: CronScheduleSpec;
   handleChange: (obj: any) => void;
   isDefault?: boolean;
+  importTables?: boolean;
 }
 type TMinutes = { minutes: number; day: number; hour: number };
 
@@ -26,12 +27,14 @@ const defaultHourForDaily = 8;
 const ScheduleView = ({
   schedule,
   handleChange,
-  isDefault
+  isDefault,
+  importTables
 }: IScheduleViewProps) => {
   const [mode, setMode] = useState('');
   const [minutes, setMinutes] = useState<TMinutes>(defaultMinutes);
   const [hour, setHour] = useState(defaultHourForDaily);
-  const { table, column }: { table: string; column: string } = useDecodedParams();
+  const { table, column }: { table: string; column: string } =
+    useDecodedParams();
 
   const { isCronScheduled, userProfile } = useSelector(
     (state: IRootState) => state.job || {}
@@ -193,6 +196,9 @@ const ScheduleView = ({
     }
     if (table && column) {
       return 'Use scheduling configuration from the connection or table levels';
+    }
+    if (importTables) {
+      return 'Do not schedule table auto import from this connection';
     }
     return 'Scheduled check execution not configured for all tables from this connection';
   };

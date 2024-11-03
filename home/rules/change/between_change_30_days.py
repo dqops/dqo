@@ -32,8 +32,8 @@ class BetweenChange30DaysRuleParametersSpec:
 
 
 class HistoricDataPoint:
-    timestamp_utc: datetime
-    local_datetime: datetime
+    timestamp_utc_epoch: int
+    local_datetime_epoch: int
     back_periods_index: int
     sensor_readout: float
     expected_value: float
@@ -48,7 +48,7 @@ class RuleTimeWindowSettingsSpec:
 class RuleExecutionRunParameters:
     actual_value: float
     parameters: BetweenChange30DaysRuleParametersSpec
-    time_period_local: datetime
+    time_period_local_epoch: int
     previous_readouts: Sequence[HistoricDataPoint]
     time_window: RuleTimeWindowSettingsSpec
 

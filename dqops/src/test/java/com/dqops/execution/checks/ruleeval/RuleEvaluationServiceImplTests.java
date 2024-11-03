@@ -22,6 +22,7 @@ import com.dqops.checks.table.profiling.TableVolumeProfilingChecksSpec;
 import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import com.dqops.connectors.ProviderDialectSettingsObjectMother;
 import com.dqops.connectors.ProviderType;
+import com.dqops.core.configuration.DqoPythonConfigurationProperties;
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.principal.UserDomainIdentityObjectMother;
 import com.dqops.data.normalization.CommonTableNormalizationServiceImpl;
@@ -38,6 +39,7 @@ import com.dqops.execution.checks.progress.CheckExecutionProgressListenerStub;
 import com.dqops.execution.rules.DataQualityRuleRunner;
 import com.dqops.execution.rules.DataQualityRuleRunnerObjectMother;
 import com.dqops.execution.rules.finder.RuleDefinitionFindServiceImpl;
+import com.dqops.execution.rules.training.RuleModelTrainingQueueImpl;
 import com.dqops.execution.sensors.SensorExecutionResult;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.TimeWindowFilterParameters;
@@ -56,8 +58,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import tech.tablesaw.api.DoubleColumn;
+import tech.tablesaw.api.StringColumn;
 import tech.tablesaw.api.Table;
-import tech.tablesaw.api.TextColumn;
 
 @SpringBootTest
 public class RuleEvaluationServiceImplTests extends BaseTest {
@@ -77,7 +79,8 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
     void setUp() {
         DataQualityRuleRunner ruleRunner = DataQualityRuleRunnerObjectMother.getDefault();
         DefaultTimeZoneProvider defaultTimeZoneProvider = DefaultTimeZoneProviderObjectMother.getDefaultTimeZoneProvider();
-        this.sut = new RuleEvaluationServiceImpl(ruleRunner, new RuleDefinitionFindServiceImpl(), defaultTimeZoneProvider);
+        this.sut = new RuleEvaluationServiceImpl(ruleRunner, new RuleDefinitionFindServiceImpl(), defaultTimeZoneProvider,
+                new RuleModelTrainingQueueImpl(), new DqoPythonConfigurationProperties());
 		this.normalizeService = new SensorReadoutsNormalizationServiceImpl(new CommonTableNormalizationServiceImpl(), defaultTimeZoneProvider);
 		this.table = Table.create("results");
 		executionContext = CheckExecutionContextObjectMother.createWithInMemoryUserContext();
@@ -105,6 +108,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
                 null,
                 1000,
                 true,
+                null,
                 null);
 		progressListener = new CheckExecutionProgressListenerStub();
 		sensorExecutionResult = new SensorExecutionResult(this.sensorExecutionRunParameters, this.table);
@@ -432,7 +436,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
     @Test
     void evaluateRules_whenTwoRowsForDifferentTimeSeriesAndOneRule_thenReturnsTwoResults() {
 		this.table.addColumns(DoubleColumn.create("actual_value", 11.0, 10.0));
-		this.table.addColumns(TextColumn.create("grouping_level_1", "one", "two"));
+		this.table.addColumns(StringColumn.create("grouping_level_1", "one", "two"));
         this.tableSpec.getDefaultDataGroupingConfiguration()
                 .setLevel1(DataStreamLevelSpecObjectMother.createColumnMapping("length_string"));
         this.sensorExecutionRunParameters.setTimeSeries(TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForPartitionedCheck(

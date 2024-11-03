@@ -23,6 +23,7 @@ import com.dqops.metadata.search.pattern.SearchPattern;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.utils.datetime.LocalDateTimeTruncateUtility;
 import com.dqops.utils.exceptions.DqoRuntimeException;
+import com.dqops.utils.tables.TableCopyUtility;
 import com.google.common.collect.Lists;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import jakarta.validation.constraints.NotNull;
@@ -36,6 +37,7 @@ import java.time.LocalTime;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 /**
@@ -51,9 +53,12 @@ public class TableDataSnapshot {
     private final TableDataChanges tableDataChanges;
     private final Table newResultsTable;
     private final String[] columnNames;
-    private Map<ParquetPartitionId, LoadedMonthlyPartition> loadedMonthlyPartitions;
-    private LocalDate firstLoadedMonth;
-    private LocalDate lastLoadedMonth;
+    private final String[] allColumnNames;
+    private ConcurrentHashMap<ParquetPartitionId, LoadedMonthlyPartition> loadedMonthlyPartitions;
+    private volatile LocalDate firstLoadedMonth;
+    private volatile LocalDate lastLoadedMonth;
+    private Table cachedAllData;
+    private final Object allDataLock = new Object();
 
     /**
      * Creates a new writable snapshot of data for a single parquet table with results for one connection and physical table.
@@ -78,6 +83,7 @@ public class TableDataSnapshot {
         this.newResultsTable = newResults;
         this.tableDataChanges = new TableDataChanges(newResults);
         this.columnNames = null;
+        this.allColumnNames = newResults != null ? newResults.columnNames().toArray(String[]::new) : null;
     }
 
     /**
@@ -106,6 +112,7 @@ public class TableDataSnapshot {
         this.newResultsTable = newResultsTemplate;
         this.tableDataChanges = null;
         this.columnNames = columnNames;
+        this.allColumnNames = null;
     }
 
     /**
@@ -186,22 +193,29 @@ public class TableDataSnapshot {
      * The order of partitions whose data is appended to the result table is not ensured.
      * @return Table with the data from all partitions or null when no partitions were loaded or all loaded partitions were empty.
      */
+    @Deprecated()
     public Table getAllData() {
-        Table allData = null;
-        if (loadedMonthlyPartitions != null) {
-            for (LoadedMonthlyPartition loadedMonthlyPartition : this.loadedMonthlyPartitions.values()) {
-                if (loadedMonthlyPartition.getData() != null) {
-                    if (allData == null) {
-                        allData = loadedMonthlyPartition.getData().copy();
-                    }
-                    else {
-                        allData.append(loadedMonthlyPartition.getData());
+        synchronized (this.allDataLock) {
+            if (this.cachedAllData != null) {
+                return this.cachedAllData;
+            }
+
+            Table allData = null;
+            if (this.loadedMonthlyPartitions != null) {
+                for (LoadedMonthlyPartition loadedMonthlyPartition : this.loadedMonthlyPartitions.values()) {
+                    if (loadedMonthlyPartition.getData() != null) {
+                        if (allData == null) {
+                            allData = TableCopyUtility.fastTableCopy(loadedMonthlyPartition.getData());
+                        } else {
+                            allData.append(loadedMonthlyPartition.getData());
+                        }
                     }
                 }
             }
-        }
 
-        return allData;
+            this.cachedAllData = allData;
+            return allData;
+        }
     }
 
     /**
@@ -246,11 +260,11 @@ public class TableDataSnapshot {
                 LoadedMonthlyPartition newLoadedPartition = new LoadedMonthlyPartition(
                         loadedMonthlyPartition.getPartitionId(), loadedMonthlyPartition.getLastModified(), newTableWithLimitedColumns);
 
-                loadedPartitions.put(loadedMonthlyPartition.getPartitionId(),newLoadedPartition);
+                loadedPartitions.put(loadedMonthlyPartition.getPartitionId(), newLoadedPartition);
             }
         }
         else {
-            for (LoadedMonthlyPartition loadedMonthlyPartition : loadedPartitions.values()) {
+            for (LoadedMonthlyPartition loadedMonthlyPartition : new ArrayList<>(loadedPartitions.values())) {
                 Table partitionData = loadedMonthlyPartition.getData();
                 if (partitionData == null) {
                     continue;
@@ -260,25 +274,29 @@ public class TableDataSnapshot {
                 Table updatedPartitionData = null;
 
                 Table emptyTableSample = this.getTableDataChanges().getNewOrChangedRows();
-                for (Column<?> expectedColumn : emptyTableSample.columns()) {
-                    if (!columnNamesInPartitionData.contains(expectedColumn.name())) {
+                for (String columnName : this.allColumnNames) {
+                    if (!columnNamesInPartitionData.contains(columnName)) {
+                        Column<?> expectedColumn = emptyTableSample.column(columnName);
                         Column<?> emptyColumnToAdd = expectedColumn.emptyCopy(partitionData.rowCount());
                         if (updatedPartitionData == null) {
-                            updatedPartitionData = partitionData.copy();
+                            updatedPartitionData = TableCopyUtility.fastTableCopy(partitionData);
                         }
                         updatedPartitionData.addColumns(emptyColumnToAdd);
                     }
                 }
 
-                if ((updatedPartitionData == null && partitionData.columnCount() != emptyTableSample.columnCount()) ||
-                        (updatedPartitionData != null && updatedPartitionData.columnCount() != emptyTableSample.columnCount())) {
+                if ((updatedPartitionData == null && partitionData.columnCount() != this.allColumnNames.length) ||
+                        (updatedPartitionData != null && updatedPartitionData.columnCount() != this.allColumnNames.length)) {
                     // remove old columns
-                    Set<String> expectedColumnNames = new LinkedHashSet<>(emptyTableSample.columnNames());
+                    Set<String> expectedColumnNames = new LinkedHashSet<>();
+                    for (String columnName : this.allColumnNames) {
+                        expectedColumnNames.add(columnName);
+                    }
 
                     for (Column<?> existingColumn : new ArrayList<>(partitionData.columns())) {
                         if (!expectedColumnNames.contains(existingColumn.name())) {
                             if (updatedPartitionData == null) {
-                                updatedPartitionData = partitionData.copy();
+                                updatedPartitionData = TableCopyUtility.fastTableCopy(partitionData);
                             }
                             updatedPartitionData.removeColumns(existingColumn);
                         }
@@ -286,7 +304,9 @@ public class TableDataSnapshot {
                 }
 
                 if (updatedPartitionData != null) {
-                    loadedMonthlyPartition.setData(updatedPartitionData); // this is not perfect, because we are updating a table in the cache
+                    LoadedMonthlyPartition newLoadedPartition = new LoadedMonthlyPartition(
+                            loadedMonthlyPartition.getPartitionId(), loadedMonthlyPartition.getLastModified(), updatedPartitionData);
+                    loadedPartitions.put(loadedMonthlyPartition.getPartitionId(), newLoadedPartition);
                 }
             }
         }
@@ -302,9 +322,7 @@ public class TableDataSnapshot {
             return this.columnNames;
         }
 
-        Table emptyTableSample = this.getTableDataChanges().getNewOrChangedRows();
-        String[] columnNamesInFullTable = emptyTableSample.columnNames().toArray(String[]::new);
-        return columnNamesInFullTable;
+        return this.allColumnNames;
     }
 
     /**
@@ -342,10 +360,13 @@ public class TableDataSnapshot {
                     this.connectionName, this.tableName, this.firstLoadedMonth, this.lastLoadedMonth, this.storageSettings, this.getExpectedColumns(), this.userIdentity);
             if (loadedPartitions != null) {
                 if (this.loadedMonthlyPartitions == null) {
-                    this.loadedMonthlyPartitions = new LinkedHashMap<>();
+                    this.loadedMonthlyPartitions = new ConcurrentHashMap<>();
                 }
                 updateSchemaForLoadedPartitions(loadedPartitions);
                 this.loadedMonthlyPartitions.putAll(loadedPartitions);
+                synchronized (this.allDataLock) {
+                    this.cachedAllData = null;
+                }
                 return true;
             }
         }
@@ -361,6 +382,9 @@ public class TableDataSnapshot {
             if (loadedEarlierPartitions != null) {
                 updateSchemaForLoadedPartitions(loadedEarlierPartitions);
                 this.loadedMonthlyPartitions.putAll(loadedEarlierPartitions);
+                synchronized (this.allDataLock) {
+                    this.cachedAllData = null;
+                }
                 anyMonthLoaded = true;
             }
         }
@@ -376,6 +400,9 @@ public class TableDataSnapshot {
             if (loadedLaterPartitions != null) {
                 updateSchemaForLoadedPartitions(loadedLaterPartitions);
                 this.loadedMonthlyPartitions.putAll(loadedLaterPartitions);
+                synchronized (this.allDataLock) {
+                    this.cachedAllData = null;
+                }
                 anyMonthLoaded = true;
             }
         }
@@ -415,10 +442,13 @@ public class TableDataSnapshot {
                         .orElse(null);
 
                 if (this.loadedMonthlyPartitions == null) {
-                    this.loadedMonthlyPartitions = new LinkedHashMap<>();
+                    this.loadedMonthlyPartitions = new ConcurrentHashMap<>();
                 }
                 updateSchemaForLoadedPartitions(loadedPartitions);
                 this.loadedMonthlyPartitions.putAll(loadedPartitions);
+                synchronized (this.allDataLock) {
+                    this.cachedAllData = null;
+                }
             }
         }
         else {
@@ -438,6 +468,9 @@ public class TableDataSnapshot {
                 this.lastLoadedMonth = lastLoadedLaterMonth.orElse(this.lastLoadedMonth);
                 updateSchemaForLoadedPartitions(loadedLaterPartitions);
                 this.loadedMonthlyPartitions.putAll(loadedLaterPartitions);
+                synchronized (this.allDataLock) {
+                    this.cachedAllData = null;
+                }
             }
             currentlyLoadedPartitions = loadedMonthlyPartitions == null ? 0 : loadedMonthlyPartitions.size();
             needToLoad = maxRecentMonthsToLoad - currentlyLoadedPartitions;
@@ -461,6 +494,9 @@ public class TableDataSnapshot {
                 this.firstLoadedMonth = lastLoadedEarlierMonth.orElse(this.firstLoadedMonth);
                 updateSchemaForLoadedPartitions(loadedEarlierPartitions);
                 this.loadedMonthlyPartitions.putAll(loadedEarlierPartitions);
+                synchronized (this.allDataLock) {
+                    this.cachedAllData = null;
+                }
             }
         }
     }
@@ -506,7 +542,8 @@ public class TableDataSnapshot {
         LocalDate startMonth = startDate == null ? null : LocalDateTimeTruncateUtility.truncateMonth(startDate);
         LocalDate endMonth = endDate == null ? null : LocalDateTimeTruncateUtility.truncateMonth(endDate);
         this.ensureNRecentMonthsAreLoaded(startMonth, endMonth, Integer.MAX_VALUE);
-        if (this.loadedMonthlyPartitions == null) {
+        if (this.loadedMonthlyPartitions == null || this.loadedMonthlyPartitions.isEmpty() ||
+                this.firstLoadedMonth == null || this.lastLoadedMonth == null) {
             // No data to delete
             return;
         }
@@ -565,14 +602,14 @@ public class TableDataSnapshot {
                             SearchPattern searchPattern = SearchPattern.create(true, colValue);
                             toDelete = toDelete.and(
                                     monthlyPartitionTable
-                                            .textColumn(colName)
+                                            .stringColumn(colName)
                                             .eval(searchPattern::match));
                         }
 
                     } else {
                         toDelete = toDelete.and(
                                 monthlyPartitionTable
-                                        .textColumn(colName)
+                                        .stringColumn(colName)
                                         .isIn(colValues));
                     }
                 }
@@ -582,7 +619,7 @@ public class TableDataSnapshot {
             }
 
             List<String> idsToDeleteInPartition = monthlyPartitionTable
-                    .textColumn(this.storageSettings.getIdStringColumnName())
+                    .stringColumn(this.storageSettings.getIdStringColumnName())
                     .where(toDelete).asList();
             idsToDelete.addAll(idsToDeleteInPartition);
         }
@@ -604,7 +641,7 @@ public class TableDataSnapshot {
             }
 
             int deletedRows = loadedPartitionTable
-                    .textColumn(CommonColumnNames.ID_COLUMN_NAME)
+                    .stringColumn(CommonColumnNames.ID_COLUMN_NAME)
                     .isIn(deletedIds)
                     .size();
             boolean allRowsDeleted = deletedRows == loadedPartitionTable.rowCount();
@@ -694,9 +731,9 @@ public class TableDataSnapshot {
             return;
         }
 
-        TextColumn idColumn = this.getTableDataChanges()
+        StringColumn idColumn = this.getTableDataChanges()
                 .getNewOrChangedRows()
-                .textColumn(this.storageSettings.getIdStringColumnName());
+                .stringColumn(this.storageSettings.getIdStringColumnName());
         Set<String> foundIds = new LinkedHashSet<>();
         IntArrayList duplicateRowIndexesToDrop = null;
 

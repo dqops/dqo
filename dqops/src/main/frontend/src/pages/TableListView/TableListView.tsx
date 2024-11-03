@@ -4,6 +4,7 @@ import { LabelModel, TableListModel } from '../../api';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
 import SvgIcon from '../../components/SvgIcon';
+import Switch from '../../components/Switch';
 import TableList from '../../components/TableList';
 import { LabelsApiClient, SearchApiClient } from '../../services/apiClient';
 import { CheckTypes } from '../../shared/routes';
@@ -28,6 +29,7 @@ export default function TableListView() {
     connection: string;
     schema: string;
   } = useDecodedParams();
+  const [showDimensions, setShowDimensions] = useState<boolean>(true);
   const [tables, setTables] = useState<TTableWithSchema[]>([]);
   const [filters, setFilters] = useState<any>({ page: 1, pageSize: 50 });
   const [searchFilters, setSearchFilters] = useState<TSearchFilters>({});
@@ -147,7 +149,7 @@ export default function TableListView() {
       );
     }
   };
-
+  console.log(tables);
   return (
     <div className="bg-white">
       <div className="flex items-center bg-white w-full relative">
@@ -210,6 +212,13 @@ export default function TableListView() {
             )
           }
         />
+        <div className="flex items-center mt-5 gap-x-2">
+          <div className="text-sm font-bold">Dimensions</div>
+          <Switch
+            checked={showDimensions}
+            onChange={(c) => setShowDimensions(c)}
+          />
+        </div>
       </div>
       <TableList
         tables={tables}
@@ -218,6 +227,7 @@ export default function TableListView() {
         labels={labels}
         onChangeLabels={onChangeLabels}
         loading={loading}
+        showDimensions={showDimensions}
       />
     </div>
   );

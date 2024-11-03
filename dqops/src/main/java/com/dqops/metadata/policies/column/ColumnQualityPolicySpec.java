@@ -47,6 +47,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.base.Strings;
 import lombok.EqualsAndHashCode;
 
+import java.time.Instant;
 import java.util.Objects;
 
 /**
@@ -301,26 +302,30 @@ public class ColumnQualityPolicySpec extends AbstractSpec implements InvalidYaml
      * @param tableSpec Parent table specification.
      * @param targetColumn Target column.
      * @param dialectSettings Dialect settings, to decide if the checks are applicable.
+     * @param policyLastModified The timestamp when the policy file was last modified.
      */
-    public void applyOnColumn(TableSpec tableSpec, ColumnSpec targetColumn, ProviderDialectSettings dialectSettings) {
+    public void applyOnColumn(TableSpec tableSpec,
+                              ColumnSpec targetColumn,
+                              ProviderDialectSettings dialectSettings,
+                              Instant policyLastModified) {
         DataTypeCategory dataTypeCategory = dialectSettings.detectColumnType(targetColumn.getTypeSnapshot());
 
         if (this.profilingChecks != null && !this.profilingChecks.isDefault()) {
             AbstractRootChecksContainerSpec tableProfilingContainer = targetColumn.getColumnCheckRootContainer(CheckType.profiling, null, true);
-            this.profilingChecks.copyChecksToContainer(tableProfilingContainer, tableSpec, dataTypeCategory, dialectSettings);
+            this.profilingChecks.copyChecksToContainer(tableProfilingContainer, tableSpec, dataTypeCategory, dialectSettings, policyLastModified);
         }
 
         if (this.monitoringChecks != null) {
             AbstractRootChecksContainerSpec defaultChecksDaily = this.monitoringChecks.getDaily();
             if (defaultChecksDaily != null && !defaultChecksDaily.isDefault()) {
                 AbstractRootChecksContainerSpec targetContainer = targetColumn.getColumnCheckRootContainer(CheckType.monitoring, CheckTimeScale.daily, true);
-                defaultChecksDaily.copyChecksToContainer(targetContainer, tableSpec, dataTypeCategory, dialectSettings);
+                defaultChecksDaily.copyChecksToContainer(targetContainer, tableSpec, dataTypeCategory, dialectSettings, policyLastModified);
             }
 
             AbstractRootChecksContainerSpec defaultChecksMonthly = this.monitoringChecks.getMonthly();
             if (defaultChecksMonthly != null && !defaultChecksMonthly.isDefault()) {
                 AbstractRootChecksContainerSpec targetContainer = targetColumn.getColumnCheckRootContainer(CheckType.monitoring, CheckTimeScale.monthly, true);
-                defaultChecksMonthly.copyChecksToContainer(targetContainer, tableSpec, dataTypeCategory, dialectSettings);
+                defaultChecksMonthly.copyChecksToContainer(targetContainer, tableSpec, dataTypeCategory, dialectSettings, policyLastModified);
             }
         }
 
@@ -329,13 +334,13 @@ public class ColumnQualityPolicySpec extends AbstractSpec implements InvalidYaml
             AbstractRootChecksContainerSpec defaultChecksDaily = this.partitionedChecks.getDaily();
             if (defaultChecksDaily != null && !defaultChecksDaily.isDefault()) {
                 AbstractRootChecksContainerSpec targetContainer = targetColumn.getColumnCheckRootContainer(CheckType.partitioned, CheckTimeScale.daily, true);
-                defaultChecksDaily.copyChecksToContainer(targetContainer, tableSpec, dataTypeCategory, dialectSettings);
+                defaultChecksDaily.copyChecksToContainer(targetContainer, tableSpec, dataTypeCategory, dialectSettings, policyLastModified);
             }
 
             AbstractRootChecksContainerSpec defaultChecksMonthly = this.partitionedChecks.getMonthly();
             if (defaultChecksMonthly != null && !defaultChecksMonthly.isDefault()) {
                 AbstractRootChecksContainerSpec targetContainer = targetColumn.getColumnCheckRootContainer(CheckType.partitioned, CheckTimeScale.monthly, true);
-                defaultChecksMonthly.copyChecksToContainer(targetContainer, tableSpec, dataTypeCategory, dialectSettings);
+                defaultChecksMonthly.copyChecksToContainer(targetContainer, tableSpec, dataTypeCategory, dialectSettings, policyLastModified);
             }
         }
     }

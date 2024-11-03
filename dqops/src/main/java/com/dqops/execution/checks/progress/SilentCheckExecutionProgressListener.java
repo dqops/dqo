@@ -28,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class SilentCheckExecutionProgressListener implements CheckExecutionProgressListener {
     protected final TerminalWriter terminalWriter;
     protected final JsonSerializer jsonSerializer;
+    protected final Object lock = new Object();
     private boolean showSummary = true;
 
     /**

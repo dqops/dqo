@@ -15,6 +15,7 @@ Model that describes a table that is similar to a reference table. Similar table
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |<span class="no-wrap-code">`difference`</span>|Table similarity score. Lower numbers indicate higher similarity.|*integer*|
+|<span class="no-wrap-code">`similarity_pct`</span>|A similarity score as a percentage. A value 100.0 means that the tables are probably equal.|*double*|
 |<span class="no-wrap-code">`connection_name`</span>|Connection name|*string*|
 |<span class="no-wrap-code">`schema_name`</span>|Schema name|*string*|
 |<span class="no-wrap-code">`table_name`</span>|Table name|*string*|

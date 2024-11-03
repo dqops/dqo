@@ -16,6 +16,9 @@
 package com.dqops.execution.checks.ruleeval;
 
 import com.dqops.checks.AbstractCheckSpec;
+import com.dqops.core.configuration.DqoPythonConfigurationProperties;
+import com.dqops.core.filesystem.BuiltInFolderNames;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.readouts.factory.SensorReadoutsColumnNames;
 import com.dqops.data.readouts.normalization.SensorReadoutsNormalizedResult;
 import com.dqops.data.readouts.snapshot.SensorReadoutsSnapshot;
@@ -26,8 +29,10 @@ import com.dqops.execution.checks.progress.CheckExecutionProgressListener;
 import com.dqops.execution.rules.*;
 import com.dqops.execution.rules.finder.RuleDefinitionFindResult;
 import com.dqops.execution.rules.finder.RuleDefinitionFindService;
+import com.dqops.execution.rules.training.RuleModelTrainingQueue;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.metadata.comparisons.TableComparisonConfigurationSpec;
+import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.timeseries.TimePeriodGradient;
 import com.dqops.metadata.incidents.ConnectionIncidentGroupingSpec;
 import com.dqops.metadata.incidents.EffectiveIncidentGroupingConfiguration;
@@ -37,14 +42,17 @@ import com.dqops.rules.HistoricDataPointsGrouping;
 import com.dqops.rules.RuleTimeWindowSettingsSpec;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
 import com.dqops.utils.tables.TableColumnUtility;
+import com.dqops.utils.tables.TableRowUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tech.tablesaw.api.*;
 import tech.tablesaw.table.TableSlice;
 import tech.tablesaw.table.TableSliceGroup;
 
+import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -57,19 +65,28 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
     private final DataQualityRuleRunner ruleRunner;
     private final RuleDefinitionFindService ruleDefinitionFindService;
     private final DefaultTimeZoneProvider defaultTimeZoneProvider;
+    private final RuleModelTrainingQueue ruleModelTrainingQueue;
+    private final DqoPythonConfigurationProperties dqoPythonConfigurationProperties;
 
     /**
      * Creates an instance of the rule evaluation service, given all dependencies.
      * @param ruleRunner Rule runner dependency.
      * @param ruleDefinitionFindService Rule definition find service.
+     * @param defaultTimeZoneProvider Default time zone provider.
+     * @param ruleModelTrainingQueue ML rule training queue.
+     * @param dqoPythonConfigurationProperties Python configuration parameters.
      */
     @Autowired
     public RuleEvaluationServiceImpl(DataQualityRuleRunner ruleRunner,
                                      RuleDefinitionFindService ruleDefinitionFindService,
-                                     DefaultTimeZoneProvider defaultTimeZoneProvider) {
+                                     DefaultTimeZoneProvider defaultTimeZoneProvider,
+                                     RuleModelTrainingQueue ruleModelTrainingQueue,
+                                     DqoPythonConfigurationProperties dqoPythonConfigurationProperties) {
         this.ruleRunner = ruleRunner;
         this.ruleDefinitionFindService = ruleDefinitionFindService;
         this.defaultTimeZoneProvider = defaultTimeZoneProvider;
+        this.ruleModelTrainingQueue = ruleModelTrainingQueue;
+        this.dqoPythonConfigurationProperties = dqoPythonConfigurationProperties;
     }
 
     /**
@@ -93,7 +110,8 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
         Table sensorResultsTable = normalizedSensorResults.getTable();
         TableSliceGroup dimensionTimeSeriesSlices = sensorResultsTable.splitOn(normalizedSensorResults.getDataGroupHashColumn());
         SensorReadoutsTimeSeriesMap historicReadoutsTimeSeries = sensorReadoutsSnapshot.getHistoricReadoutsTimeSeries();
-        long checkHashId = checkSpec.getHierarchyId().hashCode64();
+        HierarchyId checkSpecHierarchyId = checkSpec.getHierarchyId();
+        long checkHashId = checkSpecHierarchyId.hashCode64();
 
         DoubleColumn actualValueColumn = normalizedSensorResults.getActualValueColumn();
         DoubleColumn expectedValueColumn = normalizedSensorResults.getExpectedValueColumn();
@@ -109,12 +127,24 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
         Map<String, String> ruleConfigurationParameters = ruleFindResult != null && ruleFindResult.getRuleDefinitionSpec() != null ?
                 ruleFindResult.getRuleDefinitionSpec().getParameters() : null;
         TableComparisonConfigurationSpec tableComparisonConfiguration = sensorRunParameters.getTableComparisonConfiguration();
+        String modelPath = null;
+        boolean modelMustBeRetrained = false;
+
+        // the rule uses historic data, and can use a persistent model for prediction
+        String modelRelativePath = checkSpecHierarchyId.toModelRelativePath();
+        Path userHomePath = executionContext.getUserHomeContext().getHomeRoot().getPhysicalAbsolutePath();
+        modelPath = userHomePath != null ? userHomePath.resolve(BuiltInFolderNames.INDEX)
+                .resolve(BuiltInFolderNames.TIME_SERIES_PREDICTION_MODELS)
+                .resolve(modelRelativePath)
+                .toAbsolutePath().toString() : null;
 
         for (TableSlice dimensionTableSlice : dimensionTimeSeriesSlices) {
             Table dimensionSensorResults = dimensionTableSlice.asTable();  // results for a single dimension, the rows should be already sorted by the time period, ascending
-            LongColumn dimensionColumn = (LongColumn) TableColumnUtility.findColumn(dimensionSensorResults,
+            LongColumn dataGroupHashColumn = (LongColumn) TableColumnUtility.findColumn(dimensionSensorResults,
                     SensorReadoutsColumnNames.DATA_GROUP_HASH_COLUMN_NAME, "data_stream_hash");
-            Long timeSeriesDimensionId = dimensionColumn.get(0);
+            StringColumn dataGroupNameColumn = dimensionSensorResults.stringColumn(SensorReadoutsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+            Long timeSeriesDimensionId = dataGroupHashColumn.get(0);
+            String dataGroupName = dataGroupNameColumn.getString(0);
             SensorReadoutsTimeSeriesData historicTimeSeriesData = historicReadoutsTimeSeries.findTimeSeriesData(checkHashId, timeSeriesDimensionId);
             HistoricDataPointsGrouping historicDataPointGrouping = ruleTimeWindowSettings != null ? ruleTimeWindowSettings.getHistoricDataPointGrouping() : null;
             TimePeriodGradient timeGradient = historicDataPointGrouping != null ? historicDataPointGrouping.toTimePeriodGradient() : TimePeriodGradient.day;
@@ -145,6 +175,17 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
 
                 LocalDateTime timePeriodLocal = timePeriodColumn.get(allSensorResultsRowIndex);
                 HistoricDataPoint[] previousDataPoints = null; // combined data points from current readouts and historic sensor readouts
+
+                if (previousDataPointTimeSeriesCollectorOld != null && timePeriodLocal != null && sensorRunParameters.getCheckConfiguredAt() != null) {
+                    HistoricResultPreviousRun previousResult = previousDataPointTimeSeriesCollectorOld.getPreviousResult(timePeriodLocal);
+                    if (previousResult != null && Objects.equals(previousResult.getLastActualValue(), actualValue) &&
+                            (expectedValueFromSensor == null || Objects.equals(previousResult.getLastExpectedValue(), expectedValueFromSensor)) &&
+                            sensorRunParameters.getCheckConfiguredAt().isBefore(previousResult.getExecutedAt())) {
+                        // no data changes, we can ignore calculating the rule again
+                        continue;
+                    }
+                }
+
 
                 if (customSeverity == null) {
                     if (historicDataPointGrouping == HistoricDataPointsGrouping.last_n_readouts) {
@@ -202,7 +243,8 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                             continue;
                         }
 
-                        Double previouslyPredictedExpectedValue = previousExpectedValues.get(previousDataPoint.getLocalDatetime());
+                        LocalDateTime previousDataPointTimePeriod = LocalDateTime.ofEpochSecond(previousDataPoint.getLocalDatetimeEpoch(), 0, ZoneOffset.UTC);
+                        Double previouslyPredictedExpectedValue = previousExpectedValues.get(previousDataPointTimePeriod);
                         if (previouslyPredictedExpectedValue != null) {
                             previousDataPoint.setExpectedValue(previouslyPredictedExpectedValue);
                         }
@@ -222,8 +264,10 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
 
                 if (customSeverity == null && fatalRule != null) {
                     RuleExecutionRunParameters ruleRunParametersFatal = new RuleExecutionRunParameters(actualValue, expectedValueFromSensor,
-                            fatalRule, timePeriodLocal, previousDataPoints, ruleTimeWindowSettings, ruleConfigurationParameters);
+                            fatalRule, timePeriodLocal, dataGroupName, previousDataPoints, ruleTimeWindowSettings, ruleConfigurationParameters,
+                            modelPath, this.dqoPythonConfigurationProperties.getRuleModelUpdateMode());
                     ruleExecutionResultFatal = this.ruleRunner.executeRule(executionContext, ruleRunParametersFatal, sensorRunParameters);
+                    modelMustBeRetrained |= ruleExecutionResultFatal.isModelIsOutdated();
 
                     if (ruleExecutionResultFatal.getPassed() != null && !ruleExecutionResultFatal.getPassed()) {
                         highestSeverity = 3;
@@ -242,8 +286,10 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
 
                 if (customSeverity == null && errorRule != null) {
                     RuleExecutionRunParameters ruleRunParametersError = new RuleExecutionRunParameters(actualValue, expectedValueFromSensor,
-                            errorRule, timePeriodLocal, previousDataPoints, ruleTimeWindowSettings, ruleConfigurationParameters);
+                            errorRule, timePeriodLocal, dataGroupName, previousDataPoints, ruleTimeWindowSettings, ruleConfigurationParameters,
+                            modelPath, this.dqoPythonConfigurationProperties.getRuleModelUpdateMode());
                     ruleExecutionResultError = this.ruleRunner.executeRule(executionContext, ruleRunParametersError, sensorRunParameters);
+                    modelMustBeRetrained |= ruleExecutionResultError.isModelIsOutdated();
 
                     if (ruleExecutionResultError.getPassed() != null && highestSeverity == null && !ruleExecutionResultError.getPassed()) {
                         highestSeverity = 2;
@@ -262,8 +308,10 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
 
                 if (customSeverity == null && warningRule != null) {
                     RuleExecutionRunParameters ruleRunParametersWarning = new RuleExecutionRunParameters(actualValue, expectedValueFromSensor,
-                            warningRule, timePeriodLocal, previousDataPoints, ruleTimeWindowSettings, ruleConfigurationParameters);
+                            warningRule, timePeriodLocal, dataGroupName, previousDataPoints, ruleTimeWindowSettings, ruleConfigurationParameters,
+                            modelPath, this.dqoPythonConfigurationProperties.getRuleModelUpdateMode());
                     ruleExecutionResultWarning = this.ruleRunner.executeRule(executionContext, ruleRunParametersWarning, sensorRunParameters);
+                    modelMustBeRetrained |= ruleExecutionResultWarning.isModelIsOutdated();
 
                     if (ruleExecutionResultWarning.getPassed() != null && highestSeverity == null && !ruleExecutionResultWarning.getPassed()) {
                         highestSeverity = 1;
@@ -304,8 +352,7 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                     highestSeverity = 0; // pass
                 }
 
-                Row targetRuleResultRow = result.appendRow();
-                int targetRowIndex = targetRuleResultRow.getRowNumber();
+                int targetRowIndex = TableRowUtility.appendRow(result.getRuleResultsTable());
                 result.copyRowFrom(targetRowIndex, sensorResultsTable, allSensorResultsRowIndex);
                 result.getIncludeInKpiColumn().set(targetRowIndex, hasRuleResult && !checkSpec.isExcludeFromKpi());
                 result.getIncludeInSlaColumn().set(targetRowIndex, hasRuleResult && checkSpec.isIncludeInSla());
@@ -373,6 +420,11 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                         expectedValueColumn.set(allSensorResultsRowIndex, expectedValue);  // write back an expected value calculated from the sensor, will allow to use prediction better
                     }
                 }
+            }
+            
+            if (modelMustBeRetrained) {
+                UserDomainIdentity userDomainIdentity = executionContext.getUserHomeContext().getUserIdentity();
+                this.ruleModelTrainingQueue.queueModelRetraining(userDomainIdentity, checkSpecHierarchyId);
             }
         }
 

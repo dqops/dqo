@@ -97,6 +97,8 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
         Row row1 = sourceTable.appendRow();
         normalizedResults.getActualValueColumn().set(row1.getRowNumber(), 20.5);
         normalizedResults.getTimePeriodColumn().set(row1.getRowNumber(), LocalDateTime.of(2022, 3, 10, 14, 40, 55));
+        normalizedResults.getIdColumn().set(row1.getRowNumber(), "1");
+        normalizedResults.getConnectionHashColumn().set(row1.getRowNumber(), 1L);
 
         PhysicalTableName tableName = new PhysicalTableName("sch", "tab1");
         LocalDate month = LocalDate.of(2022, 3, 1);
@@ -129,6 +131,8 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
         normalizedResults.getTimePeriodColumn().set(row1.getRowNumber(), LocalDateTime.of(2022, 3, 10, 14, 40, 55));
         normalizedResults.getTableNameColumn().set(row1.getRowNumber(), "tab1");
         normalizedResults.getConnectionNameColumn().set(row1.getRowNumber(), "conn1");
+        normalizedResults.getIdColumn().set(row1.getRowNumber(), "1");
+        normalizedResults.getConnectionHashColumn().set(row1.getRowNumber(), 1L);
 
         PhysicalTableName tableName = new PhysicalTableName("sch", "tab1");
         LocalDate month = LocalDate.of(2022, 3, 1);
@@ -163,6 +167,8 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
         Row row1 = sourceTable.appendRow();
         normalizedResults.getActualValueColumn().set(row1.getRowNumber(), 20.5);
         normalizedResults.getTimePeriodColumn().set(row1.getRowNumber(), LocalDateTime.of(2022, 5, 10, 14, 40, 55));
+        normalizedResults.getIdColumn().set(row1.getRowNumber(), "1");
+        normalizedResults.getConnectionHashColumn().set(row1.getRowNumber(), 1L);
 
         PhysicalTableName tableName = new PhysicalTableName("sch", "tab1");
         LocalDate month = LocalDate.of(2022, 3, 1);
@@ -267,6 +273,7 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
         normalizedResultsNew.getActualValueColumn().set(row.getRowNumber(), actualValue);
         normalizedResultsNew.getTimePeriodColumn().set(row.getRowNumber(), timePeriod);
         normalizedResultsNew.getIdColumn().set(row.getRowNumber(), id);
+        normalizedResultsNew.getConnectionHashColumn().set(row.getRowNumber(), 1L);
         return changesTable;
     }
 
@@ -317,14 +324,20 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
         Row row1 = sourceTable.appendRow();
         normalizedResults.getActualValueColumn().set(row1.getRowNumber(), 10.5);
         normalizedResults.getTimePeriodColumn().set(row1.getRowNumber(), LocalDateTime.of(2022, 1, 10, 14, 10, 55));
+        normalizedResults.getIdColumn().set(row1.getRowNumber(), "1");
+        normalizedResults.getConnectionHashColumn().set(row1.getRowNumber(), 1L);
 
         Row row2 = sourceTable.appendRow();
         normalizedResults.getActualValueColumn().set(row2.getRowNumber(), 20.5);
         normalizedResults.getTimePeriodColumn().set(row2.getRowNumber(), LocalDateTime.of(2022, 2, 10, 14, 20, 55));
+        normalizedResults.getIdColumn().set(row2.getRowNumber(), "2");
+        normalizedResults.getConnectionHashColumn().set(row2.getRowNumber(), 1L);
 
         Row row3 = sourceTable.appendRow();
         normalizedResults.getActualValueColumn().set(row3.getRowNumber(), 30.5);
         normalizedResults.getTimePeriodColumn().set(row3.getRowNumber(), LocalDateTime.of(2022, 3, 10, 14, 30, 55));
+        normalizedResults.getIdColumn().set(row3.getRowNumber(), "3");
+        normalizedResults.getConnectionHashColumn().set(row3.getRowNumber(), 1L);
 
         PhysicalTableName tableName = new PhysicalTableName("sch", "tab1");
         LocalDate month = LocalDate.of(2022, 2, 1);
@@ -355,6 +368,7 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
         normalizedResultsCurrent.getActualValueColumn().set(row1.getRowNumber(), 10.5);
         normalizedResultsCurrent.getTimePeriodColumn().set(row1.getRowNumber(), LocalDateTime.of(2022, 1, 10, 14, 10, 55));
         normalizedResultsCurrent.getIdColumn().set(row1.getRowNumber(), "id1");
+        normalizedResultsCurrent.getConnectionHashColumn().set(row1.getRowNumber(), 1L);
 
         PhysicalTableName tableName = new PhysicalTableName("sch", "tab1");
         LocalDate month = LocalDate.of(2022, 1, 1);
@@ -374,6 +388,7 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
         normalizedResultsNew.getActualValueColumn().set(row2.getRowNumber(), 20.0);
         normalizedResultsNew.getTimePeriodColumn().set(row2.getRowNumber(), LocalDateTime.of(2022, 1, 20, 14, 10, 55));
         normalizedResultsNew.getIdColumn().set(row2.getRowNumber(), "id2");
+        normalizedResultsNew.getConnectionHashColumn().set(row2.getRowNumber(), 1L);
         this.sut.savePartition(loadedPartition, new TableDataChanges(changesTable), this.sensorReadoutsStorageSettings, this.userDomainIdentity);
 
         LoadedMonthlyPartition reloadedPartition = this.sut.loadPartition(partitionId, this.sensorReadoutsStorageSettings, null, this.userDomainIdentity);
@@ -382,8 +397,8 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
         Assertions.assertNotEquals(loadedPartition.getLastModified(), reloadedPartition.getLastModified());
 
         Assertions.assertEquals(2, reloadedPartition.getData().rowCount());
-        Assertions.assertTrue(reloadedPartition.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id1"));
-        Assertions.assertTrue(reloadedPartition.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id2"));
+        Assertions.assertTrue(reloadedPartition.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id1"));
+        Assertions.assertTrue(reloadedPartition.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id2"));
     }
 
     @Test
@@ -394,6 +409,7 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
         normalizedResultsCurrent.getActualValueColumn().set(row1.getRowNumber(), 10.5);
         normalizedResultsCurrent.getTimePeriodColumn().set(row1.getRowNumber(), LocalDateTime.of(2022, 1, 10, 14, 10, 55));
         normalizedResultsCurrent.getIdColumn().set(row1.getRowNumber(), "id1");
+        normalizedResultsCurrent.getConnectionHashColumn().set(row1.getRowNumber(), 1L);
 
         PhysicalTableName tableName = new PhysicalTableName("sch", "tab1");
         LocalDate month = LocalDate.of(2022, 1, 1);
@@ -413,6 +429,7 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
         normalizedResultsNew.getActualValueColumn().set(row2.getRowNumber(), 20.0);
         normalizedResultsNew.getTimePeriodColumn().set(row2.getRowNumber(), LocalDateTime.of(2022, 1, 20, 14, 10, 55));
         normalizedResultsNew.getIdColumn().set(row2.getRowNumber(), "id1");
+        normalizedResultsNew.getConnectionHashColumn().set(row2.getRowNumber(), 1L);
         this.sut.savePartition(loadedPartition, new TableDataChanges(changesTable), this.sensorReadoutsStorageSettings, this.userDomainIdentity);
 
         LoadedMonthlyPartition reloadedPartition = this.sut.loadPartition(partitionId, this.sensorReadoutsStorageSettings, null, this.userDomainIdentity);
@@ -421,7 +438,7 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
         Assertions.assertNotEquals(loadedPartition.getLastModified(), reloadedPartition.getLastModified());
 
         Assertions.assertEquals(1, reloadedPartition.getData().rowCount());
-        Assertions.assertTrue(reloadedPartition.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id1"));
+        Assertions.assertTrue(reloadedPartition.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id1"));
         Assertions.assertTrue(reloadedPartition.getData().doubleColumn(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME).contains(20.0));
     }
 
@@ -433,10 +450,12 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
         normalizedResultsCurrent.getActualValueColumn().set(row1.getRowNumber(), 10.5);
         normalizedResultsCurrent.getTimePeriodColumn().set(row1.getRowNumber(), LocalDateTime.of(2022, 1, 10, 14, 10, 55));
         normalizedResultsCurrent.getIdColumn().set(row1.getRowNumber(), "id1");
+        normalizedResultsCurrent.getConnectionHashColumn().set(row1.getRowNumber(), 1L);
         Row row2 = sourceTable.appendRow();
         normalizedResultsCurrent.getActualValueColumn().set(row2.getRowNumber(), 15.5);
         normalizedResultsCurrent.getTimePeriodColumn().set(row2.getRowNumber(), LocalDateTime.of(2022, 1, 10, 14, 10, 55));
         normalizedResultsCurrent.getIdColumn().set(row2.getRowNumber(), "id2");
+        normalizedResultsCurrent.getConnectionHashColumn().set(row2.getRowNumber(), 1L);
 
         PhysicalTableName tableName = new PhysicalTableName("sch", "tab1");
         LocalDate month = LocalDate.of(2022, 1, 1);
@@ -462,8 +481,8 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
         Assertions.assertNotEquals(loadedPartition.getLastModified(), reloadedPartition.getLastModified());
 
         Assertions.assertEquals(1, reloadedPartition.getData().rowCount());
-        Assertions.assertTrue(reloadedPartition.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id2"));
-        Assertions.assertFalse(reloadedPartition.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id1"));
+        Assertions.assertTrue(reloadedPartition.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id2"));
+        Assertions.assertFalse(reloadedPartition.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id1"));
         Assertions.assertTrue(reloadedPartition.getData().doubleColumn(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME).contains(15.5));
     }
 
@@ -475,10 +494,12 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
         normalizedResultsCurrent.getActualValueColumn().set(row1.getRowNumber(), 10.5);
         normalizedResultsCurrent.getTimePeriodColumn().set(row1.getRowNumber(), LocalDateTime.of(2022, 1, 10, 14, 10, 55));
         normalizedResultsCurrent.getIdColumn().set(row1.getRowNumber(), "id1");
+        normalizedResultsCurrent.getConnectionHashColumn().set(row1.getRowNumber(), 1L);
         Row row2 = sourceTable.appendRow();
         normalizedResultsCurrent.getActualValueColumn().set(row2.getRowNumber(), 15.5);
         normalizedResultsCurrent.getTimePeriodColumn().set(row2.getRowNumber(), LocalDateTime.of(2022, 1, 10, 14, 10, 55));
         normalizedResultsCurrent.getIdColumn().set(row2.getRowNumber(), "id2");
+        normalizedResultsCurrent.getConnectionHashColumn().set(row2.getRowNumber(), 1L);
 
         PhysicalTableName tableName = new PhysicalTableName("sch", "tab1");
         LocalDate month = LocalDate.of(2022, 1, 1);
@@ -512,6 +533,7 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
         normalizedResultsCurrent.getActualValueColumn().set(row1.getRowNumber(), 10.5);
         normalizedResultsCurrent.getTimePeriodColumn().set(row1.getRowNumber(), LocalDateTime.of(2022, 1, 10, 14, 10, 55));
         normalizedResultsCurrent.getIdColumn().set(row1.getRowNumber(), "id1");
+        normalizedResultsCurrent.getConnectionHashColumn().set(row1.getRowNumber(), 1L);
 
         PhysicalTableName tableName = new PhysicalTableName("sch", "tab1");
         LocalDate month = LocalDate.of(2022, 1, 1);
@@ -531,6 +553,7 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
         normalizedResultsNew1.getActualValueColumn().set(row2.getRowNumber(), 20.0);
         normalizedResultsNew1.getTimePeriodColumn().set(row2.getRowNumber(), LocalDateTime.of(2022, 1, 20, 14, 10, 55));
         normalizedResultsNew1.getIdColumn().set(row2.getRowNumber(), "id2");
+        normalizedResultsNew1.getConnectionHashColumn().set(row2.getRowNumber(), 1L);
         this.sut.savePartition(loadedPartition, new TableDataChanges(changesTable1), this.sensorReadoutsStorageSettings, this.userDomainIdentity);
 
         SensorReadoutsNormalizedResult normalizedResultsNew2 = SensorNormalizedResultObjectMother.createEmptyNormalizedResults();
@@ -539,6 +562,7 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
         normalizedResultsNew2.getActualValueColumn().set(row3.getRowNumber(), 30.0);
         normalizedResultsNew2.getTimePeriodColumn().set(row3.getRowNumber(), LocalDateTime.of(2022, 1, 20, 14, 10, 55));
         normalizedResultsNew2.getIdColumn().set(row3.getRowNumber(), "id3");
+        normalizedResultsNew2.getConnectionHashColumn().set(row3.getRowNumber(), 1L);
         this.sut.savePartition(loadedPartition, new TableDataChanges(changesTable2),
                 this.sensorReadoutsStorageSettings, this.userDomainIdentity);  // saving a new row, having an old "loadedPartition" that does not have changes from "changesTable1"
 
@@ -548,9 +572,9 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
         Assertions.assertNotEquals(loadedPartition.getLastModified(), reloadedPartition.getLastModified());
 
         Assertions.assertEquals(3, reloadedPartition.getData().rowCount());
-        Assertions.assertTrue(reloadedPartition.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id1"));
-        Assertions.assertTrue(reloadedPartition.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id2"));
-        Assertions.assertTrue(reloadedPartition.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id3"));
+        Assertions.assertTrue(reloadedPartition.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id1"));
+        Assertions.assertTrue(reloadedPartition.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id2"));
+        Assertions.assertTrue(reloadedPartition.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id3"));
         Assertions.assertTrue(reloadedPartition.getData().doubleColumn(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME).contains(20.0)); // value was not lost
     }
 }

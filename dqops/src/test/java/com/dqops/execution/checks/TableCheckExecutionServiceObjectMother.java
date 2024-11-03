@@ -21,6 +21,7 @@ import com.dqops.connectors.ConnectionProviderRegistry;
 import com.dqops.connectors.ConnectionProviderRegistryObjectMother;
 import com.dqops.core.configuration.*;
 import com.dqops.core.incidents.IncidentImportQueueServiceStub;
+import com.dqops.core.jobqueue.concurrency.ParallelJobLimitProviderStub;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.core.secrets.SecretValueProviderObjectMother;
 import com.dqops.data.checkresults.factory.CheckResultsTableFactoryImpl;
@@ -37,12 +38,15 @@ import com.dqops.data.readouts.normalization.SensorReadoutsNormalizationServiceI
 import com.dqops.data.readouts.snapshot.SensorReadoutsSnapshotFactoryImpl;
 import com.dqops.data.storage.ParquetPartitionStorageServiceImpl;
 import com.dqops.data.storage.ParquetPartitionStorageServiceObjectMother;
+import com.dqops.execution.checks.ruleeval.RuleEvaluationSchedulerProvider;
+import com.dqops.execution.checks.ruleeval.RuleEvaluationSchedulerProviderObjectMother;
 import com.dqops.execution.checks.ruleeval.RuleEvaluationServiceImpl;
 import com.dqops.execution.errorsampling.TableErrorSamplerExecutionServiceImpl;
 import com.dqops.execution.rules.DataQualityRuleRunnerImpl;
 import com.dqops.execution.rules.finder.RuleDefinitionFindService;
 import com.dqops.execution.rules.finder.RuleDefinitionFindServiceObjectMother;
 import com.dqops.execution.rules.runners.RuleRunnerFactoryObjectMother;
+import com.dqops.execution.rules.training.RuleModelTrainingQueueImpl;
 import com.dqops.execution.sensors.DataQualitySensorRunnerImpl;
 import com.dqops.execution.sensors.SensorExecutionRunParametersFactoryImpl;
 import com.dqops.execution.sensors.finder.SensorDefinitionFindService;
@@ -83,7 +87,8 @@ public class TableCheckExecutionServiceObjectMother {
 
         RuleDefinitionFindService ruleDefinitionFindService = RuleDefinitionFindServiceObjectMother.getRuleDefinitionFindService();
         DataQualityRuleRunnerImpl ruleRunner = new DataQualityRuleRunnerImpl(ruleDefinitionFindService, RuleRunnerFactoryObjectMother.createDefault());
-        RuleEvaluationServiceImpl ruleEvaluationService = new RuleEvaluationServiceImpl(ruleRunner, ruleDefinitionFindService, defaultTimeZoneProvider);
+        RuleEvaluationServiceImpl ruleEvaluationService = new RuleEvaluationServiceImpl(ruleRunner, ruleDefinitionFindService, defaultTimeZoneProvider,
+                new RuleModelTrainingQueueImpl(), new DqoPythonConfigurationProperties());
 
         ParquetPartitionStorageServiceImpl parquetPartitionStorageService =
                 ParquetPartitionStorageServiceObjectMother.create(userHomeContext);
@@ -128,7 +133,9 @@ public class TableCheckExecutionServiceObjectMother {
                 userErrorLogger,
                 defaultObservabilityConfigurationService,
                 tableErrorSamplerExecutionService,
-                DefaultTimeZoneProviderObjectMother.getDefaultTimeZoneProvider());
+                DefaultTimeZoneProviderObjectMother.getDefaultTimeZoneProvider(),
+                new ParallelJobLimitProviderStub(2),
+                RuleEvaluationSchedulerProviderObjectMother.getDefault());
 
         return tableCheckExecutionService;
     }

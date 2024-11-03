@@ -19,21 +19,25 @@ import com.dqops.connectors.ConnectionProvider;
 import com.dqops.connectors.ConnectionProviderRegistryObjectMother;
 import com.dqops.connectors.ProviderType;
 import com.dqops.connectors.bigquery.BigQueryConnectionSpecObjectMother;
+import com.dqops.connectors.clickhouse.ClickHouseConnectionSpecObjectMother;
 import com.dqops.connectors.databricks.DatabricksConnectionSpecObjectMother;
 import com.dqops.connectors.db2.Db2ConnectionSpecObjectMother;
 import com.dqops.connectors.duckdb.DuckDbTypesMappings;
 import com.dqops.connectors.duckdb.DuckdbConnectionSpecObjectMother;
 import com.dqops.connectors.hana.HanaConnectionSpecObjectMother;
+import com.dqops.connectors.mariadb.MariaDbConnectionSpecObjectMother;
 import com.dqops.connectors.mysql.MysqlConnectionSpecObjectMother;
 import com.dqops.connectors.mysql.MysqlEngineType;
 import com.dqops.connectors.mysql.SingleStoreDbConnectionSpecObjectMother;
 import com.dqops.connectors.oracle.OracleConnectionSpecObjectMother;
 import com.dqops.connectors.postgresql.PostgresqlConnectionSpecObjectMother;
 import com.dqops.connectors.presto.PrestoConnectionSpecObjectMother;
+import com.dqops.connectors.questdb.QuestDbConnectionSpecObjectMother;
 import com.dqops.connectors.redshift.RedshiftConnectionSpecObjectMother;
 import com.dqops.connectors.snowflake.SnowflakeConnectionSpecObjectMother;
 import com.dqops.connectors.spark.SparkConnectionSpecObjectMother;
 import com.dqops.connectors.sqlserver.SqlServerConnectionSpecObjectMother;
+import com.dqops.connectors.teradata.TeradataConnectionSpecObjectMother;
 import com.dqops.connectors.trino.TrinoConnectionSpecObjectMother;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProviderObjectMother;
@@ -105,6 +109,18 @@ public class SampleTableMetadataObjectMother {
             case db2:
                 return Db2ConnectionSpecObjectMother.create();
 
+            case mariadb:
+                return MariaDbConnectionSpecObjectMother.create();
+
+            case clickhouse:
+                return ClickHouseConnectionSpecObjectMother.create();
+
+            case questdb:
+                return QuestDbConnectionSpecObjectMother.create();
+
+            case teradata:
+                return TeradataConnectionSpecObjectMother.create();
+
         }
 
         Assertions.fail("Add a case statement for a target provider and define a connection spec object mother for " + providerType.name());
@@ -163,6 +179,18 @@ public class SampleTableMetadataObjectMother {
 
             case db2:
                 return Db2ConnectionSpecObjectMother.getSchemaName();
+
+            case mariadb:
+                return MariaDbConnectionSpecObjectMother.getSchemaName();
+
+            case clickhouse:
+                return ClickHouseConnectionSpecObjectMother.getSchemaName();
+
+            case questdb:
+                return QuestDbConnectionSpecObjectMother.getSchemaName();
+
+            case teradata:
+                return TeradataConnectionSpecObjectMother.getSchemaName();
         }
 
         Assertions.fail("Add a case statement for a target provider " + providerType.name());

@@ -255,7 +255,8 @@ http://localhost:8888/api/environment/profile
 		  "can_manage_and_view_shared_credentials" : false,
 		  "can_change_own_password" : false,
 		  "can_use_data_domains" : false,
-		  "can_synchronize_to_data_catalog" : false
+		  "can_synchronize_to_data_catalog" : false,
+		  "can_use_ai_anomaly_detection" : false
 		}
         ```
     
@@ -303,7 +304,8 @@ http://localhost:8888/api/environment/profile
 			can_manage_and_view_shared_credentials=False,
 			can_change_own_password=False,
 			can_use_data_domains=False,
-			can_synchronize_to_data_catalog=False
+			can_synchronize_to_data_catalog=False,
+			can_use_ai_anomaly_detection=False
 		)
         ```
     
@@ -352,7 +354,8 @@ http://localhost:8888/api/environment/profile
 			can_manage_and_view_shared_credentials=False,
 			can_change_own_password=False,
 			can_use_data_domains=False,
-			can_synchronize_to_data_catalog=False
+			can_synchronize_to_data_catalog=False,
+			can_use_ai_anomaly_detection=False
 		)
         ```
     
@@ -404,7 +407,8 @@ http://localhost:8888/api/environment/profile
 			can_manage_and_view_shared_credentials=False,
 			can_change_own_password=False,
 			can_use_data_domains=False,
-			can_synchronize_to_data_catalog=False
+			can_synchronize_to_data_catalog=False,
+			can_use_ai_anomaly_detection=False
 		)
         ```
     
@@ -456,7 +460,8 @@ http://localhost:8888/api/environment/profile
 			can_manage_and_view_shared_credentials=False,
 			can_change_own_password=False,
 			can_use_data_domains=False,
-			can_synchronize_to_data_catalog=False
+			can_synchronize_to_data_catalog=False,
+			can_use_ai_anomaly_detection=False
 		)
         ```
     

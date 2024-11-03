@@ -18,18 +18,22 @@ package com.dqops.rest.models.metadata;
 import com.dqops.checks.CheckType;
 import com.dqops.connectors.ProviderType;
 import com.dqops.connectors.bigquery.BigQueryParametersSpec;
+import com.dqops.connectors.clickhouse.ClickHouseParametersSpec;
 import com.dqops.connectors.databricks.DatabricksParametersSpec;
 import com.dqops.connectors.db2.Db2ParametersSpec;
 import com.dqops.connectors.duckdb.DuckdbParametersSpec;
 import com.dqops.connectors.hana.HanaParametersSpec;
+import com.dqops.connectors.mariadb.MariaDbParametersSpec;
 import com.dqops.connectors.mysql.MysqlParametersSpec;
 import com.dqops.connectors.oracle.OracleParametersSpec;
 import com.dqops.connectors.postgresql.PostgresqlParametersSpec;
 import com.dqops.connectors.presto.PrestoParametersSpec;
+import com.dqops.connectors.questdb.QuestDbParametersSpec;
 import com.dqops.connectors.redshift.RedshiftParametersSpec;
 import com.dqops.connectors.snowflake.SnowflakeParametersSpec;
 import com.dqops.connectors.spark.SparkParametersSpec;
 import com.dqops.connectors.sqlserver.SqlServerParametersSpec;
+import com.dqops.connectors.teradata.TeradataParametersSpec;
 import com.dqops.connectors.trino.TrinoParametersSpec;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
 import com.dqops.metadata.search.CheckSearchFilters;
@@ -160,10 +164,34 @@ public class ConnectionModel {
     private HanaParametersSpec hana;
 
     /**
-     * HANA connection parameters.
+     * DB2 connection parameters.
      */
     @JsonPropertyDescription("DB2 connection parameters.")
     private Db2ParametersSpec db2;
+
+    /**
+     * MariaDB connection parameters.
+     */
+    @JsonPropertyDescription("MariaDB connection parameters.")
+    private MariaDbParametersSpec mariadb;
+
+    /**
+     * ClickHouse connection parameters.
+     */
+    @JsonPropertyDescription("ClickHouse connection parameters.")
+    private ClickHouseParametersSpec clickhouse;
+
+    /**
+     * QuestDB connection parameters.
+     */
+    @JsonPropertyDescription("QuestDB connection parameters.")
+    private QuestDbParametersSpec questdb;
+
+    /**
+     * Teradata connection parameters.
+     */
+    @JsonPropertyDescription("Teradata connection parameters.")
+    private TeradataParametersSpec teradata;
 
     /**
      * Configured parameters for the "check run" job that should be pushed to the job queue in order to run all checks within this connection.
@@ -272,6 +300,10 @@ public class ConnectionModel {
             setDatabricks(connectionSpec.getDatabricks());
             setHana(connectionSpec.getHana());
             setDb2(connectionSpec.getDb2());
+            setMariadb(connectionSpec.getMariadb());
+            setClickhouse(connectionSpec.getClickhouse());
+            setQuestdb(connectionSpec.getQuestdb());
+            setTeradata(connectionSpec.getTeradata());
             setCanEdit(isEditor);
             setCanRunChecks(isOperator);
             setCanCollectStatistics(isOperator);
@@ -345,6 +377,10 @@ public class ConnectionModel {
         targetConnectionSpec.setDatabricks(this.getDatabricks());
         targetConnectionSpec.setHana(this.getHana());
         targetConnectionSpec.setDb2(this.getDb2());
+        targetConnectionSpec.setMariadb(this.getMariadb());
+        targetConnectionSpec.setClickhouse(this.getClickhouse());
+        targetConnectionSpec.setQuestdb(this.getQuestdb());
+        targetConnectionSpec.setTeradata(this.getTeradata());
         targetConnectionSpec.setAdvancedProperties(this.getAdvancedProperties());
     }
 

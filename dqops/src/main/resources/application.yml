@@ -75,6 +75,8 @@ dqo:
     python-script-timeout-seconds: 120
     use-host-python: false
     enable-debugging: false
+    debug-mode: silent
+    rule-model-update-mode: never
   user:
     home: .
     has-local-home: true
@@ -148,7 +150,7 @@ dqo:
   sensor:
     limits:
       sensor-readout-limit: 1000
-      sensor-readout-limit-partitioned: 7000
+      sensor-readout-limit-partitioned: 100000
       fail-on-sensor-readout-limit-exceeded: true
       max-merged-queries: 100
   statistics:
@@ -198,6 +200,8 @@ dqo:
   cli:
     terminal:
       width: 150
+  duckdb:
+    memory-limit: 4GB
   ui:
     application-name: "DQOps Data Quality Operations Center"
     home-page:

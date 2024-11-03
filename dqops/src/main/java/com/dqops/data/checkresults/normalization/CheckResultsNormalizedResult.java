@@ -27,10 +27,10 @@ import tech.tablesaw.api.*;
 public class CheckResultsNormalizedResult extends SensorReadoutsNormalizedResult {
     private final IntColumn severityColumn;
     private final LongColumn incidentHashColumn;
-    private final TextColumn referenceConnectionColumn;
-    private final TextColumn referenceSchemaColumn;
-    private final TextColumn referenceTableColumn;
-    private final TextColumn referenceColumnColumn;
+    private final StringColumn referenceConnectionColumn;
+    private final StringColumn referenceSchemaColumn;
+    private final StringColumn referenceTableColumn;
+    private final StringColumn referenceColumnColumn;
     private final BooleanColumn includeInKpiColumn;
     private final BooleanColumn includeInSlaColumn;
     private final DoubleColumn fatalLowerBoundColumn;
@@ -57,10 +57,10 @@ public class CheckResultsNormalizedResult extends SensorReadoutsNormalizedResult
         super(table, addColumWhenMissing);
         this.severityColumn = TableColumnUtility.getOrAddIntColumn(table, CheckResultsColumnNames.SEVERITY_COLUMN_NAME, addColumWhenMissing);
         this.incidentHashColumn = TableColumnUtility.getOrAddLongColumn(table, CheckResultsColumnNames.INCIDENT_HASH_COLUMN_NAME, addColumWhenMissing);
-        this.referenceConnectionColumn = TableColumnUtility.getOrAddTextColumn(table, CheckResultsColumnNames.REFERENCE_CONNECTION_COLUMN_NAME, addColumWhenMissing);
-        this.referenceSchemaColumn = TableColumnUtility.getOrAddTextColumn(table, CheckResultsColumnNames.REFERENCE_SCHEMA_COLUMN_NAME, addColumWhenMissing);
-        this.referenceTableColumn = TableColumnUtility.getOrAddTextColumn(table, CheckResultsColumnNames.REFERENCE_TABLE_COLUMN_NAME, addColumWhenMissing);
-        this.referenceColumnColumn = TableColumnUtility.getOrAddTextColumn(table, CheckResultsColumnNames.REFERENCE_COLUMN_COLUMN_NAME, addColumWhenMissing);
+        this.referenceConnectionColumn = TableColumnUtility.getOrAddStringColumn(table, CheckResultsColumnNames.REFERENCE_CONNECTION_COLUMN_NAME, addColumWhenMissing);
+        this.referenceSchemaColumn = TableColumnUtility.getOrAddStringColumn(table, CheckResultsColumnNames.REFERENCE_SCHEMA_COLUMN_NAME, addColumWhenMissing);
+        this.referenceTableColumn = TableColumnUtility.getOrAddStringColumn(table, CheckResultsColumnNames.REFERENCE_TABLE_COLUMN_NAME, addColumWhenMissing);
+        this.referenceColumnColumn = TableColumnUtility.getOrAddStringColumn(table, CheckResultsColumnNames.REFERENCE_COLUMN_COLUMN_NAME, addColumWhenMissing);
         this.includeInKpiColumn = TableColumnUtility.getOrAddBooleanColumn(table, CheckResultsColumnNames.INCLUDE_IN_KPI_COLUMN_NAME, addColumWhenMissing);
         this.includeInSlaColumn = TableColumnUtility.getOrAddBooleanColumn(table, CheckResultsColumnNames.INCLUDE_IN_SLA_COLUMN_NAME, addColumWhenMissing);
         this.fatalLowerBoundColumn = TableColumnUtility.getOrAddDoubleColumn(table, CheckResultsColumnNames.FATAL_LOWER_BOUND_COLUMN_NAME, addColumWhenMissing);
@@ -91,7 +91,7 @@ public class CheckResultsNormalizedResult extends SensorReadoutsNormalizedResult
      * Returns the column that contains the name of a connection (data source) that contains the reference data that are compared.
      * @return The name of a reference connection.
      */
-    public TextColumn getReferenceConnectionColumn() {
+    public StringColumn getReferenceConnectionColumn() {
         return referenceConnectionColumn;
     }
 
@@ -99,7 +99,7 @@ public class CheckResultsNormalizedResult extends SensorReadoutsNormalizedResult
      * Returns the column that contains the name of a schema that contains the reference data that are compared.
      * @return The name of a reference schema.
      */
-    public TextColumn getReferenceSchemaColumn() {
+    public StringColumn getReferenceSchemaColumn() {
         return referenceSchemaColumn;
     }
 
@@ -107,7 +107,7 @@ public class CheckResultsNormalizedResult extends SensorReadoutsNormalizedResult
      * Returns the column that contains the name of a table that contains the reference data that are compared.
      * @return The name of a reference table.
      */
-    public TextColumn getReferenceTableColumn() {
+    public StringColumn getReferenceTableColumn() {
         return referenceTableColumn;
     }
 
@@ -115,7 +115,7 @@ public class CheckResultsNormalizedResult extends SensorReadoutsNormalizedResult
      * Returns the column that contains the name of a column that contains the reference data that are compared.
      * @return The name of a reference column.
      */
-    public TextColumn getReferenceColumnColumn() {
+    public StringColumn getReferenceColumnColumn() {
         return referenceColumnColumn;
     }
 

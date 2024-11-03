@@ -146,11 +146,11 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
             InstantColumn timePeriodUtcColumn = filteredTable.instantColumn(SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME);
             InstantColumn executedAtColumn = filteredTable.instantColumn(SensorReadoutsColumnNames.EXECUTED_AT_COLUMN_NAME);
             IntColumn severityColumn = TableColumnUtility.getOrAddIntColumn(filteredTable, CheckResultsColumnNames.SEVERITY_COLUMN_NAME, false);
-            TextColumn dataGroupNameColumn = filteredTable.textColumn(SensorReadoutsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+            StringColumn dataGroupNameColumn = filteredTable.stringColumn(SensorReadoutsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
             LongColumn checkHashColumn = filteredTable.longColumn(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME);
-            TextColumn checkCategoryColumn = filteredTable.textColumn(SensorReadoutsColumnNames.CHECK_CATEGORY_COLUMN_NAME);
-            TextColumn checkNameColumn = filteredTable.textColumn(SensorReadoutsColumnNames.CHECK_NAME_COLUMN_NAME);
-            TextColumn tableComparisonColumn = filteredTable.textColumn(SensorReadoutsColumnNames.TABLE_COMPARISON_NAME_COLUMN_NAME);
+            StringColumn checkCategoryColumn = filteredTable.stringColumn(SensorReadoutsColumnNames.CHECK_CATEGORY_COLUMN_NAME);
+            StringColumn checkNameColumn = filteredTable.stringColumn(SensorReadoutsColumnNames.CHECK_NAME_COLUMN_NAME);
+            StringColumn tableComparisonColumn = filteredTable.stringColumn(SensorReadoutsColumnNames.TABLE_COMPARISON_NAME_COLUMN_NAME);
             DoubleColumn actualValueColumn = filteredTable.doubleColumn(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
             for (int i = rowCount - 1; i >= 0 ; i--) {
                 LocalDateTime timePeriod = timePeriodColumn.get(i);
@@ -271,9 +271,9 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
         int rowCount = sortedTable.rowCount();
         InstantColumn executedAtColumn = sortedTable.instantColumn(CheckResultsColumnNames.EXECUTED_AT_COLUMN_NAME);
         IntColumn severityColumn = sortedTable.intColumn(CheckResultsColumnNames.SEVERITY_COLUMN_NAME);
-        TextColumn checkNameColumn = sortedTable.textColumn(CheckResultsColumnNames.CHECK_NAME_COLUMN_NAME);
-        TextColumn columnNameColumn = sortedTable.textColumn(CheckResultsColumnNames.COLUMN_NAME_COLUMN_NAME);
-        TextColumn dataGroupNameColumn = sortedTable.textColumn(SensorReadoutsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+        StringColumn checkNameColumn = sortedTable.stringColumn(CheckResultsColumnNames.CHECK_NAME_COLUMN_NAME);
+        StringColumn columnNameColumn = sortedTable.stringColumn(CheckResultsColumnNames.COLUMN_NAME_COLUMN_NAME);
+        StringColumn dataGroupNameColumn = sortedTable.stringColumn(SensorReadoutsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
 
         for (int i = 0; i < rowCount ; i++) {
             Instant executedAt = executedAtColumn.get(i);
@@ -339,8 +339,9 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
             }
             Table filteredTableByDataGroup = filteredTable;
             if (!Strings.isNullOrEmpty(loadParameters.getDataGroupName())) {
-                TextColumn dataGroupNameFilteredColumn = filteredTable.textColumn(CheckResultsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
-                filteredTableByDataGroup = filteredTable.where(dataGroupNameFilteredColumn.isEqualTo(loadParameters.getDataGroupName()));
+                StringColumn dataGroupNameFilteredColumn = filteredTable.stringColumn(CheckResultsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+                filteredTableByDataGroup = TableCopyUtility.copyTableFiltered(filteredTable,
+                        dataGroupNameFilteredColumn.isEqualTo(loadParameters.getDataGroupName()));
             }
 
             if (filteredTableByDataGroup.isEmpty()) {
@@ -355,8 +356,8 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
 
             LongColumn checkHashColumn = sortedTable.longColumn(CheckResultsColumnNames.CHECK_HASH_COLUMN_NAME);
             LongColumn checkHashColumnUnsorted = filteredTable.longColumn(CheckResultsColumnNames.CHECK_HASH_COLUMN_NAME);
-            TextColumn allDataGroupColumnUnsorted = filteredTable.textColumn(CheckResultsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
-            TextColumn allDataGroupColumn = sortedTable.textColumn(CheckResultsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+            StringColumn allDataGroupColumnUnsorted = filteredTable.stringColumn(CheckResultsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+            StringColumn allDataGroupColumn = sortedTable.stringColumn(CheckResultsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
 
             int rowCount = sortedTable.rowCount();
             for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
@@ -431,8 +432,9 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
             }
             Table filteredTableByDataGroup = filteredTable;
             if (!Strings.isNullOrEmpty(loadParameters.getDataGroupName())) {
-                TextColumn dataGroupNameFilteredColumn = filteredTable.textColumn(CheckResultsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
-                filteredTableByDataGroup = filteredTable.where(dataGroupNameFilteredColumn.isEqualTo(loadParameters.getDataGroupName()));
+                StringColumn dataGroupNameFilteredColumn = filteredTable.stringColumn(CheckResultsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+                filteredTableByDataGroup = TableCopyUtility.copyTableFiltered(filteredTable,
+                        dataGroupNameFilteredColumn.isEqualTo(loadParameters.getDataGroupName()));
             }
 
             if (filteredTableByDataGroup.isEmpty()) {
@@ -446,7 +448,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
             CheckResultsNormalizedResult checkResultsNormalizedResult = new CheckResultsNormalizedResult(sortedTable, false);
 
             LongColumn checkHashColumn = sortedTable.longColumn(CheckResultsColumnNames.CHECK_HASH_COLUMN_NAME);
-            TextColumn allDataGroupColumn = sortedTable.textColumn(CheckResultsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+            StringColumn allDataGroupColumn = sortedTable.stringColumn(CheckResultsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
 
             int rowCount = sortedTable.rowCount();
             for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
@@ -647,7 +649,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                     .and(issuesInTimeRange)
                     .and(incidentHashSelection);
             if (!Strings.isNullOrEmpty(filterParameters.getColumn())) {
-                TextColumn partitionColumnNameColumn = checkResultsNormalizedResult.getColumnNameColumn();
+                StringColumn partitionColumnNameColumn = checkResultsNormalizedResult.getColumnNameColumn();
                 if (Objects.equals(CheckResultsDataService.COLUMN_NAME_TABLE_CHECKS_PLACEHOLDER, filterParameters.getColumn())) {
                     selectionOfMatchingIssues = selectionOfMatchingIssues.and(partitionColumnNameColumn.isMissing()); // table level sensors
                 } else {
@@ -656,7 +658,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
             }
 
             if (!Strings.isNullOrEmpty(filterParameters.getCheck())) {
-                TextColumn partitionCheckNameColumn =checkResultsNormalizedResult.getCheckNameColumn();
+                StringColumn partitionCheckNameColumn =checkResultsNormalizedResult.getCheckNameColumn();
                 selectionOfMatchingIssues = selectionOfMatchingIssues.and(partitionCheckNameColumn.isEqualTo(filterParameters.getCheck()));
             }
 
@@ -768,7 +770,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
             IntColumn severityColumn = checkResultsNormalizedResult.getSeverityColumn();
             Selection minSeveritySelection = severityColumn.isGreaterThanOrEqualTo(minSeverity);
 
-            TextColumn checkTypeColumn = checkResultsNormalizedResult.getCheckTypeColumn();
+            StringColumn checkTypeColumn = checkResultsNormalizedResult.getCheckTypeColumn();
             Selection checkTypeSelection =
                     filterParameters.getCheckType() != null ? checkTypeColumn.isEqualTo(filterParameters.getCheckType().getDisplayName()) :
                     checkTypeColumn.isNotEqualTo(CheckType.profiling.getDisplayName()); // by default, we are snowing monitoring and partition checks, excluding profiling checks, but user can pick a different check type
@@ -791,9 +793,9 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                 continue;
             }
 
-            TextColumn columnNameColumn = checkResultsNormalizedResult.getColumnNameColumn();
-            TextColumn checkNameColumn = checkResultsNormalizedResult.getCheckNameColumn();
-            TextColumn checkTimeGradientColumn = checkResultsNormalizedResult.getTimeGradientColumn();
+            StringColumn columnNameColumn = checkResultsNormalizedResult.getColumnNameColumn();
+            StringColumn checkNameColumn = checkResultsNormalizedResult.getCheckNameColumn();
+            StringColumn checkTimeGradientColumn = checkResultsNormalizedResult.getTimeGradientColumn();
 
             for (Integer rowIndex : selectionOfMatchingIssues) {
                 if (!Strings.isNullOrEmpty(filterParameters.getFilter())) {
@@ -863,7 +865,8 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
         statusModel.setSchemaName(physicalTableName.getSchemaName());
         statusModel.setTableName(physicalTableName.getTableName());
 
-        int lastMonths = tableCurrentDataQualityStatusFilterParameters.getLastMonths() == null ? 3 :
+        int lastMonths = tableCurrentDataQualityStatusFilterParameters.getLastMonths() == null ?
+                TableCurrentDataQualityStatusFilterParameters.DEFAULT_PREVIOUS_MONTHS :
                 tableCurrentDataQualityStatusFilterParameters.getLastMonths();
         if (tableCurrentDataQualityStatusFilterParameters.getSince() != null) {
             ZoneId defaultTimeZoneId = this.defaultTimeZoneProvider.getDefaultTimeZoneId();
@@ -901,8 +904,9 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                 Table filteredTable = filterTableOnFilterParameters(loadedMonthlyPartition.getData(), tableCurrentDataQualityStatusFilterParameters);
                 Table filteredTableByDataGroup = filteredTable;
                 if (!Strings.isNullOrEmpty(tableCurrentDataQualityStatusFilterParameters.getDataGroup())) {
-                    TextColumn dataGroupNameFilteredColumn = filteredTable.textColumn(CheckResultsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
-                    filteredTableByDataGroup = filteredTable.where(dataGroupNameFilteredColumn.isEqualTo(tableCurrentDataQualityStatusFilterParameters.getDataGroup()));
+                    StringColumn dataGroupNameFilteredColumn = filteredTable.stringColumn(CheckResultsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+                    filteredTableByDataGroup = TableCopyUtility.copyTableFiltered(filteredTable,
+                            dataGroupNameFilteredColumn.isEqualTo(tableCurrentDataQualityStatusFilterParameters.getDataGroup()));
                 }
 
                 calculateStatus(filteredTableByDataGroup, statusModel);
@@ -936,8 +940,9 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                 Table filteredTable = filterTableOnFilterParameters(loadedMonthlyPartition.getData(), tableCurrentDataQualityStatusFilterParameters);
                 Table filteredTableByDataGroup = filteredTable;
                 if (!Strings.isNullOrEmpty(tableCurrentDataQualityStatusFilterParameters.getDataGroup())) {
-                    TextColumn dataGroupNameFilteredColumn = filteredTable.textColumn(CheckResultsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
-                    filteredTableByDataGroup = filteredTable.where(dataGroupNameFilteredColumn.isEqualTo(tableCurrentDataQualityStatusFilterParameters.getDataGroup()));
+                    StringColumn dataGroupNameFilteredColumn = filteredTable.stringColumn(CheckResultsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+                    filteredTableByDataGroup = TableCopyUtility.copyTableFiltered(filteredTable,
+                            dataGroupNameFilteredColumn.isEqualTo(tableCurrentDataQualityStatusFilterParameters.getDataGroup()));
                 }
 
                 calculateStatus(filteredTableByDataGroup, statusModel);
@@ -954,7 +959,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
      */
     private Long extractMostRecentRowCount(Table checkResultsTable) {
         InstantColumn executedAtColumn = checkResultsTable.instantColumn(CheckResultsColumnNames.EXECUTED_AT_COLUMN_NAME);
-        TextColumn checkNameColumn = checkResultsTable.textColumn(CheckResultsColumnNames.CHECK_NAME_COLUMN_NAME);
+        StringColumn checkNameColumn = checkResultsTable.stringColumn(CheckResultsColumnNames.CHECK_NAME_COLUMN_NAME);
         DoubleColumn actualValueColumn = checkResultsTable.doubleColumn(CheckResultsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
         String[] rowCountCheckNames = new String[] { "daily_row_count", "daily_row_count_anomaly", "profile_row_count", "profile_row_count_anomaly" };
         Instant mostRecentExecutedAt = null;
@@ -1007,7 +1012,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
      */
     private Double extractMostRecentDataFreshnessDelay(Table checkResultsTable) {
         InstantColumn executedAtColumn = checkResultsTable.instantColumn(CheckResultsColumnNames.EXECUTED_AT_COLUMN_NAME);
-        TextColumn checkNameColumn = checkResultsTable.textColumn(CheckResultsColumnNames.CHECK_NAME_COLUMN_NAME);
+        StringColumn checkNameColumn = checkResultsTable.stringColumn(CheckResultsColumnNames.CHECK_NAME_COLUMN_NAME);
         DoubleColumn actualValueColumn = checkResultsTable.doubleColumn(CheckResultsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
         String[] rowCountCheckNames = new String[] { "daily_data_freshness", "daily_data_freshness_anomaly", "profile_data_freshness", "profile_data_freshness_anomaly" };
         Instant mostRecentExecutedAt = null;
@@ -1059,12 +1064,12 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
     protected TableCurrentDataQualityStatusModel calculateStatus(Table sourceTable, TableCurrentDataQualityStatusModel tableStatusModel) {
         InstantColumn executedAtColumn = sourceTable.instantColumn(CheckResultsColumnNames.EXECUTED_AT_COLUMN_NAME);
         IntColumn severityColumn = (IntColumn)TableColumnUtility.findColumn(sourceTable, CheckResultsColumnNames.SEVERITY_COLUMN_NAME); // when there is no severity column, it is the "errors" table and the severity is 4 as an execution error
-        TextColumn checkNameColumn = sourceTable.textColumn(CheckResultsColumnNames.CHECK_NAME_COLUMN_NAME);
-        TextColumn checkCategoryColumn = sourceTable.textColumn(CheckResultsColumnNames.CHECK_CATEGORY_COLUMN_NAME);
-        TextColumn qualityDimensionColumn = sourceTable.textColumn(CheckResultsColumnNames.QUALITY_DIMENSION_COLUMN_NAME);
-        TextColumn columnNameColumn = sourceTable.textColumn(CheckResultsColumnNames.COLUMN_NAME_COLUMN_NAME);
-        TextColumn checkTypeColumn = sourceTable.textColumn(CheckResultsColumnNames.CHECK_TYPE_COLUMN_NAME);
-        TextColumn timeGradientColumn = sourceTable.textColumn(CheckResultsColumnNames.TIME_GRADIENT_COLUMN_NAME);
+        StringColumn checkNameColumn = sourceTable.stringColumn(CheckResultsColumnNames.CHECK_NAME_COLUMN_NAME);
+        StringColumn checkCategoryColumn = sourceTable.stringColumn(CheckResultsColumnNames.CHECK_CATEGORY_COLUMN_NAME);
+        StringColumn qualityDimensionColumn = sourceTable.stringColumn(CheckResultsColumnNames.QUALITY_DIMENSION_COLUMN_NAME);
+        StringColumn columnNameColumn = sourceTable.stringColumn(CheckResultsColumnNames.COLUMN_NAME_COLUMN_NAME);
+        StringColumn checkTypeColumn = sourceTable.stringColumn(CheckResultsColumnNames.CHECK_TYPE_COLUMN_NAME);
+        StringColumn timeGradientColumn = sourceTable.stringColumn(CheckResultsColumnNames.TIME_GRADIENT_COLUMN_NAME);
 
         int rowCount = sourceTable.rowCount();
 
@@ -1206,30 +1211,30 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                                                      String categoryName,
                                                      Table sourceTable) {
         String checkType = rootChecksContainerSpec.getCheckType().getDisplayName();
-        Selection rowSelection = sourceTable.textColumn(CheckResultsColumnNames.CHECK_TYPE_COLUMN_NAME).isEqualTo(checkType);
+        Selection rowSelection = sourceTable.stringColumn(CheckResultsColumnNames.CHECK_TYPE_COLUMN_NAME).isEqualTo(checkType);
 
         if (!Strings.isNullOrEmpty(checkName)) {
-            TextColumn checkNameColumn = sourceTable.textColumn(SensorReadoutsColumnNames.CHECK_NAME_COLUMN_NAME);
+            StringColumn checkNameColumn = sourceTable.stringColumn(SensorReadoutsColumnNames.CHECK_NAME_COLUMN_NAME);
             rowSelection = rowSelection.and(checkNameColumn.isEqualTo(checkName));
         }
 
         if (!Strings.isNullOrEmpty(categoryName)) {
-            TextColumn categoryColumn = sourceTable.textColumn(SensorReadoutsColumnNames.CHECK_CATEGORY_COLUMN_NAME);
+            StringColumn categoryColumn = sourceTable.stringColumn(SensorReadoutsColumnNames.CHECK_CATEGORY_COLUMN_NAME);
             rowSelection = rowSelection.and(categoryColumn.isEqualTo(categoryName));
         }
 
         CheckTimeScale timeScale = rootChecksContainerSpec.getCheckTimeScale();
         if (timeScale != null) {
-            TextColumn timeGradientColumn = sourceTable.textColumn(CheckResultsColumnNames.TIME_GRADIENT_COLUMN_NAME);
+            StringColumn timeGradientColumn = sourceTable.stringColumn(CheckResultsColumnNames.TIME_GRADIENT_COLUMN_NAME);
             TimePeriodGradient timePeriodGradient = timeScale.toTimeSeriesGradient();
             rowSelection = rowSelection.and(timeGradientColumn.isEqualTo(timePeriodGradient.name()));
         }
 
         String columnName = rootChecksContainerSpec.getHierarchyId().getColumnName(); // nullable
-        TextColumn columnNameColumn = sourceTable.textColumn(CheckResultsColumnNames.COLUMN_NAME_COLUMN_NAME);
+        StringColumn columnNameColumn = sourceTable.stringColumn(CheckResultsColumnNames.COLUMN_NAME_COLUMN_NAME);
         rowSelection = rowSelection.and((columnName != null) ? columnNameColumn.isEqualTo(columnName) : columnNameColumn.isMissing());
 
-        Table filteredTable = sourceTable.where(rowSelection);
+        Table filteredTable = TableCopyUtility.copyTableFiltered(sourceTable, rowSelection);
         return filteredTable;
     }
 
@@ -1245,17 +1250,17 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
         Selection rowSelection = Selection.withRange(0, sourceTable.rowCount());
 
         if (!filterParameters.isProfiling()) {
-            rowSelection = rowSelection.and(sourceTable.textColumn(CheckResultsColumnNames.CHECK_TYPE_COLUMN_NAME)
+            rowSelection = rowSelection.and(sourceTable.stringColumn(CheckResultsColumnNames.CHECK_TYPE_COLUMN_NAME)
                     .isNotEqualTo(CheckType.profiling.getDisplayName()));
         }
 
         if (!filterParameters.isMonitoring()) {
-            rowSelection = rowSelection.and(sourceTable.textColumn(CheckResultsColumnNames.CHECK_TYPE_COLUMN_NAME)
+            rowSelection = rowSelection.and(sourceTable.stringColumn(CheckResultsColumnNames.CHECK_TYPE_COLUMN_NAME)
                     .isNotEqualTo(CheckType.monitoring.getDisplayName()));
         }
 
         if (!filterParameters.isPartitioned()) {
-            rowSelection = rowSelection.and(sourceTable.textColumn(CheckResultsColumnNames.CHECK_TYPE_COLUMN_NAME)
+            rowSelection = rowSelection.and(sourceTable.stringColumn(CheckResultsColumnNames.CHECK_TYPE_COLUMN_NAME)
                     .isNotEqualTo(CheckType.partitioned.getDisplayName()));
         }
 
@@ -1267,13 +1272,13 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
 
         CheckTimeScale checkTimeScale = filterParameters.getCheckTimeScale();
         if (checkTimeScale != null) {
-            TextColumn timeGradientColumn = sourceTable.textColumn(CheckResultsColumnNames.TIME_GRADIENT_COLUMN_NAME);
+            StringColumn timeGradientColumn = sourceTable.stringColumn(CheckResultsColumnNames.TIME_GRADIENT_COLUMN_NAME);
             TimePeriodGradient timePeriodGradient = checkTimeScale.toTimeSeriesGradient();
             rowSelection = rowSelection.and(timeGradientColumn.isEqualTo(timePeriodGradient.name()));
         }
 
         if (!Strings.isNullOrEmpty(filterParameters.getCheckName())) {
-            TextColumn checkNameColumn = sourceTable.textColumn(CheckResultsColumnNames.CHECK_NAME_COLUMN_NAME);
+            StringColumn checkNameColumn = sourceTable.stringColumn(CheckResultsColumnNames.CHECK_NAME_COLUMN_NAME);
             rowSelection = rowSelection.and(checkNameColumn.isEqualTo(filterParameters.getCheckName()));
         }
 
@@ -1284,11 +1289,11 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
 
         String qualityDimension = filterParameters.getQualityDimension();
         if (qualityDimension != null) {
-            TextColumn dimensionColumn = sourceTable.textColumn(CheckResultsColumnNames.QUALITY_DIMENSION_COLUMN_NAME);
+            StringColumn dimensionColumn = sourceTable.stringColumn(CheckResultsColumnNames.QUALITY_DIMENSION_COLUMN_NAME);
             rowSelection = rowSelection.and(dimensionColumn.isEqualTo(qualityDimension));
         }
 
-        Table filteredTable = sourceTable.where(rowSelection);
+        Table filteredTable = TableCopyUtility.copyTableFiltered(sourceTable, rowSelection);
         return filteredTable;
     }
 
@@ -1313,12 +1318,12 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                 tableComparison = columnCategorySplits[1];
             }
 
-            TextColumn checkCategoryColumn = sourceTable.textColumn(CheckResultsColumnNames.CHECK_CATEGORY_COLUMN_NAME);
+            StringColumn checkCategoryColumn = sourceTable.stringColumn(CheckResultsColumnNames.CHECK_CATEGORY_COLUMN_NAME);
             currentSelection = currentSelection.and(checkCategoryColumn.isEqualTo(checkCategory));
         }
 
         if (!Strings.isNullOrEmpty(tableComparison)) {
-            TextColumn tableComparisonNameColumn = sourceTable.textColumn(CheckResultsColumnNames.TABLE_COMPARISON_NAME_COLUMN_NAME);
+            StringColumn tableComparisonNameColumn = sourceTable.stringColumn(CheckResultsColumnNames.TABLE_COMPARISON_NAME_COLUMN_NAME);
             currentSelection = currentSelection.and(tableComparisonNameColumn.isEqualTo(tableComparison));
         }
 
@@ -1337,21 +1342,21 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                                                                         Table sourceTable,
                                                                         CheckResultsDetailedFilterParameters filterParameters) {
         String checkType = rootChecksContainerSpec.getCheckType().getDisplayName();
-        Selection rowSelection = sourceTable.textColumn(CheckResultsColumnNames.CHECK_TYPE_COLUMN_NAME).isEqualTo(checkType);
+        Selection rowSelection = sourceTable.stringColumn(CheckResultsColumnNames.CHECK_TYPE_COLUMN_NAME).isEqualTo(checkType);
 
         CheckTimeScale timeScale = rootChecksContainerSpec.getCheckTimeScale();
         if (timeScale != null) {
-            TextColumn timeGradientColumn = sourceTable.textColumn(CheckResultsColumnNames.TIME_GRADIENT_COLUMN_NAME);
+            StringColumn timeGradientColumn = sourceTable.stringColumn(CheckResultsColumnNames.TIME_GRADIENT_COLUMN_NAME);
             TimePeriodGradient timePeriodGradient = timeScale.toTimeSeriesGradient();
             rowSelection = rowSelection.and(timeGradientColumn.isEqualTo(timePeriodGradient.name()));
         }
 
         String columnName = rootChecksContainerSpec.getHierarchyId().getColumnName(); // nullable
-        TextColumn columnNameColumn = sourceTable.textColumn(CheckResultsColumnNames.COLUMN_NAME_COLUMN_NAME);
+        StringColumn columnNameColumn = sourceTable.stringColumn(CheckResultsColumnNames.COLUMN_NAME_COLUMN_NAME);
         rowSelection = rowSelection.and((columnName != null) ? columnNameColumn.isEqualTo(columnName) : columnNameColumn.isMissing());
 
         if (!Strings.isNullOrEmpty(filterParameters.getCheckName())) {
-            TextColumn checkNameColumn = sourceTable.textColumn(CheckResultsColumnNames.CHECK_NAME_COLUMN_NAME);
+            StringColumn checkNameColumn = sourceTable.stringColumn(CheckResultsColumnNames.CHECK_NAME_COLUMN_NAME);
             rowSelection = rowSelection.and(checkNameColumn.isEqualTo(filterParameters.getCheckName()));
         }
 
@@ -1360,7 +1365,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
 
         rowSelection = filterCategoryAndTableComparison(sourceTable, rowSelection, checkCategory, tableComparison);
 
-        Table filteredTable = sourceTable.where(rowSelection);
+        Table filteredTable = TableCopyUtility.copyTableFiltered(sourceTable, rowSelection);
         return filteredTable;
     }
 
@@ -1377,21 +1382,21 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                                                          CheckTimeScale timeScale,
                                                          String tableComparisonName) {
         String checkTypeString = checkType.getDisplayName();
-        Selection rowSelection = sourceTable.textColumn(CheckResultsColumnNames.CHECK_TYPE_COLUMN_NAME)
+        Selection rowSelection = sourceTable.stringColumn(CheckResultsColumnNames.CHECK_TYPE_COLUMN_NAME)
                 .isEqualTo(checkTypeString);
 
         if (timeScale != null) {
-            TextColumn timeGradientColumn = sourceTable.textColumn(CheckResultsColumnNames.TIME_GRADIENT_COLUMN_NAME);
+            StringColumn timeGradientColumn = sourceTable.stringColumn(CheckResultsColumnNames.TIME_GRADIENT_COLUMN_NAME);
             TimePeriodGradient timePeriodGradient = timeScale.toTimeSeriesGradient();
             String timeSeriesGradientName = timePeriodGradient.name();
             rowSelection = rowSelection.and(timeGradientColumn.isEqualTo(timeSeriesGradientName));
         }
 
-        TextColumn checkCategoryColumn = sourceTable.textColumn(CheckResultsColumnNames.CHECK_CATEGORY_COLUMN_NAME);
+        StringColumn checkCategoryColumn = sourceTable.stringColumn(CheckResultsColumnNames.CHECK_CATEGORY_COLUMN_NAME);
         rowSelection = rowSelection.and(checkCategoryColumn.isEqualTo(AbstractComparisonCheckCategorySpecMap.COMPARISONS_CATEGORY_NAME));
 
         if (!Strings.isNullOrEmpty(tableComparisonName)) {
-            TextColumn tableComparisonNameColumn = (TextColumn) TableColumnUtility.findColumn(sourceTable, CheckResultsColumnNames.TABLE_COMPARISON_NAME_COLUMN_NAME);
+            StringColumn tableComparisonNameColumn = (StringColumn) TableColumnUtility.findColumn(sourceTable, CheckResultsColumnNames.TABLE_COMPARISON_NAME_COLUMN_NAME);
             if (tableComparisonNameColumn != null) {
                 rowSelection = rowSelection.and(tableComparisonNameColumn.isEqualTo(tableComparisonName));
             } else {
@@ -1399,7 +1404,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
             }
         }
 
-        Table filteredTable = sourceTable.where(rowSelection);
+        Table filteredTable = TableCopyUtility.copyTableFiltered(sourceTable, rowSelection);
         return filteredTable;
     }
 

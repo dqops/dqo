@@ -31,16 +31,14 @@ import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.utils.datetime.LocalDateTimePeriodUtility;
 import com.dqops.utils.datetime.LocalDateTimeTruncateUtility;
+import com.dqops.utils.tables.TableCopyUtility;
 import com.dqops.utils.tables.TableRowUtility;
 import com.google.common.base.Strings;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import tech.tablesaw.api.LongColumn;
-import tech.tablesaw.api.Row;
-import tech.tablesaw.api.Table;
-import tech.tablesaw.api.TextColumn;
+import tech.tablesaw.api.*;
 import tech.tablesaw.selection.Selection;
 
 import java.time.Instant;
@@ -89,8 +87,9 @@ public class SensorReadoutsDataServiceImpl implements SensorReadoutsDataService 
 
         Table filteredTableByDataGroup = filteredTableWithAllDataGroups;
         if (!Strings.isNullOrEmpty(loadParameters.getDataGroupName())) {
-            TextColumn dataGroupNameFilteredColumn = filteredTableWithAllDataGroups.textColumn(SensorReadoutsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
-            filteredTableByDataGroup = filteredTableWithAllDataGroups.where(dataGroupNameFilteredColumn.isEqualTo(loadParameters.getDataGroupName()));
+            StringColumn dataGroupNameFilteredColumn = filteredTableWithAllDataGroups.stringColumn(SensorReadoutsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+            filteredTableByDataGroup = TableCopyUtility.copyTableFiltered(filteredTableWithAllDataGroups,
+                    dataGroupNameFilteredColumn.isEqualTo(loadParameters.getDataGroupName()));
         }
 
         if (filteredTableByDataGroup.isEmpty()) {
@@ -103,8 +102,8 @@ public class SensorReadoutsDataServiceImpl implements SensorReadoutsDataService 
 
         LongColumn checkHashColumn = sortedTable.longColumn(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME);
         LongColumn checkHashColumnUnsorted = filteredTableWithAllDataGroups.longColumn(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME);
-        TextColumn allDataGroupColumnUnsorted = filteredTableWithAllDataGroups.textColumn(SensorReadoutsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
-        TextColumn allDataGroupColumn = sortedTable.textColumn(SensorReadoutsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+        StringColumn allDataGroupColumnUnsorted = filteredTableWithAllDataGroups.stringColumn(SensorReadoutsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+        StringColumn allDataGroupColumn = sortedTable.stringColumn(SensorReadoutsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
 
         int rowCount = sortedTable.rowCount();
         for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
@@ -231,18 +230,18 @@ public class SensorReadoutsDataServiceImpl implements SensorReadoutsDataService 
         String checkType = rootChecksContainerSpec.getCheckType().getDisplayName();
         CheckTimeScale timeScale = rootChecksContainerSpec.getCheckTimeScale();
 
-        Selection rowSelection = sourceTable.textColumn(SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME).isEqualTo(checkType);
+        Selection rowSelection = sourceTable.stringColumn(SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME).isEqualTo(checkType);
 
         if (timeScale != null) {
-            TextColumn timeGradientColumn = sourceTable.textColumn(SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME);
+            StringColumn timeGradientColumn = sourceTable.stringColumn(SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME);
             TimePeriodGradient timePeriodGradient = timeScale.toTimeSeriesGradient();
             rowSelection = rowSelection.and(timeGradientColumn.isEqualTo(timePeriodGradient.name()));
         }
 
-        TextColumn columnNameColumn = sourceTable.textColumn(SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME);
+        StringColumn columnNameColumn = sourceTable.stringColumn(SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME);
         rowSelection = rowSelection.and((columnName != null) ? columnNameColumn.isEqualTo(columnName) : columnNameColumn.isMissing());
 
-        Table filteredTable = sourceTable.where(rowSelection);
+        Table filteredTable = TableCopyUtility.copyTableFiltered(sourceTable, rowSelection);
         return filteredTable;
     }
 
@@ -260,19 +259,19 @@ public class SensorReadoutsDataServiceImpl implements SensorReadoutsDataService 
         String checkType = rootChecksContainerSpec.getCheckType().getDisplayName();
         CheckTimeScale timeScale = rootChecksContainerSpec.getCheckTimeScale();
 
-        Selection rowSelection = sourceTable.textColumn(SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME).isEqualTo(checkType);
+        Selection rowSelection = sourceTable.stringColumn(SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME).isEqualTo(checkType);
 
         if (timeScale != null) {
-            TextColumn timeGradientColumn = sourceTable.textColumn(SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME);
+            StringColumn timeGradientColumn = sourceTable.stringColumn(SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME);
             TimePeriodGradient timePeriodGradient = timeScale.toTimeSeriesGradient();
             rowSelection = rowSelection.and(timeGradientColumn.isEqualTo(timePeriodGradient.name()));
         }
 
-        TextColumn columnNameColumn = sourceTable.textColumn(SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME);
+        StringColumn columnNameColumn = sourceTable.stringColumn(SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME);
         rowSelection = rowSelection.and((columnName != null) ? columnNameColumn.isEqualTo(columnName) : columnNameColumn.isMissing());
 
         if (!Strings.isNullOrEmpty(filterParameters.getCheckName())) {
-            TextColumn checkNameColumn = sourceTable.textColumn(SensorReadoutsColumnNames.CHECK_NAME_COLUMN_NAME);
+            StringColumn checkNameColumn = sourceTable.stringColumn(SensorReadoutsColumnNames.CHECK_NAME_COLUMN_NAME);
             rowSelection = rowSelection.and(checkNameColumn.isEqualTo(filterParameters.getCheckName()));
         }
 
@@ -287,16 +286,16 @@ public class SensorReadoutsDataServiceImpl implements SensorReadoutsDataService 
                 tableComparison = columnCategorySplits[1];
             }
 
-            TextColumn checkCategoryColumn = sourceTable.textColumn(SensorReadoutsColumnNames.CHECK_CATEGORY_COLUMN_NAME);
+            StringColumn checkCategoryColumn = sourceTable.stringColumn(SensorReadoutsColumnNames.CHECK_CATEGORY_COLUMN_NAME);
             rowSelection = rowSelection.and(checkCategoryColumn.isEqualTo(checkCategory));
         }
 
         if (!Strings.isNullOrEmpty(tableComparison)) {
-            TextColumn tableComparisonNameColumn = sourceTable.textColumn(SensorReadoutsColumnNames.TABLE_COMPARISON_NAME_COLUMN_NAME);
+            StringColumn tableComparisonNameColumn = sourceTable.stringColumn(SensorReadoutsColumnNames.TABLE_COMPARISON_NAME_COLUMN_NAME);
             rowSelection = rowSelection.and(tableComparisonNameColumn.isEqualTo(tableComparison));
         }
 
-        Table filteredTable = sourceTable.where(rowSelection);
+        Table filteredTable = TableCopyUtility.copyTableFiltered(sourceTable, rowSelection);
         return filteredTable;
     }
 

@@ -20,6 +20,7 @@ import com.dqops.core.configuration.DqoConfigurationProperties;
 import com.dqops.core.configuration.DqoConfigurationPropertiesObjectMother;
 import com.dqops.core.configuration.DqoPythonConfigurationProperties;
 import com.dqops.core.configuration.DqoPythonConfigurationPropertiesObjectMother;
+import com.dqops.core.jobqueue.concurrency.ParallelJobLimitProviderStub;
 import com.dqops.execution.sqltemplates.rendering.JinjaTemplateRenderInput;
 import com.dqops.execution.sqltemplates.rendering.JinjaTemplateRenderOutput;
 import com.dqops.execution.sqltemplates.rendering.JinjaTemplateRenderParameters;
@@ -45,7 +46,7 @@ public class PythonCallerServiceImplTests extends BaseTest {
 		this.pythonVirtualEnvService = PythonVirtualEnvServiceObjectMother.getDefault();
         this.pythonConfigurationProperties = DqoPythonConfigurationPropertiesObjectMother.getDefaultCloned();
         this.sut = new PythonCallerServiceImpl(configurationProperties, pythonConfigurationProperties,
-                new JsonSerializerImpl(), pythonVirtualEnvService);
+                new JsonSerializerImpl(), pythonVirtualEnvService, new ParallelJobLimitProviderStub(8));
     }
 
     @Test

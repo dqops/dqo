@@ -23,8 +23,8 @@ import tech.tablesaw.api.*;
  * Tabular object returned from {@link CheckExecutionService} with a summary of sensors that were executed.
  */
 public class CheckExecutionSummary {
-    private final TextColumn connectionColumn;
-    private final TextColumn tableColumn;
+    private final StringColumn connectionColumn;
+    private final StringColumn tableColumn;
     private final IntColumn checksExecutedColumn;
     private final IntColumn validResultsColumn;
     private final IntColumn warningsCountColumn;
@@ -40,9 +40,9 @@ public class CheckExecutionSummary {
      */
     public CheckExecutionSummary() {
 		this.summaryTable = Table.create("Check execution summary");
-		connectionColumn = TextColumn.create("Connection");
+		connectionColumn = StringColumn.create("Connection");
 		this.summaryTable.addColumns(connectionColumn);
-		tableColumn = TextColumn.create("Table");
+		tableColumn = StringColumn.create("Table");
 		this.summaryTable.addColumns(tableColumn);
 		checksExecutedColumn = IntColumn.create("Checks");
 		this.summaryTable.addColumns(checksExecutedColumn);
@@ -72,7 +72,7 @@ public class CheckExecutionSummary {
      * Connection name column.
      * @return Column.
      */
-    public TextColumn getConnectionColumn() {
+    public StringColumn getConnectionColumn() {
         return connectionColumn;
     }
 
@@ -80,7 +80,7 @@ public class CheckExecutionSummary {
      * Full table name column.
      * @return Table name column.
      */
-    public TextColumn getTableColumn() {
+    public StringColumn getTableColumn() {
         return tableColumn;
     }
 

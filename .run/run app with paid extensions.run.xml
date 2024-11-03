@@ -13,7 +13,7 @@
     </envs>
     <option name="MAIN_CLASS_NAME" value="com.dqops.cli.CliApplication" />
     <module name="dqo-dqops" />
-    <option name="PROGRAM_PARAMETERS" value="--server.port=8888 --dqo.webserver.authentication-method=oauth2" />
+    <option name="PROGRAM_PARAMETERS" value="--server.port=8888 --dqo.webserver.authentication-method=oauth2 --dqo.python.debug-mode=failed" />
     <shortenClasspath name="ARGS_FILE" />
     <option name="VM_PARAMETERS" value="-XX:MaxRAMPercentage=60.0 --add-opens java.base/java.nio=ALL-UNNAMED --add-opens java.base/java.util.concurrent=ALL-UNNAMED" />
     <extension name="software.aws.toolkits.jetbrains.core.execution.JavaAwsConnectionExtension">

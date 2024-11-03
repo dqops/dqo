@@ -26,11 +26,13 @@ import com.dqops.connectors.ProviderDialectSettings;
 import com.dqops.connectors.ProviderType;
 import com.dqops.connectors.bigquery.BigQueryParametersSpec;
 import com.dqops.connectors.bigquery.BigQueryProviderDialectSettings;
+import com.dqops.connectors.clickhouse.ClickHouseProviderDialectSettings;
 import com.dqops.connectors.databricks.DatabricksParametersSpec;
 import com.dqops.connectors.databricks.DatabricksProviderDialectSettings;
 import com.dqops.connectors.db2.Db2ProviderDialectSettings;
 import com.dqops.connectors.duckdb.DuckdbProviderDialectSettings;
 import com.dqops.connectors.hana.HanaProviderDialectSettings;
+import com.dqops.connectors.mariadb.MariaDbProviderDialectSettings;
 import com.dqops.connectors.mysql.MysqlEngineType;
 import com.dqops.connectors.mysql.MysqlParametersSpec;
 import com.dqops.connectors.mysql.MysqlProviderDialectSettings;
@@ -40,6 +42,7 @@ import com.dqops.connectors.postgresql.PostgresqlParametersSpec;
 import com.dqops.connectors.postgresql.PostgresqlProviderDialectSettings;
 import com.dqops.connectors.presto.PrestoParametersSpec;
 import com.dqops.connectors.presto.PrestoProviderDialectSettings;
+import com.dqops.connectors.questdb.QuestDbProviderDialectSettings;
 import com.dqops.connectors.redshift.RedshiftParametersSpec;
 import com.dqops.connectors.redshift.RedshiftProviderDialectSettings;
 import com.dqops.connectors.snowflake.SnowflakeParametersSpec;
@@ -48,6 +51,7 @@ import com.dqops.connectors.spark.SparkParametersSpec;
 import com.dqops.connectors.spark.SparkProviderDialectSettings;
 import com.dqops.connectors.sqlserver.SqlServerParametersSpec;
 import com.dqops.connectors.sqlserver.SqlServerProviderDialectSettings;
+import com.dqops.connectors.teradata.TeradataProviderDialectSettings;
 import com.dqops.connectors.trino.TrinoParametersSpec;
 import com.dqops.connectors.trino.TrinoProviderDialectSettings;
 import com.dqops.core.principal.UserDomainIdentity;
@@ -708,6 +712,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                         new CheckSearchFilters(),
                         1000,
                         true,
+                        null,
                         null
                 );
 
@@ -767,6 +772,14 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 return new HanaProviderDialectSettings();
             case db2:
                 return new Db2ProviderDialectSettings();
+            case mariadb:
+                return new MariaDbProviderDialectSettings();
+            case clickhouse:
+                return new ClickHouseProviderDialectSettings();
+            case questdb:
+                return new QuestDbProviderDialectSettings();
+            case teradata:
+                return new TeradataProviderDialectSettings();
             default:
                 throw new DqoRuntimeException("Missing configuration of the dialect settings for the provider " + providerType + ", please add it here");
         }

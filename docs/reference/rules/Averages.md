@@ -102,6 +102,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     from datetime import datetime
     from typing import Sequence
     import scipy
+    import numpy as np
     
     
     # rule specific parameters object, contains values received from the quality check threshold configuration
@@ -111,8 +112,8 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
     
     class HistoricDataPoint:
-        timestamp_utc: datetime
-        local_datetime: datetime
+        timestamp_utc_epoch: int
+        local_datetime_epoch: int
         back_periods_index: int
         sensor_readout: float
         expected_value: float
@@ -127,7 +128,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     class RuleExecutionRunParameters:
         actual_value: float
         parameters: BetweenPercentMovingAverage30DaysRuleParametersSpec
-        time_period_local: datetime
+        time_period_local_epoch: int
         previous_readouts: Sequence[HistoricDataPoint]
         time_window: RuleTimeWindowSettingsSpec
     
@@ -157,7 +158,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         if len(filtered) == 0:
             return RuleExecutionResult()
     
-        filtered_mean = float(scipy.mean(filtered))
+        filtered_mean = float(np.mean(filtered))
     
         upper_bound = filtered_mean * (1.0 + rule_parameters.parameters.max_percent_above / 100.0)
         lower_bound = filtered_mean * (1.0 - rule_parameters.parameters.max_percent_below / 100.0)
@@ -268,6 +269,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     from datetime import datetime
     from typing import Sequence
     import scipy
+    import numpy as np
     
     
     # rule specific parameters object, contains values received from the quality check threshold configuration
@@ -277,8 +279,8 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
     
     class HistoricDataPoint:
-        timestamp_utc: datetime
-        local_datetime: datetime
+        timestamp_utc_epoch: int
+        local_datetime_epoch: int
         back_periods_index: int
         sensor_readout: float
         expected_value: float
@@ -293,7 +295,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     class RuleExecutionRunParameters:
         actual_value: float
         parameters: BetweenPercentMovingAverage60DaysRuleParametersSpec
-        time_period_local: datetime
+        time_period_local_epoch: int
         previous_readouts: Sequence[HistoricDataPoint]
         time_window: RuleTimeWindowSettingsSpec
     
@@ -323,7 +325,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         if len(filtered) == 0:
             return RuleExecutionResult()
     
-        filtered_mean = float(scipy.mean(filtered))
+        filtered_mean = float(np.mean(filtered))
     
         upper_bound = filtered_mean * (1.0 + rule_parameters.parameters.max_percent_above / 100.0)
         lower_bound = filtered_mean * (1.0 - rule_parameters.parameters.max_percent_below / 100.0)
@@ -434,6 +436,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     from datetime import datetime
     from typing import Sequence
     import scipy
+    import numpy as np
     
     
     # rule specific parameters object, contains values received from the quality check threshold configuration
@@ -443,8 +446,8 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
     
     class HistoricDataPoint:
-        timestamp_utc: datetime
-        local_datetime: datetime
+        timestamp_utc_epoch: int
+        local_datetime_epoch: int
         back_periods_index: int
         sensor_readout: float
         expected_value: float
@@ -459,7 +462,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     class RuleExecutionRunParameters:
         actual_value: float
         parameters: BetweenPctMovingAverage7DaysRuleParametersSpec
-        time_period_local: datetime
+        time_period_local_epoch: int
         previous_readouts: Sequence[HistoricDataPoint]
         time_window: RuleTimeWindowSettingsSpec
     
@@ -489,7 +492,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         if len(filtered) == 0:
             return RuleExecutionResult()
     
-        filtered_mean = float(scipy.mean(filtered))
+        filtered_mean = float(np.mean(filtered))
     
         upper_bound = filtered_mean * (1.0 + rule_parameters.parameters.max_percent_above / 100.0)
         lower_bound = filtered_mean * (1.0 - rule_parameters.parameters.max_percent_below / 100.0)
@@ -598,6 +601,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     from datetime import datetime
     from typing import Sequence
     import scipy
+    import numpy as np
     
     
     # rule specific parameters object, contains values received from the quality check threshold configuration
@@ -607,8 +611,8 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
     
     class HistoricDataPoint:
-        timestamp_utc: datetime
-        local_datetime: datetime
+        timestamp_utc_epoch: int
+        local_datetime_epoch: int
         back_periods_index: int
         sensor_readout: float
         expected_value: float
@@ -623,7 +627,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     class RuleExecutionRunParameters:
         actual_value: float
         parameters: PercentMovingAverageRuleParametersSpec
-        time_period_local: datetime
+        time_period_local_epoch: int
         previous_readouts: Sequence[HistoricDataPoint]
         time_window: RuleTimeWindowSettingsSpec
     
@@ -653,7 +657,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         if len(filtered) == 0:
             return RuleExecutionResult()
     
-        filtered_mean = float(scipy.mean(filtered))
+        filtered_mean = float(np.mean(filtered))
     
         upper_bound = filtered_mean * (1.0 + rule_parameters.parameters.max_percent_above / 100.0)
         lower_bound = filtered_mean * (1.0 - rule_parameters.parameters.max_percent_below / 100.0)
@@ -755,6 +759,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     from datetime import datetime
     from typing import Sequence
     import scipy
+    import numpy as np
     
     
     # rule specific parameters object, contains values received from the quality check threshold configuration
@@ -763,8 +768,8 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
     
     class HistoricDataPoint:
-        timestamp_utc: datetime
-        local_datetime: datetime
+        timestamp_utc_epoch: int
+        local_datetime_epoch: int
         back_periods_index: int
         sensor_readout: float
         expected_value: float
@@ -779,7 +784,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     class RuleExecutionRunParameters:
         actual_value: float
         parameters: WithinPercentMovingAverage30DaysRuleParametersSpec
-        time_period_local: datetime
+        time_period_local_epoch: int
         previous_readouts: Sequence[HistoricDataPoint]
         time_window: RuleTimeWindowSettingsSpec
     
@@ -808,7 +813,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         if len(filtered) == 0:
             return RuleExecutionResult()
     
-        filtered_mean = float(scipy.mean(filtered))
+        filtered_mean = float(np.mean(filtered))
     
         upper_bound = filtered_mean * (1.0 + rule_parameters.parameters.max_percent_within / 100.0)
         lower_bound = filtered_mean * (1.0 - rule_parameters.parameters.max_percent_within / 100.0)
@@ -910,6 +915,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     from datetime import datetime
     from typing import Sequence
     import scipy
+    import numpy as np
     
     
     # rule specific parameters object, contains values received from the quality check threshold configuration
@@ -918,8 +924,8 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
     
     class HistoricDataPoint:
-        timestamp_utc: datetime
-        local_datetime: datetime
+        timestamp_utc_epoch: int
+        local_datetime_epoch: int
         back_periods_index: int
         sensor_readout: float
         expected_value: float
@@ -934,7 +940,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     class RuleExecutionRunParameters:
         actual_value: float
         parameters: WithinPercentMovingAverage60DaysRuleParametersSpec
-        time_period_local: datetime
+        time_period_local_epoch: int
         previous_readouts: Sequence[HistoricDataPoint]
         time_window: RuleTimeWindowSettingsSpec
     
@@ -963,7 +969,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         if len(filtered) == 0:
             return RuleExecutionResult()
     
-        filtered_mean = float(scipy.mean(filtered))
+        filtered_mean = float(np.mean(filtered))
     
         upper_bound = filtered_mean * (1.0 + rule_parameters.parameters.max_percent_within / 100.0)
         lower_bound = filtered_mean * (1.0 - rule_parameters.parameters.max_percent_within / 100.0)
@@ -1065,6 +1071,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     from datetime import datetime
     from typing import Sequence
     import scipy
+    import numpy as np
     
     
     # rule specific parameters object, contains values received from the quality check threshold configuration
@@ -1073,8 +1080,8 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
     
     class HistoricDataPoint:
-        timestamp_utc: datetime
-        local_datetime: datetime
+        timestamp_utc_epoch: int
+        local_datetime_epoch: int
         back_periods_index: int
         sensor_readout: float
         expected_value: float
@@ -1089,7 +1096,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     class RuleExecutionRunParameters:
         actual_value: float
         parameters: WithinPercentMovingAverage7DaysRuleParametersSpec
-        time_period_local: datetime
+        time_period_local_epoch: int
         previous_readouts: Sequence[HistoricDataPoint]
         time_window: RuleTimeWindowSettingsSpec
     
@@ -1118,7 +1125,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         if len(filtered) == 0:
             return RuleExecutionResult()
     
-        filtered_mean = float(scipy.mean(filtered))
+        filtered_mean = float(np.mean(filtered))
     
         upper_bound = filtered_mean * (1.0 + rule_parameters.parameters.max_percent_within / 100.0)
         lower_bound = filtered_mean * (1.0 - rule_parameters.parameters.max_percent_within / 100.0)

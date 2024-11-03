@@ -27,11 +27,9 @@ We will verify the data of `bigquery-public-data.austin_311.311_service_requests
 [valid_longitude_percent](../../checks/column/numeric/valid-longitude-percent.md) column checks.
 Our goal is to verify if the percentage of valid latitude values in the `latitude` and `longitude` columns are above the set threshold.
 
-In this example, we will set three minimum percentage thresholds levels for the check:
+In this example, we will set the minimum percentage threshold level for the check:
 
 - warning: 99.0%
-- error: 98.0%
-- fatal: 95.0%
 
 If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/definition-of-data-quality-checks/index.md).
 
@@ -66,7 +64,7 @@ A detailed explanation of [how to start DQOps platform and run the example is de
 
 To navigate to a list of checks prepared in the example using the [user interface](../../dqo-concepts/dqops-user-interface-overview.md):
 
-![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-valid-latitude-and-longitude-percent-checks1.png){ loading=lazy; width="1200px" }
+![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-string-match-date-regex-percent-checks3.png){ loading=lazy; width="1200px" }
 
 1. Go to the **Monitoring** section.
 
@@ -78,7 +76,7 @@ To navigate to a list of checks prepared in the example using the [user interfac
     On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../data-sources/index.md).
 
 
-3. Select the **Daily checks** tab.
+3. Select the **Daily checkpoints** tab.
 
     This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../dqo-concepts/dqops-user-interface-overview.md#check-editor).
 
@@ -90,21 +88,22 @@ Run the activated check using the **Run check** button. Run checks on latitude a
 You can also run all the checks for an entire connection. Click on the three dots icon next to the name of the 
 connection in the tree view and click on **Run checks**. 
 
-![Run check](https://dqops.com/docs/images/examples/daily-valid-latitude-and-longitude-percent-run-checks1.png){ loading=lazy; width="1200px" }
+![Run check](https://dqops.com/docs/images/examples/daily-valid-latitude-and-longitude-percent-run-checks2.png){ loading=lazy; width="1200px" }
 
 
 ### **View detailed check results**
 
 Access the detailed results by clicking the **Results** button. The results should be similar to the one below.
 
-![Valid-latitude-and-longitude-percent check results](https://dqops.com/docs/images/examples/daily-valid-latitude-and-longitude-percent-checks-results1.png){ loading=lazy; width="1200px" }
+![Valid-latitude-and-longitude-percent check results](https://dqops.com/docs/images/examples/daily-valid-latitude-and-longitude-percent-checks-results2.png){ loading=lazy; width="1200px" }
 
-Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
+Within the Results window, you will see four categories: **Check results**, **Sensor readouts**, **Execution errors**, and **Error sampling**.
 The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
 The Sensor readouts category displays the values obtained by the sensors from the data source.
 The Execution errors category displays any error that occurred during the check's execution.
+The Error sampling category displays examples of invalid values in the column.
 
-The actual value in this example is 99.24% for both longitude and latitude checks, which is above the minimum
+The actual value in this example is 100% for both longitude and latitude checks, which is above the minimum
 threshold level set in the warning (99.0%).
 The check gives a correct result (notice the green square to the left of the check name).
 
@@ -116,32 +115,6 @@ of the user interface.
 
 Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
 
-### **Review the results on the data quality dashboards**
-
-To review the results on the [data quality dashboards](../../working-with-dqo/review-the-data-quality-results-on-dashboards.md)
-go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. 
- 
-Below you can see the results displayed on the **Highest issue severity per check and day table** dashboard which is located in the
-Highest issue severity per day group of dashboards. This dashboard allows for reviewing and filtering a summary 
-number of issues that arise from data quality checks per day, grouped by [check category](../../dqo-concepts/definition-of-data-quality-checks/index.md#categories-of-checks).
-    
-This dashboard helps evaluate the areas with the highest number of data quality issues that should be addressed.
-It also allows to review how the issue severity changed per day of the month.
-
-This dashboard allow filtering data by:
-    
-* current and previous month,
-* connection,
-* schema,
-* data group,
-* data quality dimension,
-* check category,
-* check name,
-* table,
-* column.
-
-![Valid-latitude-and-longitude-percent check results on Highest issue severity per check and day dashboard](https://dqops.com/docs/images/examples/daily-valid-latitude-and-longitude-percent-checks-results-on-dashboard1.png){ loading=lazy; width="1200px" }
-
 ## Change a schedule at the connection level
 
 With DQOps, you can easily customize when checks are run by setting schedules. You can set schedules for an entire connection,
@@ -149,7 +122,7 @@ table, or individual check.
 
 After importing new tables, DQOps sets the schedule for 12:00 P.M. (noon) every day. Follow the steps below to change the schedule.
 
-![Change a schedule at the connection level](https://dqops.com/docs/images/examples/change-schedule-for-connection.png){ loading=lazy; width="1200px" }
+![Change a schedule at the connection level](https://dqops.com/docs/images/examples/change-schedule-for-connection2.png){ loading=lazy; width="1200px" }
 
 1. Navigate to the **Data Source** section.
 
@@ -178,162 +151,69 @@ You might also want to check the [Running checks with a scheduler](../data-quali
 
 The YAML configuration file stores both the table details and checks configurations.
 
-In this example, we have set three maximum percentage thresholds levels for the checks:
+In this example, we have set the maximum percentage threshold level for the checks:
 
 - warning: 99.0%
-- error: 98.0%
-- fatal: 95.0%
 
 The highlighted fragments in the YAML file below represent the segment where the monitoring `daily_valid_latitude_percent` and
 `daily_valid_longitude_percent`checks are configured.
 
 If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/definition-of-data-quality-checks/index.md).
 
-```yaml hl_lines="12-39"
+```yaml hl_lines="12-31"
 apiVersion: dqo/v1
 kind: table
 spec:
-  incremental_time_window:
-    daily_partitioning_recent_days: 7
-    monthly_partitioning_recent_months: 1
-  columns:
-    unique_key:
-      type_snapshot:
-        column_type: STRING
-        nullable: true
-    latitude:
-      type_snapshot:
-        column_type: FLOAT64
-        nullable: true
-      monitoring_checks:
-        daily:
-          numeric:
-            daily_valid_latitude_percent:
-              warning:
-                min_percent: 99.0
-              error:
-                min_percent: 98.0
-              fatal:
-                min_percent: 95.0
-    longitude:
-      type_snapshot:
-        column_type: FLOAT64
-        nullable: true
-      monitoring_checks:
-        daily:
-          numeric:
-            daily_valid_longitude_percent:
-              warning:
-                min_percent: 99.0
-              error:
-                min_percent: 98.0
-              fatal:
-                min_percent: 95.0
-```
-
-## Run the checks in the example using the DQOps Shell
-
-A detailed explanation of [how to start DQOps platform and run the example is described here](../index.md#running-the-use-cases).
-
-To execute the check prepared in the example, run the following command in DQOps Shell:
-
-``` 
-check run
-```
-
-Review the results which should be similar to the one below.
-The percent of valid latitude and longitude values is above the 99% and the checks results are valid.
-
-```
-Check evaluation summary per table:
-+----------+-------------------------------+------+--------------+-------------+--------+------+------------+----------------+
-|Connection|Table                          |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
-+----------+-------------------------------+------+--------------+-------------+--------+------+------------+----------------+
-|austin_311|austin_311.311_service_requests|2     |2             |2            |0       |0     |0           |0               |
-+----------+-------------------------------+------+--------------+-------------+--------+------+------------+----------------+
-```
-
-For a more detailed insight of how the checks are run, you can initiate the checks in debug mode by executing the
-following command:
-
-```
-check run --mode=debug
-```
-
-In the debug mode you can view the SQL queries (sensors) executed in the checks.
-
-```
-**************************************************
-Executing SQL on connection austin_311 (bigquery)
-SQL to be executed on the connection:
-SELECT
-    100.0 * SUM(
-        CASE
-            WHEN analyzed_table.`latitude` >= -90.0 AND analyzed_table.`latitude` <= 90.0 THEN 1
-            ELSE 0
-        END
-    )/COUNT(*) AS actual_value,
-    CURRENT_TIMESTAMP() AS time_period,
-    TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
-FROM `bigquery-public-data`.`austin_311`.`311_service_requests` AS analyzed_table
-GROUP BY time_period, time_period_utc
-ORDER BY time_period, time_period_utc
-**************************************************
-```
-
-```
-**************************************************
-Executing SQL on connection austin_311 (bigquery)
-SQL to be executed on the connection:
-SELECT
-    100.0 * SUM(
-        CASE
-            WHEN analyzed_table.`longitude` >= -180.0 AND analyzed_table.`longitude` <= 180.0 THEN 1
-            ELSE 0
-        END
-    )/COUNT(*) AS actual_value,
-    CURRENT_TIMESTAMP() AS time_period,
-    TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
-FROM `bigquery-public-data`.`austin_311`.`311_service_requests` AS analyzed_table
-GROUP BY time_period, time_period_utc
-ORDER BY time_period, time_period_utc
-**************************************************
-
-```
-
-You can also see the results returned by the sensors. The actual values in this example for both sensors is 99.19%, 
-which is above the maximum threshold level set for the warning (99%).
-
-```
-**************************************************
-Finished executing a sensor for a check valid_latitude_percent on the table austin_311.311_service_requests 
-using a sensor definition column/numeric/valid_latitude_percent, sensor result count: 1
-
-Results returned by the sensor:
-+----------------+------------------------+------------------------+
-|actual_value    |time_period             |time_period_utc         |
-+----------------+------------------------+------------------------+
-|99.1905543612962|2023-05-08T06:08:26.679Z|2023-05-08T06:08:26.679Z|
-+----------------+------------------------+------------------------+
-**************************************************
-```
-
-```
-Finished executing a sensor for a check valid_longitude_percent on the table austin_311.311_service_requests
-using a sensor definition column/numeric/valid_longitude_percent, sensor result count: 1
-
-Results returned by the sensor:
-+-----------------+------------------------+------------------------+
-|actual_value     |time_period             |time_period_utc         |
-+-----------------+------------------------+------------------------+
-|99.19006528255773|2023-05-08T13:34:23.984Z|2023-05-08T13:34:23.984Z|
-+-----------------+------------------------+------------------------+
+   incremental_time_window:
+      daily_partitioning_recent_days: 7
+      monthly_partitioning_recent_months: 1
+   columns:      
+      state_plane_y_coordinate:
+         type_snapshot:
+            column_type: FLOAT64
+            nullable: true
+      latitude:
+         type_snapshot:
+            column_type: FLOAT64
+            nullable: true
+         monitoring_checks:
+            daily:
+               numeric:
+                  daily_valid_latitude_percent:
+                     warning:
+                        min_percent: 99.0
+      longitude:
+         type_snapshot:
+            column_type: FLOAT64
+            nullable: true
+         monitoring_checks:
+            daily:
+               numeric:
+                  daily_valid_longitude_percent:
+                     warning:
+                        min_percent: 99.0
+      location:
+         type_snapshot:
+            column_type: STRING
+            nullable: true
+      council_district_code:
+         type_snapshot:
+            column_type: INT64
+            nullable: true
+      map_page:
+         type_snapshot:
+            column_type: STRING
+            nullable: true
+      map_tile:
+         type_snapshot:
+            column_type: STRING
+            nullable: true
 ```
 
 In this example, we have demonstrated how to use DQOps to verify the validity of data in a column.
 By using the [valid_latitude_percent](../../checks/column/numeric/valid-latitude-percent.md) and
 [valid_longitude_percent](../../checks/column/numeric/valid-longitude-percent.md) column checks, we can monitor that
-the percentage of valid latitude and longitude values does not fall below a set threshold. If it does, you will get a warning, error or fatal resul
+the percentage of valid latitude and longitude values does not fall below a set threshold. If it does, you will get a warning result.
 
 
 ## Next steps

@@ -1,8 +1,8 @@
 ---
-title: How to activate data observability for DuckDB
+title: How to set up data quality monitoring and data observability for DuckDB
 ---
-# How to activate data observability for DuckDB
-Read this guide to learn how to configure DQOps to use CSV, JSON, or Parquet files, or table formats such as Iceberg or Delta Lake, from the UI, command-line interface, or directly in YAML files, and activate monitoring.
+# How to set up data quality monitoring and data observability for DuckDB
+Data observability and data monitoring for DuckDB. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
 
 ## Overview
 
@@ -62,8 +62,8 @@ After navigating to the DuckDB connection settings, you will need to fill in its
 
 Click the link for a detailed description of the next steps to add the connection in a supported file format.
 
-- [CSV](./csv.md#Setting-the-path-to-data)
-- [JSON](./json.md#Setting-the-path-to-data)
-- [Parquet](./parquet.md#Setting-the-path-to-data)
-- [Iceberg](./iceberg.md#Setting-the-path-to-data)
-- [Delta Lake](./deltalake.md#Setting-the-path-to-data)
+- [CSV](./csv.md#setting-the-path-to-data-import)
+- [JSON](./json.md#setting-the-path-to-data-import)
+- [Parquet](./parquet.md#setting-the-path-to-data-import)
+- [Iceberg](./iceberg.md#setting-the-path-to-data-import)
+- [Delta Lake](./deltalake.md#setting-the-path-to-data-import)

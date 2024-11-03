@@ -5,6 +5,7 @@ import {
   PopoverContent,
   PopoverHandler
 } from '@material-tailwind/react';
+import clsx from 'clsx';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import {
@@ -28,6 +29,7 @@ import AddTableDialog from './AddTableDialog';
 import CollectStatisticsDialog from './CollectStatisticsDialog';
 import ConfirmDialog from './ConfirmDialog';
 import DeleteStoredDataExtendedPopUp from './DeleteStoredDataExtendedPopUp';
+import PushToDataCatalogDialog from './PushToDataCatalogDialog';
 import RunChecksDialog from './RunChecksDialog';
 
 interface ContextMenuProps {
@@ -56,6 +58,7 @@ const ContextMenu = ({ node }: ContextMenuProps) => {
   const [addTableDialogOpen, setAddTableDialogOpen] = useState(false);
   const [addSchemaDialogOpen, setAddSchemaDialogOpen] = useState(false);
   const [deleteNodePopup, setDeleteNodePopup] = useState(false);
+  const [pushToDataCatalogOpen, setPushToDataCatalogOpen] = useState(false);
   const dispatch = useActionDispatch();
 
   const handleRefresh = () => {
@@ -419,6 +422,26 @@ const ContextMenu = ({ node }: ContextMenuProps) => {
                 Reimport metadata
               </div>
             )}
+          {(node.level === TREE_LEVEL.TABLE ||
+            node.level === TREE_LEVEL.DATABASE ||
+            node.level === TREE_LEVEL.SCHEMA) &&
+            checkTypes === CheckTypes.SOURCES && (
+              <div
+                className={clsx(
+                  'cursor-pointer hover:bg-gray-100 hover:text-gray-900 px-4 py-2 rounded',
+                  userProfile &&
+                    !userProfile.can_synchronize_to_data_catalog ? 
+                    'text-gray-500' : 'text-gray-900'
+                )}
+                onClick={() =>
+                  userProfile.can_synchronize_to_data_catalog
+                    ? setPushToDataCatalogOpen(true)
+                    : undefined
+                }
+              >
+                Push to data catalog
+              </div>
+            )}
         </div>
         {deleteDataDialogOpened && (
           <DeleteStoredDataExtendedPopUp
@@ -474,6 +497,13 @@ const ContextMenu = ({ node }: ContextMenuProps) => {
               setRunChecksDialogOpened(false);
             }}
             runChecksJobTemplate={node.run_checks_job_template ?? {}}
+          />
+        )}
+        {pushToDataCatalogOpen && (
+          <PushToDataCatalogDialog
+            open={pushToDataCatalogOpen}
+            onClose={() => setPushToDataCatalogOpen(false)}
+            nodeId={String(node.id)}
           />
         )}
         {deleteNodePopup && (

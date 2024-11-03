@@ -15,16 +15,30 @@
  */
 package com.dqops.data.readouts.snapshot;
 
+import com.dqops.data.readouts.factory.SensorReadoutsColumnNames;
+import com.dqops.data.storage.LoadedMonthlyPartition;
+import com.dqops.data.storage.ParquetPartitionId;
+import com.dqops.utils.tables.TableColumnUtility;
+import com.dqops.utils.tables.TableCopyUtility;
+import lombok.Data;
+import tech.tablesaw.api.LongColumn;
+import tech.tablesaw.api.Table;
+import tech.tablesaw.index.LongIndex;
+import tech.tablesaw.selection.Selection;
+
+import java.lang.ref.WeakReference;
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Dictionary of identified time series in the historic sensor readout results.
  */
 public class SensorReadoutsTimeSeriesMap {
-    private final Map<SensorReadoutTimeSeriesKey, SensorReadoutsTimeSeriesData> entries = new LinkedHashMap<>();
+    private final Map<SensorReadoutTimeSeriesKey, WeakReference<SensorReadoutsTimeSeriesData>> entries = new LinkedHashMap<>();
+    private final Map<ParquetPartitionId, LoadedMonthlyPartition> partitionMap;
+    private final Map<ParquetPartitionId, PartitionIndexes> partitionIndexes = new TreeMap<>();
     private LocalDate firstLoadedMonth;
     private LocalDate lastLoadedMonth;
 
@@ -32,10 +46,30 @@ public class SensorReadoutsTimeSeriesMap {
      * Create a time series map.
      * @param firstLoadedMonth The date of the first loaded month.
      * @param lastLoadedMonth The date of the last loaded month.
+     * @param partitionMap Dictionary of loaded partitions.
      */
-    public SensorReadoutsTimeSeriesMap(LocalDate firstLoadedMonth, LocalDate lastLoadedMonth) {
+    public SensorReadoutsTimeSeriesMap(LocalDate firstLoadedMonth, LocalDate lastLoadedMonth,
+                                       Map<ParquetPartitionId, LoadedMonthlyPartition> partitionMap) {
         this.firstLoadedMonth = firstLoadedMonth;
         this.lastLoadedMonth = lastLoadedMonth;
+        this.partitionMap = partitionMap;
+        if (partitionMap != null) {
+            for (Map.Entry<ParquetPartitionId, LoadedMonthlyPartition> partitionKeyValue : partitionMap.entrySet()) {
+                Table partitionData = partitionKeyValue.getValue().getData();
+                if (partitionData == null) {
+                    return;
+                }
+
+                LongColumn checkHashColumn = (LongColumn) partitionData.column(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME);
+                LongColumn dataStreamHashColumn = (LongColumn) TableColumnUtility.findColumn(partitionData,
+                            SensorReadoutsColumnNames.DATA_GROUP_HASH_COLUMN_NAME);
+                LongIndex checkHashIndex = new LongIndex(checkHashColumn);
+                LongIndex dataStreamHashIndex = new LongIndex(dataStreamHashColumn);
+
+                PartitionIndexes partitionIndexesEntry = new PartitionIndexes(checkHashIndex, dataStreamHashIndex, partitionKeyValue.getValue());
+                this.partitionIndexes.put(partitionKeyValue.getKey(), partitionIndexesEntry);
+            }
+        }
     }
 
     /**
@@ -55,29 +89,75 @@ public class SensorReadoutsTimeSeriesMap {
     }
 
     /**
-     * Returns a known time series for the given key or null when no historic data for this time series is present.
-     * @param key Time series key.
-     * @return Time series data or null.
-     */
-    public SensorReadoutsTimeSeriesData findTimeSeriesData(SensorReadoutTimeSeriesKey key) {
-        return this.entries.get(key);
-    }
-
-    /**
      * Returns a known time series for the given key (check and dimension) or null when no historic data for this time series is present.
      * @param checkHashId Check hash code id.
      * @param dimensionId Dimension hash code id.
      * @return Time series data or null.
      */
     public SensorReadoutsTimeSeriesData findTimeSeriesData(long checkHashId, long dimensionId) {
-        return this.entries.get(new SensorReadoutTimeSeriesKey(checkHashId, dimensionId));
+        SensorReadoutTimeSeriesKey key = new SensorReadoutTimeSeriesKey(checkHashId, dimensionId);
+        WeakReference<SensorReadoutsTimeSeriesData> sensorReadoutsTimeSeriesDataRef = this.entries.get(key);
+        SensorReadoutsTimeSeriesData sensorReadoutsTimeSeriesData = sensorReadoutsTimeSeriesDataRef != null ?
+                sensorReadoutsTimeSeriesDataRef.get() : null;
+
+        if (sensorReadoutsTimeSeriesData != null) {
+            return sensorReadoutsTimeSeriesData;
+        }
+
+        Table allTimeSeriesData = null;
+
+        for (Map.Entry<ParquetPartitionId, PartitionIndexes> partitionIndexesKeyValue : this.partitionIndexes.entrySet()) {
+            PartitionIndexes partitionIndexesEntry = partitionIndexesKeyValue.getValue();
+            Selection checkHashRows = partitionIndexesEntry.checkHashIndex.get(checkHashId);
+            Selection groupHashRows = partitionIndexesEntry.dataStreamHashIndex.get(dimensionId);
+
+            Table partitionDataTable = partitionIndexesEntry.partitionData.getData();
+            if (partitionDataTable == null) {
+                continue;
+            }
+
+            Table filteredPartitionRows = TableCopyUtility.copyTableFiltered(partitionDataTable, checkHashRows.and(groupHashRows));
+            Table sortedTimeSeriesTable = filteredPartitionRows.sortOn(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME);
+
+            if (allTimeSeriesData == null) {
+                allTimeSeriesData = sortedTimeSeriesTable;
+            } else {
+                allTimeSeriesData.append(sortedTimeSeriesTable);
+            }
+        }
+
+        if (allTimeSeriesData == null) {
+            return null;
+        }
+
+        SensorReadoutsTimeSeriesData timeSeriesDataSlice = new SensorReadoutsTimeSeriesData(key, allTimeSeriesData);  // TODO: we could store it in the cache.. but not for the moment, maybe for a different use case
+        return timeSeriesDataSlice;
     }
 
     /**
-     * Adds a time series object to the dictionary.
-     * @param timeSeries Time series object.
+     * Partition indexes container.
      */
-    public void add(SensorReadoutsTimeSeriesData timeSeries) {
-		this.entries.put(timeSeries.getKey(), timeSeries);
+    @Data
+    public static class PartitionIndexes {
+        /**
+         * Check hash index.
+         */
+        private final LongIndex checkHashIndex;
+
+        /**
+         * Data stream (data group) hash index.
+         */
+        private final LongIndex dataStreamHashIndex;
+
+        /**
+         * The partition data.
+         */
+        private final LoadedMonthlyPartition partitionData;
+
+        public PartitionIndexes(LongIndex checkHashIndex, LongIndex dataStreamHashIndex, LoadedMonthlyPartition monthlyPartition) {
+            this.checkHashIndex = checkHashIndex;
+            this.dataStreamHashIndex = dataStreamHashIndex;
+            this.partitionData = monthlyPartition;
+        }
     }
 }

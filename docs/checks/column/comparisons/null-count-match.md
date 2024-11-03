@@ -183,6 +183,38 @@ spec:
                 ) AS actual_value
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
             ```
+    ??? example "ClickHouse"
+
+        === "Sensor template for ClickHouse"
+
+            ```sql+jinja
+            {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+            SELECT
+                SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for ClickHouse"
+
+            ```sql
+            SELECT
+                SUM(
+                    CASE
+                        WHEN analyzed_table."target_column" IS NULL THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            ```
     ??? example "Databricks"
 
         === "Sensor template for Databricks"
@@ -330,6 +362,38 @@ spec:
                     original_table.*
                 FROM "<target_schema>"."<target_table>" original_table
             ) analyzed_table
+            ```
+    ??? example "MariaDB"
+
+        === "Sensor template for MariaDB"
+
+            ```sql+jinja
+            {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+            SELECT
+                SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MariaDB"
+
+            ```sql
+            SELECT
+                SUM(
+                    CASE
+                        WHEN analyzed_table.`target_column` IS NULL THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+            FROM `<target_table>` AS analyzed_table
             ```
     ??? example "MySQL"
 
@@ -479,6 +543,48 @@ spec:
                 FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             ```
+    ??? example "QuestDB"
+
+        === "Sensor template for QuestDB"
+
+            ```sql+jinja
+            {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+            SELECT
+                SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM(
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for QuestDB"
+
+            ```sql
+            SELECT
+                SUM(
+                    CASE
+                        WHEN analyzed_table."target_column" IS NULL THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+            FROM(
+                SELECT
+                    original_table.*
+                FROM "<target_table>" original_table
+            ) analyzed_table
+            ```
     ??? example "Redshift"
 
         === "Sensor template for Redshift"
@@ -606,6 +712,38 @@ spec:
                     END
                 ) AS actual_value
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+            ```
+    ??? example "Teradata"
+
+        === "Sensor template for Teradata"
+
+            ```sql+jinja
+            {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
+            SELECT
+                SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Teradata"
+
+            ```sql
+            SELECT
+                SUM(
+                    CASE
+                        WHEN analyzed_table."target_column" IS NULL THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
             ```
     ??? example "Trino"
 
@@ -825,6 +963,38 @@ spec:
                 ) AS actual_value
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
             ```
+    ??? example "ClickHouse"
+
+        === "Sensor template for ClickHouse"
+
+            ```sql+jinja
+            {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+            SELECT
+                SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for ClickHouse"
+
+            ```sql
+            SELECT
+                SUM(
+                    CASE
+                        WHEN analyzed_table."target_column" IS NULL THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            ```
     ??? example "Databricks"
 
         === "Sensor template for Databricks"
@@ -972,6 +1142,38 @@ spec:
                     original_table.*
                 FROM "<target_schema>"."<target_table>" original_table
             ) analyzed_table
+            ```
+    ??? example "MariaDB"
+
+        === "Sensor template for MariaDB"
+
+            ```sql+jinja
+            {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+            SELECT
+                SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MariaDB"
+
+            ```sql
+            SELECT
+                SUM(
+                    CASE
+                        WHEN analyzed_table.`target_column` IS NULL THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+            FROM `<target_table>` AS analyzed_table
             ```
     ??? example "MySQL"
 
@@ -1121,6 +1323,48 @@ spec:
                 FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             ```
+    ??? example "QuestDB"
+
+        === "Sensor template for QuestDB"
+
+            ```sql+jinja
+            {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+            SELECT
+                SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM(
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for QuestDB"
+
+            ```sql
+            SELECT
+                SUM(
+                    CASE
+                        WHEN analyzed_table."target_column" IS NULL THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+            FROM(
+                SELECT
+                    original_table.*
+                FROM "<target_table>" original_table
+            ) analyzed_table
+            ```
     ??? example "Redshift"
 
         === "Sensor template for Redshift"
@@ -1248,6 +1492,38 @@ spec:
                     END
                 ) AS actual_value
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+            ```
+    ??? example "Teradata"
+
+        === "Sensor template for Teradata"
+
+            ```sql+jinja
+            {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
+            SELECT
+                SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Teradata"
+
+            ```sql
+            SELECT
+                SUM(
+                    CASE
+                        WHEN analyzed_table."target_column" IS NULL THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
             ```
     ??? example "Trino"
 
@@ -1467,6 +1743,38 @@ spec:
                 ) AS actual_value
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
             ```
+    ??? example "ClickHouse"
+
+        === "Sensor template for ClickHouse"
+
+            ```sql+jinja
+            {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+            SELECT
+                SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for ClickHouse"
+
+            ```sql
+            SELECT
+                SUM(
+                    CASE
+                        WHEN analyzed_table."target_column" IS NULL THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            ```
     ??? example "Databricks"
 
         === "Sensor template for Databricks"
@@ -1614,6 +1922,38 @@ spec:
                     original_table.*
                 FROM "<target_schema>"."<target_table>" original_table
             ) analyzed_table
+            ```
+    ??? example "MariaDB"
+
+        === "Sensor template for MariaDB"
+
+            ```sql+jinja
+            {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+            SELECT
+                SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MariaDB"
+
+            ```sql
+            SELECT
+                SUM(
+                    CASE
+                        WHEN analyzed_table.`target_column` IS NULL THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+            FROM `<target_table>` AS analyzed_table
             ```
     ??? example "MySQL"
 
@@ -1763,6 +2103,48 @@ spec:
                 FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             ```
+    ??? example "QuestDB"
+
+        === "Sensor template for QuestDB"
+
+            ```sql+jinja
+            {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+            SELECT
+                SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM(
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for QuestDB"
+
+            ```sql
+            SELECT
+                SUM(
+                    CASE
+                        WHEN analyzed_table."target_column" IS NULL THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+            FROM(
+                SELECT
+                    original_table.*
+                FROM "<target_table>" original_table
+            ) analyzed_table
+            ```
     ??? example "Redshift"
 
         === "Sensor template for Redshift"
@@ -1890,6 +2272,38 @@ spec:
                     END
                 ) AS actual_value
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+            ```
+    ??? example "Teradata"
+
+        === "Sensor template for Teradata"
+
+            ```sql+jinja
+            {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
+            SELECT
+                SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Teradata"
+
+            ```sql
+            SELECT
+                SUM(
+                    CASE
+                        WHEN analyzed_table."target_column" IS NULL THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
             ```
     ??? example "Trino"
 
@@ -2123,6 +2537,42 @@ spec:
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
+    ??? example "ClickHouse"
+
+        === "Sensor template for ClickHouse"
+
+            ```sql+jinja
+            {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+            SELECT
+                SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for ClickHouse"
+
+            ```sql
+            SELECT
+                SUM(
+                    CASE
+                        WHEN analyzed_table."target_column" IS NULL THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
+                CAST(analyzed_table."date_column" AS DATE) AS time_period,
+                toDateTime64(CAST(analyzed_table."date_column" AS DATE), 3) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "Databricks"
 
         === "Sensor template for Databricks"
@@ -2288,6 +2738,42 @@ spec:
                 TO_TIMESTAMP(CAST(original_table."date_column" AS DATE)) AS time_period_utc
                 FROM "<target_schema>"."<target_table>" original_table
             ) analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "MariaDB"
+
+        === "Sensor template for MariaDB"
+
+            ```sql+jinja
+            {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+            SELECT
+                SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MariaDB"
+
+            ```sql
+            SELECT
+                SUM(
+                    CASE
+                        WHEN analyzed_table.`target_column` IS NULL THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
+                DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-%d 00:00:00') AS time_period,
+                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-%d 00:00:00'))) AS time_period_utc
+            FROM `<target_table>` AS analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -2459,6 +2945,54 @@ spec:
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
+    ??? example "QuestDB"
+
+        === "Sensor template for QuestDB"
+
+            ```sql+jinja
+            {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+            SELECT
+                SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM(
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for QuestDB"
+
+            ```sql
+            SELECT
+                SUM(
+                    CASE
+                        WHEN analyzed_table."target_column" IS NULL THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
+                time_period,
+                time_period_utc
+            FROM(
+                SELECT
+                    original_table.*,
+                CAST(DATE_TRUNC('day', original_table."date_column") AS DATE) AS time_period,
+                CAST((CAST(DATE_TRUNC('day', original_table."date_column") AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                FROM "<target_table>" original_table
+            ) analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "Redshift"
 
         === "Sensor template for Redshift"
@@ -2604,6 +3138,42 @@ spec:
             ORDER BY CAST(analyzed_table.[date_column] AS date)
             
                 
+            ```
+    ??? example "Teradata"
+
+        === "Sensor template for Teradata"
+
+            ```sql+jinja
+            {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
+            SELECT
+                SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Teradata"
+
+            ```sql
+            SELECT
+                SUM(
+                    CASE
+                        WHEN analyzed_table."target_column" IS NULL THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
+                CAST(analyzed_table."date_column" AS DATE) AS time_period,
+                CAST(CAST(analyzed_table."date_column" AS DATE) AS TIMESTAMP) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
             ```
     ??? example "Trino"
 
@@ -2843,6 +3413,42 @@ spec:
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
+    ??? example "ClickHouse"
+
+        === "Sensor template for ClickHouse"
+
+            ```sql+jinja
+            {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+            SELECT
+                SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for ClickHouse"
+
+            ```sql
+            SELECT
+                SUM(
+                    CASE
+                        WHEN analyzed_table."target_column" IS NULL THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
+                DATE_TRUNC('month', CAST(analyzed_table."date_column" AS DATE)) AS time_period,
+                toDateTime64(DATE_TRUNC('month', CAST(analyzed_table."date_column" AS DATE)), 3) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "Databricks"
 
         === "Sensor template for Databricks"
@@ -3008,6 +3614,42 @@ spec:
                 TO_TIMESTAMP(SERIES_ROUND(CAST(original_table."date_column" AS DATE), 'INTERVAL 1 MONTH', ROUND_DOWN)) AS time_period_utc
                 FROM "<target_schema>"."<target_table>" original_table
             ) analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "MariaDB"
+
+        === "Sensor template for MariaDB"
+
+            ```sql+jinja
+            {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+            SELECT
+                SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MariaDB"
+
+            ```sql
+            SELECT
+                SUM(
+                    CASE
+                        WHEN analyzed_table.`target_column` IS NULL THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
+                DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-01 00:00:00') AS time_period,
+                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-01 00:00:00'))) AS time_period_utc
+            FROM `<target_table>` AS analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -3179,6 +3821,54 @@ spec:
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
+    ??? example "QuestDB"
+
+        === "Sensor template for QuestDB"
+
+            ```sql+jinja
+            {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+            SELECT
+                SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM(
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for QuestDB"
+
+            ```sql
+            SELECT
+                SUM(
+                    CASE
+                        WHEN analyzed_table."target_column" IS NULL THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
+                time_period,
+                time_period_utc
+            FROM(
+                SELECT
+                    original_table.*,
+                CAST(DATE_TRUNC('month', original_table."date_column") AS DATE) AS time_period,
+                CAST((CAST(DATE_TRUNC('month', original_table."date_column") AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                FROM "<target_table>" original_table
+            ) analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "Redshift"
 
         === "Sensor template for Redshift"
@@ -3324,6 +4014,42 @@ spec:
             ORDER BY DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1)
             
                 
+            ```
+    ??? example "Teradata"
+
+        === "Sensor template for Teradata"
+
+            ```sql+jinja
+            {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
+            SELECT
+                SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Teradata"
+
+            ```sql
+            SELECT
+                SUM(
+                    CASE
+                        WHEN analyzed_table."target_column" IS NULL THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
+                TRUNC(CAST(analyzed_table."date_column" AS DATE), 'MM') AS time_period,
+                CAST(TRUNC(CAST(analyzed_table."date_column" AS DATE), 'MM') AS TIMESTAMP) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
             ```
     ??? example "Trino"
 

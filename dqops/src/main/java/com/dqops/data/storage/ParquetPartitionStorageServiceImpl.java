@@ -36,10 +36,14 @@ import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.metadata.storage.localfiles.userhome.LocalUserHomeFileStorageService;
 import com.dqops.utils.datetime.LocalDateTimeTruncateUtility;
 import com.dqops.utils.exceptions.DqoRuntimeException;
+import com.dqops.utils.tables.TableColumnUtility;
 import com.dqops.utils.tables.TableCompressUtility;
+import com.dqops.utils.tables.TableCopyUtility;
 import com.dqops.utils.tables.TableMergeUtility;
+import lombok.extern.slf4j.Slf4j;
 import net.tlabs.tablesaw.parquet.TablesawParquetReadOptions;
 import net.tlabs.tablesaw.parquet.TablesawParquetReader;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.ChecksumException;
 import org.jetbrains.annotations.NotNull;
@@ -56,17 +60,19 @@ import java.nio.file.Path;
 import java.time.*;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Service that supports reading and writing parquet file partitions from a local file system.
  */
 @Service
+@Slf4j
 public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStorageService {
     /**
      * The number of retries to write a parquet file when another thread was trying to write the same file.
      * When a change was detected, new changes will be merged into the most current parquet file.
      */
-    public static final int MAX_WRITE_RETRY_ON_WRITE_RACE_CONDITION = 3;
+    public static final int MAX_WRITE_RETRY_ON_WRITE_RACE_CONDITION = 10;
 
     private final ParquetPartitionMetadataService parquetPartitionMetadataService;
     private final LocalDqoUserHomePathProvider localDqoUserHomePathProvider;
@@ -120,17 +126,31 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
                                                 UserDomainIdentity userIdentity) {
         Path targetParquetFilePath = makeParquetTargetFilePath(partitionId, storageSettings, userIdentity);
         File targetParquetFile = targetParquetFilePath.toFile();
+        String[] effectiveColumnNames = columnNames != null ? columnNames :
+                storageSettings.getTableSchemaSample().columnNames().toArray(String[]::new);
 
         try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(storageSettings.getTableType(), userIdentity.getDataDomainFolder())) {
             LoadedMonthlyPartition cachedParquetFile = this.localFileSystemCache.getParquetFile(targetParquetFilePath);
             if (cachedParquetFile != null) {
-                if (cachedParquetFile.getData() == null || columnNames == null) {
+                if (cachedParquetFile.getData() == null) {
                     return cachedParquetFile;
                 }
 
-                Set<String> columnNamesHashSet = new LinkedHashSet<>(cachedParquetFile.getData().columnNames());
-                if (Arrays.stream(columnNames).allMatch(columnNamesHashSet::contains)) {
-                    return cachedParquetFile;
+                List<String> columnsInTable = cachedParquetFile.getData().columnNames();
+                Set<String> columnNamesHashSet = new LinkedHashSet<>(columnsInTable);
+                boolean allRequiredColumnsPresent = Arrays.stream(effectiveColumnNames).allMatch(columnNamesHashSet::contains);
+                if (allRequiredColumnsPresent) {
+                    if (effectiveColumnNames.length == columnsInTable.size()) {
+                        return cachedParquetFile;
+                    } else {
+                        List<Column<?>> requestedColumns = cachedParquetFile.getData().columns().stream()
+                                .filter(column -> ArrayUtils.contains(effectiveColumnNames, column.name()))
+                                .collect(Collectors.toList());
+
+                        Table tableWithRequestedColumns = Table.create(cachedParquetFile.getData().name(), requestedColumns);
+                        LoadedMonthlyPartition smallerPartition = new LoadedMonthlyPartition(partitionId, cachedParquetFile.getLastModified(), tableWithRequestedColumns);
+                        return smallerPartition;
+                    }
                 }
             }
 
@@ -142,14 +162,14 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
 
             TablesawParquetReadOptions.Builder optionsBuilder = TablesawParquetReadOptions
                     .builder(targetParquetFile);
-            if (columnNames != null) {
-                optionsBuilder = optionsBuilder.withOnlyTheseColumns(columnNames);
+            if (effectiveColumnNames != null) {
+                optionsBuilder = optionsBuilder.withOnlyTheseColumns(effectiveColumnNames);
             }
             TablesawParquetReadOptions readOptions = optionsBuilder.build();
 
             try (DqoTablesawParquetReader dqoTablesawParquetReader = new DqoTablesawParquetReader(this.hadoopConfigurationProvider.getHadoopConfiguration())) {
                 Table data = dqoTablesawParquetReader.read(readOptions);
-                TableCompressUtility.internStrings(data);
+//                TableCompressUtility.internStrings(data); // not necessary when using the StringColumn type
 
                 LoadedMonthlyPartition loadedPartition = new LoadedMonthlyPartition(partitionId, targetParquetFile.lastModified(), data);
                 this.localFileSystemCache.storeParquetFile(targetParquetFilePath, loadedPartition);
@@ -394,7 +414,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
                         .and(timePeriodColumn.isBefore(startOfNextMonth));
 
                 if (selectionOfRowsInPartitionMonth.size() > 0) {
-                    newOrChangedDataPartitionMonth = tableDataChanges.getNewOrChangedRows().where(selectionOfRowsInPartitionMonth);
+                    newOrChangedDataPartitionMonth = TableCopyUtility.copyTableFiltered(tableDataChanges.getNewOrChangedRows(), selectionOfRowsInPartitionMonth);
                 }
             }
 
@@ -404,6 +424,10 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
             }
 
             for (int i = 0; i < MAX_WRITE_RETRY_ON_WRITE_RACE_CONDITION ; i++) {
+                if (i > 0) {
+                    Thread.sleep(i * 1000L); // add a sleep, in case of a race condition
+                }
+
                 Table partitionDataOld;
                 Long beforeReadFileLastModifiedTimestamp = null;
 
@@ -421,7 +445,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
                                 .build();
                         partitionDataOld = new TablesawParquetReader().read(readOptions); // load the data
                     } else {
-                        partitionDataOld = loadedPartition.getData() != null ? loadedPartition.getData().copy() : null;
+                        partitionDataOld = loadedPartition.getData() != null ? TableCopyUtility.fastTableCopy(loadedPartition.getData()) : null;
                     }
                 }
 
@@ -432,7 +456,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
                         dataToSave = newOrChangedDataPartitionMonth;
                         InstantColumn createdAtColumn = dataToSave.instantColumn(CommonColumnNames.CREATED_AT_COLUMN_NAME);
                         createdAtColumn.setMissingTo(Instant.now());
-                        TextColumn createdByColumn = dataToSave.textColumn(CommonColumnNames.CREATED_BY_COLUMN_NAME);
+                        StringColumn createdByColumn = dataToSave.stringColumn(CommonColumnNames.CREATED_BY_COLUMN_NAME);
                         createdByColumn.setMissingTo(userIdentity.getUserName());
                     } else {
                         String[] joinColumns = {
@@ -445,7 +469,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
                 }
 
                 if (tableDataChanges.getDeletedIds() != null && tableDataChanges.getDeletedIds().size() > 0 && dataToSave != null) {
-                    Selection rowsToDeleteSelection = dataToSave.textColumn(storageSettings.getIdStringColumnName())
+                    Selection rowsToDeleteSelection = dataToSave.stringColumn(storageSettings.getIdStringColumnName())
                             .isIn(tableDataChanges.getDeletedIds());
                     if (rowsToDeleteSelection.size() > 0) {
                         dataToSave = dataToSave.dropWhere(rowsToDeleteSelection);
@@ -470,6 +494,29 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
                     }
                 }
 
+                // fix some invalid records
+                Column<?> idColumn = dataToSave.column(storageSettings.getIdStringColumnName());
+                Selection idValueMissing = idColumn.isMissing();
+                if (!idValueMissing.isEmpty()) {
+                    dataToSave = dataToSave.dropWhere(idValueMissing);
+
+                    log.warn("Missing ID column values found when saving a partition, ID column name: " +
+                            storageSettings.getIdStringColumnName() + ". Table: " + storageSettings.getTableType() + ", partition: " + loadedPartition.getPartitionId());
+                }
+
+                // fix some invalid records
+                LongColumn connectionHashColumn = (LongColumn) TableColumnUtility.findColumn(dataToSave, CommonColumnNames.CONNECTION_HASH_COLUMN_NAME);
+                if (connectionHashColumn != null) {
+                    Selection connectionHashMissing = connectionHashColumn.isMissing();
+                    if (!connectionHashMissing.isEmpty()) {
+                        dataToSave = dataToSave.dropWhere(connectionHashMissing);
+
+                        log.warn("Missing connection_hash column values found when saving a partition. Table: " +
+                                storageSettings.getTableType() + ", partition: " + loadedPartition.getPartitionId());
+                    }
+                }
+
+
                 Configuration hadoopConfiguration = this.hadoopConfigurationProvider.getHadoopConfiguration();
                 byte[] parquetFileContent = new DqoTablesawParquetWriter(hadoopConfiguration).writeToByteArray(dataToSave);
 
@@ -493,12 +540,15 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
                     try {
                         Files.write(targetParquetFilePath, parquetFileContent);
                     } catch (Exception ex) {
+                        this.localFileSystemCache.removeFile(targetParquetFilePath);
                         if (targetParquetFile.exists()) {
                             targetParquetFile.delete();
                         }
                         throw ex;
                     } finally {
-                        this.localFileSystemCache.removeFile(targetParquetFilePath);
+                        long lastSavedTimestamp = targetParquetFile.lastModified();
+                        LoadedMonthlyPartition newPartitionObject = new LoadedMonthlyPartition(loadedPartition.getPartitionId(), lastSavedTimestamp, dataToSave);
+                        this.localFileSystemCache.storeParquetFile(targetParquetFilePath, newPartitionObject);
                     }
 
                     return true;

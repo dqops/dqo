@@ -19,5 +19,13 @@ spec:
     data_type: double
     required: true
     default_value: 0.5
+  - field_name: use_ai
+    display_name: use_ai
+    help_text: "Use an AI model to predict anomalies. WARNING: anomaly detection by\
+      \ AI models is not supported in an open-source distribution of DQOps. Please\
+      \ contact DQOps support to upgrade your instance to a closed-source DQOps distribution."
+    data_type: boolean
+    display_hint: requires_paid_version
   parameters:
     degrees_of_freedom: 5
+    ai_degrees_of_freedom: 8

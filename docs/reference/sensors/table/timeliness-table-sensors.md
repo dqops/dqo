@@ -72,6 +72,50 @@ The templates used to generate the SQL query for each data source supported by D
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "ClickHouse"
+
+    ```sql+jinja
+    {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+    
+    {% macro render_current_event_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        DATE_DIFF(
+            'MILLISECOND',
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+            toDateTime64(now(), 3)
+        ) / 24.0 / 3600.0 / 1000.0
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        DATE_DIFF(
+            'DAY',
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+            toDate(now())
+        )
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        DATE_DIFF(
+            'MILLISECOND',
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+            toDateTime(now())
+        ) / 24.0 / 3600.0 / 1000.0
+        {%- else -%}
+        DATE_DIFF(
+            'MILLISECOND',
+            MAX(
+                toDateTime64OrNull({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}, 3)
+            ),
+            toDateTime64(now(), 3)
+        ) / 24.0 / 3600.0 / 1000.0
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        {{ render_current_event_diff() }} AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "Databricks"
 
     ```sql+jinja
@@ -225,6 +269,48 @@ The templates used to generate the SQL query for each data source supported by D
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "MariaDB"
+
+    ```sql+jinja
+    {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+    
+    {% macro render_current_event_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        TIMESTAMPDIFF(
+            SECOND,
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+            CURRENT_TIMESTAMP()
+        ) / 24.0 / 3600.0
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        DATEDIFF(
+            DAY,
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+            CURRENT_DATE()
+        )
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        TIMESTAMPDIFF(
+            SECOND,
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+            CURRENT_TIMESTAMP()
+        ) / 24.0 / 3600.0
+        {%- else -%}
+        TIMESTAMPDIFF(
+            SECOND,
+            CURRENT_TIMESTAMP(),
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+        ) / 24.0 / 3600.0
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        {{ render_current_event_diff() }} AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "MySQL"
 
     ```sql+jinja
@@ -371,6 +457,44 @@ The templates used to generate the SQL query for each data source supported by D
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM (
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+    ) analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "QuestDB"
+
+    ```sql+jinja
+    {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+    
+    {% macro render_current_event_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        EXTRACT(EPOCH FROM (
+            NOW() - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+        )) / 24.0 / 3600.0
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            TODAY() - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        EXTRACT(EPOCH FROM (
+            NOW() - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+        )) / 24.0 / 3600.0
+        {%- else -%}
+        EXTRACT(EPOCH FROM (
+            NOW() - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        {{ render_current_event_diff() }} AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM(
         SELECT
             original_table.*
             {{- lib.render_data_grouping_projections('original_table') }}
@@ -537,6 +661,50 @@ The templates used to generate the SQL query for each data source supported by D
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "Teradata"
+
+    ```sql+jinja
+    {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
+    
+    {% macro render_current_event_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        (
+            EXTRACT(DAY FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 86400
+            + EXTRACT(HOUR FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 3600
+            + EXTRACT(MINUTE FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 60
+            + EXTRACT(SECOND FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND))
+        ) / 24.0 / 3600.0
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        DATEDIFF(
+            CURRENT_DATE,
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+        )
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        (
+            EXTRACT(DAY FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 86400
+            + EXTRACT(HOUR FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 3600
+            + EXTRACT(MINUTE FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 60
+            + EXTRACT(SECOND FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND))
+        ) / 24.0 / 3600.0
+        {%- else -%}
+        (
+            EXTRACT(DAY FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 86400
+            + EXTRACT(HOUR FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 3600
+            + EXTRACT(MINUTE FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 60
+            + EXTRACT(SECOND FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND))
+        ) / 24.0 / 3600.0
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        {{ render_current_event_diff() }} AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "Trino"
 
     ```sql+jinja
@@ -648,6 +816,55 @@ The templates used to generate the SQL query for each data source supported by D
                 SAFE_CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
             ),
             MILLISECOND
+        ) / 24.0 / 3600.0 / 1000.0
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        {{ render_ingestion_event_max_diff() }} AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "ClickHouse"
+
+    ```sql+jinja
+    {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+    
+    {% macro render_ingestion_event_max_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+        and lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        DATE_DIFF(
+            'MILLISECOND',
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+        ) / 24.0 / 3600.0 / 1000.0
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+        and lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        DATE_DIFF(
+            'DAY'
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+        )
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+        and lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        DATE_DIFF(
+            'MILLISECOND',
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+        ) / 24.0 / 3600.0 / 1000.0
+        {%- else -%}
+        DATE_DIFF(
+            'MILLISECOND',
+            MAX(
+                toDateTime64OrNull({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}, 3)
+            ),
+            MAX(
+                toDateTime64OrNull({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}), 3)
+            )
         ) / 24.0 / 3600.0 / 1000.0
         {%- endif -%}
     {%- endmacro -%}
@@ -842,6 +1059,51 @@ The templates used to generate the SQL query for each data source supported by D
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "MariaDB"
+
+    ```sql+jinja
+    {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+    
+    {% macro render_ingestion_event_max_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+        and lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        TIMESTAMPDIFF(
+            SECOND,
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+        ) / 24.0 / 3600.0
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+        and lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        DATEDIFF(
+            DAY,
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+        )
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+        and lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        TIMESTAMPDIFF(
+            SECOND,
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+        ) / 24.0 / 3600.0
+        {%- else -%}
+        TIMESTAMPDIFF(
+            SECOND,
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP),
+            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
+        ) / 24.0 / 3600.0
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        {{ render_ingestion_event_max_diff() }} AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "MySQL"
 
     ```sql+jinja
@@ -1003,6 +1265,47 @@ The templates used to generate the SQL query for each data source supported by D
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM (
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+    ) analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "QuestDB"
+
+    ```sql+jinja
+    {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+    
+    {% macro render_ingestion_event_max_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+        and lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        EXTRACT(EPOCH FROM (
+            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}) - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+        )) / 24.0 / 3600.0
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+        and lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}) - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+        and lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        EXTRACT(EPOCH FROM (
+            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}) - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+        )) / 24.0 / 3600.0
+        {%- else -%}
+        EXTRACT(EPOCH FROM (
+            MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP) - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        {{ render_ingestion_event_max_diff() }} AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM(
         SELECT
             original_table.*
             {{- lib.render_data_grouping_projections('original_table') }}
@@ -1181,6 +1484,65 @@ The templates used to generate the SQL query for each data source supported by D
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "Teradata"
+
+    ```sql+jinja
+    {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
+    
+    {% macro render_ingestion_event_max_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+        and lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        (
+            EXTRACT(DAY FROM ((CAST(MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)
+                - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 86400
+            + EXTRACT(HOUR FROM ((CAST(MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)
+                - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 3600
+            + EXTRACT(MINUTE FROM ((CAST(MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)
+                - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 60
+            + EXTRACT(SECOND FROM ((CAST(MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)
+                - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND))
+        ) / 24.0 / 3600.0
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+        and lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        DATEDIFF(
+            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+        )
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+        and lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        (
+            EXTRACT(DAY FROM ((CAST(MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)
+                - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 86400
+            + EXTRACT(HOUR FROM ((CAST(MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)
+                - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 3600
+            + EXTRACT(MINUTE FROM ((CAST(MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)
+                - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 60
+            + EXTRACT(SECOND FROM ((CAST(MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)
+                - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND))
+        ) / 24.0 / 3600.0
+        {%- else -%}
+        (
+            EXTRACT(DAY FROM ((CAST(MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)
+                - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 86400
+            + EXTRACT(HOUR FROM ((CAST(MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)
+                - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 3600
+            + EXTRACT(MINUTE FROM ((CAST(MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)
+                - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 60
+            + EXTRACT(SECOND FROM ((CAST(MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)
+                - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND))
+        ) / 24.0 / 3600.0
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        {{ render_ingestion_event_max_diff() }} AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "Trino"
 
     ```sql+jinja
@@ -1292,6 +1654,50 @@ The templates used to generate the SQL query for each data source supported by D
                 SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
             ),
             MILLISECOND
+        ) / 24.0 / 3600.0 / 1000.0
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        {{ render_current_ingestion_diff() }} AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "ClickHouse"
+
+    ```sql+jinja
+    {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+    
+    {% macro render_current_ingestion_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        DATE_DIFF(
+            'MILLISECOND',
+            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+            toDateTime64(now(), 3)
+        ) / 24.0 / 3600.0 / 1000.0
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        DATE_DIFF(
+            'DAY',
+            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+            toDate(now())
+        )
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        DATE_DIFF(
+            'MILLISECOND',
+            toDateTime(now()),
+            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+        ) / 24.0 / 3600.0 / 1000.0
+        {%- else -%}
+        DATE_DIFF(
+            'MILLISECOND',
+            MAX(
+                toDateTime64OrNull({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}, 3)
+            ),
+            toDateTime64(now(), 3)
         ) / 24.0 / 3600.0 / 1000.0
         {%- endif -%}
     {%- endmacro -%}
@@ -1458,6 +1864,48 @@ The templates used to generate the SQL query for each data source supported by D
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "MariaDB"
+
+    ```sql+jinja
+    {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+    
+    {% macro render_current_ingestion_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        TIMESTAMPDIFF(
+            SECOND,
+            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+            CURRENT_TIMESTAMP()
+        ) / 24.0 / 3600.0
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        DATEDIFF(
+            DAY,
+            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+            CURRENT_DATE()
+        )
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        TIMESTAMPDIFF(
+            SECOND,
+            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+            CURRENT_TIMESTAMP()
+        ) / 24.0 / 3600.0
+        {%- else -%}
+        TIMESTAMPDIFF(
+            SECOND,
+            MAX(CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)),
+            CURRENT_TIMESTAMP()
+        ) / 24.0 / 3600.0
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        {{ render_current_ingestion_diff() }} AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "MySQL"
 
     ```sql+jinja
@@ -1604,6 +2052,44 @@ The templates used to generate the SQL query for each data source supported by D
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM (
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+    ) analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "QuestDB"
+
+    ```sql+jinja
+    {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+    
+    {% macro render_current_ingestion_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        EXTRACT(EPOCH FROM (
+            NOW() - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+        )) / 24.0 / 3600.0
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            TODAY() - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        EXTRACT(EPOCH FROM (
+            NOW() - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+        )) / 24.0 / 3600.0
+        {%- else -%}
+        EXTRACT(EPOCH FROM (
+            NOW() - MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        {{ render_current_ingestion_diff() }} AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM(
         SELECT
             original_table.*
             {{- lib.render_data_grouping_projections('original_table') }}
@@ -1771,6 +2257,50 @@ The templates used to generate the SQL query for each data source supported by D
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "Teradata"
+
+    ```sql+jinja
+    {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
+    
+    {% macro render_current_ingestion_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        (
+            EXTRACT(DAY FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 86400
+            + EXTRACT(HOUR FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 3600
+            + EXTRACT(MINUTE FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 60
+            + EXTRACT(SECOND FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND))
+        ) / 24.0 / 3600.0
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        DATEDIFF(
+            CURRENT_DATE,
+            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+        )
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        (
+            EXTRACT(DAY FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 86400
+            + EXTRACT(HOUR FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 3600
+            + EXTRACT(MINUTE FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 60
+            + EXTRACT(SECOND FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND))
+        ) / 24.0 / 3600.0
+        {%- else -%}
+        (
+            EXTRACT(DAY FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 86400
+            + EXTRACT(HOUR FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 3600
+            + EXTRACT(MINUTE FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND)) * 60
+            + EXTRACT(SECOND FROM ((CURRENT_TIMESTAMP - CAST(MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) DAY(4) TO SECOND))
+        ) / 24.0 / 3600.0
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        {{ render_current_ingestion_diff() }} AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "Trino"
 
     ```sql+jinja
@@ -1885,6 +2415,59 @@ The templates used to generate the SQL query for each data source supported by D
                 SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP),
                 SAFE_CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP),
                 MILLISECOND
+            )
+        ) / 24.0 / 3600.0 / 1000.0
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        {{ render_ingestion_event_diff() }} AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "ClickHouse"
+
+    ```sql+jinja
+    {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+    
+    {% macro render_ingestion_event_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+        and lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        MAX(
+            DATE_DIFF(
+                'MILLISECOND',
+                {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }},
+                {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}
+            )
+        ) / 24.0 / 3600.0 / 1000.0
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+        and lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        MAX(
+            DATE_DIFF(
+                'DAY',
+                {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }},
+                {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}
+            )
+        )
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+        and lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        MAX(
+            DATE_DIFF(
+                'MILLISECOND',
+                {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }},
+                {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}
+            )
+        ) / 24.0 / 3600.0 / 1000.0
+        {%- else -%}
+        MAX(
+            DATE_DIFF(
+                'MILLISECOND',
+                {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }},
+                {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}
             )
         ) / 24.0 / 3600.0 / 1000.0
         {%- endif -%}
@@ -2091,6 +2674,59 @@ The templates used to generate the SQL query for each data source supported by D
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "MariaDB"
+
+    ```sql+jinja
+    {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+    
+    {% macro render_ingestion_event_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+        and lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        MAX(
+             TIMESTAMPDIFF(
+                SECOND,
+                {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }},
+                {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}
+            )
+        ) / 24.0 / 3600.0
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+        and lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        MAX(
+            DATEDIFF(
+            DAY,
+                {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }},
+                {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}
+            )
+        )
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+        and lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        MAX(
+            TIMESTAMPDIFF(
+                SECOND,
+                {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }},
+                {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}
+            )
+        ) / 24.0 / 3600.0
+        {%- else -%}
+        MAX(
+             TIMESTAMPDIFF(
+                SECOND,
+                CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP),
+                CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
+            )
+        ) / 24.0 / 3600.0
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        {{ render_ingestion_event_diff() }} AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "MySQL"
 
     ```sql+jinja
@@ -2282,6 +2918,56 @@ The templates used to generate the SQL query for each data source supported by D
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "QuestDB"
+
+    ```sql+jinja
+    {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+    
+    {% macro render_ingestion_event_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+        and lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        MAX(
+            EXTRACT(EPOCH FROM (
+                {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} - {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}
+            ))
+        ) / 24.0 / 3600.0
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+        and lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        MAX(
+                {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} - {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}
+            )
+        )
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+        and lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        MAX(
+            EXTRACT(EPOCH FROM (
+                {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} - {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}
+            ))
+        ) / 24.0 / 3600.0
+        {%- else -%}
+        MAX(
+            EXTRACT(EPOCH FROM (
+                ({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP - ({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP
+            ))
+        ) / 24.0 / 3600.0
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        {{ render_ingestion_event_diff() }} AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM(
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+    ) analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "Redshift"
 
     ```sql+jinja
@@ -2460,6 +3146,55 @@ The templates used to generate the SQL query for each data source supported by D
                 {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }},
                 {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}
             )
+        ) / 24.0 / 3600.0
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        {{ render_ingestion_event_diff() }} AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Teradata"
+
+    ```sql+jinja
+    {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
+    
+    {% macro render_ingestion_event_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+        and lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        MAX(
+              EXTRACT(DAY FROM ((CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP) - CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)) DAY(4) TO SECOND)) * 86400
+              + EXTRACT(HOUR FROM ((CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP) - CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)) DAY(4) TO SECOND)) * 3600
+              + EXTRACT(MINUTE FROM ((CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP) - CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)) DAY(4) TO SECOND)) * 60
+              + EXTRACT(SECOND FROM ((CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP) - CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)) DAY(4) TO SECOND))
+        ) / 24.0 / 3600.0
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+        and lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        MAX(
+            DATEDIFF(
+                {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }},
+                {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}
+            )
+        )
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+        and lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        MAX(
+            EXTRACT(DAY FROM ((CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP) - CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)) DAY(4) TO SECOND)) * 86400
+                      + EXTRACT(HOUR FROM ((CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP) - CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)) DAY(4) TO SECOND)) * 3600
+                      + EXTRACT(MINUTE FROM ((CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP) - CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)) DAY(4) TO SECOND)) * 60
+                      + EXTRACT(SECOND FROM ((CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP) - CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)) DAY(4) TO SECOND))
+        ) / 24.0 / 3600.0
+        {%- else -%}
+        MAX(
+            EXTRACT(DAY FROM ((CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP) - CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)) DAY(4) TO SECOND)) * 86400
+                      + EXTRACT(HOUR FROM ((CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP) - CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)) DAY(4) TO SECOND)) * 3600
+                      + EXTRACT(MINUTE FROM ((CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP) - CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)) DAY(4) TO SECOND)) * 60
+                      + EXTRACT(SECOND FROM ((CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP) - CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)) DAY(4) TO SECOND))
         ) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}

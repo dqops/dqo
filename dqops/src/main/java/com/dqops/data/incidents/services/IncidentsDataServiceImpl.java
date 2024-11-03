@@ -137,25 +137,25 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
                     continue;
                 }
 
-                TextColumn incidentIdColumn = partitionTable.textColumn(IncidentsColumnNames.ID_COLUMN_NAME);
-                TextColumn schemaColumn = partitionTable.textColumn(IncidentsColumnNames.SCHEMA_NAME_COLUMN_NAME);
-                TextColumn tableColumn = partitionTable.textColumn(IncidentsColumnNames.TABLE_NAME_COLUMN_NAME);
+                StringColumn incidentIdColumn = partitionTable.stringColumn(IncidentsColumnNames.ID_COLUMN_NAME);
+                StringColumn schemaColumn = partitionTable.stringColumn(IncidentsColumnNames.SCHEMA_NAME_COLUMN_NAME);
+                StringColumn tableColumn = partitionTable.stringColumn(IncidentsColumnNames.TABLE_NAME_COLUMN_NAME);
                 IntColumn tablePriorityColumn = partitionTable.intColumn(IncidentsColumnNames.TABLE_PRIORITY_COLUMN_NAME);
                 LongColumn incidentHashColumn = partitionTable.longColumn(IncidentsColumnNames.INCIDENT_HASH_COLUMN_NAME);
                 InstantColumn firstSeenColumn = partitionTable.instantColumn(IncidentsColumnNames.FIRST_SEEN_COLUMN_NAME);
                 InstantColumn lastSeenColumn = partitionTable.instantColumn(IncidentsColumnNames.LAST_SEEN_COLUMN_NAME);
                 InstantColumn incidentUntilColumn = partitionTable.instantColumn(IncidentsColumnNames.INCIDENT_UNTIL_COLUMN_NAME);
-                TextColumn dataStreamNameColumn = partitionTable.textColumn(IncidentsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
-                TextColumn qualityDimensionColumn = partitionTable.textColumn(IncidentsColumnNames.QUALITY_DIMENSION_COLUMN_NAME);
-                TextColumn checkCategoryColumn = partitionTable.textColumn(IncidentsColumnNames.CHECK_CATEGORY_COLUMN_NAME);
-                TextColumn checkTypeColumn = partitionTable.textColumn(IncidentsColumnNames.CHECK_TYPE_COLUMN_NAME);
-                TextColumn checkNameColumn = partitionTable.textColumn(IncidentsColumnNames.CHECK_NAME_COLUMN_NAME);
+                StringColumn dataStreamNameColumn = partitionTable.stringColumn(IncidentsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+                StringColumn qualityDimensionColumn = partitionTable.stringColumn(IncidentsColumnNames.QUALITY_DIMENSION_COLUMN_NAME);
+                StringColumn checkCategoryColumn = partitionTable.stringColumn(IncidentsColumnNames.CHECK_CATEGORY_COLUMN_NAME);
+                StringColumn checkTypeColumn = partitionTable.stringColumn(IncidentsColumnNames.CHECK_TYPE_COLUMN_NAME);
+                StringColumn checkNameColumn = partitionTable.stringColumn(IncidentsColumnNames.CHECK_NAME_COLUMN_NAME);
                 IntColumn highestSeverityColumn = partitionTable.intColumn(IncidentsColumnNames.HIGHEST_SEVERITY_COLUMN_NAME);
                 IntColumn minSeverityColumn = partitionTable.containsColumn(IncidentsColumnNames.MINIMUM_SEVERITY_COLUMN_NAME) ?
                         partitionTable.intColumn(IncidentsColumnNames.MINIMUM_SEVERITY_COLUMN_NAME) : null;
                 IntColumn failedChecksCountColumn = partitionTable.intColumn(IncidentsColumnNames.FAILED_CHECKS_COUNT_COLUMN_NAME);
-                TextColumn issueUrlColumn = partitionTable.textColumn(IncidentsColumnNames.ISSUE_URL_COLUMN_NAME);
-                TextColumn statusColumn = partitionTable.textColumn(IncidentsColumnNames.STATUS_COLUMN_NAME);
+                StringColumn issueUrlColumn = partitionTable.stringColumn(IncidentsColumnNames.ISSUE_URL_COLUMN_NAME);
+                StringColumn statusColumn = partitionTable.stringColumn(IncidentsColumnNames.STATUS_COLUMN_NAME);
 
                 int partitionYear = partitionEntry.getKey().getMonth().getYear();
                 int partitionMonth = partitionEntry.getKey().getMonth().getMonthValue();
@@ -285,7 +285,7 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
         }
 
         Table incidentMonthData = monthPartition.getData();
-        TextColumn incidentIdColumn = incidentMonthData.textColumn(IncidentsColumnNames.ID_COLUMN_NAME);
+        StringColumn incidentIdColumn = incidentMonthData.stringColumn(IncidentsColumnNames.ID_COLUMN_NAME);
         Selection incidentIdSelection = incidentIdColumn.isEqualTo(incidentId);
         if (incidentIdSelection.isEmpty()) {
             return null;
@@ -434,7 +434,7 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
                 continue;
             }
 
-            TextColumn statusColumn = partitionTable.textColumn(IncidentsColumnNames.STATUS_COLUMN_NAME);
+            StringColumn statusColumn = partitionTable.stringColumn(IncidentsColumnNames.STATUS_COLUMN_NAME);
             InstantColumn firstSeenColumn = partitionTable.instantColumn(IncidentsColumnNames.FIRST_SEEN_COLUMN_NAME);
             Instant partitionMaxFirstSeen = firstSeenColumn.max();
             if (partitionMaxFirstSeen != null) {
@@ -507,25 +507,25 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
                     continue;
                 }
 
-                TextColumn incidentIdColumn = partitionTable.textColumn(IncidentsColumnNames.ID_COLUMN_NAME);
-                TextColumn schemaColumn = partitionTable.textColumn(IncidentsColumnNames.SCHEMA_NAME_COLUMN_NAME);
-                TextColumn tableColumn = partitionTable.textColumn(IncidentsColumnNames.TABLE_NAME_COLUMN_NAME);
+                StringColumn incidentIdColumn = partitionTable.stringColumn(IncidentsColumnNames.ID_COLUMN_NAME);
+                StringColumn schemaColumn = partitionTable.stringColumn(IncidentsColumnNames.SCHEMA_NAME_COLUMN_NAME);
+                StringColumn tableColumn = partitionTable.stringColumn(IncidentsColumnNames.TABLE_NAME_COLUMN_NAME);
                 IntColumn tablePriorityColumn = partitionTable.intColumn(IncidentsColumnNames.TABLE_PRIORITY_COLUMN_NAME);
                 LongColumn incidentHashColumn = partitionTable.longColumn(IncidentsColumnNames.INCIDENT_HASH_COLUMN_NAME);
                 InstantColumn firstSeenColumn = partitionTable.instantColumn(IncidentsColumnNames.FIRST_SEEN_COLUMN_NAME);
                 InstantColumn lastSeenColumn = partitionTable.instantColumn(IncidentsColumnNames.LAST_SEEN_COLUMN_NAME);
                 InstantColumn incidentUntilColumn = partitionTable.instantColumn(IncidentsColumnNames.INCIDENT_UNTIL_COLUMN_NAME);
-                TextColumn dataStreamNameColumn = partitionTable.textColumn(IncidentsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
-                TextColumn qualityDimensionColumn = partitionTable.textColumn(IncidentsColumnNames.QUALITY_DIMENSION_COLUMN_NAME);
-                TextColumn checkCategoryColumn = partitionTable.textColumn(IncidentsColumnNames.CHECK_CATEGORY_COLUMN_NAME);
-                TextColumn checkTypeColumn = partitionTable.textColumn(IncidentsColumnNames.CHECK_TYPE_COLUMN_NAME);
-                TextColumn checkNameColumn = partitionTable.textColumn(IncidentsColumnNames.CHECK_NAME_COLUMN_NAME);
+                StringColumn dataStreamNameColumn = partitionTable.stringColumn(IncidentsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+                StringColumn qualityDimensionColumn = partitionTable.stringColumn(IncidentsColumnNames.QUALITY_DIMENSION_COLUMN_NAME);
+                StringColumn checkCategoryColumn = partitionTable.stringColumn(IncidentsColumnNames.CHECK_CATEGORY_COLUMN_NAME);
+                StringColumn checkTypeColumn = partitionTable.stringColumn(IncidentsColumnNames.CHECK_TYPE_COLUMN_NAME);
+                StringColumn checkNameColumn = partitionTable.stringColumn(IncidentsColumnNames.CHECK_NAME_COLUMN_NAME);
                 IntColumn highestSeverityColumn = partitionTable.intColumn(IncidentsColumnNames.HIGHEST_SEVERITY_COLUMN_NAME);
                 IntColumn minSeverityColumn = partitionTable.containsColumn(IncidentsColumnNames.MINIMUM_SEVERITY_COLUMN_NAME) ?
                         partitionTable.intColumn(IncidentsColumnNames.MINIMUM_SEVERITY_COLUMN_NAME) : null;
                 IntColumn failedChecksCountColumn = partitionTable.intColumn(IncidentsColumnNames.FAILED_CHECKS_COUNT_COLUMN_NAME);
-                TextColumn issueUrlColumn = partitionTable.textColumn(IncidentsColumnNames.ISSUE_URL_COLUMN_NAME);
-                TextColumn statusColumn = partitionTable.textColumn(IncidentsColumnNames.STATUS_COLUMN_NAME);
+                StringColumn issueUrlColumn = partitionTable.stringColumn(IncidentsColumnNames.ISSUE_URL_COLUMN_NAME);
+                StringColumn statusColumn = partitionTable.stringColumn(IncidentsColumnNames.STATUS_COLUMN_NAME);
 
                 int partitionYear = partitionEntry.getKey().getMonth().getYear();
                 int partitionMonth = partitionEntry.getKey().getMonth().getMonthValue();

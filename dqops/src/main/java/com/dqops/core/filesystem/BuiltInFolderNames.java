@@ -90,6 +90,11 @@ public final class BuiltInFolderNames {
     public static final String CONNECTION_SIMILARITY_INDEX = SOURCES;
 
     /**
+     * A folder inside the .index folder where time series models can store persisted ML models.
+     */
+    public static final String TIME_SERIES_PREDICTION_MODELS = "models";
+
+    /**
      * Credentials folder to store local credentials that are not stored in the repository, but are synchronized to DQOps cloud.
      */
     public static final String CREDENTIALS = ".credentials";

@@ -165,6 +165,43 @@ spec:
                     LIMIT 1
                 ) AS tab_scan
             ```
+    ??? example "ClickHouse"
+
+        === "Sensor template for ClickHouse"
+
+            ```sql+jinja
+            {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+            SELECT
+                0.0 AS actual_value
+                {{- lib.render_time_dimension_projection('tab_scan') }}
+            FROM
+                (
+                    SELECT
+                        *
+                        {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    FROM {{ lib.render_target_table() }} AS analyzed_table
+                    {{ lib.render_where_clause() }}
+                    LIMIT 1
+                ) AS tab_scan
+            {% if lib.time_series is not none -%}
+            GROUP BY time_period
+            ORDER BY time_period
+            {%- endif -%}
+            ```
+        === "Rendered SQL for ClickHouse"
+
+            ```sql
+            SELECT
+                0.0 AS actual_value
+            FROM
+                (
+                    SELECT
+                        *
+                    FROM "<target_schema>"."<target_table>" AS analyzed_table
+                    
+                    LIMIT 1
+                ) AS tab_scan
+            ```
     ??? example "Databricks"
 
         === "Sensor template for Databricks"
@@ -309,6 +346,43 @@ spec:
                     SELECT
                         *
                     FROM "<target_schema>"."<target_table>" AS analyzed_table
+                    
+                    LIMIT 1
+                ) AS tab_scan
+            ```
+    ??? example "MariaDB"
+
+        === "Sensor template for MariaDB"
+
+            ```sql+jinja
+            {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+            SELECT
+                0.0 AS actual_value
+                {{- lib.render_time_dimension_projection('tab_scan') }}
+            FROM
+                (
+                    SELECT
+                        *
+                        {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    FROM {{ lib.render_target_table() }} AS analyzed_table
+                    {{ lib.render_where_clause() }}
+                    LIMIT 1
+                ) AS tab_scan
+            {% if lib.time_series is not none -%}
+            GROUP BY time_period
+            ORDER BY time_period
+            {%- endif -%}
+            ```
+        === "Rendered SQL for MariaDB"
+
+            ```sql
+            SELECT
+                0.0 AS actual_value
+            FROM
+                (
+                    SELECT
+                        *
+                    FROM `<target_table>` AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
@@ -467,6 +541,43 @@ spec:
                     LIMIT 1
                 ) AS tab_scan
             ```
+    ??? example "QuestDB"
+
+        === "Sensor template for QuestDB"
+
+            ```sql+jinja
+            {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+            SELECT
+                0.0 AS actual_value
+                {{- lib.render_time_dimension_projection('tab_scan') }}
+            FROM
+                (
+                    SELECT
+                        *
+                        {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    FROM {{ lib.render_target_table() }} AS analyzed_table
+                    {{ lib.render_where_clause() }}
+                    LIMIT 1
+                ) AS tab_scan
+            {% if lib.time_series is not none -%}
+            GROUP BY time_period
+            ORDER BY time_period
+            {%- endif -%}
+            ```
+        === "Rendered SQL for QuestDB"
+
+            ```sql
+            SELECT
+                0.0 AS actual_value
+            FROM
+                (
+                    SELECT
+                        *
+                    FROM "<target_table>" AS analyzed_table
+                    
+                    LIMIT 1
+                ) AS tab_scan
+            ```
     ??? example "Redshift"
 
         === "Sensor template for Redshift"
@@ -605,6 +716,43 @@ spec:
                         *
                     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
                     
+                ) AS tab_scan
+            ```
+    ??? example "Teradata"
+
+        === "Sensor template for Teradata"
+
+            ```sql+jinja
+            {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
+            SELECT
+                0.0 AS actual_value
+                {{- lib.render_time_dimension_projection('tab_scan') }}
+            FROM
+                (
+                    SELECT
+                        *
+                        {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    FROM {{ lib.render_target_table() }} AS analyzed_table
+                    {{ lib.render_where_clause() }}
+                    QUALIFY ROW_NUMBER() OVER (ORDER BY 1) = 1
+                ) AS tab_scan
+            {% if lib.time_series is not none -%}
+            GROUP BY time_period
+            ORDER BY time_period
+            {%- endif -%}
+            ```
+        === "Rendered SQL for Teradata"
+
+            ```sql
+            SELECT
+                0.0 AS actual_value
+            FROM
+                (
+                    SELECT
+                        *
+                    FROM "<target_schema>"."<target_table>" AS analyzed_table
+                    
+                    QUALIFY ROW_NUMBER() OVER (ORDER BY 1) = 1
                 ) AS tab_scan
             ```
     ??? example "Trino"
@@ -801,6 +949,43 @@ spec:
                     LIMIT 1
                 ) AS tab_scan
             ```
+    ??? example "ClickHouse"
+
+        === "Sensor template for ClickHouse"
+
+            ```sql+jinja
+            {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+            SELECT
+                0.0 AS actual_value
+                {{- lib.render_time_dimension_projection('tab_scan') }}
+            FROM
+                (
+                    SELECT
+                        *
+                        {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    FROM {{ lib.render_target_table() }} AS analyzed_table
+                    {{ lib.render_where_clause() }}
+                    LIMIT 1
+                ) AS tab_scan
+            {% if lib.time_series is not none -%}
+            GROUP BY time_period
+            ORDER BY time_period
+            {%- endif -%}
+            ```
+        === "Rendered SQL for ClickHouse"
+
+            ```sql
+            SELECT
+                0.0 AS actual_value
+            FROM
+                (
+                    SELECT
+                        *
+                    FROM "<target_schema>"."<target_table>" AS analyzed_table
+                    
+                    LIMIT 1
+                ) AS tab_scan
+            ```
     ??? example "Databricks"
 
         === "Sensor template for Databricks"
@@ -945,6 +1130,43 @@ spec:
                     SELECT
                         *
                     FROM "<target_schema>"."<target_table>" AS analyzed_table
+                    
+                    LIMIT 1
+                ) AS tab_scan
+            ```
+    ??? example "MariaDB"
+
+        === "Sensor template for MariaDB"
+
+            ```sql+jinja
+            {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+            SELECT
+                0.0 AS actual_value
+                {{- lib.render_time_dimension_projection('tab_scan') }}
+            FROM
+                (
+                    SELECT
+                        *
+                        {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    FROM {{ lib.render_target_table() }} AS analyzed_table
+                    {{ lib.render_where_clause() }}
+                    LIMIT 1
+                ) AS tab_scan
+            {% if lib.time_series is not none -%}
+            GROUP BY time_period
+            ORDER BY time_period
+            {%- endif -%}
+            ```
+        === "Rendered SQL for MariaDB"
+
+            ```sql
+            SELECT
+                0.0 AS actual_value
+            FROM
+                (
+                    SELECT
+                        *
+                    FROM `<target_table>` AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
@@ -1103,6 +1325,43 @@ spec:
                     LIMIT 1
                 ) AS tab_scan
             ```
+    ??? example "QuestDB"
+
+        === "Sensor template for QuestDB"
+
+            ```sql+jinja
+            {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+            SELECT
+                0.0 AS actual_value
+                {{- lib.render_time_dimension_projection('tab_scan') }}
+            FROM
+                (
+                    SELECT
+                        *
+                        {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    FROM {{ lib.render_target_table() }} AS analyzed_table
+                    {{ lib.render_where_clause() }}
+                    LIMIT 1
+                ) AS tab_scan
+            {% if lib.time_series is not none -%}
+            GROUP BY time_period
+            ORDER BY time_period
+            {%- endif -%}
+            ```
+        === "Rendered SQL for QuestDB"
+
+            ```sql
+            SELECT
+                0.0 AS actual_value
+            FROM
+                (
+                    SELECT
+                        *
+                    FROM "<target_table>" AS analyzed_table
+                    
+                    LIMIT 1
+                ) AS tab_scan
+            ```
     ??? example "Redshift"
 
         === "Sensor template for Redshift"
@@ -1241,6 +1500,43 @@ spec:
                         *
                     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
                     
+                ) AS tab_scan
+            ```
+    ??? example "Teradata"
+
+        === "Sensor template for Teradata"
+
+            ```sql+jinja
+            {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
+            SELECT
+                0.0 AS actual_value
+                {{- lib.render_time_dimension_projection('tab_scan') }}
+            FROM
+                (
+                    SELECT
+                        *
+                        {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    FROM {{ lib.render_target_table() }} AS analyzed_table
+                    {{ lib.render_where_clause() }}
+                    QUALIFY ROW_NUMBER() OVER (ORDER BY 1) = 1
+                ) AS tab_scan
+            {% if lib.time_series is not none -%}
+            GROUP BY time_period
+            ORDER BY time_period
+            {%- endif -%}
+            ```
+        === "Rendered SQL for Teradata"
+
+            ```sql
+            SELECT
+                0.0 AS actual_value
+            FROM
+                (
+                    SELECT
+                        *
+                    FROM "<target_schema>"."<target_table>" AS analyzed_table
+                    
+                    QUALIFY ROW_NUMBER() OVER (ORDER BY 1) = 1
                 ) AS tab_scan
             ```
     ??? example "Trino"
@@ -1437,6 +1733,43 @@ spec:
                     LIMIT 1
                 ) AS tab_scan
             ```
+    ??? example "ClickHouse"
+
+        === "Sensor template for ClickHouse"
+
+            ```sql+jinja
+            {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+            SELECT
+                0.0 AS actual_value
+                {{- lib.render_time_dimension_projection('tab_scan') }}
+            FROM
+                (
+                    SELECT
+                        *
+                        {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    FROM {{ lib.render_target_table() }} AS analyzed_table
+                    {{ lib.render_where_clause() }}
+                    LIMIT 1
+                ) AS tab_scan
+            {% if lib.time_series is not none -%}
+            GROUP BY time_period
+            ORDER BY time_period
+            {%- endif -%}
+            ```
+        === "Rendered SQL for ClickHouse"
+
+            ```sql
+            SELECT
+                0.0 AS actual_value
+            FROM
+                (
+                    SELECT
+                        *
+                    FROM "<target_schema>"."<target_table>" AS analyzed_table
+                    
+                    LIMIT 1
+                ) AS tab_scan
+            ```
     ??? example "Databricks"
 
         === "Sensor template for Databricks"
@@ -1581,6 +1914,43 @@ spec:
                     SELECT
                         *
                     FROM "<target_schema>"."<target_table>" AS analyzed_table
+                    
+                    LIMIT 1
+                ) AS tab_scan
+            ```
+    ??? example "MariaDB"
+
+        === "Sensor template for MariaDB"
+
+            ```sql+jinja
+            {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+            SELECT
+                0.0 AS actual_value
+                {{- lib.render_time_dimension_projection('tab_scan') }}
+            FROM
+                (
+                    SELECT
+                        *
+                        {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    FROM {{ lib.render_target_table() }} AS analyzed_table
+                    {{ lib.render_where_clause() }}
+                    LIMIT 1
+                ) AS tab_scan
+            {% if lib.time_series is not none -%}
+            GROUP BY time_period
+            ORDER BY time_period
+            {%- endif -%}
+            ```
+        === "Rendered SQL for MariaDB"
+
+            ```sql
+            SELECT
+                0.0 AS actual_value
+            FROM
+                (
+                    SELECT
+                        *
+                    FROM `<target_table>` AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
@@ -1739,6 +2109,43 @@ spec:
                     LIMIT 1
                 ) AS tab_scan
             ```
+    ??? example "QuestDB"
+
+        === "Sensor template for QuestDB"
+
+            ```sql+jinja
+            {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+            SELECT
+                0.0 AS actual_value
+                {{- lib.render_time_dimension_projection('tab_scan') }}
+            FROM
+                (
+                    SELECT
+                        *
+                        {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    FROM {{ lib.render_target_table() }} AS analyzed_table
+                    {{ lib.render_where_clause() }}
+                    LIMIT 1
+                ) AS tab_scan
+            {% if lib.time_series is not none -%}
+            GROUP BY time_period
+            ORDER BY time_period
+            {%- endif -%}
+            ```
+        === "Rendered SQL for QuestDB"
+
+            ```sql
+            SELECT
+                0.0 AS actual_value
+            FROM
+                (
+                    SELECT
+                        *
+                    FROM "<target_table>" AS analyzed_table
+                    
+                    LIMIT 1
+                ) AS tab_scan
+            ```
     ??? example "Redshift"
 
         === "Sensor template for Redshift"
@@ -1877,6 +2284,43 @@ spec:
                         *
                     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
                     
+                ) AS tab_scan
+            ```
+    ??? example "Teradata"
+
+        === "Sensor template for Teradata"
+
+            ```sql+jinja
+            {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
+            SELECT
+                0.0 AS actual_value
+                {{- lib.render_time_dimension_projection('tab_scan') }}
+            FROM
+                (
+                    SELECT
+                        *
+                        {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    FROM {{ lib.render_target_table() }} AS analyzed_table
+                    {{ lib.render_where_clause() }}
+                    QUALIFY ROW_NUMBER() OVER (ORDER BY 1) = 1
+                ) AS tab_scan
+            {% if lib.time_series is not none -%}
+            GROUP BY time_period
+            ORDER BY time_period
+            {%- endif -%}
+            ```
+        === "Rendered SQL for Teradata"
+
+            ```sql
+            SELECT
+                0.0 AS actual_value
+            FROM
+                (
+                    SELECT
+                        *
+                    FROM "<target_schema>"."<target_table>" AS analyzed_table
+                    
+                    QUALIFY ROW_NUMBER() OVER (ORDER BY 1) = 1
                 ) AS tab_scan
             ```
     ??? example "Trino"

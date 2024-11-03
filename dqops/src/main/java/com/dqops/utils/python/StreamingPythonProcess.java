@@ -43,6 +43,7 @@ public class StreamingPythonProcess implements Closeable, ExecuteResultHandler {
     private static final int PYTHON_BUFFER_SIZE = 1024; // buffer size used in the python streaming process in a call to TextIO.read(buffer_size)
     private static final int PYTHON_RECEIVE_RESPONSE_BUFFER_SIZE = 1024;
     private static final byte[] PYTHON_BUFFER_SPACE = StringUtils.repeat(' ', PYTHON_BUFFER_SIZE + 10).getBytes(StandardCharsets.UTF_8);
+    private static final boolean STOP_ON_STDERR_ERROR = true; // TODO: We can support using a parameter to turn it on/off
 
     private PipedOutputStream writeToProcessStream;
     private PipedInputStream writeToProcessStreamProcessSide;
@@ -139,6 +140,9 @@ public class StreamingPythonProcess implements Closeable, ExecuteResultHandler {
                     }
                     catch (Throwable ex) {
                         requestReplyMessage.getResponseFuture().completeExceptionally(ex);
+                    }
+                    finally {
+                        requestReplyMessage.setRequest(null);
                     }
                 }
                 catch (InterruptedException ex) {
@@ -254,23 +258,29 @@ public class StreamingPythonProcess implements Closeable, ExecuteResultHandler {
             this.jsonFactory = new JsonFactory();
             this.jsonParser = jsonFactory.createParser(this.readFromProcessStreamReader);
 
-            ActivityDetectionOutputStream errorOutputStream = new ActivityDetectionOutputStream(new FlushingOutputStream(this.errorStream));
-            this.outputDetectedOnStderrFuture = errorOutputStream.getOutputDetectedFuture();
-            this.outputDetectedOnStderrFuture
-                    .thenRun(() -> {
-                        try {
-                            // we detected that some output was written to the stderr of the python process, it is an error and we will terminate...
-                            Thread.sleep(100); // we need to wait for the remaining output
-                            this.waitForClose.countDown();
-                            this.close();
+            OutputStream errorOutputStream = null;
+            if (STOP_ON_STDERR_ERROR) {
+                ActivityDetectionOutputStream activityDetectionOutputStream = new ActivityDetectionOutputStream(new FlushingOutputStream(this.errorStream));
+                errorOutputStream = activityDetectionOutputStream;
+                this.outputDetectedOnStderrFuture = activityDetectionOutputStream.getOutputDetectedFuture();
+                this.outputDetectedOnStderrFuture
+                        .thenRun(() -> {
+                            try {
+                                // we detected that some output was written to the stderr of the python process, it is an error and we will terminate...
+                                Thread.sleep(100); // we need to wait for the remaining output
+                                this.waitForClose.countDown();
+                                this.close();
 
-                            String errStreamText = this.errorStream.toString(StandardCharsets.UTF_8);
-                            log.error("Python process failed with an error, the error captured from the stderr: " + errStreamText);
-                        }
-                        catch (Exception ioe) {
-                            log.error("Python process failed with an error and we cannot close the stream: " + ioe.getMessage(), ioe);
-                        }
-                    });
+                                String errStreamText = this.errorStream.toString(StandardCharsets.UTF_8);
+                                log.error("Python process failed with an error, the error captured from the stderr: " + errStreamText);
+                            } catch (Exception ioe) {
+                                log.error("Python process failed with an error and we cannot close the stream: " + ioe.getMessage(), ioe);
+                            }
+                        });
+            } else {
+                errorOutputStream = new TailOutputStream(this.errorStream);
+                this.outputDetectedOnStderrFuture = new CompletableFuture<>();
+            }
 
             this.streamHandler = new FlushingPumpStreamHandler(
                     new FlushingOutputStream(this.readFromProcessStreamProcessSide),

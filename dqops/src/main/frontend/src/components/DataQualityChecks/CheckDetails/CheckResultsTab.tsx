@@ -1,7 +1,7 @@
 import { IconButton, Tooltip } from '@material-tailwind/react';
 import clsx from 'clsx';
 import moment from 'moment';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { CheckResultEntryModel, CheckResultsListModel } from '../../../api';
 import { useTree } from '../../../contexts/treeContext';
@@ -262,13 +262,21 @@ const CheckResultsTab = ({
   }, []);
 
   useEffect(() => {
-    const startDate = month
-      ? moment(month, 'MMMM YYYY').startOf('month').format('YYYY-MM-DD')
-      : '';
-    const endDate = month
-      ? moment(month, 'MMMM YYYY').endOf('month').format('YYYY-MM-DD')
-      : '';
+    let startDate = '';
+    let endDate = '';
 
+    if (month === 'Last 3 months') {
+      startDate = moment()
+        .subtract(3, 'months')
+        .startOf('month')
+        .format('YYYY-MM-DD');
+      endDate = moment().endOf('month').format('YYYY-MM-DD');
+    } else if (month) {
+      startDate = moment(month, 'MMMM YYYY')
+        .startOf('month')
+        .format('YYYY-MM-DD');
+      endDate = moment(month, 'MMMM YYYY').endOf('month').format('YYYY-MM-DD');
+    }
     dispatch(
       getCheckResults(checkTypes, firstLevelActiveTab, {
         connection,
@@ -281,10 +289,12 @@ const CheckResultsTab = ({
         startDate,
         endDate,
         category,
-        comparisonName
+        comparisonName,
+        dataGrouping: mode === 'group' ? undefined : dataGroup,
+        loadMore: mode === 'group' ? 'most_recent_per_group' : undefined
       })
     );
-  }, [mode]);
+  }, [mode, dataGroup, month]);
 
   const allResults = results
     .map((result) =>
@@ -300,6 +310,26 @@ const CheckResultsTab = ({
       }))
     )
     .reduce((arr, el) => [...arr, ...el], []);
+
+  const checkResultsForTable = useCallback(
+    (results: CheckResultsListModel[]) => {
+      const newResults: any[] = [];
+      results.forEach((result) => {
+        (result?.checkResultEntries ?? []).forEach((entry) => {
+          newResults.push({
+            ...entry,
+            checkName: result.checkName,
+            executedAt: moment(
+              getLocalDateInUserTimeZone(new Date(String(entry.executedAt)))
+            ).format('YYYY-MM-DD HH:mm:ss'),
+            timePeriod: entry.timePeriod?.replace(/T/g, ' ')
+          });
+        });
+      });
+      return newResults;
+    },
+    [results]
+  )(results);
 
   return (
     <div
@@ -318,7 +348,9 @@ const CheckResultsTab = ({
               })) || []
             }
             onChange={onChangeDataGroup}
-            disabled={(results[0]?.dataGroups ?? []).length === 0}
+            disabled={
+              (results[0]?.dataGroups ?? []).length === 0 || mode === 'group'
+            }
           />
         </div>
         <div className="flex space-x-4 items-center">
@@ -334,7 +366,7 @@ const CheckResultsTab = ({
             ripple={false}
             size="sm"
             className={
-              mode === 'chart'
+              mode !== 'table'
                 ? 'bg-white border border-teal-500 !shadow-none hover:!shadow-none hover:bg-[#DDF2EF] '
                 : 'bg-teal-500 !shadow-none hover:!shadow-none hover:bg-[#028770]'
             }
@@ -358,10 +390,37 @@ const CheckResultsTab = ({
             </Tooltip>
           </IconButton>
           <IconButton
+            ripple={false}
+            size="sm"
+            className={
+              mode !== 'group'
+                ? 'bg-white border border-teal-500 !shadow-none hover:!shadow-none hover:bg-[#DDF2EF] '
+                : 'bg-teal-500 !shadow-none hover:!shadow-none hover:bg-[#028770]'
+            }
+            onClick={() => {
+              setMode('group');
+            }}
+          >
+            <Tooltip
+              content="View results for all data groups"
+              className="max-w-80 py-2 px-2 !mb-6 bg-gray-800 !absolute"
+            >
+              <div>
+                <SvgIcon
+                  name="grouping"
+                  className={clsx(
+                    'w-4 h-4 cursor-pointer ',
+                    mode === 'group' ? 'font-bold text-white' : 'text-teal-500'
+                  )}
+                />
+              </div>
+            </Tooltip>
+          </IconButton>
+          <IconButton
             size="sm"
             ripple={false}
             className={
-              mode === 'table'
+              mode !== 'chart'
                 ? 'bg-white border border-teal-500 !shadow-none hover:!shadow-none hover:bg-[#DDF2EF] '
                 : 'bg-teal-500 !shadow-none hover:!shadow-none hover:bg-[#028770]'
             }
@@ -389,20 +448,13 @@ const CheckResultsTab = ({
       {results.length === 0 && (
         <div className="text-gray-700 mt-5 text-sm">No Data</div>
       )}
-      {mode === 'table' && results.length !== 0 && (
+      {(mode === 'table' || mode === 'group') && results.length !== 0 && (
         <>
           {results[0] && (
             <Table
               className="mt-1 w-full"
               columns={columns}
-              data={(results[0].checkResultEntries || []).map((item) => ({
-                ...item,
-                checkName: results[0].checkName,
-                executedAt: moment(
-                  getLocalDateInUserTimeZone(new Date(String(item.executedAt)))
-                ).format('YYYY-MM-DD HH:mm:ss'),
-                timePeriod: item.timePeriod?.replace(/T/g, ' ')
-              }))}
+              data={checkResultsForTable}
               emptyMessage="No data"
               getRowClass={getSeverityClass}
             />

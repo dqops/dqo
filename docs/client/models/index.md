@@ -251,6 +251,7 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 |[*SynchronizeRootFolderParameters*](./jobs.md#synchronizerootfolderparameters)|Parameter object for starting a file synchronization job. Identifies the folder and direction that should be synchronized.|
 |[*SynchronizeRootFolderDqoQueueJobParameters*](./jobs.md#synchronizerootfolderdqoqueuejobparameters)|Parameters object for a job that synchronizes one folder with DQOps Cloud.|
 |[*SynchronizeMultipleFoldersDqoQueueJobParameters*](./jobs.md#synchronizemultiplefoldersdqoqueuejobparameters)|Simple object for starting multiple folder synchronization jobs with the same configuration.|
+|[*RunChecksTarget*](./jobs.md#runcheckstarget)||
 |[*RunChecksResult*](./jobs.md#runchecksresult)||
 |[*RunChecksParameters*](./jobs.md#runchecksparameters)||
 |[*RunChecksOnTableParameters*](./jobs.md#runchecksontableparameters)||

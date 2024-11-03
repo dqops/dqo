@@ -9,6 +9,7 @@ import {
   DuckdbParametersSpecFilesFormatTypeEnum,
   DuckdbParametersSpecStorageTypeEnum,
   MysqlParametersSpecMysqlEngineTypeEnum,
+  PostgresqlParametersSpecPostgresqlEngineTypeEnum,
   SingleStoreDbParametersSpecLoadBalancingModeEnum,
   TrinoParametersSpecAwsAuthenticationModeEnum,
   TrinoParametersSpecTrinoEngineTypeEnum
@@ -50,7 +51,22 @@ const CreateConnection = () => {
         break;
       }
       case ConnectionModelProviderTypeEnum.postgresql: {
-        copiedDatabase.postgresql = { port: '5432', properties: { '': '' } };
+        if (
+          nameOfDatabase?.toLowerCase() ===
+          PostgresqlParametersSpecPostgresqlEngineTypeEnum.postgresql
+        ) {
+          copiedDatabase.postgresql = {
+            port: '5432',
+            postgresql_engine_type: PostgresqlParametersSpecPostgresqlEngineTypeEnum.postgresql,
+            properties: { '': '' }
+          };
+        } else {
+          copiedDatabase.postgresql = {
+            port: '5432',
+            postgresql_engine_type: PostgresqlParametersSpecPostgresqlEngineTypeEnum.timescale,
+            properties: { '': '' }
+          };
+        }
         break;
       }
       case ConnectionModelProviderTypeEnum.redshift: {
@@ -162,6 +178,22 @@ const CreateConnection = () => {
           port: '50000', 
           db2_platform_type: Db2ParametersSpecDb2PlatformTypeEnum.luw,
           properties: { '': '' } };
+        break;
+      }
+      case ConnectionModelProviderTypeEnum.mariadb: {
+        copiedDatabase.mariadb = { port: '3306', properties: { '': '' } };
+        break;
+      }
+      case ConnectionModelProviderTypeEnum.clickhouse: {
+        copiedDatabase.clickhouse = { port: '8123', properties: { '': '' } };
+        break;
+      }
+      case ConnectionModelProviderTypeEnum.questdb: {
+        copiedDatabase.questdb = { port: '8812', properties: { '': '' } };
+        break;
+      }
+      case ConnectionModelProviderTypeEnum.teradata: {
+        copiedDatabase.teradata = { port: '1025', properties: { '': '' } };
         break;
       }
     }

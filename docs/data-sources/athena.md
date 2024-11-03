@@ -1,8 +1,8 @@
 ---
-title: How to activate data observability for Amazon Athena
+title: How to set up data quality monitoring and data observability for Amazon Athena
 ---
-# How to activate data observability for Amazon Athena
-Read this guide to learn how to connect DQOps to Amazon Athena from the UI, command-line interface, or directly in YAML files, and activate monitoring. 
+# How to set up data quality monitoring and data observability for Amazon Athena
+Data observability and data monitoring for Amazon Athena. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
 
 ## Overview
 
@@ -97,8 +97,8 @@ and profiling data by running default data profiling checks. Simply click on the
 
 !!! info "Automatically activated checks"
 
-    Once new tables are imported, DQOps automatically activates [profiling and monitoring checks](../dqo-concepts/definition-of-data-quality-checks/index.md).
-    These checks include row count, table availability, and checks detecting schema changes. The profiling checks are scheduled 
+    Once new tables are imported, DQOps automatically activates [profiling and monitoring checks](../dqo-concepts/definition-of-data-quality-checks/index.md) which are which are pre-enabled by [data quality policies](../dqo-concepts/data-observability.md#automatic-activation-of-checks).
+    These checks detect volume anomalies, data freshness anomalies, empty tables, table availability, schema changes, anomalies in the count of distinct values, and null percent anomalies. The profiling checks are scheduled 
     to run at 1:00 a.m. on the 1st day of every month, and the monitoring checks are scheduled to run daily at 12:00 p.m.
     
     [**Profiling checks**](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md) are designed to assess
@@ -124,18 +124,24 @@ Fill in the data you will be asked for.
 Connection name (--name): connection1
 Database provider type (--provider):
  [ 1] bigquery
- [ 2] databricks
- [ 3] mysql
- [ 4] oracle
- [ 5] postgresql
- [ 6] duckdb
- [ 7] presto
- [ 8] redshift
- [ 9] snowflake
- [10] spark
- [11] sqlserver
- [12] trino
-Please enter one of the [] values: 12
+ [ 2] clickhouse
+ [ 3] databricks
+ [ 4] db2
+ [ 5] duckdb
+ [ 6] hana
+ [ 7] mariadb
+ [ 8] mysql
+ [ 9] oracle
+ [10] postgresql
+ [11] presto
+ [12] questdb
+ [13] redshift
+ [14] snowflake
+ [15] spark
+ [16] sqlserver
+ [17] teradata
+ [18] trino
+Please enter one of the [] values: 18
 Trino engine type (--trino-engine):
  [ 1] trino
  [ 2] athena

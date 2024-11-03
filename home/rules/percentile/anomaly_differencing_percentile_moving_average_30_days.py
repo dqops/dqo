@@ -1,5 +1,5 @@
 #
-# Copyright © 2023 DQOps (support@dqops.com)
+# Copyright © 2024 DQOps (support@dqops.com)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,10 +15,12 @@
 #
 
 from datetime import datetime
-from typing import Sequence
+from typing import Sequence, Dict
 import numpy as np
 import scipy
 import scipy.stats
+from lib.anomalies.data_preparation import convert_historic_data_differencing, average_forecast
+from lib.anomalies.anomaly_detection import detect_upper_bound_anomaly, detect_lower_bound_anomaly, detect_anomaly
 
 
 # rule specific parameters object, contains values received from the quality check threshold configuration
@@ -27,8 +29,8 @@ class AnomalyDifferencingPercentileMovingAverageRuleParametersSpec:
 
 
 class HistoricDataPoint:
-    timestamp_utc: datetime
-    local_datetime: datetime
+    timestamp_utc_epoch: int
+    local_datetime_epoch: int
     back_periods_index: int
     sensor_readout: float
     expected_value: float
@@ -47,7 +49,7 @@ class AnomalyConfigurationParameters:
 class RuleExecutionRunParameters:
     actual_value: float
     parameters: AnomalyDifferencingPercentileMovingAverageRuleParametersSpec
-    time_period_local: datetime
+    time_period_local_epoch: int
     previous_readouts: Sequence[HistoricDataPoint]
     time_window: RuleTimeWindowSettingsSpec
     configuration_parameters: AnomalyConfigurationParameters
@@ -94,83 +96,93 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
     differences_std = float(scipy.stats.tstd(differences))
     differences_median = np.median(differences)
     differences_median_float = float(differences_median)
-    degrees_of_freedom = float(rule_parameters.configuration_parameters.degrees_of_freedom)
-    tail = rule_parameters.parameters.anomaly_percent / 100.0
+    tail = rule_parameters.parameters.anomaly_percent / 100.0 / 2
 
     last_readout = float(filtered[-1])
     actual_difference = rule_parameters.actual_value - last_readout
 
     if float(differences_std) == 0:
-        return RuleExecutionResult(actual_difference == differences_median_float,
+        return RuleExecutionResult(None if actual_difference == differences_median_float else False,
                                    last_readout + differences_median_float, last_readout + differences_median_float,
                                    last_readout + differences_median_float)
 
     if all(difference > 0 for difference in differences_list):
         # using a 0-based calculation (scale from 0)
-        upper_median_multiples_array = [(difference / differences_median_float - 1.0) for difference
-                                        in differences_list if difference >= differences_median_float]
-        upper_multiples = np.array(upper_median_multiples_array, dtype=float)
-        upper_multiples_median = np.median(upper_multiples)
-        upper_multiples_std = scipy.stats.tstd(upper_multiples)
+        anomaly_data = convert_historic_data_differencing(rule_parameters.previous_readouts,
+                                                          lambda readout: (readout / differences_median_float - 1.0 if readout >= differences_median_float else
+                                                                           (-1.0 / (readout / differences_median_float)) + 1.0))
+        threshold_upper_multiple, threshold_lower_multiple, forecast_multiple = detect_anomaly(historic_data=anomaly_data, median=0.0,
+                                                                                               tail=tail, parameters=rule_parameters)
 
-        if float(upper_multiples_std) == 0:
-            threshold_upper = differences_median_float
-        else:
-            # Assumption: the historical data follows t-student distribution
-            upper_readout_distribution = scipy.stats.t(df=degrees_of_freedom, loc=upper_multiples_median, scale=upper_multiples_std)
-            threshold_upper_multiple = float(upper_readout_distribution.ppf(1 - tail))
+        passed = True
+        if threshold_upper_multiple is not None:
             threshold_upper = (threshold_upper_multiple + 1.0) * differences_median_float
-
-        lower_median_multiples_array = [(-1.0 / (difference / differences_median_float)) for difference
-                                        in differences_list if difference <= differences_median_float if difference != 0]
-        lower_multiples = np.array(lower_median_multiples_array, dtype=float)
-        lower_multiples_median = np.median(lower_multiples)
-        lower_multiples_std = scipy.stats.tstd(lower_multiples)
-
-        if float(lower_multiples_std) == 0:
-            threshold_lower = differences_median_float
+            passed = actual_difference <= threshold_upper
         else:
-            # Assumption: the historical data follows t-student distribution
-            lower_readout_distribution = scipy.stats.t(df=degrees_of_freedom, loc=lower_multiples_median, scale=lower_multiples_std)
-            threshold_lower_multiple = float(lower_readout_distribution.ppf(tail))
-            threshold_lower = differences_median_float * (-1.0 / threshold_lower_multiple)
+            threshold_upper = None
 
-        passed = threshold_lower <= actual_difference <= threshold_upper
+        if threshold_lower_multiple is not None:
+            threshold_lower = differences_median_float * (-1.0 / (threshold_lower_multiple - 1.0))
+            passed = passed and threshold_lower <= actual_difference
+        else:
+            threshold_lower = None
 
-        expected_value = last_readout + differences_median_float
-        lower_bound = last_readout + threshold_lower
-        upper_bound = last_readout + threshold_upper
+        if forecast_multiple is not None:
+            if forecast_multiple >= 0:
+                forecast = (forecast_multiple + 1.0) * differences_median_float
+            else:
+                forecast = differences_median_float * (-1.0 / (forecast_multiple - 1.0))
+        else:
+            forecast = differences_median_float
+
+        if forecast is not None:
+            expected_value = last_readout + forecast
+        else:
+            expected_value = None
+
+        if threshold_lower is not None:
+            lower_bound = last_readout + threshold_lower
+        else:
+            lower_bound = None
+
+        if threshold_upper is not None:
+            upper_bound = last_readout + threshold_upper
+        else:
+            upper_bound = None
         return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
 
     else:
         # using unrestricted method for both positive and negative values
-        upper_half_filtered = [difference for difference in differences_list if difference >= differences_median_float]
-        upper_half = np.array(upper_half_filtered, dtype=float)
-        upper_half_median = np.median(upper_half)
-        upper_half_std = scipy.stats.tstd(upper_half)
+        anomaly_data = convert_historic_data_differencing(rule_parameters.previous_readouts,
+                                                          lambda readout: readout)
+        threshold_upper_result, threshold_lower_result, forecast = detect_anomaly(historic_data=anomaly_data, median=differences_median_float,
+                                                                                  tail=tail, parameters=rule_parameters)
 
-        if float(upper_half_std) == 0:
-            threshold_upper = differences_median_float
+        passed = True
+        if threshold_upper_result is not None:
+            threshold_upper = threshold_upper_result
+            passed = actual_difference <= threshold_upper
         else:
-            # Assumption: the historical data follows t-student distribution
-            upper_readout_distribution = scipy.stats.t(df=degrees_of_freedom, loc=upper_half_median, scale=upper_half_std)
-            threshold_upper = float(upper_readout_distribution.ppf(1 - tail))
+            threshold_upper = None
 
-        lower_half_list = [difference for difference in differences_list if difference <= differences_median_float]
-        lower_half = np.array(lower_half_list, dtype=float)
-        lower_half_median = np.median(lower_half)
-        lower_half_std = scipy.stats.tstd(lower_half)
-
-        if float(lower_half_std) == 0:
-            threshold_lower = differences_median_float
+        if threshold_lower_result is not None:
+            threshold_lower = threshold_lower_result
+            passed = passed and threshold_lower <= actual_difference
         else:
-            # Assumption: the historical data follows t-student distribution
-            lower_readout_distribution = scipy.stats.t(df=degrees_of_freedom, loc=lower_half_median, scale=lower_half_std)
-            threshold_lower = float(lower_readout_distribution.ppf(tail))
+            threshold_lower = None
 
-        passed = threshold_lower <= actual_difference <= threshold_upper
+        if forecast is not None:
+            expected_value = last_readout + forecast
+        else:
+            expected_value = None
 
-        expected_value = last_readout + differences_median_float
-        lower_bound = last_readout + threshold_lower
-        upper_bound = last_readout + threshold_upper
+        if threshold_lower is not None:
+            lower_bound = last_readout + threshold_lower
+        else:
+            lower_bound = None
+
+        if threshold_upper is not None:
+            upper_bound = last_readout + threshold_upper
+        else:
+            upper_bound = None
         return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)

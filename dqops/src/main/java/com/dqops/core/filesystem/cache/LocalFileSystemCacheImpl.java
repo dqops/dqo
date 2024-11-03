@@ -23,11 +23,16 @@ import com.dqops.core.filesystem.virtual.FileContent;
 import com.dqops.core.filesystem.virtual.FileNameSanitizer;
 import com.dqops.core.filesystem.virtual.HomeFilePath;
 import com.dqops.core.filesystem.virtual.HomeFolderPath;
+import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.core.principal.DqoUserPrincipalProvider;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.similarity.TableSimilarityRefreshService;
 import com.dqops.core.similarity.TableSimilarityRefreshServiceProvider;
+import com.dqops.data.checkresults.models.currentstatus.TableCurrentDataQualityStatusFilterParameters;
 import com.dqops.data.checkresults.statuscache.DomainConnectionTableKey;
 import com.dqops.data.checkresults.statuscache.TableStatusCache;
 import com.dqops.data.checkresults.statuscache.TableStatusCacheProvider;
+import com.dqops.data.storage.HivePartitionPathUtility;
 import com.dqops.data.storage.LoadedMonthlyPartition;
 import com.dqops.data.storage.ParquetPartitioningKeys;
 import com.dqops.metadata.labels.labelloader.LabelRefreshKey;
@@ -38,6 +43,7 @@ import com.dqops.metadata.lineage.lineagecache.TableLineageCache;
 import com.dqops.metadata.lineage.lineagecache.TableLineageCacheProvider;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.metadata.storage.localfiles.SpecFileNames;
+import com.dqops.utils.datetime.LocalDateTimeTruncateUtility;
 import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.dqops.utils.reflection.ObjectMemorySizeUtility;
 import com.github.benmanes.caffeine.cache.Cache;
@@ -51,6 +57,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.nio.file.*;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -79,7 +86,7 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
     private final TableLineageCacheProvider tableLineageCacheProvider;
     private final TableSimilarityRefreshServiceProvider tableSimilarityRefreshServiceProvider;
     private final HomeLocationFindService homeLocationFindService;
-    private final Path userHomeRootPath;
+    private Path userHomeRootPath;
     private Instant nextFileChangeDetectionAt = Instant.now().minus(100L, ChronoUnit.MILLIS);
     private boolean wasRecentlyInvalidated;
 
@@ -105,17 +112,6 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
         this.tableLineageCacheProvider = tableLineageCacheProvider;
         this.tableSimilarityRefreshServiceProvider = tableSimilarityRefreshServiceProvider;
         this.homeLocationFindService = homeLocationFindService;
-        this.userHomeRootPath = homeLocationFindService.getUserHomePath() != null ? Path.of(homeLocationFindService.getUserHomePath()) : Path.of(".");
-
-        WatchService newWatchService = null;
-        if (dqoCacheConfigurationProperties.isEnable() && dqoCacheConfigurationProperties.isWatchFileSystemChanges()) {
-            try {
-                newWatchService = FileSystems.getDefault().newWatchService();
-            } catch (IOException ioe) {
-                throw new DqoRuntimeException("Cannot create a watch service.");
-            }
-        }
-        this.watchService = newWatchService;
 
         this.folderListsCache = Caffeine.newBuilder()
                 .maximumSize(dqoCacheConfigurationProperties.getYamlFilesLimit())
@@ -141,6 +137,25 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
     }
 
     /**
+     * Starts a local file system cache.
+     */
+    @Override
+    public void start() {
+        this.userHomeRootPath = homeLocationFindService.getRootUserHomePath() != null ?
+                Path.of(homeLocationFindService.getRootUserHomePath()) : Path.of(".");
+
+        WatchService newWatchService = null;
+        if (dqoCacheConfigurationProperties.isEnable() && dqoCacheConfigurationProperties.isWatchFileSystemChanges()) {
+            try {
+                newWatchService = FileSystems.getDefault().newWatchService();
+            } catch (IOException ioe) {
+                throw new DqoRuntimeException("Cannot create a watch service.");
+            }
+        }
+        this.watchService = newWatchService;
+    }
+
+    /**
      * Called when the object is destroyed. Stops the watcher.
      * @throws Exception
      */
@@ -157,7 +172,7 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
      * @param folderPath Folder path.
      */
     public void startFolderWatcher(Path folderPath) {
-        if (folderPath == null) {
+        if (folderPath == null || this.watchService == null) {
             return;
         }
 
@@ -241,6 +256,13 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
                 for (WatchEvent<?> event : watchKey.pollEvents()) {
                     Path filePath = (Path) event.context();
                     Path absoluteFilePath = directoryPath.resolve(filePath).toAbsolutePath().normalize();
+                    if (filePath.toString().endsWith(".parquet")) {
+                        LoadedMonthlyPartition alreadyCachedPartition = this.parquetFilesCache.getIfPresent(absoluteFilePath);
+                        if (alreadyCachedPartition != null && absoluteFilePath.toFile().lastModified() == alreadyCachedPartition.getLastModified()) {
+                            continue;
+                        }
+                    }
+
                     invalidateFile(absoluteFilePath);
                     invalidateFolder(absoluteFilePath); // we don't know if it is a file or a folder
                     invalidateFolder(directoryPath);
@@ -481,6 +503,10 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
      *                            and it is not a real invalidation, but just a notification that a file was just cached.
      */
     public void invalidateTableCaches(Path filePath, boolean replacingCachedFile) {
+        if (this.userHomeRootPath == null) {
+            return; // not initialized
+        }
+
         if (!filePath.startsWith(this.userHomeRootPath)) {
             return;
         }
@@ -496,20 +522,28 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
         }
 
         HomeFolderPath folder = homeFilePath.getFolder();
-        if (folder.size() >= 4 && Objects.equals(BuiltInFolderNames.DATA, folder.get(0).getFileSystemName()) &&
+        if (folder.size() > 4 && Objects.equals(BuiltInFolderNames.DATA, folder.get(0).getFileSystemName()) &&
                 (Objects.equals(BuiltInFolderNames.CHECK_RESULTS, folder.get(1).getFileSystemName()) ||
                         Objects.equals(BuiltInFolderNames.ERRORS, folder.get(1).getFileSystemName()))) {
             // check results or errors parquet file updated
 
             String connectionNameFolder = folder.get(2).getFileSystemName();
             String schemaTableNameFolder = folder.get(3).getFileSystemName();
+            String monthFolder = folder.get(4).getFileSystemName();
 
             if (connectionNameFolder.startsWith(ParquetPartitioningKeys.CONNECTION + "=") && connectionNameFolder.length() > 2 &&
-                    schemaTableNameFolder.startsWith(ParquetPartitioningKeys.SCHEMA_TABLE  + "=") && schemaTableNameFolder.length() > 2) {
+                    schemaTableNameFolder.startsWith(ParquetPartitioningKeys.SCHEMA_TABLE  + "=") && schemaTableNameFolder.length() > 2 &&
+                    monthFolder.startsWith(ParquetPartitioningKeys.MONTH  + "=") && monthFolder.length() > 2) {
                 String decodedConnectionName = FileNameSanitizer.decodeFileSystemName(connectionNameFolder.substring(2));
                 PhysicalTableName physicalTableName = PhysicalTableName.fromBaseFileName(schemaTableNameFolder.substring(2));
-                TableStatusCache tableStatusCache = this.tableStatusCacheProvider.getTableStatusCache();
-                tableStatusCache.invalidateTableStatus(new DomainConnectionTableKey(folder.getDataDomain(), decodedConnectionName, physicalTableName), replacingCachedFile);
+                LocalDate partitionMonth = HivePartitionPathUtility.monthFromHivePartitionFolderName(monthFolder);
+
+                LocalDate earliestMonthToIncludeInCurrentStatus = LocalDateTimeTruncateUtility.truncateMonth(LocalDate.now())
+                        .minusMonths(TableCurrentDataQualityStatusFilterParameters.DEFAULT_PREVIOUS_MONTHS);
+                if (!partitionMonth.isBefore(earliestMonthToIncludeInCurrentStatus)) {
+                    TableStatusCache tableStatusCache = this.tableStatusCacheProvider.getTableStatusCache();
+                    tableStatusCache.invalidateTableStatus(new DomainConnectionTableKey(folder.getDataDomain(), decodedConnectionName, physicalTableName), replacingCachedFile);
+                }
             }
         }
 

@@ -38,6 +38,7 @@ public class HistoricDataPointTimeSeriesCollector {
     private final InstantColumn timePeriodUtcColumn;
     private final DoubleColumn actualValueColumn;
     private final DoubleColumn expectedValueColumn;
+    private final InstantColumn executedAtColumn;
     private final TimePeriodGradient gradient;
     private final ZoneId timeZoneId;
     private LongIndex timePeriodIndex;
@@ -53,10 +54,11 @@ public class HistoricDataPointTimeSeriesCollector {
 												TimePeriodGradient gradient,
 												ZoneId timeZoneId) {
         this.timeSeriesData = timeSeriesData;
-		this.timePeriodColumn = (DateTimeColumn) timeSeriesData.column(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME);
-        this.timePeriodUtcColumn = (InstantColumn) timeSeriesData.column(SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME);
-		this.actualValueColumn = (DoubleColumn) timeSeriesData.column(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
-        this.expectedValueColumn = (DoubleColumn) timeSeriesData.column(SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME);
+		this.timePeriodColumn = timeSeriesData.dateTimeColumn(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME);
+        this.timePeriodUtcColumn = timeSeriesData.instantColumn(SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME);
+		this.actualValueColumn = timeSeriesData.doubleColumn(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
+        this.expectedValueColumn = timeSeriesData.doubleColumn(SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME);
+        this.executedAtColumn = timeSeriesData.instantColumn(SensorReadoutsColumnNames.EXECUTED_AT_COLUMN_NAME);
         this.gradient = gradient;
         this.timeZoneId = timeZoneId;
     }
@@ -147,5 +149,34 @@ public class HistoricDataPointTimeSeriesCollector {
         }
 
         return historicDataPoints;
+    }
+
+    /**
+     * Looks up the previous result for the same time period.
+     * @param readoutTimestamp The time period to find.
+     * @return Previous result with its execution time, or null when no value was found.
+     */
+    public HistoricResultPreviousRun getPreviousResult(LocalDateTime readoutTimestamp) {
+        if (this.timePeriodIndex == null) {
+            this.timePeriodIndex = new LongIndex(this.timePeriodColumn);
+        }
+
+        Selection rowSelection = this.timePeriodIndex.get(readoutTimestamp);
+        if (rowSelection.isEmpty()) {
+            return null;
+        }
+
+        int[] rowIndexes = rowSelection.toArray();
+        int rowIndex = rowIndexes[0];
+
+        if (this.executedAtColumn.isMissing(rowIndex)) {
+            return  null;
+        }
+
+        Double previousActualValue = this.actualValueColumn.get(rowIndex);
+        Double previousExpectedValue = this.expectedValueColumn.get(rowIndex);
+        Instant previousExecutedAt = this.executedAtColumn.get(rowIndex);
+
+        return new HistoricResultPreviousRun(previousActualValue, previousExpectedValue, previousExecutedAt);
     }
 }

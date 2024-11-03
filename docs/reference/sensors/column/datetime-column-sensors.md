@@ -57,6 +57,28 @@ The templates used to generate the SQL query for each data source supported by D
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "ClickHouse"
+
+    ```sql+jinja
+    {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "Databricks"
 
     ```sql+jinja
@@ -157,6 +179,28 @@ The templates used to generate the SQL query for each data source supported by D
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "MariaDB"
+
+    ```sql+jinja
+    {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "MySQL"
 
     ```sql+jinja
@@ -247,6 +291,32 @@ The templates used to generate the SQL query for each data source supported by D
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM (
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+    ) analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "QuestDB"
+
+    ```sql+jinja
+    {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        COALESCE(100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }}), 0.0)
+        AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM(
         SELECT
             original_table.*
             {{- lib.render_data_grouping_projections('original_table') }}
@@ -361,6 +431,28 @@ The templates used to generate the SQL query for each data source supported by D
     {{- lib.render_group_by() -}}
     {{- render_ordering_column_names() -}}
     ```
+=== "Teradata"
+
+    ```sql+jinja
+    {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "Trino"
 
     ```sql+jinja
@@ -438,6 +530,37 @@ The templates used to generate the SQL query for each data source supported by D
                             {{ lib.render_target_column('analyzed_table') }} > DATETIME_ADD(CURRENT_DATETIME(), INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS INT64) SECOND)
                         {% else -%}
                             SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS INT64) SECOND)
+                        {% endif -%}
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "ClickHouse"
+
+    ```sql+jinja
+    {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                            {{ lib.render_target_column('analyzed_table') }} > toDateTime64(now(), 3) + INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS Int64) SECOND
+                        {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                            {{ lib.render_target_column('analyzed_table') }} > toDate(now()) + INTERVAL CAST({{(parameters.max_future_days)}} AS Int64) DAY
+                        {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                            {{ lib.render_target_column('analyzed_table') }} > toDateTime(now()) + INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS Int64) SECOND
+                        {% else -%}
+                            toDateTime64({{ lib.render_target_column('analyzed_table') }}, 3) > toDateTime64(now(), 3) + INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS Int64) SECOND
                         {% endif -%}
                         THEN 1
                     ELSE 0
@@ -590,6 +713,38 @@ The templates used to generate the SQL query for each data source supported by D
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "MariaDB"
+
+    ```sql+jinja
+    {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN
+                        {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                            {{ lib.render_target_column('analyzed_table') }} > DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND)
+                        {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                            {{ lib.render_target_column('analyzed_table') }} > DATE_ADD(CURRENT_DATE(), INTERVAL ({{(parameters.max_future_days)}}) DAY)
+                        {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                            {{ lib.render_target_column('analyzed_table') }} > DATE_ADD(CURRENT_DATETIME(), INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND)
+                        {% else -%}
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND)
+                        {% endif -%}
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "MySQL"
 
     ```sql+jinja
@@ -734,6 +889,42 @@ The templates used to generate the SQL query for each data source supported by D
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "QuestDB"
+
+    ```sql+jinja
+    {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        COALESCE(100.0 * SUM(
+                CASE
+                    WHEN
+                        {% if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
+                            {{ lib.render_target_column('analyzed_table') }} > DATEADD('s', ({{(parameters.max_future_days)}})::int * 86400, NOW())
+                        {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                            {{ lib.render_target_column('analyzed_table') }} > DATEADD('d', ({{(parameters.max_future_days)}})::int, TODAY())
+                        {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                            {{ lib.render_target_column('analyzed_table') }} > DATEADD('s', ({{(parameters.max_future_days)}})::int * 86400, NOW())
+                        {% else -%}
+                            ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > DATEADD('s', ({{(parameters.max_future_days)}})::int * 86400, NOW())
+                        {% endif -%}
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }}), 0.0)
+        AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM(
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+    ) analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "Redshift"
 
     ```sql+jinja
@@ -862,6 +1053,38 @@ The templates used to generate the SQL query for each data source supported by D
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "Teradata"
+
+    ```sql+jinja
+    {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN
+                        {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
+                        {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                            {{ lib.render_target_column('analyzed_table') }} > (CURRENT_DATE + INTERVAL {{((parameters.max_future_days) * 1) | int}} DAY)
+                        {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
+                        {% else -%}
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
+                        {% endif -%}
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "Trino"
 
     ```sql+jinja
@@ -943,6 +1166,30 @@ The templates used to generate the SQL query for each data source supported by D
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
                          REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r{{lib.render_date_format_regex(parameters.date_format)}}) IS NOT FALSE
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "ClickHouse"
+
+    ```sql+jinja
+    {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
+                         match(toString({{ lib.render_target_column('analyzed_table') }}), {{lib.render_date_format_regex(parameters.date_format)}}) != FALSE
                         THEN 1
                     ELSE 0
                 END
@@ -1061,6 +1308,29 @@ The templates used to generate the SQL query for each data source supported by D
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "MariaDB"
+
+    ```sql+jinja
+    {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(CASE
+                  WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
+                       {{ lib.render_regex(lib.render_target_column('analyzed_table'), lib.render_date_format_regex(parameters.date_format), wrap_with_quotes = false) }}
+                     THEN 1
+                  ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "MySQL"
 
     ```sql+jinja
@@ -1167,6 +1437,34 @@ The templates used to generate the SQL query for each data source supported by D
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "QuestDB"
+
+    ```sql+jinja
+    {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        COALESCE(100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
+                            CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{lib.render_date_format_regex(parameters.date_format)}} = TRUE
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }}), 100.0)
+        AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM(
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+    ) analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "Redshift"
 
     ```sql+jinja
@@ -1255,6 +1553,30 @@ The templates used to generate the SQL query for each data source supported by D
                     ELSE 0
                 END
             ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Teradata"
+
+    ```sql+jinja
+    {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
+                         REGEXP_SUBSTR(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR(4096)), {{lib.render_date_format_regex(parameters.date_format)}}) IS NOT NULL
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}

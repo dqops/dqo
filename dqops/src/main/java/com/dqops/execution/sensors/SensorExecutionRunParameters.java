@@ -83,6 +83,7 @@ public class SensorExecutionRunParameters {
     private int rowCountLimit = 1000;
     private boolean failOnSensorReadoutLimitExceeded = true;
     private ErrorSamplingRenderParameters errorSamplingRenderParameters;
+    private Instant checkConfiguredAt;
 
 
     /**
@@ -116,6 +117,7 @@ public class SensorExecutionRunParameters {
      * @param rowCountLimit Sets the row count limit.
      * @param failOnSensorReadoutLimitExceeded Fail when the row count limit is exceeded.
      * @param errorSamplingRenderParameters Optional parameters for error sampling. When present (not null), an error sampling template is used to capture error samples.
+     * @param checkConfiguredAt The timestamp when this check was probably configured for the last time.
      */
     public SensorExecutionRunParameters(
 			ConnectionSpec connection,
@@ -135,7 +137,8 @@ public class SensorExecutionRunParameters {
             CheckSearchFilters checkSearchFilter,
             int rowCountLimit,
             boolean failOnSensorReadoutLimitExceeded,
-            ErrorSamplingRenderParameters errorSamplingRenderParameters) {
+            ErrorSamplingRenderParameters errorSamplingRenderParameters,
+            Instant checkConfiguredAt) {
         this.success = true;
         this.connection = connection;
         this.table = table;
@@ -158,6 +161,7 @@ public class SensorExecutionRunParameters {
         if (timeWindowFilter != null && !Strings.isNullOrEmpty(timeWindowFilter.getWhereFilter())) {
             this.additionalFilters.add(timeWindowFilter.getWhereFilter());
         }
+        this.checkConfiguredAt = checkConfiguredAt;
     }
 
     /**
@@ -554,6 +558,23 @@ public class SensorExecutionRunParameters {
      */
     public void setErrorSamplingRenderParameters(ErrorSamplingRenderParameters errorSamplingRenderParameters) {
         this.errorSamplingRenderParameters = errorSamplingRenderParameters;
+    }
+
+    /**
+     * Returns the timestamp when this check was probably configured for the last time. It is the file modification timestamp
+     * of the table YAML file or data quality policy file, depending on the source of configuring this check.
+     * @return Check configuration timestamp.
+     */
+    public Instant getCheckConfiguredAt() {
+        return checkConfiguredAt;
+    }
+
+    /**
+     * Sets the timestamp when the check was configured.
+     * @param checkConfiguredAt Check configured at timestamp.
+     */
+    public void setCheckConfiguredAt(Instant checkConfiguredAt) {
+        this.checkConfiguredAt = checkConfiguredAt;
     }
 
     /**

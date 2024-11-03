@@ -23,17 +23,15 @@ We will verify the data of `bigquery-public-data.austin_311.311_service_requests
 [duplicate_percent](../../checks/column/uniqueness/duplicate-percent.md) column check.
 Our goal is to verify if the percentage of duplicated values in `unique_key` column does not exceed set thresholds.
 
-In this example, we will set three maximum percentage thresholds levels for the check:
+In this example, we will set the maximum percentage threshold level for the check:
 
-- warning: 1.0%
-- error: 2.0%
-- fatal: 5.0%
+- error: 1.0%
 
 If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/definition-of-data-quality-checks/index.md).
 
 **VALUE**
 
-If the percentage of duplicated values on `unqiue_key` column exceed 1.0%, a warning alert will be triggered.
+If the percentage of duplicated values on `unqiue_key` column exceed 1.0%, an error alert will be triggered.
 
 ## Data structure
 
@@ -59,7 +57,7 @@ A detailed explanation of [how to start DQOps platform and run the example is de
 
 To navigate to a list of checks prepared in the example using the [user interface](../../dqo-concepts/dqops-user-interface-overview.md):
 
-![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-duplicate-percent-checks1.png){ loading=lazy; width="1200px" }
+![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-duplicate-percent-checks2.png){ loading=lazy; width="1200px" }
 
 1. Go to the **Monitoring** section.
 
@@ -71,7 +69,7 @@ To navigate to a list of checks prepared in the example using the [user interfac
     On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../data-sources/index.md).
 
 
-3. Select the **Daily checks** tab.
+3. Select the **Data quality check editor** tab.
 
     This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../dqo-concepts/dqops-user-interface-overview.md#check-editor).
 
@@ -82,21 +80,22 @@ Run the activated check using the **Run check** button.
 
 You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
 
-![Run check](https://dqops.com/docs/images/examples/daily-duplicate-percent-run-checks1.png){ loading=lazy; width="1200px" }
+![Run check](https://dqops.com/docs/images/examples/daily-duplicate-percent-run-checks2.png){ loading=lazy; width="1200px" }
 
 
 ### **View detailed check results**
 
 Access the detailed results by clicking the **Results** button. The results should be similar to the one below.
 
-![Duplicate-percent check results](https://dqops.com/docs/images/examples/daily-duplicate-percent-checks-results1.png){ loading=lazy; width="1200px" }
+![Duplicate-percent check results](https://dqops.com/docs/images/examples/daily-duplicate-percent-checks-results2.png){ loading=lazy; width="1200px" }
 
-Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
+Within the Results window, you will see four categories: **Check results**, **Sensor readouts**, **Execution errors**, and **Error sampling**.
 The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
 The Sensor readouts category displays the values obtained by the sensors from the data source.
 The Execution errors category displays any error that occurred during the check's execution.
+The Error sampling category displays examples of invalid values in the column.
 
-The actual value in this example is 0%, which is below the maximum threshold level set in the warning (1.0%).
+The actual value in this example is 0%, which is below the maximum threshold level set in the error (1.0%).
 The check gives a correct result (notice the green square to the left of the check name).
 
 ### **Synchronize the results with the cloud account**
@@ -106,30 +105,6 @@ of the user interface.
 
 Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
 
-### **Review the results on the data quality dashboards**
-
-To review the results on the [data quality dashboards](../../working-with-dqo/review-the-data-quality-results-on-dashboards.md)
-go to the Data Quality Dashboards section and select the dashboard from the tree view on the left.  
- 
-Below you can see the results displayed on the **Highest issue severity per column and day** dashboard located in Highest issue severity group.
-This dashboard allows for reviewing and filtering a summary number of issues that arise from data quality checks per day. 
-This dashboard help evaluate the areas with the highest number of data quality issues that should be addressed.
-It also allows to review how the issue severity changed per day of the month.
-
-This dashboard allows filtering data by:
-    
-* current and previous month,
-* connection,
-* schema,
-* data group,
-* data quality dimension,
-* check category,
-* check name,
-* table,
-* column.
-
-![Duplicate-percent check results on Highest issue severity per column and day dashboard](https://dqops.com/docs/images/examples/highest-issue-severity-per-column-and-day-dashboard.png){ loading=lazy; width="1200px" }
-
 ## Change a schedule at the connection level
 
 With DQOps, you can easily customize when checks are run by setting schedules. You can set schedules for an entire connection,
@@ -137,7 +112,7 @@ table, or individual check.
 
 After importing new tables, DQOps sets the schedule for 12:00 P.M. (noon) every day. Follow the steps below to change the schedule.
 
-![Change a schedule at the connection level](https://dqops.com/docs/images/examples/change-schedule-for-connection.png){ loading=lazy; width="1200px" }
+![Change a schedule at the connection level](https://dqops.com/docs/images/examples/change-schedule-for-connection2.png){ loading=lazy; width="1200px" }
 
 1. Navigate to the **Data Source** section.
 
@@ -166,17 +141,15 @@ You might also want to check the [Running checks with a scheduler](../data-quali
 
 The YAML configuration file stores both the table details and checks configurations.
 
-In this example, we have set three maximum percentage thresholds levels for the check:
+In this example, we have set the maximum percentage threshold level for the check:
 
-- warning: 1.0%
-- error: 2.0%
-- fatal: 5.0%
+- error: 1.0%
 
 The highlighted fragments in the YAML file below represent the segment where the monitoring `daily_duplicate_percent` check is configured.
 
 If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/definition-of-data-quality-checks/index.md).
 
-```yaml hl_lines="8-21"
+```yaml hl_lines="8-17"
 apiVersion: dqo/v1
 kind: table
 spec:
@@ -192,12 +165,8 @@ spec:
         daily:
           uniqueness:
             daily_duplicate_percent:
-              warning:
-                max_percent: 1.0
               error:
-                max_percent: 2.0
-              fatal:
-                max_percent: 5.0
+                max_percent: 1.0
     source:
       type_snapshot:
         column_type: STRING
@@ -208,75 +177,9 @@ spec:
         nullable: true
 ```
 
-## Run the checks in the example using the DQOps Shell
-
-A detailed explanation of [how to start DQOps platform and run the example is described here](../index.md#running-the-use-cases).
-
-To execute the check prepared in the example, run the following command in DQOps Shell:
-
-``` 
-check run
-```
-
-Review the results which should be similar to the one below.
-The percent of the duplicate values in the `unique_key` column is below 5.0% and the check gives correct result.
-
-```
-Check evaluation summary per table:
-+----------+-------------------------------+------+--------------+-------------+--------+------+------------+----------------+
-|Connection|Table                          |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
-+----------+-------------------------------+------+--------------+-------------+--------+------+------------+----------------+
-|austin_311|austin_311.311_service_requests|1     |1             |1            |0       |0     |0           |0               |
-+----------+-------------------------------+------+--------------+-------------+--------+------+------------+----------------+
-```
-
-For a more detailed insight of how the check is run, you can initiate the check in debug mode by executing the
-following command:
-
-```
-check run --mode=debug
-```
-
-In the debug mode you can view the SQL query (sensor) executed in the check.
-
-```
-**************************************************
-Executing SQL on connection austin_311 (bigquery)
-SQL to be executed on the connection:
-SELECT
-    CASE
-        WHEN COUNT(analyzed_table.`unique_key`) = 0 THEN 100.0
-        ELSE 100.0 * (
-            COUNT(analyzed_table.`unique_key`) - COUNT(DISTINCT analyzed_table.`unique_key`)
-        ) / COUNT(analyzed_table.`unique_key`)
-    END AS actual_value,
-    CURRENT_TIMESTAMP() AS time_period,
-    TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
-FROM `bigquery-public-data`.`austin_311`.`311_service_requests` AS analyzed_table
-GROUP BY time_period, time_period_utc
-ORDER BY time_period, time_period_utc
-**************************************************
-```
-
-You can also see the results returned by the sensor. The actual value in this example is 0.0%, which is below the maximum
-threshold level set in the warning (5.0%).
-
-```
-**************************************************
-Finished executing a sensor for a check duplicate_percent on the table austin_311.311_service_requests using a sensor definition column/uniqueness/duplicate_percent, sensor result count: 1
-
-Results returned by the sensor:
-+------------+------------------------+------------------------+
-|actual_value|time_period             |time_period_utc         |
-+------------+------------------------+------------------------+
-|0.0         |2023-04-25T14:37:23.670Z|2023-04-25T14:37:23.670Z|
-+------------+------------------------+------------------------+
-**************************************************
-```
-
 In this example, we have demonstrated how to use DQOps to verify the uniqueness of data in a column.
 By using the [duplicate_percent](../../checks/column/uniqueness/duplicate-percent.md) column check, we can monitor that
-the percentage of duplicate values in a column does not exceed the maximum accepted percentage. If it does, you will get a warning, error or fatal result.
+the percentage of duplicate values in a column does not exceed the maximum accepted percentage. If it does, you will get an error result.
 
 ## Next steps
 

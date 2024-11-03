@@ -34,6 +34,12 @@ import java.time.LocalDateTime;
 @Builder
 public class TableCurrentDataQualityStatusFilterParameters {
     /**
+     * The default number of recent months (previous months) that are scanned to detect table schema changes.
+     * DQOps analyzes the current month and data from up to this number of past months.
+     */
+    public static final int DEFAULT_PREVIOUS_MONTHS = 3;
+
+    /**
      * The connection name in DQOps.
      */
     @JsonPropertyDescription("The connection name in DQOps.")
@@ -49,7 +55,7 @@ public class TableCurrentDataQualityStatusFilterParameters {
      * The number of recent months to load the data. 1 means the current month and 1 last month.
      */
     @JsonPropertyDescription("The number of recent months to load the data. 1 means the current month and 1 last month. The default value is 1, which means that DQOps will read only the parquet partition for this month and the previous month.")
-    private Integer lastMonths = 1;
+    private Integer lastMonths = DEFAULT_PREVIOUS_MONTHS;
 
     /**
      * Optional filter that accepts an UTC timestamp to read only data quality check results captured since that timestamp.

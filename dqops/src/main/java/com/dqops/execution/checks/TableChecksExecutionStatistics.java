@@ -30,6 +30,7 @@ public class TableChecksExecutionStatistics {
     private int fatalIssuesCount = 0;
     private int sensorExecutionErrorsCount = 0;
     private int ruleExecutionErrorsCount = 0;
+    private final Object lock = new Object();
 
     /**
      * Returns the count of executed checks (even if they failed to execute).
@@ -60,7 +61,9 @@ public class TableChecksExecutionStatistics {
      * @param increment The increment value to increase the current count.
      */
     public void incrementSensorReadoutsCount(int increment) {
-        this.sensorReadoutsCount += increment;
+        synchronized (this.lock) {
+            this.sensorReadoutsCount += increment;
+        }
     }
 
     /**
@@ -68,7 +71,9 @@ public class TableChecksExecutionStatistics {
      * @return Count of fully passed checks.
      */
     public int getPassedRulesCount() {
-        return passedRulesCount;
+        synchronized (this.lock) {
+            return passedRulesCount;
+        }
     }
 
     /**
@@ -76,7 +81,9 @@ public class TableChecksExecutionStatistics {
      * @param increment The increment value to increase the current count.
      */
     public void incrementPassedRulesCount(int increment) {
-        this.passedRulesCount += increment;
+        synchronized (this.lock) {
+            this.passedRulesCount += increment;
+        }
     }
 
     /**
@@ -84,7 +91,9 @@ public class TableChecksExecutionStatistics {
      * @return Count of checks that failed as a warning severity level.
      */
     public int getWarningIssuesCount() {
-        return warningIssuesCount;
+        synchronized (this.lock) {
+            return warningIssuesCount;
+        }
     }
 
     /**
@@ -92,7 +101,9 @@ public class TableChecksExecutionStatistics {
      * @param increment The increment value to increase the current count.
      */
     public void incrementWarningIssuesCount(int increment) {
-        this.warningIssuesCount += increment;
+        synchronized (this.lock) {
+            this.warningIssuesCount += increment;
+        }
     }
 
     /**
@@ -100,7 +111,9 @@ public class TableChecksExecutionStatistics {
      * @return Count of checks that failed as an error severity level.
      */
     public int getErrorIssuesCount() {
-        return errorIssuesCount;
+        synchronized (this.lock) {
+            return errorIssuesCount;
+        }
     }
 
     /**
@@ -108,7 +121,9 @@ public class TableChecksExecutionStatistics {
      * @param increment The increment value to increase the current count.
      */
     public void incrementErrorIssuesCount(int increment) {
-        this.errorIssuesCount += increment;
+        synchronized (this.lock) {
+            this.errorIssuesCount += increment;
+        }
     }
 
     /**
@@ -116,7 +131,9 @@ public class TableChecksExecutionStatistics {
      * @return Count of checks that failed as a fatal severity level.
      */
     public int getFatalIssuesCount() {
-        return fatalIssuesCount;
+        synchronized (this.lock) {
+            return fatalIssuesCount;
+        }
     }
 
     /**
@@ -124,7 +141,9 @@ public class TableChecksExecutionStatistics {
      * @param increment The increment value to increase the current count.
      */
     public void incrementFatalIssuesCount(int increment) {
-        this.fatalIssuesCount += increment;
+        synchronized (this.lock) {
+            this.fatalIssuesCount += increment;
+        }
     }
 
     /**
@@ -132,7 +151,9 @@ public class TableChecksExecutionStatistics {
      * @return Count of check execution errors that failed when the sensors were executed.
      */
     public int getSensorExecutionErrorsCount() {
-        return sensorExecutionErrorsCount;
+        synchronized (this.lock) {
+            return sensorExecutionErrorsCount;
+        }
     }
 
     /**
@@ -140,7 +161,9 @@ public class TableChecksExecutionStatistics {
      * @param increment The increment value to increase the current count.
      */
     public void incrementSensorExecutionErrorsCount(int increment) {
-        this.sensorExecutionErrorsCount += increment;
+        synchronized (this.lock) {
+            this.sensorExecutionErrorsCount += increment;
+        }
     }
 
     /**
@@ -149,7 +172,9 @@ public class TableChecksExecutionStatistics {
      * @return Count of rules that failed to execute due to some coding issues.
      */
     public int getRuleExecutionErrorsCount() {
-        return ruleExecutionErrorsCount;
+        synchronized (this.lock) {
+            return ruleExecutionErrorsCount;
+        }
     }
 
     /**
@@ -157,7 +182,9 @@ public class TableChecksExecutionStatistics {
      * @param increment The increment value to increase the current count.
      */
     public void incrementRuleExecutionErrorsCount(int increment) {
-        this.ruleExecutionErrorsCount += increment;
+        synchronized (this.lock) {
+            this.ruleExecutionErrorsCount += increment;
+        }
     }
 
     /**
@@ -165,10 +192,12 @@ public class TableChecksExecutionStatistics {
      * @param ruleEvaluationResult Rule evaluation result with the rule results that should be counted by the rule severity level.
      */
     public void addRuleEvaluationResults(RuleEvaluationResult ruleEvaluationResult) {
-        passedRulesCount += ruleEvaluationResult.getSeverityColumn().isLessThanOrEqualTo(1).size();  // passed checks are severity 0 (passed) and 1 (warnings)
-        warningIssuesCount += ruleEvaluationResult.getSeverityColumn().isEqualTo(1).size();
-        errorIssuesCount += ruleEvaluationResult.getSeverityColumn().isEqualTo(2).size();
-        fatalIssuesCount += ruleEvaluationResult.getSeverityColumn().isEqualTo(3).size();
+        synchronized (this.lock) {
+            passedRulesCount += ruleEvaluationResult.getSeverityColumn().isLessThanOrEqualTo(1).size();  // passed checks are severity 0 (passed) and 1 (warnings)
+            warningIssuesCount += ruleEvaluationResult.getSeverityColumn().isEqualTo(1).size();
+            errorIssuesCount += ruleEvaluationResult.getSeverityColumn().isEqualTo(2).size();
+            fatalIssuesCount += ruleEvaluationResult.getSeverityColumn().isEqualTo(3).size();
+        }
     }
 
     /**
@@ -176,7 +205,9 @@ public class TableChecksExecutionStatistics {
      * @return True when there are any check results that failed a rule evaluation and were considered as data quality issues.
      */
     public boolean hasAnyFailedRules() {
-        return warningIssuesCount > 0 || errorIssuesCount > 0 || fatalIssuesCount > 0;
+        synchronized (this.lock) {
+            return warningIssuesCount > 0 || errorIssuesCount > 0 || fatalIssuesCount > 0;
+        }
     }
 
     /**

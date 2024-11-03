@@ -1,0 +1,17 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/ColumnLevelDataQualityPolicyYaml-schema.json
+apiVersion: dqo/v1
+kind: default_column_checks
+spec:
+  priority: 2000
+  description: Monitors the count and the percentage of null values without raising
+    data quality issues.
+  monitoring_checks:
+    daily:
+      nulls:
+        daily_nulls_count: {}
+        daily_nulls_percent: {}
+  partitioned_checks:
+    daily:
+      nulls:
+        daily_partition_nulls_count: {}
+        daily_partition_nulls_percent: {}

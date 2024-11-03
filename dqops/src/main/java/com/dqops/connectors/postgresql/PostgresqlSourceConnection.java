@@ -15,21 +15,28 @@
  */
 package com.dqops.connectors.postgresql;
 
+import com.dqops.connectors.ConnectionProviderSpecificParameters;
 import com.dqops.connectors.ConnectorOperationFailedException;
+import com.dqops.connectors.ProviderDialectSettings;
+import com.dqops.connectors.SourceSchemaModel;
 import com.dqops.connectors.jdbc.AbstractJdbcSourceConnection;
 import com.dqops.connectors.jdbc.JdbcConnectionPool;
+import com.dqops.core.jobqueue.JobCancellationToken;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
+import com.dqops.metadata.sources.ColumnSpec;
+import com.dqops.metadata.sources.ColumnTypeSnapshotSpec;
 import com.dqops.metadata.sources.ConnectionSpec;
+import com.dqops.metadata.sources.TableSpec;
 import com.zaxxer.hikari.HikariConfig;
 import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import tech.tablesaw.api.Table;
 
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -139,4 +146,34 @@ public class PostgresqlSourceConnection extends AbstractJdbcSourceConnection {
         hikariConfig.setDataSourceProperties(dataSourceProperties);
         return hikariConfig;
     }
+
+    /**
+     * Returns a list of schemas from the source.
+     *
+     * @return List of schemas.
+     */
+    @Override
+    public List<SourceSchemaModel> listSchemas() {
+        PostgresqlParametersSpec postgresqlSpec = this.getConnectionSpec().getPostgresql();
+        if (!postgresqlSpec.getPostgresqlEngineType().equals(PostgresqlEngineType.timescale)){
+            return super.listSchemas();
+        }
+
+        StringBuilder sqlBuilder = new StringBuilder();
+        sqlBuilder.append("SELECT CATALOG_NAME AS catalog_name, SCHEMA_NAME as schema_name FROM ");
+        sqlBuilder.append(getInformationSchemaName());
+        sqlBuilder.append(".SCHEMATA WHERE SCHEMA_NAME NOT IN ('information_schema', 'timescaledb_information', '_timescaledb_config', '_timescaledb_internal', '_timescaledb_catalog', '_timescaledb_cache', 'pg_catalog', 'pg_toast_temp_1', 'pg_temp_1', 'pg_toast')");
+        String listSchemataSql = sqlBuilder.toString();
+        Table schemaRows = this.executeQuery(listSchemataSql, JobCancellationToken.createDummyJobCancellationToken(), null, false);
+
+        List<SourceSchemaModel> results = new ArrayList<>();
+        for (int rowIndex = 0; rowIndex < schemaRows.rowCount(); rowIndex++) {
+            String schemaName = schemaRows.getString(rowIndex, "schema_name");
+            SourceSchemaModel schemaModel = new SourceSchemaModel(schemaName);
+            results.add(schemaModel);
+        }
+
+        return results;
+    }
+
 }

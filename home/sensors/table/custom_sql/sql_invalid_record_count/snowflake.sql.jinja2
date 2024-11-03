@@ -1,0 +1,6 @@
+{% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+SELECT
+    COUNT(*) as actual_value
+FROM (
+    {{ parameters.sql_query | replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}
+) AS analyzed_table

@@ -54,7 +54,7 @@ public class LocalUserHomeFileStorageServiceImpl extends LocalFileStorageService
                                                UserHomeLockManager userHomeLockManager,
                                                SynchronizationStatusTracker synchronizationStatusTracker,
                                                LocalFileSystemCache localFileSystemCache) {
-        super(homeLocationFindService.getUserHomePath(), HomeType.USER_HOME, localFileSystemCache);
+        super(homeLocationFindService.getRootUserHomePath(), HomeType.USER_HOME, localFileSystemCache);
         this.userHomeLockManager = userHomeLockManager;
         this.synchronizationStatusTracker = synchronizationStatusTracker;
         this.localFileSystemCache = localFileSystemCache;

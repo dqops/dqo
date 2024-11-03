@@ -19,10 +19,7 @@ import com.dqops.checks.AbstractCheckCategorySpec;
 import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
-import com.dqops.checks.column.checkspecs.customsql.ColumnSqlAggregateExpressionCheckSpec;
-import com.dqops.checks.column.checkspecs.customsql.ColumnSqlConditionFailedCheckSpec;
-import com.dqops.checks.column.checkspecs.customsql.ColumnSqlConditionPassedPercentCheckSpec;
-import com.dqops.checks.column.checkspecs.customsql.ColumnSqlImportCustomResultCheckSpec;
+import com.dqops.checks.column.checkspecs.customsql.*;
 import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -47,6 +44,7 @@ public class ColumnCustomSqlMonthlyMonitoringChecksSpec extends AbstractCheckCat
             put("monthly_sql_condition_failed_on_column", o -> o.monthlySqlConditionFailedOnColumn);
             put("monthly_sql_condition_passed_percent_on_column", o -> o.monthlySqlConditionPassedPercentOnColumn);
             put("monthly_sql_aggregate_expression_on_column", o -> o.monthlySqlAggregateExpressionOnColumn);
+            put("monthly_sql_invalid_value_count_on_column", o -> o.monthlySqlInvalidValueCountOnColumn);
             put("monthly_import_custom_result_on_column", o -> o.monthlyImportCustomResultOnColumn);
         }
     };
@@ -61,6 +59,12 @@ public class ColumnCustomSqlMonthlyMonitoringChecksSpec extends AbstractCheckCat
 
     @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the expected range. Stores the most recent check result for each month when the data quality check was evaluated.")
     private ColumnSqlAggregateExpressionCheckSpec monthlySqlAggregateExpressionOnColumn;
+
+    @JsonPropertyDescription("Runs a custom query that retrieves invalid values found in a column and returns the number of them," +
+            " and raises an issue if too many failures were detected. " +
+            "This check is used for setting testing queries or ready queries used by users in their own systems (legacy SQL queries). " +
+            "For example, when this check is applied on a column. The condition can find invalid values in the column which have values lower than 18 using an SQL query: `SELECT {column} FROM {table} WHERE {column} < 18`.")
+    private ColumnSqlInvalidValueCountCheckSpec monthlySqlInvalidValueCountOnColumn;
 
     @JsonPropertyDescription("Runs a custom query that retrieves a result of a data quality check performed in the data engineering, whose result (the severity level) is pulled from a separate table.")
     private ColumnSqlImportCustomResultCheckSpec monthlyImportCustomResultOnColumn;
@@ -117,6 +121,24 @@ public class ColumnCustomSqlMonthlyMonitoringChecksSpec extends AbstractCheckCat
         this.setDirtyIf(!Objects.equals(this.monthlySqlAggregateExpressionOnColumn, monthlySqlAggregateExpressionOnColumn));
         this.monthlySqlAggregateExpressionOnColumn = monthlySqlAggregateExpressionOnColumn;
         propagateHierarchyIdToField(monthlySqlAggregateExpressionOnColumn, "monthly_sql_aggregate_expression_on_column");
+    }
+
+    /**
+     * Returns a check specification.
+     * @return New check specification.
+     */
+    public ColumnSqlInvalidValueCountCheckSpec getMonthlySqlInvalidValueCountOnColumn() {
+        return monthlySqlInvalidValueCountOnColumn;
+    }
+
+    /**
+     * Sets a new check specification.
+     * @param monthlySqlInvalidValueCountOnColumn Check specification.
+     */
+    public void setMonthlySqlInvalidValueCountOnColumn(ColumnSqlInvalidValueCountCheckSpec monthlySqlInvalidValueCountOnColumn) {
+        this.setDirtyIf(!Objects.equals(this.monthlySqlInvalidValueCountOnColumn, monthlySqlInvalidValueCountOnColumn));
+        this.monthlySqlInvalidValueCountOnColumn = monthlySqlInvalidValueCountOnColumn;
+        propagateHierarchyIdToField(monthlySqlInvalidValueCountOnColumn, "monthly_sql_invalid_value_count_on_column");
     }
 
     /**

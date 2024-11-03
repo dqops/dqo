@@ -131,6 +131,8 @@ from .check_target_model import CheckTargetModel
 from .check_template import CheckTemplate
 from .check_time_scale import CheckTimeScale
 from .check_type import CheckType
+from .click_house_parameters_spec import ClickHouseParametersSpec
+from .click_house_parameters_spec_properties import ClickHouseParametersSpecProperties
 from .cloud_synchronization_folders_status_model import (
     CloudSynchronizationFoldersStatusModel,
 )
@@ -1094,6 +1096,12 @@ from .column_sql_import_custom_result_check_spec import (
 from .column_sql_import_custom_result_sensor_parameters_spec import (
     ColumnSqlImportCustomResultSensorParametersSpec,
 )
+from .column_sql_invalid_value_count_check_spec import (
+    ColumnSqlInvalidValueCountCheckSpec,
+)
+from .column_sql_invalid_value_count_sensor_parameters_spec import (
+    ColumnSqlInvalidValueCountSensorParametersSpec,
+)
 from .column_statistics_collectors_root_categories_spec import (
     ColumnStatisticsCollectorsRootCategoriesSpec,
 )
@@ -1552,6 +1560,8 @@ from .json_format_type import JsonFormatType
 from .json_records_type import JsonRecordsType
 from .label_model import LabelModel
 from .local_data_domain_model import LocalDataDomainModel
+from .maria_db_parameters_spec import MariaDbParametersSpec
+from .maria_db_parameters_spec_properties import MariaDbParametersSpecProperties
 from .max_count_rule_0_error_parameters_spec import MaxCountRule0ErrorParametersSpec
 from .max_count_rule_0_warning_parameters_spec import MaxCountRule0WarningParametersSpec
 from .max_count_rule_100_parameters_spec import MaxCountRule100ParametersSpec
@@ -1608,6 +1618,7 @@ from .parameter_definition_spec import ParameterDefinitionSpec
 from .parquet_file_format_spec import ParquetFileFormatSpec
 from .partition_incremental_time_window_spec import PartitionIncrementalTimeWindowSpec
 from .physical_table_name import PhysicalTableName
+from .postgresql_engine_type import PostgresqlEngineType
 from .postgresql_parameters_spec import PostgresqlParametersSpec
 from .postgresql_parameters_spec_properties import PostgresqlParametersSpecProperties
 from .postgresql_ssl_mode import PostgresqlSslMode
@@ -1623,6 +1634,8 @@ from .provider_sensor_model import ProviderSensorModel
 from .provider_sensor_runner_type import ProviderSensorRunnerType
 from .provider_type import ProviderType
 from .quality_category_model import QualityCategoryModel
+from .quest_db_parameters_spec import QuestDbParametersSpec
+from .quest_db_parameters_spec_properties import QuestDbParametersSpecProperties
 from .redshift_authentication_mode import RedshiftAuthenticationMode
 from .redshift_parameters_spec import RedshiftParametersSpec
 from .redshift_parameters_spec_properties import RedshiftParametersSpecProperties
@@ -1643,6 +1656,7 @@ from .run_checks_on_table_parameters import RunChecksOnTableParameters
 from .run_checks_parameters import RunChecksParameters
 from .run_checks_queue_job_result import RunChecksQueueJobResult
 from .run_checks_result import RunChecksResult
+from .run_checks_target import RunChecksTarget
 from .schedule_enabled_status_model import ScheduleEnabledStatusModel
 from .schema_model import SchemaModel
 from .schema_remote_model import SchemaRemoteModel
@@ -1986,6 +2000,12 @@ from .table_sql_import_custom_result_check_spec import (
 from .table_sql_import_custom_result_sensor_parameters_spec import (
     TableSqlImportCustomResultSensorParametersSpec,
 )
+from .table_sql_invalid_record_count_check_spec import (
+    TableSqlInvalidRecordCountCheckSpec,
+)
+from .table_sql_invalid_record_count_sensor_parameters_spec import (
+    TableSqlInvalidRecordCountSensorParametersSpec,
+)
 from .table_statistics_collectors_root_categories_spec import (
     TableStatisticsCollectorsRootCategoriesSpec,
 )
@@ -2097,6 +2117,8 @@ from .target_column_pattern_spec import TargetColumnPatternSpec
 from .target_rule_severity_level import TargetRuleSeverityLevel
 from .target_table_pattern_spec import TargetTablePatternSpec
 from .temporal_unit import TemporalUnit
+from .teradata_parameters_spec import TeradataParametersSpec
+from .teradata_parameters_spec_properties import TeradataParametersSpecProperties
 from .text_built_in_date_formats import TextBuiltInDateFormats
 from .time_period_gradient import TimePeriodGradient
 from .time_window_filter_parameters import TimeWindowFilterParameters
@@ -2181,6 +2203,8 @@ __all__ = (
     "CheckTemplate",
     "CheckTimeScale",
     "CheckType",
+    "ClickHouseParametersSpec",
+    "ClickHouseParametersSpecProperties",
     "CloudSynchronizationFoldersStatusModel",
     "CollectErrorSamplesOnTableParameters",
     "CollectErrorSamplesParameters",
@@ -2554,6 +2578,8 @@ __all__ = (
     "ColumnSqlConditionPassedPercentSensorParametersSpec",
     "ColumnSqlImportCustomResultCheckSpec",
     "ColumnSqlImportCustomResultSensorParametersSpec",
+    "ColumnSqlInvalidValueCountCheckSpec",
+    "ColumnSqlInvalidValueCountSensorParametersSpec",
     "ColumnStatisticsCollectorsRootCategoriesSpec",
     "ColumnStatisticsModel",
     "ColumnStringsExpectedTextsInTopValuesCountSensorParametersSpec",
@@ -2796,6 +2822,8 @@ __all__ = (
     "JsonRecordsType",
     "LabelModel",
     "LocalDataDomainModel",
+    "MariaDbParametersSpec",
+    "MariaDbParametersSpecProperties",
     "MaxCountRule0ErrorParametersSpec",
     "MaxCountRule0WarningParametersSpec",
     "MaxCountRule100ParametersSpec",
@@ -2840,6 +2868,7 @@ __all__ = (
     "ParquetFileFormatSpec",
     "PartitionIncrementalTimeWindowSpec",
     "PhysicalTableName",
+    "PostgresqlEngineType",
     "PostgresqlParametersSpec",
     "PostgresqlParametersSpecProperties",
     "PostgresqlSslMode",
@@ -2853,6 +2882,8 @@ __all__ = (
     "ProviderSensorRunnerType",
     "ProviderType",
     "QualityCategoryModel",
+    "QuestDbParametersSpec",
+    "QuestDbParametersSpecProperties",
     "RedshiftAuthenticationMode",
     "RedshiftParametersSpec",
     "RedshiftParametersSpecProperties",
@@ -2873,6 +2904,7 @@ __all__ = (
     "RunChecksParameters",
     "RunChecksQueueJobResult",
     "RunChecksResult",
+    "RunChecksTarget",
     "ScheduleEnabledStatusModel",
     "SchemaModel",
     "SchemaRemoteModel",
@@ -3042,6 +3074,8 @@ __all__ = (
     "TableSqlConditionPassedPercentSensorParametersSpec",
     "TableSqlImportCustomResultCheckSpec",
     "TableSqlImportCustomResultSensorParametersSpec",
+    "TableSqlInvalidRecordCountCheckSpec",
+    "TableSqlInvalidRecordCountSensorParametersSpec",
     "TableStatisticsCollectorsRootCategoriesSpec",
     "TableStatisticsModel",
     "TableTimelinessDailyMonitoringChecksSpec",
@@ -3085,6 +3119,8 @@ __all__ = (
     "TargetRuleSeverityLevel",
     "TargetTablePatternSpec",
     "TemporalUnit",
+    "TeradataParametersSpec",
+    "TeradataParametersSpecProperties",
     "TextBuiltInDateFormats",
     "TimePeriodGradient",
     "TimestampColumnsSpec",

@@ -34,7 +34,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import tech.tablesaw.api.TextColumn;
+import tech.tablesaw.api.StringColumn;
 
 import java.util.List;
 
@@ -152,7 +152,7 @@ public class RepairStoredDataQueueJob extends DqoQueueJob<RepairStoredDataQueueJ
                     partitionId, fileStorageSettings, null, userIdentity);
 
             if (loadedMonthlyPartition.getData() != null && loadedMonthlyPartition.getData().rowCount() != 0) {
-                TextColumn idColumn = loadedMonthlyPartition.getData().textColumn(fileStorageSettings.getIdStringColumnName());
+                StringColumn idColumn = loadedMonthlyPartition.getData().stringColumn(fileStorageSettings.getIdStringColumnName());
                 if (idColumn.countUnique() != idColumn.size()) {
                     // duplicates found, removing the partition
                     this.parquetPartitionStorageService.deletePartitionFile(loadedMonthlyPartition.getPartitionId(), fileStorageSettings, userIdentity);

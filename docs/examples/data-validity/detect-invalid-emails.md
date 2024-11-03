@@ -20,11 +20,9 @@ The `email` column contains email values. We want to verify that the number of i
 We will verify the data using monitoring [invalid_email_format_found](../../checks/column/patterns/invalid-email-format-found.md) column check.
 Our goal is to verify if the number of invalid email values in `email` column does not exceed set thresholds.
 
-In this example, we will set three maximum thresholds levels for the check:
+In this example, we will set the maximum threshold level for the check:
 
 - warning: 0
-- error: 10
-- fatal: 15
 
 If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/definition-of-data-quality-checks/index.md).
 
@@ -56,7 +54,7 @@ A detailed explanation of [how to start DQOps platform and run the example is de
 
 To navigate to a list of checks prepared in the example using the [user interface](../../dqo-concepts/dqops-user-interface-overview.md):
 
-![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-string-invalid-email-count-checks1.png){ loading=lazy; width="1200px" }
+![Navigating to a list of checks](https://dqops.com/docs/images/examples/daily-string-invalid-email-navigating-to-the-list-of-daily-checks1.png){ loading=lazy; width="1200px" }
 
 1. Go to the **Monitoring** section.
 
@@ -68,7 +66,7 @@ To navigate to a list of checks prepared in the example using the [user interfac
     On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../data-sources/index.md).
 
 
-3. Select the **Daily checks** tab.
+3. Select the **Daily checkpoints** tab.
 
     This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../dqo-concepts/dqops-user-interface-overview.md#check-editor).
 
@@ -79,22 +77,25 @@ Run the activated check using the **Run check** button.
 
 You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
 
-![Run check](https://dqops.com/docs/images/examples/daily-string-invalid-email-count-run-checks1.png){ loading=lazy; width="1200px" }
+![Run check](https://dqops.com/docs/images/examples/daily-string-invalid-email-count-run-checks2.png){ loading=lazy; width="1200px" }
 
 
 ### **View detailed check results**
 
 Access the detailed results by clicking the **Results** button. The results should be similar to the one below.
 
-![String-invalid-email-count check results](https://dqops.com/docs/images/examples/daily-string-invalid-email-count-check-results1.png){ loading=lazy; width="1200px" }
+![String-invalid-email-count check results](https://dqops.com/docs/images/examples/daily-string-invalid-email-count-check-results2.png){ loading=lazy; width="1200px" }
 
-Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
+Within the Results window, you will see four categories: **Check results**, **Sensor readouts**, **Execution errors**, and **Error sampling**.
 The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
 The Sensor readouts category displays the values obtained by the sensors from the data source.
 The Execution errors category displays any error that occurred during the check's execution.
+The Error sampling category displays examples of invalid values in the column.
 
-The actual value in this example is 22, which is above the maximum threshold level set in the warning (0).
-The check gives a fatal error (notice the red square to the left of the check name).
+The actual value in this example is 6, which is above the maximum threshold level set in the warning (0).
+Examples of bad emails can be viewed in the **Error sampling** tab.
+
+![String-invalid-email-error sampling](https://dqops.com/docs/images/examples/daily-string-invalid-email-error-sampling1.png){ loading=lazy; width="1200px" }
 
 
 ### **Synchronize the results with the cloud account**
@@ -104,31 +105,6 @@ of the user interface.
 
 Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
 
-### **Review the results on the data quality dashboards**
-
-To review the results on the [data quality dashboards](../../working-with-dqo/review-the-data-quality-results-on-dashboards.md)
-go to the Data Quality Dashboards section and select the dashboard from the tree view on the left.  
- 
-Below you can see the results displayed on the **Current column status** dashboard located in Current status group.
-This dashboard allow data engineers and data owners to quickly evaluate the data quality of monitored
-tables and columns. The dashboards display a color-coded status that indicates the severity level detected by run
-checks. When the status is green, it means that the monitored column has no data quality issues. However, if the status
-is yellow, orange, or red, it indicates that there were some issues detected. The dashboard also displays the number
-of detected issues per severity threshold, making it easier to identify and address tables and columns with issues.
-
-These dashboards allow filtering data by:
-    
-* time frame,
-* connection,
-* schema,
-* data quality dimension,
-* check category,
-* data group,
-* table,
-* column.
-    
-![String-invalid-email-count results on Current column status dashboard](https://dqops.com/docs/images/examples/daily-string-invalid-email-count-check-results-on-current-column-status-dashboard.png){ loading=lazy; width="1200px" }
-
 ## Change a schedule at the connection level
 
 With DQOps, you can easily customize when checks are run by setting schedules. You can set schedules for an entire connection,
@@ -136,7 +112,7 @@ table, or individual check.
 
 After importing new tables, DQOps sets the schedule for 12:00 P.M. (noon) every day. Follow the steps below to change the schedule.
 
-![Change a schedule at the connection level](https://dqops.com/docs/images/examples/change-schedule-for-connection.png){ loading=lazy; width="1200px" }
+![Change a schedule at the connection level](https://dqops.com/docs/images/examples/daily-string-invalid-email-change-schedule-for-connection1.png){ loading=lazy; width="1200px" }
 
 1. Navigate to the **Data Source** section.
 
@@ -165,121 +141,49 @@ You might also want to check the [Running checks with a scheduler](../data-quali
 
 The YAML configuration file stores both the table details and checks configurations.
 
-In this example, we have set three maximum thresholds levels for the check:
+In this example, we have set the maximum threshold level for the check:
 
 - warning: 0
-- error: 10
-- fatal: 15
 
 The highlighted fragments in the YAML file below represent the segment where the monitoring `daily_invalid_email_format_found` check is configured.
 
 If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/definition-of-data-quality-checks/index.md).
 
-```yaml hl_lines="12-25"
+```yaml hl_lines="12-21"
 apiVersion: dqo/v1
 kind: table
 spec:
-  incremental_time_window:
-    daily_partitioning_recent_days: 7
-    monthly_partitioning_recent_months: 1
-  columns:
-    id:
-      type_snapshot:
-        column_type: INT64
-        nullable: true
-    email:
-      type_snapshot:
-        column_type: STRING
-        nullable: true
-      monitoring_checks:
-        daily:
-          patterns:
-            daily_invalid_email_format_found:
-              warning:
-                max_count: 0
-              error:
-                max_count: 10
-              fatal:
-                max_count: 15
-    email_ok:
-      type_snapshot:
-        column_type: INT64
-        nullable: true
-    surrounded_by_whitespace:
-      type_snapshot:
-        column_type: STRING
-        nullable: true
-```
-
-## Run the checks in the example using the DQOps Shell
-
-A detailed explanation of [how to start DQOps platform and run the example is described here](../index.md#running-the-use-cases).
-
-To execute the check prepared in the example, run the following command in DQOps Shell:
-
-``` 
-check run
-```
-
-Review the results which should be similar to the one below.
-The number of the invalid email values in the `email` column above 15 and the check raised the fatal error.
-
-```
-+-------------------+-----------------------------------------------------+------+--------------+-------------+--------+------+------------+----------------+
-|Connection         |Table                                                |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
-+-------------------+-----------------------------------------------------+------+--------------+-------------+--------+------+------------+----------------+
-|invalid_email_count|dqo_ai_test_data.string_test_data_3888926926528139965|1     |1             |0            |0       |0     |1           |0               |
-+-------------------+-----------------------------------------------------+------+--------------+-------------+--------+------+------------+----------------+
-```
-
-For a more detailed insight of how the check is run, you can initiate the check in debug mode by executing the
-following command:
-
-```
-check run --mode=debug
-```
-
-In the debug mode you can view the SQL query (sensor) executed in the check.
-
-```
-**************************************************
-Executing SQL on connection invalid_email_count (bigquery)
-SQL to be executed on the connection:
-SELECT
-    SUM(
-        CASE
-            WHEN REGEXP_CONTAINS(CAST(analyzed_table.`email` AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
-                THEN 0
-            ELSE 1
-        END
-    ) AS actual_value,
-    DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
-    TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
-FROM `dqo-ai-testing`.`dqo_ai_test_data`.`string_test_data_3888926926528139965` AS analyzed_table
-GROUP BY time_period, time_period_utc
-ORDER BY time_period, time_period_utc
-**************************************************
-```
-
-You can also see the results returned by the sensor. The actual value of invalid emails in this example is 22, which is above the maximum
-threshold level set in the fatal error (15).
-
-```
-**************************************************
-Finished executing a sensor for a check profile_invalid_email_format_found on the table dqo_ai_test_data.string_test_data_3888926926528139965 using a sensor definition column/patterns/invalid_email_format_found, sensor result count: 1
-
-Results returned by the sensor:
-+------------+-----------+--------------------+
-|actual_value|time_period|time_period_utc     |
-+------------+-----------+--------------------+
-|22          |2023-08-01 |2023-08-01T00:00:00Z|
-+------------+-----------+--------------------+
-**************************************************
+   incremental_time_window:
+      daily_partitioning_recent_days: 7
+      monthly_partitioning_recent_months: 1
+   columns:
+      id:
+         type_snapshot:
+            column_type: INT64
+            nullable: true
+      email:
+         type_snapshot:
+            column_type: STRING
+            nullable: true
+         monitoring_checks:
+            daily:
+               patterns:
+                  daily_invalid_email_format_found:
+                     warning:
+                        max_count: 0
+      email_ok:
+         type_snapshot:
+            column_type: INT64
+            nullable: true
+      surrounded_by_whitespace:
+         type_snapshot:
+            column_type: STRING
+            nullable: true
 ```
 
 In this example, we have demonstrated how to use DQOps to verify the validity of data in a column.
 By using the [invalid_email_format_found](../../checks/column/patterns/invalid-email-format-found.md) column check, we can monitor that
-the number of invalid emails in a monitored column does not exceed the maximum accepted count. If it does, you will get a warning, error or fatal result.
+the number of invalid emails in a monitored column does not exceed the maximum accepted count. If it does, you will get a warning.
 
 ## Next steps
 

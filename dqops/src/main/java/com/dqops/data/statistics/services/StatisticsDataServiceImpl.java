@@ -29,10 +29,12 @@ import com.dqops.data.storage.LoadedMonthlyPartition;
 import com.dqops.data.storage.ParquetPartitionId;
 import com.dqops.metadata.search.StatisticsCollectorSearchFilters;
 import com.dqops.metadata.sources.PhysicalTableName;
+import com.dqops.utils.tables.TableCopyUtility;
 import com.google.common.base.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tech.tablesaw.api.*;
+import tech.tablesaw.selection.Selection;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -101,17 +103,18 @@ public class StatisticsDataServiceImpl implements StatisticsDataService {
                                                                  boolean includeColumnLevelStatistics,
                                                                  Table statisticsDataTable,
                                                                  StatisticsResultsForTableModel targetStatisticsResultsModel) {
-        Table selectedDataStreamData = statisticsDataTable.where(statisticsDataTable.textColumn(StatisticsColumnNames.DATA_GROUP_NAME_COLUMN_NAME).isEqualTo(dataGroup));
+        Selection rowSelection = statisticsDataTable.stringColumn(StatisticsColumnNames.DATA_GROUP_NAME_COLUMN_NAME).isEqualTo(dataGroup);
         if (!includeColumnLevelStatistics) {
-            selectedDataStreamData = selectedDataStreamData.where(
-                    statisticsDataTable.textColumn(StatisticsColumnNames.COLLECTOR_TARGET_COLUMN_NAME).isEqualTo(StatisticsCollectorTarget.table.name()));
+            rowSelection = rowSelection.and(statisticsDataTable.stringColumn(StatisticsColumnNames.COLLECTOR_TARGET_COLUMN_NAME)
+                    .isEqualTo(StatisticsCollectorTarget.table.name()));
         }
+        Table selectedDataStreamData = TableCopyUtility.copyTableFiltered(statisticsDataTable, rowSelection);
 
         Table sortedResults = selectedDataStreamData.sortDescendingOn(StatisticsColumnNames.COLLECTED_AT_COLUMN_NAME);
 
-        TextColumn categoryColumn = sortedResults.textColumn(StatisticsColumnNames.COLLECTOR_CATEGORY_COLUMN_NAME);
-        TextColumn collectorNameColumn = sortedResults.textColumn(StatisticsColumnNames.COLLECTOR_NAME_COLUMN_NAME);
-        TextColumn columnNameColumn = sortedResults.textColumn(StatisticsColumnNames.COLUMN_NAME_COLUMN_NAME);
+        StringColumn categoryColumn = sortedResults.stringColumn(StatisticsColumnNames.COLLECTOR_CATEGORY_COLUMN_NAME);
+        StringColumn collectorNameColumn = sortedResults.stringColumn(StatisticsColumnNames.COLLECTOR_NAME_COLUMN_NAME);
+        StringColumn columnNameColumn = sortedResults.stringColumn(StatisticsColumnNames.COLUMN_NAME_COLUMN_NAME);
         DateTimeColumn collectedAtColumn = sortedResults.dateTimeColumn(StatisticsColumnNames.COLLECTED_AT_COLUMN_NAME);
         IntColumn sampleIndexColumn = sortedResults.intColumn(StatisticsColumnNames.SAMPLE_INDEX_COLUMN_NAME);
 
@@ -188,12 +191,12 @@ public class StatisticsDataServiceImpl implements StatisticsDataService {
         if (allData == null) {
             return columnStatisticsResults; // no profiling data
         }
-        Table selectedDataStreamData = allData.where(allData.textColumn(StatisticsColumnNames.COLUMN_NAME_COLUMN_NAME).isEqualTo(columName)
-                .and(allData.textColumn(StatisticsColumnNames.DATA_GROUP_NAME_COLUMN_NAME).isEqualTo(dataGroup)));
+        Table selectedDataStreamData = TableCopyUtility.copyTableFiltered(allData, allData.stringColumn(StatisticsColumnNames.COLUMN_NAME_COLUMN_NAME).isEqualTo(columName)
+                .and(allData.stringColumn(StatisticsColumnNames.DATA_GROUP_NAME_COLUMN_NAME).isEqualTo(dataGroup)));
         Table sortedResults = selectedDataStreamData.sortDescendingOn(StatisticsColumnNames.COLLECTED_AT_COLUMN_NAME, StatisticsColumnNames.SAMPLE_COUNT_COLUMN_NAME);
 
-        TextColumn categoryColumn = sortedResults.textColumn(StatisticsColumnNames.COLLECTOR_CATEGORY_COLUMN_NAME);
-        TextColumn collectorNameColumn = sortedResults.textColumn(StatisticsColumnNames.COLLECTOR_NAME_COLUMN_NAME);
+        StringColumn categoryColumn = sortedResults.stringColumn(StatisticsColumnNames.COLLECTOR_CATEGORY_COLUMN_NAME);
+        StringColumn collectorNameColumn = sortedResults.stringColumn(StatisticsColumnNames.COLLECTOR_NAME_COLUMN_NAME);
         DateTimeColumn collectedAtColumn = sortedResults.dateTimeColumn(StatisticsColumnNames.COLLECTED_AT_COLUMN_NAME);
         IntColumn sampleIndexColumn = sortedResults.intColumn(StatisticsColumnNames.SAMPLE_INDEX_COLUMN_NAME);
 

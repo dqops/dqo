@@ -354,8 +354,14 @@ export const databaseOptions: IDatabaseOption[] = [
   {
     type: ConnectionModelProviderTypeEnum.bigquery,
     name: 'Google BigQuery',
-    iconName: 'bigquery',
-    displayName: 'Bigquery'
+    iconName: 'googlebigquery',
+    displayName: 'BigQuery'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.clickhouse,
+    name: 'ClickHouse',
+    iconName: 'clickhouse',
+    displayName: 'ClickHouse'
   },
   {
     type: ConnectionModelProviderTypeEnum.mysql,
@@ -396,7 +402,7 @@ export const databaseOptions: IDatabaseOption[] = [
   {
     type: ConnectionModelProviderTypeEnum.db2,
     name: 'IBM DB2',
-    iconName: 'ibm_db2',
+    iconName: 'ibmdb2',
     displayName: 'DB2'
   },
   {
@@ -424,7 +430,7 @@ export const databaseOptions: IDatabaseOption[] = [
     displayName: 'JSON'
   },
   {
-    type: ConnectionModelProviderTypeEnum.mysql,
+    type: ConnectionModelProviderTypeEnum.mariadb,
     name: 'MariaDB',
     iconName: 'mariadb',
     displayName: 'MariaDB'
@@ -478,6 +484,12 @@ export const databaseOptions: IDatabaseOption[] = [
     displayName: 'Presto'
   },
   {
+    type: ConnectionModelProviderTypeEnum.questdb,
+    name: 'QuestDB',
+    iconName: 'questdb',
+    displayName: 'QuestDB'
+  },
+  {
     type: ConnectionModelProviderTypeEnum.mysql,
     name: 'SingleStoreDB',
     iconName: 'singlestoredb',
@@ -494,6 +506,18 @@ export const databaseOptions: IDatabaseOption[] = [
     name: 'Snowflake',
     iconName: 'snowflake',
     displayName: 'Snowflake'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.teradata,
+    name: 'Teradata',
+    iconName: 'teradata',
+    displayName: 'Teradata'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.postgresql,
+    name: 'Timescale',
+    iconName: 'timescale',
+    displayName: 'Timescale'
   },
   {
     type: ConnectionModelProviderTypeEnum.trino,
@@ -571,7 +595,10 @@ export const RUN_CHECK_TIME_WINDOW_FILTERS: {
   }
 };
 
-export const formatNumber = (t: number) => {
+export const formatNumber = (t?: number) => {
+  if (t === undefined) {
+    return '';
+  }
   const k = Math.abs(t);
 
   if (k > 1000 && k < 1000000) {

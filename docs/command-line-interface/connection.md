@@ -88,6 +88,9 @@ $ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--sqlserver-disable-encr
                 [--bigquery-json-key-path=<jsonKeyPath>]
                 [--bigquery-quota-project-id=<quotaProjectId>]
                 [--bigquery-source-project-id=<sourceProjectId>]
+                [--clickhouse-database=<database>] [--clickhouse-host=<host>]
+                [--clickhouse-password=<password>] [--clickhouse-port=<port>]
+                [--clickhouse-user=<user>]
                 [--databricks-access-token=<accessToken>]
                 [--databricks-catalog=<catalog>] [--databricks-host=<host>]
                 [--databricks-http-path=<httpPath>]
@@ -111,7 +114,10 @@ $ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--sqlserver-disable-encr
                 [--duckdb-storage-type=<storageType>] [--duckdb-user=<user>]
                 [--hana-host=<host>] [--hana-instance-number=<instanceNumber>]
                 [--hana-password=<password>] [--hana-port=<port>]
-                [--hana-user=<user>] [--mysql-database=<database>]
+                [--hana-user=<user>] [--mariadb-database=<database>]
+                [--mariadb-host=<host>] [--mariadb-password=<password>]
+                [--mariadb-port=<port>] [--mariadb-user=<user>]
+                [--mysql-database=<database>]
                 [--mysql-engine=<mysqlEngineType>] [--mysql-host=<host>]
                 [--mysql-password=<password>] [--mysql-port=<port>]
                 [--mysql-sslmode=<sslmode>] [--mysql-user=<user>] [-n=<name>]
@@ -120,12 +126,15 @@ $ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--sqlserver-disable-encr
                 [--oracle-initialization-sql=<initializationSql>]
                 [--oracle-password=<password>] [--oracle-port=<port>]
                 [--oracle-user=<user>] [--postgresql-database=<database>]
+                [--postgresql-engine=<postgresqlEngineType>]
                 [--postgresql-host=<host>] [--postgresql-options=<options>]
                 [--postgresql-password=<password>] [--postgresql-port=<port>]
                 [--postgresql-sslmode=<sslmode>] [--postgresql-user=<user>]
                 [--presto-database=<database>] [--presto-host=<host>]
                 [--presto-password=<password>] [--presto-port=<port>]
-                [--presto-user=<user>]
+                [--presto-user=<user>] [--questdb-database=<database>]
+                [--questdb-host=<host>] [--questdb-password=<password>]
+                [--questdb-port=<port>] [--questdb-user=<user>]
                 [--redshift-authentication-mode=<redshiftAuthenticationMode>]
                 [--redshift-database=<database>] [--redshift-host=<host>]
                 [--redshift-password=<password>] [--redshift-port=<port>]
@@ -141,16 +150,20 @@ $ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--sqlserver-disable-encr
                 [--sqlserver-database=<database>] [--sqlserver-host=<host>]
                 [--sqlserver-password=<password>] [--sqlserver-port=<port>]
                 [--sqlserver-user=<user>] [-t=<providerType>]
+                [--teradata-host=<host>] [--teradata-password=<password>]
+                [--teradata-port=<port>] [--teradata-user=<user>]
                 [--trino-catalog=<catalog>] [--trino-engine=<trinoEngineType>]
                 [--trino-host=<host>] [--trino-password=<password>]
                 [--trino-port=<port>] [--trino-user=<user>]
-                [-D=<String=String>]... [-DB2=<String=String>]...
-                [-Duck=<String=String>]... [-E=<String=String>]...
-                [-F=<String=String>]... [-H=<String=String>]...
-                [-K=<String=String>]... [-M=<String=String>]...
+                [-C=<String=String>]... [-D=<String=String>]...
+                [-DB2=<String=String>]... [-Duck=<String=String>]...
+                [-E=<String=String>]... [-F=<String=String>]...
+                [-H=<String=String>]... [-K=<String=String>]...
+                [-M=<String=String>]... [-MA=<String=String>]...
                 [-O=<String=String>]... [-P=<String=String>]...
-                [-R=<String=String>]... [-S=<String=String>]...
-                [-T=<String=String>]...
+                [-Q=<String=String>]... [-R=<String=String>]...
+                [-S=<String=String>]... [-T=<String=String>]...
+                [-TE=<String=String>]...
 
 ```
 
@@ -169,6 +182,9 @@ dqo> connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                 [--bigquery-json-key-path=<jsonKeyPath>]
                 [--bigquery-quota-project-id=<quotaProjectId>]
                 [--bigquery-source-project-id=<sourceProjectId>]
+                [--clickhouse-database=<database>] [--clickhouse-host=<host>]
+                [--clickhouse-password=<password>] [--clickhouse-port=<port>]
+                [--clickhouse-user=<user>]
                 [--databricks-access-token=<accessToken>]
                 [--databricks-catalog=<catalog>] [--databricks-host=<host>]
                 [--databricks-http-path=<httpPath>]
@@ -192,7 +208,10 @@ dqo> connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                 [--duckdb-storage-type=<storageType>] [--duckdb-user=<user>]
                 [--hana-host=<host>] [--hana-instance-number=<instanceNumber>]
                 [--hana-password=<password>] [--hana-port=<port>]
-                [--hana-user=<user>] [--mysql-database=<database>]
+                [--hana-user=<user>] [--mariadb-database=<database>]
+                [--mariadb-host=<host>] [--mariadb-password=<password>]
+                [--mariadb-port=<port>] [--mariadb-user=<user>]
+                [--mysql-database=<database>]
                 [--mysql-engine=<mysqlEngineType>] [--mysql-host=<host>]
                 [--mysql-password=<password>] [--mysql-port=<port>]
                 [--mysql-sslmode=<sslmode>] [--mysql-user=<user>] [-n=<name>]
@@ -201,12 +220,15 @@ dqo> connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                 [--oracle-initialization-sql=<initializationSql>]
                 [--oracle-password=<password>] [--oracle-port=<port>]
                 [--oracle-user=<user>] [--postgresql-database=<database>]
+                [--postgresql-engine=<postgresqlEngineType>]
                 [--postgresql-host=<host>] [--postgresql-options=<options>]
                 [--postgresql-password=<password>] [--postgresql-port=<port>]
                 [--postgresql-sslmode=<sslmode>] [--postgresql-user=<user>]
                 [--presto-database=<database>] [--presto-host=<host>]
                 [--presto-password=<password>] [--presto-port=<port>]
-                [--presto-user=<user>]
+                [--presto-user=<user>] [--questdb-database=<database>]
+                [--questdb-host=<host>] [--questdb-password=<password>]
+                [--questdb-port=<port>] [--questdb-user=<user>]
                 [--redshift-authentication-mode=<redshiftAuthenticationMode>]
                 [--redshift-database=<database>] [--redshift-host=<host>]
                 [--redshift-password=<password>] [--redshift-port=<port>]
@@ -222,16 +244,20 @@ dqo> connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                 [--sqlserver-database=<database>] [--sqlserver-host=<host>]
                 [--sqlserver-password=<password>] [--sqlserver-port=<port>]
                 [--sqlserver-user=<user>] [-t=<providerType>]
+                [--teradata-host=<host>] [--teradata-password=<password>]
+                [--teradata-port=<port>] [--teradata-user=<user>]
                 [--trino-catalog=<catalog>] [--trino-engine=<trinoEngineType>]
                 [--trino-host=<host>] [--trino-password=<password>]
                 [--trino-port=<port>] [--trino-user=<user>]
-                [-D=<String=String>]... [-DB2=<String=String>]...
-                [-Duck=<String=String>]... [-E=<String=String>]...
-                [-F=<String=String>]... [-H=<String=String>]...
-                [-K=<String=String>]... [-M=<String=String>]...
+                [-C=<String=String>]... [-D=<String=String>]...
+                [-DB2=<String=String>]... [-Duck=<String=String>]...
+                [-E=<String=String>]... [-F=<String=String>]...
+                [-H=<String=String>]... [-K=<String=String>]...
+                [-M=<String=String>]... [-MA=<String=String>]...
                 [-O=<String=String>]... [-P=<String=String>]...
-                [-R=<String=String>]... [-S=<String=String>]...
-                [-T=<String=String>]...
+                [-Q=<String=String>]... [-R=<String=String>]...
+                [-S=<String=String>]... [-T=<String=String>]...
+                [-TE=<String=String>]...
 
 ```
 
@@ -254,6 +280,11 @@ All parameters supported by the command are listed below.
 |<div id="connection add--bigquery-json-key-path" class="no-wrap-code">`--bigquery-json-key-path`</div>|Path to a GCP service account key JSON file used to authenticate to Bigquery.| ||
 |<div id="connection add--bigquery-quota-project-id" class="no-wrap-code">`--bigquery-quota-project-id`</div>|Bigquery quota GCP project id.| ||
 |<div id="connection add--bigquery-source-project-id" class="no-wrap-code">`--bigquery-source-project-id`</div>|Bigquery source GCP project id. This is the project that has datasets that will be imported.| ||
+|<div id="connection add--clickhouse-database" class="no-wrap-code">`--clickhouse-database`</div>|ClickHouse database name| ||
+|<div id="connection add--clickhouse-host" class="no-wrap-code">`--clickhouse-host`</div>|ClickHouse host name| ||
+|<div id="connection add--clickhouse-password" class="no-wrap-code">`--clickhouse-password`</div>|ClickHouse database password. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection add--clickhouse-port" class="no-wrap-code">`--clickhouse-port`</div>|ClickHouse port number| ||
+|<div id="connection add--clickhouse-user" class="no-wrap-code">`--clickhouse-user`</div>|ClickHouse user name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--databricks-access-token" class="no-wrap-code">`--databricks-access-token`</div>|Databricks access token for the warehouse.| ||
 |<div id="connection add--databricks-catalog" class="no-wrap-code">`--databricks-catalog`</div>|Databricks catalog name.| ||
 |<div id="connection add--databricks-host" class="no-wrap-code">`--databricks-host`</div>|Databricks host name| ||
@@ -290,6 +321,11 @@ All parameters supported by the command are listed below.
 |<div id="connection add--hana-user" class="no-wrap-code">`--hana-user`</div>|Hana user name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--headless" class="no-wrap-code">`--headless`</div><div id="connection add-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
 |<div id="connection add-h" class="no-wrap-code">`-h`</div><div id="connection add--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
+|<div id="connection add--mariadb-database" class="no-wrap-code">`--mariadb-database`</div>|MariaDB database name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection add--mariadb-host" class="no-wrap-code">`--mariadb-host`</div>|MariaDB host name| ||
+|<div id="connection add--mariadb-password" class="no-wrap-code">`--mariadb-password`</div>|MariaDB database password. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection add--mariadb-port" class="no-wrap-code">`--mariadb-port`</div>|MariaDB port number| ||
+|<div id="connection add--mariadb-user" class="no-wrap-code">`--mariadb-user`</div>|MariaDB user name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--mysql-database" class="no-wrap-code">`--mysql-database`</div>|MySQL database name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--mysql-engine" class="no-wrap-code">`--mysql-engine`</div>|MySQL engine type. Supports also a null configuration with a custom environment variable.| |*mysql*<br/>*singlestoredb*<br/>|
 |<div id="connection add--mysql-host" class="no-wrap-code">`--mysql-host`</div>|MySQL host name| ||
@@ -306,6 +342,7 @@ All parameters supported by the command are listed below.
 |<div id="connection add--oracle-user" class="no-wrap-code">`--oracle-user`</div>|Oracle user name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add-of" class="no-wrap-code">`-of`</div><div id="connection add--output-format" class="no-wrap-code">`--output-format`</div>|Output format for tabular responses| |*TABLE*<br/>*CSV*<br/>*JSON*<br/>|
 |<div id="connection add--postgresql-database" class="no-wrap-code">`--postgresql-database`</div>|PostgreSQL database name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection add--postgresql-engine" class="no-wrap-code">`--postgresql-engine`</div>|Postgresql engine type. Supports also a null configuration with a custom environment variable.| |*postgresql*<br/>*timescale*<br/>|
 |<div id="connection add--postgresql-host" class="no-wrap-code">`--postgresql-host`</div>|PostgreSQL host name| ||
 |<div id="connection add--postgresql-options" class="no-wrap-code">`--postgresql-options`</div>|PostgreSQL connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes.| ||
 |<div id="connection add--postgresql-password" class="no-wrap-code">`--postgresql-password`</div>|PostgreSQL database password. The value can be in the null format to use dynamic substitution.| ||
@@ -317,7 +354,12 @@ All parameters supported by the command are listed below.
 |<div id="connection add--presto-password" class="no-wrap-code">`--presto-password`</div>|Presto database password. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--presto-port" class="no-wrap-code">`--presto-port`</div>|Presto port number| ||
 |<div id="connection add--presto-user" class="no-wrap-code">`--presto-user`</div>|Presto user name. The value can be in the null format to use dynamic substitution.| ||
-|<div id="connection add-t" class="no-wrap-code">`-t`</div><div id="connection add--provider" class="no-wrap-code">`--provider`</div>|Connection provider type| |*bigquery*<br/>*databricks*<br/>*mysql*<br/>*oracle*<br/>*postgresql*<br/>*duckdb*<br/>*presto*<br/>*redshift*<br/>*snowflake*<br/>*spark*<br/>*sqlserver*<br/>*trino*<br/>*hana*<br/>*db2*<br/>|
+|<div id="connection add-t" class="no-wrap-code">`-t`</div><div id="connection add--provider" class="no-wrap-code">`--provider`</div>|Connection provider type| |*bigquery*<br/>*clickhouse*<br/>*databricks*<br/>*db2*<br/>*duckdb*<br/>*hana*<br/>*mariadb*<br/>*mysql*<br/>*oracle*<br/>*postgresql*<br/>*presto*<br/>*questdb*<br/>*redshift*<br/>*snowflake*<br/>*spark*<br/>*sqlserver*<br/>*teradata*<br/>*trino*<br/>|
+|<div id="connection add--questdb-database" class="no-wrap-code">`--questdb-database`</div>|QuestDB database name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection add--questdb-host" class="no-wrap-code">`--questdb-host`</div>|QuestDB host name| ||
+|<div id="connection add--questdb-password" class="no-wrap-code">`--questdb-password`</div>|QuestDB database password. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection add--questdb-port" class="no-wrap-code">`--questdb-port`</div>|QuestDB port number| ||
+|<div id="connection add--questdb-user" class="no-wrap-code">`--questdb-user`</div>|QuestDB user name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--redshift-authentication-mode" class="no-wrap-code">`--redshift-authentication-mode`</div>|The authentication mode for AWS. Supports also a null configuration with a custom environment variable.| |*iam*<br/>*default_credentials*<br/>*user_password*<br/>|
 |<div id="connection add--redshift-database" class="no-wrap-code">`--redshift-database`</div>|Redshift database name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--redshift-host" class="no-wrap-code">`--redshift-host`</div>|Redshift host name| ||
@@ -342,12 +384,17 @@ All parameters supported by the command are listed below.
 |<div id="connection add--sqlserver-password" class="no-wrap-code">`--sqlserver-password`</div>|SQL Server database password. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--sqlserver-port" class="no-wrap-code">`--sqlserver-port`</div>|SQL Server port number| ||
 |<div id="connection add--sqlserver-user" class="no-wrap-code">`--sqlserver-user`</div>|SQL Server user name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection add--teradata-host" class="no-wrap-code">`--teradata-host`</div>|Teradata host name| ||
+|<div id="connection add--teradata-password" class="no-wrap-code">`--teradata-password`</div>|Teradata database password. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection add--teradata-port" class="no-wrap-code">`--teradata-port`</div>|Teradata port number| ||
+|<div id="connection add--teradata-user" class="no-wrap-code">`--teradata-user`</div>|Teradata user name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--trino-catalog" class="no-wrap-code">`--trino-catalog`</div>|The Trino catalog that contains the databases and the tables that will be accessed with the driver. Supports also a null configuration with a custom environment variable.| ||
 |<div id="connection add--trino-engine" class="no-wrap-code">`--trino-engine`</div>|Trino engine type.| |*trino*<br/>*athena*<br/>|
 |<div id="connection add--trino-host" class="no-wrap-code">`--trino-host`</div>|Trino host name.| ||
 |<div id="connection add--trino-password" class="no-wrap-code">`--trino-password`</div>|Trino database password. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--trino-port" class="no-wrap-code">`--trino-port`</div>|Trino port number.| ||
 |<div id="connection add--trino-user" class="no-wrap-code">`--trino-user`</div>|Trino user name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection add-C" class="no-wrap-code">`-C`</div>|ClickHouse additional properties that are added to the JDBC connection string| ||
 |<div id="connection add-D" class="no-wrap-code">`-D`</div>|Databricks additional properties that are added to the JDBC connection string| ||
 |<div id="connection add-DB2" class="no-wrap-code">`-DB2`</div>|DB2 additional properties that are added to the JDBC connection string| ||
 |<div id="connection add-Duck" class="no-wrap-code">`-Duck`</div>|DuckDB additional properties that are added to the JDBC connection string| ||
@@ -356,11 +403,14 @@ All parameters supported by the command are listed below.
 |<div id="connection add-H" class="no-wrap-code">`-H`</div>|Hana additional properties that are added to the JDBC connection string| ||
 |<div id="connection add-K" class="no-wrap-code">`-K`</div>|Spark additional properties that are added to the JDBC connection string| ||
 |<div id="connection add-M" class="no-wrap-code">`-M`</div>|MySQL additional properties that are added to the JDBC connection string| ||
+|<div id="connection add-MA" class="no-wrap-code">`-MA`</div>|MariaDB additional properties that are added to the JDBC connection string| ||
 |<div id="connection add-O" class="no-wrap-code">`-O`</div>|Oracle's additional properties that are added to the JDBC connection string| ||
 |<div id="connection add-P" class="no-wrap-code">`-P`</div>|PostgreSQL additional properties that are added to the JDBC connection string| ||
+|<div id="connection add-Q" class="no-wrap-code">`-Q`</div>|QuestDB additional properties that are added to the JDBC connection string| ||
 |<div id="connection add-R" class="no-wrap-code">`-R`</div>|Redshift additional properties that are added to the JDBC connection string| ||
 |<div id="connection add-S" class="no-wrap-code">`-S`</div>|SQL Server additional properties that are added to the JDBC connection string| ||
 |<div id="connection add-T" class="no-wrap-code">`-T`</div>|Trino additional properties that are added to the JDBC connection string| ||
+|<div id="connection add-TE" class="no-wrap-code">`-TE`</div>|Teradata additional properties that are added to the JDBC connection string.| ||
 
 
 
@@ -445,6 +495,10 @@ $ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--sqlserver-disable-e
                    [--bigquery-json-key-path=<jsonKeyPath>]
                    [--bigquery-quota-project-id=<quotaProjectId>]
                    [--bigquery-source-project-id=<sourceProjectId>]
+                   [--clickhouse-database=<database>]
+                   [--clickhouse-host=<host>]
+                   [--clickhouse-password=<password>]
+                   [--clickhouse-port=<port>] [--clickhouse-user=<user>]
                    [--databricks-access-token=<accessToken>]
                    [--databricks-catalog=<catalog>] [--databricks-host=<host>]
                    [--databricks-http-path=<httpPath>]
@@ -470,7 +524,10 @@ $ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--sqlserver-disable-e
                    [--hana-host=<host>]
                    [--hana-instance-number=<instanceNumber>]
                    [--hana-password=<password>] [--hana-port=<port>]
-                   [--hana-user=<user>] [--mysql-database=<database>]
+                   [--hana-user=<user>] [--mariadb-database=<database>]
+                   [--mariadb-host=<host>] [--mariadb-password=<password>]
+                   [--mariadb-port=<port>] [--mariadb-user=<user>]
+                   [--mysql-database=<database>]
                    [--mysql-engine=<mysqlEngineType>] [--mysql-host=<host>]
                    [--mysql-password=<password>] [--mysql-port=<port>]
                    [--mysql-sslmode=<sslmode>] [--mysql-user=<user>]
@@ -479,12 +536,16 @@ $ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--sqlserver-disable-e
                    [--oracle-initialization-sql=<initializationSql>]
                    [--oracle-password=<password>] [--oracle-port=<port>]
                    [--oracle-user=<user>] [--postgresql-database=<database>]
+                   [--postgresql-engine=<postgresqlEngineType>]
                    [--postgresql-host=<host>] [--postgresql-options=<options>]
                    [--postgresql-password=<password>]
                    [--postgresql-port=<port>] [--postgresql-sslmode=<sslmode>]
                    [--postgresql-user=<user>] [--presto-database=<database>]
                    [--presto-host=<host>] [--presto-password=<password>]
                    [--presto-port=<port>] [--presto-user=<user>]
+                   [--questdb-database=<database>] [--questdb-host=<host>]
+                   [--questdb-password=<password>] [--questdb-port=<port>]
+                   [--questdb-user=<user>]
                    [--redshift-authentication-mode=<redshiftAuthenticationMode>]
                     [--redshift-database=<database>] [--redshift-host=<host>]
                    [--redshift-password=<password>] [--redshift-port=<port>]
@@ -500,16 +561,20 @@ $ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--sqlserver-disable-e
                    [--sqlserver-authentication-mode=<authenticationMode>]
                    [--sqlserver-database=<database>] [--sqlserver-host=<host>]
                    [--sqlserver-password=<password>] [--sqlserver-port=<port>]
-                   [--sqlserver-user=<user>] [--trino-catalog=<catalog>]
+                   [--sqlserver-user=<user>] [--teradata-host=<host>]
+                   [--teradata-password=<password>] [--teradata-port=<port>]
+                   [--teradata-user=<user>] [--trino-catalog=<catalog>]
                    [--trino-engine=<trinoEngineType>] [--trino-host=<host>]
                    [--trino-password=<password>] [--trino-port=<port>]
-                   [--trino-user=<user>] [-D=<String=String>]...
-                   [-DB2=<String=String>]... [-Duck=<String=String>]...
-                   [-E=<String=String>]... [-F=<String=String>]...
-                   [-H=<String=String>]... [-K=<String=String>]...
-                   [-M=<String=String>]... [-O=<String=String>]...
-                   [-P=<String=String>]... [-R=<String=String>]...
-                   [-S=<String=String>]... [-T=<String=String>]...
+                   [--trino-user=<user>] [-C=<String=String>]...
+                   [-D=<String=String>]... [-DB2=<String=String>]...
+                   [-Duck=<String=String>]... [-E=<String=String>]...
+                   [-F=<String=String>]... [-H=<String=String>]...
+                   [-K=<String=String>]... [-M=<String=String>]...
+                   [-MA=<String=String>]... [-O=<String=String>]...
+                   [-P=<String=String>]... [-Q=<String=String>]...
+                   [-R=<String=String>]... [-S=<String=String>]...
+                   [-T=<String=String>]... [-TE=<String=String>]...
 
 ```
 
@@ -528,6 +593,10 @@ dqo> connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                    [--bigquery-json-key-path=<jsonKeyPath>]
                    [--bigquery-quota-project-id=<quotaProjectId>]
                    [--bigquery-source-project-id=<sourceProjectId>]
+                   [--clickhouse-database=<database>]
+                   [--clickhouse-host=<host>]
+                   [--clickhouse-password=<password>]
+                   [--clickhouse-port=<port>] [--clickhouse-user=<user>]
                    [--databricks-access-token=<accessToken>]
                    [--databricks-catalog=<catalog>] [--databricks-host=<host>]
                    [--databricks-http-path=<httpPath>]
@@ -553,7 +622,10 @@ dqo> connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                    [--hana-host=<host>]
                    [--hana-instance-number=<instanceNumber>]
                    [--hana-password=<password>] [--hana-port=<port>]
-                   [--hana-user=<user>] [--mysql-database=<database>]
+                   [--hana-user=<user>] [--mariadb-database=<database>]
+                   [--mariadb-host=<host>] [--mariadb-password=<password>]
+                   [--mariadb-port=<port>] [--mariadb-user=<user>]
+                   [--mysql-database=<database>]
                    [--mysql-engine=<mysqlEngineType>] [--mysql-host=<host>]
                    [--mysql-password=<password>] [--mysql-port=<port>]
                    [--mysql-sslmode=<sslmode>] [--mysql-user=<user>]
@@ -562,12 +634,16 @@ dqo> connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                    [--oracle-initialization-sql=<initializationSql>]
                    [--oracle-password=<password>] [--oracle-port=<port>]
                    [--oracle-user=<user>] [--postgresql-database=<database>]
+                   [--postgresql-engine=<postgresqlEngineType>]
                    [--postgresql-host=<host>] [--postgresql-options=<options>]
                    [--postgresql-password=<password>]
                    [--postgresql-port=<port>] [--postgresql-sslmode=<sslmode>]
                    [--postgresql-user=<user>] [--presto-database=<database>]
                    [--presto-host=<host>] [--presto-password=<password>]
                    [--presto-port=<port>] [--presto-user=<user>]
+                   [--questdb-database=<database>] [--questdb-host=<host>]
+                   [--questdb-password=<password>] [--questdb-port=<port>]
+                   [--questdb-user=<user>]
                    [--redshift-authentication-mode=<redshiftAuthenticationMode>]
                     [--redshift-database=<database>] [--redshift-host=<host>]
                    [--redshift-password=<password>] [--redshift-port=<port>]
@@ -583,16 +659,20 @@ dqo> connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                    [--sqlserver-authentication-mode=<authenticationMode>]
                    [--sqlserver-database=<database>] [--sqlserver-host=<host>]
                    [--sqlserver-password=<password>] [--sqlserver-port=<port>]
-                   [--sqlserver-user=<user>] [--trino-catalog=<catalog>]
+                   [--sqlserver-user=<user>] [--teradata-host=<host>]
+                   [--teradata-password=<password>] [--teradata-port=<port>]
+                   [--teradata-user=<user>] [--trino-catalog=<catalog>]
                    [--trino-engine=<trinoEngineType>] [--trino-host=<host>]
                    [--trino-password=<password>] [--trino-port=<port>]
-                   [--trino-user=<user>] [-D=<String=String>]...
-                   [-DB2=<String=String>]... [-Duck=<String=String>]...
-                   [-E=<String=String>]... [-F=<String=String>]...
-                   [-H=<String=String>]... [-K=<String=String>]...
-                   [-M=<String=String>]... [-O=<String=String>]...
-                   [-P=<String=String>]... [-R=<String=String>]...
-                   [-S=<String=String>]... [-T=<String=String>]...
+                   [--trino-user=<user>] [-C=<String=String>]...
+                   [-D=<String=String>]... [-DB2=<String=String>]...
+                   [-Duck=<String=String>]... [-E=<String=String>]...
+                   [-F=<String=String>]... [-H=<String=String>]...
+                   [-K=<String=String>]... [-M=<String=String>]...
+                   [-MA=<String=String>]... [-O=<String=String>]...
+                   [-P=<String=String>]... [-Q=<String=String>]...
+                   [-R=<String=String>]... [-S=<String=String>]...
+                   [-T=<String=String>]... [-TE=<String=String>]...
 
 ```
 
@@ -615,6 +695,11 @@ All parameters supported by the command are listed below.
 |<div id="connection update--bigquery-json-key-path" class="no-wrap-code">`--bigquery-json-key-path`</div>|Path to a GCP service account key JSON file used to authenticate to Bigquery.| ||
 |<div id="connection update--bigquery-quota-project-id" class="no-wrap-code">`--bigquery-quota-project-id`</div>|Bigquery quota GCP project id.| ||
 |<div id="connection update--bigquery-source-project-id" class="no-wrap-code">`--bigquery-source-project-id`</div>|Bigquery source GCP project id. This is the project that has datasets that will be imported.| ||
+|<div id="connection update--clickhouse-database" class="no-wrap-code">`--clickhouse-database`</div>|ClickHouse database name| ||
+|<div id="connection update--clickhouse-host" class="no-wrap-code">`--clickhouse-host`</div>|ClickHouse host name| ||
+|<div id="connection update--clickhouse-password" class="no-wrap-code">`--clickhouse-password`</div>|ClickHouse database password. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update--clickhouse-port" class="no-wrap-code">`--clickhouse-port`</div>|ClickHouse port number| ||
+|<div id="connection update--clickhouse-user" class="no-wrap-code">`--clickhouse-user`</div>|ClickHouse user name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update--databricks-access-token" class="no-wrap-code">`--databricks-access-token`</div>|Databricks access token for the warehouse.| ||
 |<div id="connection update--databricks-catalog" class="no-wrap-code">`--databricks-catalog`</div>|Databricks catalog name.| ||
 |<div id="connection update--databricks-host" class="no-wrap-code">`--databricks-host`</div>|Databricks host name| ||
@@ -651,6 +736,11 @@ All parameters supported by the command are listed below.
 |<div id="connection update--hana-user" class="no-wrap-code">`--hana-user`</div>|Hana user name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update--headless" class="no-wrap-code">`--headless`</div><div id="connection update-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
 |<div id="connection update-h" class="no-wrap-code">`-h`</div><div id="connection update--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
+|<div id="connection update--mariadb-database" class="no-wrap-code">`--mariadb-database`</div>|MariaDB database name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update--mariadb-host" class="no-wrap-code">`--mariadb-host`</div>|MariaDB host name| ||
+|<div id="connection update--mariadb-password" class="no-wrap-code">`--mariadb-password`</div>|MariaDB database password. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update--mariadb-port" class="no-wrap-code">`--mariadb-port`</div>|MariaDB port number| ||
+|<div id="connection update--mariadb-user" class="no-wrap-code">`--mariadb-user`</div>|MariaDB user name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update--mysql-database" class="no-wrap-code">`--mysql-database`</div>|MySQL database name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update--mysql-engine" class="no-wrap-code">`--mysql-engine`</div>|MySQL engine type. Supports also a null configuration with a custom environment variable.| |*mysql*<br/>*singlestoredb*<br/>|
 |<div id="connection update--mysql-host" class="no-wrap-code">`--mysql-host`</div>|MySQL host name| ||
@@ -667,6 +757,7 @@ All parameters supported by the command are listed below.
 |<div id="connection update--oracle-user" class="no-wrap-code">`--oracle-user`</div>|Oracle user name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update-of" class="no-wrap-code">`-of`</div><div id="connection update--output-format" class="no-wrap-code">`--output-format`</div>|Output format for tabular responses| |*TABLE*<br/>*CSV*<br/>*JSON*<br/>|
 |<div id="connection update--postgresql-database" class="no-wrap-code">`--postgresql-database`</div>|PostgreSQL database name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update--postgresql-engine" class="no-wrap-code">`--postgresql-engine`</div>|Postgresql engine type. Supports also a null configuration with a custom environment variable.| |*postgresql*<br/>*timescale*<br/>|
 |<div id="connection update--postgresql-host" class="no-wrap-code">`--postgresql-host`</div>|PostgreSQL host name| ||
 |<div id="connection update--postgresql-options" class="no-wrap-code">`--postgresql-options`</div>|PostgreSQL connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes.| ||
 |<div id="connection update--postgresql-password" class="no-wrap-code">`--postgresql-password`</div>|PostgreSQL database password. The value can be in the null format to use dynamic substitution.| ||
@@ -678,6 +769,11 @@ All parameters supported by the command are listed below.
 |<div id="connection update--presto-password" class="no-wrap-code">`--presto-password`</div>|Presto database password. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update--presto-port" class="no-wrap-code">`--presto-port`</div>|Presto port number| ||
 |<div id="connection update--presto-user" class="no-wrap-code">`--presto-user`</div>|Presto user name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update--questdb-database" class="no-wrap-code">`--questdb-database`</div>|QuestDB database name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update--questdb-host" class="no-wrap-code">`--questdb-host`</div>|QuestDB host name| ||
+|<div id="connection update--questdb-password" class="no-wrap-code">`--questdb-password`</div>|QuestDB database password. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update--questdb-port" class="no-wrap-code">`--questdb-port`</div>|QuestDB port number| ||
+|<div id="connection update--questdb-user" class="no-wrap-code">`--questdb-user`</div>|QuestDB user name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update--redshift-authentication-mode" class="no-wrap-code">`--redshift-authentication-mode`</div>|The authentication mode for AWS. Supports also a null configuration with a custom environment variable.| |*iam*<br/>*default_credentials*<br/>*user_password*<br/>|
 |<div id="connection update--redshift-database" class="no-wrap-code">`--redshift-database`</div>|Redshift database name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update--redshift-host" class="no-wrap-code">`--redshift-host`</div>|Redshift host name| ||
@@ -702,12 +798,17 @@ All parameters supported by the command are listed below.
 |<div id="connection update--sqlserver-password" class="no-wrap-code">`--sqlserver-password`</div>|SQL Server database password. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update--sqlserver-port" class="no-wrap-code">`--sqlserver-port`</div>|SQL Server port number| ||
 |<div id="connection update--sqlserver-user" class="no-wrap-code">`--sqlserver-user`</div>|SQL Server user name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update--teradata-host" class="no-wrap-code">`--teradata-host`</div>|Teradata host name| ||
+|<div id="connection update--teradata-password" class="no-wrap-code">`--teradata-password`</div>|Teradata database password. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update--teradata-port" class="no-wrap-code">`--teradata-port`</div>|Teradata port number| ||
+|<div id="connection update--teradata-user" class="no-wrap-code">`--teradata-user`</div>|Teradata user name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update--trino-catalog" class="no-wrap-code">`--trino-catalog`</div>|The Trino catalog that contains the databases and the tables that will be accessed with the driver. Supports also a null configuration with a custom environment variable.| ||
 |<div id="connection update--trino-engine" class="no-wrap-code">`--trino-engine`</div>|Trino engine type.| |*trino*<br/>*athena*<br/>|
 |<div id="connection update--trino-host" class="no-wrap-code">`--trino-host`</div>|Trino host name.| ||
 |<div id="connection update--trino-password" class="no-wrap-code">`--trino-password`</div>|Trino database password. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update--trino-port" class="no-wrap-code">`--trino-port`</div>|Trino port number.| ||
 |<div id="connection update--trino-user" class="no-wrap-code">`--trino-user`</div>|Trino user name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update-C" class="no-wrap-code">`-C`</div>|ClickHouse additional properties that are added to the JDBC connection string| ||
 |<div id="connection update-D" class="no-wrap-code">`-D`</div>|Databricks additional properties that are added to the JDBC connection string| ||
 |<div id="connection update-DB2" class="no-wrap-code">`-DB2`</div>|DB2 additional properties that are added to the JDBC connection string| ||
 |<div id="connection update-Duck" class="no-wrap-code">`-Duck`</div>|DuckDB additional properties that are added to the JDBC connection string| ||
@@ -716,11 +817,14 @@ All parameters supported by the command are listed below.
 |<div id="connection update-H" class="no-wrap-code">`-H`</div>|Hana additional properties that are added to the JDBC connection string| ||
 |<div id="connection update-K" class="no-wrap-code">`-K`</div>|Spark additional properties that are added to the JDBC connection string| ||
 |<div id="connection update-M" class="no-wrap-code">`-M`</div>|MySQL additional properties that are added to the JDBC connection string| ||
+|<div id="connection update-MA" class="no-wrap-code">`-MA`</div>|MariaDB additional properties that are added to the JDBC connection string| ||
 |<div id="connection update-O" class="no-wrap-code">`-O`</div>|Oracle's additional properties that are added to the JDBC connection string| ||
 |<div id="connection update-P" class="no-wrap-code">`-P`</div>|PostgreSQL additional properties that are added to the JDBC connection string| ||
+|<div id="connection update-Q" class="no-wrap-code">`-Q`</div>|QuestDB additional properties that are added to the JDBC connection string| ||
 |<div id="connection update-R" class="no-wrap-code">`-R`</div>|Redshift additional properties that are added to the JDBC connection string| ||
 |<div id="connection update-S" class="no-wrap-code">`-S`</div>|SQL Server additional properties that are added to the JDBC connection string| ||
 |<div id="connection update-T" class="no-wrap-code">`-T`</div>|Trino additional properties that are added to the JDBC connection string| ||
+|<div id="connection update-TE" class="no-wrap-code">`-TE`</div>|Teradata additional properties that are added to the JDBC connection string.| ||
 
 
 

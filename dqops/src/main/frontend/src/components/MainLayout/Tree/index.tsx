@@ -48,7 +48,6 @@ const Tree = () => {
   const [flag, setFlag] = useState(false);
   const [search, setSearch] = useState<Record<string, string>>({});
   const [funnel, setFunnel] = useState<Record<string, boolean>>({});
-
   const { job_dictionary_state, advisorJobId } = useSelector(
     (state: IRootState) => state.job || {}
   );
@@ -92,7 +91,6 @@ const Tree = () => {
       const terms = undecodedTerms.map((x) => urlencodeDecoder(x));
       const connection = terms[3] || '';
       let newTreeData = [...(treeData || [])];
-
       if (!newTreeData.length) {
         const res: AxiosResponse<ConnectionModel[]> =
           await ConnectionApiClient.getAllConnections();
@@ -115,7 +113,6 @@ const Tree = () => {
         }));
         newTreeData = [...mappedConnectionsToTreeData];
       }
-
       const connectionNode = findTreeNode(newTreeData, connection);
       if (connectionNode && !connectionNode.open) {
         const items = await refreshNode(connectionNode, false);
@@ -146,7 +143,6 @@ const Tree = () => {
       if (match.path === ROUTES.PATTERNS.SCHEMA) {
         setActiveTab(schemaNode?.id || '');
       }
-
       if (match.path === ROUTES.PATTERNS.TABLE) {
         setActiveTab(tableNode?.id || '');
       }
@@ -177,6 +173,43 @@ const Tree = () => {
 
       if (match.path === ROUTES.PATTERNS.TABLE_PARTITIONED_MONTHLY) {
         setActiveTab(`${tableNode?.id || ''}.monthlyPartitionedChecks`);
+      }
+
+      if (match.path === ROUTES.PATTERNS.TABLE_PROFILING_FILTER) {
+        const checkNode = findTreeNode(
+          newTreeData,
+          `${tableNode?.id || ''}.checks`
+        );
+
+        const items = await refreshNode(checkNode, false);
+        newTreeData = getNewTreeData(newTreeData, items, checkNode!);
+        setActiveTab(`${checkNode?.id || ''}.${terms[10]}_${terms[11]}`);
+      }
+
+      if (match.path === ROUTES.PATTERNS.TABLE_MONITORING_FILTER) {
+        const checkNode =
+          findTreeNode(newTreeData, `${tableNode?.id || ''}.dailyCheck`) ??
+          findTreeNode(newTreeData, `${tableNode?.id || ''}.monthlyCheck`);
+        const items = await refreshNode(checkNode, false);
+
+        newTreeData = getNewTreeData(newTreeData, items, checkNode!);
+        setActiveTab(`${checkNode?.id || ''}.${terms[10]}_${terms[11]}`);
+      }
+
+      if (match.path === ROUTES.PATTERNS.TABLE_PARTITIONED_FILTER) {
+        const checkNode =
+          findTreeNode(
+            newTreeData,
+            `${tableNode?.id || ''}.dailyPartitionedChecks`
+          ) ??
+          findTreeNode(
+            newTreeData,
+            `${tableNode?.id || ''}.monthlyPartitionedCheck`
+          );
+        const items = await refreshNode(checkNode, false);
+
+        newTreeData = getNewTreeData(newTreeData, items, checkNode!);
+        setActiveTab(`${checkNode?.id || ''}.${terms[10]}_${terms[11]}`);
       }
 
       if (match.path === ROUTES.PATTERNS.COLUMN) {
@@ -256,11 +289,109 @@ const Tree = () => {
 
         setActiveTab(`${columnNode?.id || ''}.monthlyCheck`);
       }
+      if (match.path === ROUTES.PATTERNS.COLUMN_PROFILING_FILTER) {
+        const columnsNode = findTreeNode(
+          newTreeData,
+          `${tableNode?.id || ''}.columns`
+        );
+
+        const items = await refreshNode(columnsNode, false);
+        newTreeData = getNewTreeData(newTreeData, items, columnsNode!);
+        const columnNode = findTreeNode(
+          newTreeData,
+          `${columnsNode?.id || ''}.${terms[9]}`
+        );
+        const items2 = await refreshNode(columnNode, true);
+
+        newTreeData = getNewTreeData(newTreeData, items2, columnNode!);
+
+        const checksNode = findTreeNode(
+          newTreeData,
+          `${columnNode?.id || ''}.checks`
+        );
+
+        const items3 = await refreshNode(checksNode, false);
+        newTreeData = getNewTreeData(newTreeData, items3, checksNode!);
+
+        const checkNode = findTreeNode(
+          newTreeData,
+          `${checksNode?.id || ''}.${terms[12]}_${terms[13]}`
+        );
+
+        setActiveTab(`${checkNode?.id || ''}`);
+      }
+
+      if (match.path === ROUTES.PATTERNS.COLUMN_MONITORING_FILTER) {
+        const columnsNode = findTreeNode(
+          newTreeData,
+          `${tableNode?.id || ''}.columns`
+        );
+
+        const items = await refreshNode(columnsNode, false);
+        newTreeData = getNewTreeData(newTreeData, items, columnsNode!);
+        const columnNode = findTreeNode(
+          newTreeData,
+          `${columnsNode?.id || ''}.${terms[9]}`
+        );
+        const items2 = await refreshNode(columnNode, true);
+
+        newTreeData = getNewTreeData(newTreeData, items2, columnNode!);
+        const checksNode =
+          findTreeNode(newTreeData, `${columnNode?.id || ''}.dailyCheck`) ??
+          findTreeNode(newTreeData, `${columnNode?.id || ''}.monthlyCheck`);
+
+        const items3 = await refreshNode(checksNode, false);
+        newTreeData = getNewTreeData(newTreeData, items3, checksNode!);
+
+        const checkNode = findTreeNode(
+          newTreeData,
+          `${checksNode?.id || ''}.${terms[12]}_${terms[13]}`
+        );
+
+        setActiveTab(`${checkNode?.id || ''}`);
+      }
+
+      if (match.path === ROUTES.PATTERNS.COLUMN_PARTITIONED_FILTER) {
+        const columnsNode = findTreeNode(
+          newTreeData,
+          `${tableNode?.id || ''}.columns`
+        );
+
+        const items = await refreshNode(columnsNode, false);
+        newTreeData = getNewTreeData(newTreeData, items, columnsNode!);
+        const columnNode = findTreeNode(
+          newTreeData,
+          `${columnsNode?.id || ''}.${terms[9]}`
+        );
+        const items2 = await refreshNode(columnNode, true);
+
+        newTreeData = getNewTreeData(newTreeData, items2, columnNode!);
+        const checksNode =
+          findTreeNode(
+            newTreeData,
+            `${columnNode?.id || ''}.dailyPartitionedChecks`
+          ) ??
+          findTreeNode(
+            newTreeData,
+            `${columnNode?.id || ''}.monthlyPartitionedChecks`
+          );
+
+        const items3 = await refreshNode(checksNode, false);
+        newTreeData = getNewTreeData(newTreeData, items3, checksNode!);
+
+        const checkNode = findTreeNode(
+          newTreeData,
+          `${checksNode?.id || ''}.${terms[12]}_${terms[13]}`
+        );
+
+        setActiveTab(`${checkNode?.id || ''}`);
+      }
+
       setTreeData(newTreeData);
 
       setFlag((prev) => !prev);
     })();
-  }, [firstLevelActiveTab]);
+  }, [firstLevelActiveTab, match.path]);
 
   const groupedData = groupBy(treeData, 'parentId');
 

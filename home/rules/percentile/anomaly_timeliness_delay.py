@@ -1,5 +1,5 @@
 #
-# Copyright © 2023 DQOps (support@dqops.com)
+# Copyright © 2024 DQOps (support@dqops.com)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,6 +19,8 @@ from typing import Sequence
 import numpy as np
 import scipy
 import scipy.stats
+from lib.anomalies.data_preparation import convert_historic_data_stationary, average_forecast
+from lib.anomalies.anomaly_detection import detect_upper_bound_anomaly, detect_lower_bound_anomaly
 
 
 # rule specific parameters object, contains values received from the quality check threshold configuration
@@ -27,8 +29,8 @@ class AnomalyTimelinessDelayRuleParametersSpec:
 
 
 class HistoricDataPoint:
-    timestamp_utc: datetime
-    local_datetime: datetime
+    timestamp_utc_epoch: int
+    local_datetime_epoch: int
     back_periods_index: int
     sensor_readout: float
     expected_value: float
@@ -47,7 +49,7 @@ class AnomalyConfigurationParameters:
 class RuleExecutionRunParameters:
     actual_value: float
     parameters: AnomalyTimelinessDelayRuleParametersSpec
-    time_period_local: datetime
+    time_period_local_epoch: int
     previous_readouts: Sequence[HistoricDataPoint]
     time_window: RuleTimeWindowSettingsSpec
     configuration_parameters: AnomalyConfigurationParameters
@@ -95,30 +97,24 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
     filtered_std = scipy.stats.tstd(filtered)
 
     if float(filtered_std) == 0:
-        return RuleExecutionResult(rule_parameters.actual_value == filtered_median_float,
+        return RuleExecutionResult(None if rule_parameters.actual_value == filtered_median_float else False,
                                    filtered_median_float, 0.0, filtered_median_float)
 
-    degrees_of_freedom = float(rule_parameters.configuration_parameters.degrees_of_freedom)
     tail = rule_parameters.parameters.anomaly_percent / 100.0
 
-    upper_median_multiples_array = [(readout / filtered_median_float - 1.0) for readout in extracted if readout >= filtered_median_float]
-    upper_multiples = np.array(upper_median_multiples_array, dtype=float)
-    upper_multiples_median = np.median(upper_multiples)
-    upper_multiples_std = scipy.stats.tstd(upper_multiples)
+    anomaly_data = convert_historic_data_stationary(rule_parameters.previous_readouts, lambda readout: readout)
+    threshold_upper_multiple, forecast_upper_multiple = detect_upper_bound_anomaly(historic_data=anomaly_data, median=filtered_median_float,
+                                                          tail=tail, parameters=rule_parameters)
 
-    if float(upper_multiples_std) == 0:
-        threshold_upper = filtered_median_float
+    passed = True
+    if threshold_upper_multiple is not None:
+        threshold_upper = threshold_upper_multiple
+        forecast_upper = forecast_upper_multiple
+        passed = rule_parameters.actual_value <= threshold_upper
     else:
-        # Assumption: the historical data follows t-student distribution
-        upper_readout_distribution = scipy.stats.t(df=degrees_of_freedom, loc=upper_multiples_median, scale=upper_multiples_std)
-        threshold_upper_multiple = float(upper_readout_distribution.ppf(1 - tail))
-        threshold_upper = (threshold_upper_multiple + 1.0) * filtered_median_float
+        threshold_upper = None
 
-    threshold_lower = 0.0  # always, our target is to have a delay of 0.0 days
-
-    passed = threshold_lower <= rule_parameters.actual_value <= threshold_upper
-
-    expected_value = filtered_median_float
-    lower_bound = threshold_lower
+    expected_value = forecast_upper
+    lower_bound = 0.0  # always, our target is to have a delay of 0.0 days
     upper_bound = threshold_upper
     return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)

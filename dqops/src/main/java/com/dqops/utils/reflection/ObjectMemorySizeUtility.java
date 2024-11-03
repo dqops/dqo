@@ -15,14 +15,24 @@
  */
 package com.dqops.utils.reflection;
 
+import org.github.jamm.FieldFilter;
+import org.github.jamm.Filters;
 import org.github.jamm.MemoryMeter;
+import org.github.jamm.MemoryMeterStrategy;
+import org.github.jamm.listeners.NoopMemoryMeterListener;
+import org.github.jamm.strategies.MemoryMeterStrategies;
 
 /**
  * JVM object memory size utility that measures the real JVM object size, including the whole object tree.
  */
 public class ObjectMemorySizeUtility {
-    private static final MemoryMeter memoryMeter = MemoryMeter.builder()
-            .build();
+    private static final MemoryMeter memoryMeter;
+
+    static {
+        MemoryMeterStrategy memoryMeterStrategy = MemoryMeterStrategies.getInstance().getStrategy(MemoryMeter.BEST);
+        FieldFilter fieldFilters = Filters.getFieldFilters(true, false, true);
+        memoryMeter = new MemoryMeter(memoryMeterStrategy, Filters.IGNORE_KNOWN_SINGLETONS, fieldFilters, NoopMemoryMeterListener.FACTORY);
+    }
 
     /**
      * Measure the size of the object, including the whole nested object tree. Include the JVM memory heap overhead for the object headers.

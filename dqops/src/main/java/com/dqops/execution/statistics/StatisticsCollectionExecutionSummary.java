@@ -24,8 +24,8 @@ import tech.tablesaw.api.*;
  */
 public class StatisticsCollectionExecutionSummary {
     private Throwable firstException;
-    private final TextColumn connectionColumn;
-    private final TextColumn tableColumn;
+    private final StringColumn connectionColumn;
+    private final StringColumn tableColumn;
     private final IntColumn collectorsExecutedColumn;
     private final IntColumn collectorsColumnsColumn;
     private final IntColumn collectorsColumnsSuccessfullyColumn;
@@ -39,10 +39,10 @@ public class StatisticsCollectionExecutionSummary {
     public StatisticsCollectionExecutionSummary() {
 		this.summaryTable = Table.create("Statistics collection execution summary");
 
-        this.connectionColumn = TextColumn.create("Connection");
+        this.connectionColumn = StringColumn.create("Connection");
 		this.summaryTable.addColumns(connectionColumn);
 
-        this.tableColumn = TextColumn.create("Table");
+        this.tableColumn = StringColumn.create("Table");
 		this.summaryTable.addColumns(tableColumn);
 
 		this.collectorsExecutedColumn = IntColumn.create("Collectors executed");
@@ -73,7 +73,7 @@ public class StatisticsCollectionExecutionSummary {
      * Connection name column.
      * @return Column.
      */
-    public TextColumn getConnectionColumn() {
+    public StringColumn getConnectionColumn() {
         return connectionColumn;
     }
 
@@ -81,7 +81,7 @@ public class StatisticsCollectionExecutionSummary {
      * Full table name column.
      * @return Table name column.
      */
-    public TextColumn getTableColumn() {
+    public StringColumn getTableColumn() {
         return tableColumn;
     }
 

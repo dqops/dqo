@@ -16,6 +16,8 @@
 package com.dqops.rules.percentile;
 
 import com.dqops.data.checkresults.normalization.CheckResultsNormalizedResult;
+import com.dqops.metadata.fields.ControlDisplayHint;
+import com.dqops.metadata.fields.DisplayHint;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.AbstractRuleParametersSpec;
@@ -52,7 +54,12 @@ public class AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpe
             " The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist" +
             " to run the calculation.")
     @RequiredField
-    private Double anomalyPercent = 0.1;
+    private Double anomalyPercent = 0.01;
+
+    @JsonPropertyDescription("Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. " +
+            "Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution.")
+    @ControlDisplayHint(DisplayHint.requires_paid_version)
+    private Boolean useAi;
 
     /**
      * Default constructor.
@@ -77,6 +84,23 @@ public class AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpe
     public void setAnomalyPercent(Double anomalyPercent) {
         this.setDirtyIf(!Objects.equals(this.anomalyPercent, anomalyPercent));
         this.anomalyPercent = anomalyPercent;
+    }
+
+    /**
+     * Returns a flag which says if anomaly detection should use an AI model.
+     * @return True when anomaly detection should use AI.
+     */
+    public Boolean getUseAi() {
+        return useAi;
+    }
+
+    /**
+     * Sets a flag to enable anomaly detection using AI. AI rules are supported only in a closed-source (paid) version of DQOps.
+     * @param useAi True when anomalies should be detected by AI.
+     */
+    public void setUseAi(Boolean useAi) {
+        this.setDirtyIf(!Objects.equals(this.useAi, useAi));
+        this.useAi = useAi;
     }
 
     /**

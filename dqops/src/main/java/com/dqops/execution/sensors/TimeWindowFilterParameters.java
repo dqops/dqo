@@ -15,7 +15,9 @@
  */
 package com.dqops.execution.sensors;
 
+import com.dqops.checks.CheckType;
 import com.dqops.metadata.timeseries.TimePeriodGradient;
+import com.dqops.utils.datetime.LocalDateTimeTruncateUtility;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -28,6 +30,7 @@ import picocli.CommandLine;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.time.ZoneId;
 
 /**
  * Incremental partitioned checks time window filter that should be applied by the query.
@@ -224,6 +227,92 @@ public class TimeWindowFilterParameters implements Cloneable {
                 toDate != null ||
                 toDateTime != null ||
                 toDateTimeOffset != null; // the WHERE filter is not included, because these are only time specific parameters
+    }
+
+    /**
+     * Calculates the start of the time period given all effective filters.
+     * @param checkType Check type.
+     * @param timePeriodGradient Time period gradient (daily, monthly).
+     * @param defaultTimeZoneId Time zone.
+     * @return Local date time of the start time period.
+     */
+    public LocalDateTime calculateTimePeriodStart(CheckType checkType, TimePeriodGradient timePeriodGradient, ZoneId defaultTimeZoneId) {
+        if (this.fromDate != null) {
+            return this.fromDate.atTime(0, 0);
+        }
+
+        if (this.fromDateTime != null) {
+            return this.fromDateTime;
+        }
+
+        if (this.fromDateTimeOffset != null) {
+            this.fromDateTimeOffset.atZoneSimilarLocal(defaultTimeZoneId);
+        }
+
+        if (checkType == CheckType.partitioned) {
+            if (timePeriodGradient == TimePeriodGradient.month) {
+                if (this.monthlyPartitioningRecentMonths != null) {
+                    LocalDate startDate = LocalDateTimeTruncateUtility.truncateMonth(LocalDate.now()).minusMonths(this.monthlyPartitioningRecentMonths);
+                    return startDate.atTime(0, 0);
+                } else {
+                    LocalDate startDate = LocalDateTimeTruncateUtility.truncateMonth(LocalDate.now()).minusMonths(3); // default is 3
+                    return startDate.atTime(0, 0);
+                }
+            }
+
+            if (this.dailyPartitioningRecentDays != null) {
+                LocalDate startDate = LocalDate.now().minusDays(this.dailyPartitioningRecentDays);
+                return startDate.atTime(0, 0);
+            } else {
+                LocalDate startDate = LocalDate.now().minusDays(7); // default is 7
+                return startDate.atTime(0, 0);
+            }
+        }
+
+        LocalDate startDate = LocalDate.now().minusDays(7); // default is 7
+        return startDate.atTime(0, 0);
+    }
+
+    /**
+     * Calculates the end of the time period given all effective filters.
+     * @param checkType Check type.
+     * @param timePeriodGradient Time period gradient (daily, monthly).
+     * @param defaultTimeZoneId Time zone.
+     * @return Local date time of the end time period.
+     */
+    public LocalDateTime calculateTimePeriodEnd(CheckType checkType, TimePeriodGradient timePeriodGradient, ZoneId defaultTimeZoneId) {
+        if (this.toDate != null) {
+            return this.toDate.atTime(0, 0);
+        }
+
+        if (this.toDateTime != null) {
+            return this.toDateTime;
+        }
+
+        if (this.toDateTimeOffset != null) {
+            this.toDateTimeOffset.atZoneSimilarLocal(defaultTimeZoneId);
+        }
+
+        if (checkType == CheckType.partitioned) {
+            if (timePeriodGradient == TimePeriodGradient.month) {
+                if (this.monthlyPartitioningIncludeCurrentMonth != null) {
+                    LocalDate endDate = LocalDateTimeTruncateUtility.truncateMonth(LocalDate.now()).minusMonths(1);
+                    return endDate.atTime(0, 0);
+                } else {
+                    LocalDate endDate = LocalDateTimeTruncateUtility.truncateMonth(LocalDate.now());
+                    return endDate.atTime(0, 0);
+                }
+            }
+
+            if (this.dailyPartitioningIncludeToday != null) {
+                LocalDate endDate = LocalDate.now().minusDays(1);
+                return endDate.atTime(0, 0);
+            } else {
+                return LocalDateTime.now();
+            }
+        }
+
+        return LocalDateTime.now();
     }
 
     /**

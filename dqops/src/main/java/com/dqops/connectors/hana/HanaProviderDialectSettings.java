@@ -24,7 +24,7 @@ import lombok.EqualsAndHashCode;
 import org.springframework.stereotype.Component;
 
 /**
- * Provider dialect settings that are specific to Spark.
+ * Provider dialect settings that are specific to HANA.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

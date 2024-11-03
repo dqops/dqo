@@ -21,8 +21,6 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
-import java.time.Instant;
-
 /**
  * Object passed to the python rule evaluation module. Specifies the path to the python file with the rule implementation and the parameters.
  */
@@ -33,8 +31,11 @@ public class PythonRuleCallInput {
     private String dataDomainModule;
     private String ruleModulePath;
     private String homePath;
-    private Instant ruleModuleLastModified;
+    private String dqoHomePath;
+    private String dqoRootUserHomePath;
+    private long ruleModuleLastModifiedEpoch;
     private RuleExecutionRunParameters ruleParameters;
+    private PythonRuleDebugMode debugMode = PythonRuleDebugMode.silent;
 
     /**
      * Returns the data domain name.
@@ -85,19 +86,51 @@ public class PythonRuleCallInput {
     }
 
     /**
+     * Returns the path to the DQOps Home folder.
+     * @return DQOps home folder path.
+     */
+    public String getDqoHomePath() {
+        return dqoHomePath;
+    }
+
+    /**
+     * Sets a path to the DQOps home folder.
+     * @param dqoHomePath Path to the DQOps home folder.
+     */
+    public void setDqoHomePath(String dqoHomePath) {
+        this.dqoHomePath = dqoHomePath;
+    }
+
+    /**
+     * Returns the path to the root DQOps user home folder.
+     * @return Path to the root user folder.
+     */
+    public String getDqoRootUserHomePath() {
+        return dqoRootUserHomePath;
+    }
+
+    /**
+     * Sets a path to a root DQOps user home folder that is used to resolve additional python packages.
+     * @param dqoRootUserHomePath DQOps root user home path.
+     */
+    public void setDqoRootUserHomePath(String dqoRootUserHomePath) {
+        this.dqoRootUserHomePath = dqoRootUserHomePath;
+    }
+
+    /**
      * Returns the timestamp when the Python rule file was last modified.
      * @return The last modification timestamp of the rule module.
      */
-    public Instant getRuleModuleLastModified() {
-        return ruleModuleLastModified;
+    public long getRuleModuleLastModifiedEpoch() {
+        return ruleModuleLastModifiedEpoch;
     }
 
     /**
      * Sets the timestamp when the rule module was modified for the last time.
-     * @param ruleModuleLastModified Rule module last modification timestamp.
+     * @param ruleModuleLastModifiedEpoch Rule module last modification timestamp.
      */
-    public void setRuleModuleLastModified(Instant ruleModuleLastModified) {
-        this.ruleModuleLastModified = ruleModuleLastModified;
+    public void setRuleModuleLastModifiedEpoch(long ruleModuleLastModifiedEpoch) {
+        this.ruleModuleLastModifiedEpoch = ruleModuleLastModifiedEpoch;
     }
 
     /**
@@ -114,5 +147,21 @@ public class PythonRuleCallInput {
      */
     public void setRuleParameters(RuleExecutionRunParameters ruleParameters) {
         this.ruleParameters = ruleParameters;
+    }
+
+    /**
+     * Returns the debug mode used for debugging rules (capturing their parameters).
+     * @return Debug mode.
+     */
+    public PythonRuleDebugMode getDebugMode() {
+        return debugMode;
+    }
+
+    /**
+     * Sets the debug mode for Python rules.
+     * @param debugMode Debug mode.
+     */
+    public void setDebugMode(PythonRuleDebugMode debugMode) {
+        this.debugMode = debugMode;
     }
 }

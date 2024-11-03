@@ -58,6 +58,7 @@ export interface IJobsState {
   newNotification: boolean;
   job_allert: IJobAllert;
   isTabChanged: boolean;
+  cleanOldJobsInterval?: moment.Moment;
 }
 
 const initialState: IJobsState = {
@@ -82,7 +83,8 @@ const initialState: IJobsState = {
   notificationCount: 0,
   newNotification: false,
   job_allert: {},
-  isTabChanged: false
+  isTabChanged: false,
+  cleanOldJobsInterval: moment()
 };
 
 const schemaReducer = (state = initialState, action: any) => {
@@ -180,6 +182,26 @@ const schemaReducer = (state = initialState, action: any) => {
       };
       const jobList = { ...state.jobList };
       let notificationCount = state.notificationCount;
+
+      // filtering out finished jobs
+      const filterFinishedJobs = (parentId: number) => {
+        const finishedJobs = job_dictionary_state[parentId].childs?.filter(
+          (x) =>
+            x.status === 'finished' ||
+            x.status === 'cancelled' ||
+            x.status === 'failed'
+        );
+        if (finishedJobs?.length > 10) {
+          delete job_dictionary_state[finishedJobs?.[0].jobId?.jobId ?? ''];
+
+          jobList[parentId] = jobList[parentId].filter(
+            (x) => x !== (finishedJobs?.[0].jobId?.jobId ?? '')
+          );
+          notificationCount--;
+          return;
+        }
+      };
+
       jobChanges.forEach((jobChange: DqoJobChangeModel) => {
         if (!jobChange.jobId?.jobId) return;
 
@@ -222,6 +244,9 @@ const schemaReducer = (state = initialState, action: any) => {
           const childIndex = job_dictionary_state[parentId].childs.findIndex(
             (child) => child.jobId?.jobId === jobId
           );
+
+          filterFinishedJobs(parentId);
+
           job_dictionary_state[parentId].childs[childIndex] = childState;
           job_dictionary_state[jobId] = childState;
         } else {
@@ -230,17 +255,52 @@ const schemaReducer = (state = initialState, action: any) => {
             notificationCount++;
             const childState = jobChange.updatedModel ?? {};
             job_dictionary_state[parentId].childs.push(childState);
+
+            filterFinishedJobs(parentId);
+
             jobList[parentId].push(String(jobId));
             job_dictionary_state[jobId] = { ...childState } as any;
           }
         }
       });
+
+      const isNewNotification =
+        Object.keys(state.job_dictionary_state).length !==
+        Object.keys(job_dictionary_state).length;
+
+      const nowDate = moment();
+
+      const lastRefreshExceeded =
+        nowDate.diff(state.cleanOldJobsInterval, 'minutes') > 10;
+
+      if (lastRefreshExceeded) {
+        Object.keys(job_dictionary_state).forEach((key) => {
+          if (
+            job_dictionary_state[key]?.statusChangedAt && 
+            nowDate.diff(job_dictionary_state[key].statusChangedAt, 'minutes') >
+            30
+          ) {
+            if (jobList[key]) {
+              jobList[key].forEach((childId) => {
+                delete job_dictionary_state[childId];
+              });
+              delete jobList[key];
+            }
+            notificationCount--;
+            delete job_dictionary_state[key];
+          }
+        });
+      }
+
       return {
         ...state,
         loading: false,
         lastSequenceNumber: action.data.lastSequenceNumber,
-        newNotification: true,
+        newNotification: isNewNotification ? true : state.newNotification,
         job_dictionary_state,
+        cleanOldJobsInterval: lastRefreshExceeded
+          ? nowDate
+          : state.cleanOldJobsInterval,
         jobList,
         notificationCount,
         folderSynchronizationStatus: action.data.folderSynchronizationStatus,

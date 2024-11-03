@@ -37,6 +37,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.base.Strings;
 import lombok.EqualsAndHashCode;
 
+import java.time.Instant;
 import java.util.Map;
 import java.util.Objects;
 
@@ -168,11 +169,13 @@ public abstract class AbstractRootChecksContainerSpec extends AbstractSpec {
      * @param parentTableSpec The specification of the parent table. Used to verify if the timestamp columns are correctly configured for timeliness checks.
      * @param columnDataTypeCategory Detected data type of a column, if we are applying it on a column.
      * @param dialectSettings Dialect settings.
+     * @param policyLastModified The timestamp when the DQ policy file was last modified.
      */
     public void copyChecksToContainer(AbstractRootChecksContainerSpec targetChecksContainer,
                                       TableSpec parentTableSpec,
                                       DataTypeCategory columnDataTypeCategory,
-                                      ProviderDialectSettings dialectSettings) {
+                                      ProviderDialectSettings dialectSettings,
+                                      Instant policyLastModified) {
         if (this.isDefault()) {
             return;
         }
@@ -223,6 +226,7 @@ public abstract class AbstractRootChecksContainerSpec extends AbstractSpec {
 
                         AbstractCheckSpec<?,?,?,?> targetCheckCloned = defaultCheck.deepClone();
                         targetCheckCloned.setDefaultCheck(true);
+                        targetCheckCloned.setPolicyLastModified(policyLastModified);
                         FieldInfo targetCategoryCheckFieldInfo = targetCategoryChildMap.getReflectionClassInfo().getFieldByYamlName(defaultChecksEntry.getChildName());
                         targetCategoryCheckFieldInfo.setFieldValue(targetCheckCloned, targetCategoryContainer);
                     }
@@ -244,6 +248,7 @@ public abstract class AbstractRootChecksContainerSpec extends AbstractSpec {
 
                         CustomCheckSpec clonedTargetCustomCheck = (CustomCheckSpec)defaultCategoryCustomCheckKeyValue.getValue().deepClone();
                         clonedTargetCustomCheck.setDefaultCheck(true);
+                        clonedTargetCustomCheck.setPolicyLastModified(policyLastModified);
                         targetCategoryCustomChecks.put(customCheckName, clonedTargetCustomCheck);
                     }
                 }
@@ -266,6 +271,7 @@ public abstract class AbstractRootChecksContainerSpec extends AbstractSpec {
 
                 CustomCheckSpec clonedTargetCustomCheck = (CustomCheckSpec)defaultCustomCheckKeyValue.getValue().deepClone();
                 clonedTargetCustomCheck.setDefaultCheck(true);
+                clonedTargetCustomCheck.setPolicyLastModified(policyLastModified);
                 targetCustomChecks.put(customCheckName, clonedTargetCustomCheck);
             }
         }

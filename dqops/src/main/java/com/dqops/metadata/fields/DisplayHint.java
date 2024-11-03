@@ -31,5 +31,11 @@ public enum DisplayHint {
      * Show a popup with a list of columns to select with checkboxes.
      */
     @JsonProperty("column_names")
-    column_names
+    column_names,
+
+    /**
+     * Activating this field requires a paid version of DQOps. It is used on the "use_ai" checkbox.
+     */
+    @JsonProperty("requires_paid_version")
+    requires_paid_version
 }

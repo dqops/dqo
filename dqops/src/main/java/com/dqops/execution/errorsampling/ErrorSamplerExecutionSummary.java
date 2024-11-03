@@ -17,18 +17,15 @@ package com.dqops.execution.errorsampling;
 
 import com.dqops.metadata.sources.ConnectionWrapper;
 import com.dqops.metadata.sources.TableSpec;
-import tech.tablesaw.api.IntColumn;
-import tech.tablesaw.api.Row;
-import tech.tablesaw.api.Table;
-import tech.tablesaw.api.TextColumn;
+import tech.tablesaw.api.*;
 
 /**
  * Tabular object returned from {@link TableErrorSamplerExecutionServiceImpl} with a summary of error samples that were collected.
  */
 public class ErrorSamplerExecutionSummary {
     private Throwable firstException;
-    private final TextColumn connectionColumn;
-    private final TextColumn tableColumn;
+    private final StringColumn connectionColumn;
+    private final StringColumn tableColumn;
     private final IntColumn errorSamplersExecutedColumn;
     private final IntColumn errorSampledColumnsColumn;
     private final IntColumn successfullyErrorSampledColumnsColumn;
@@ -42,10 +39,10 @@ public class ErrorSamplerExecutionSummary {
     public ErrorSamplerExecutionSummary() {
 		this.summaryTable = Table.create("Error samples collection execution summary");
 
-        this.connectionColumn = TextColumn.create("Connection");
+        this.connectionColumn = StringColumn.create("Connection");
 		this.summaryTable.addColumns(connectionColumn);
 
-        this.tableColumn = TextColumn.create("Table");
+        this.tableColumn = StringColumn.create("Table");
 		this.summaryTable.addColumns(tableColumn);
 
 		this.errorSamplersExecutedColumn = IntColumn.create("Error samplers executed");
@@ -76,7 +73,7 @@ public class ErrorSamplerExecutionSummary {
      * Connection name column.
      * @return Column.
      */
-    public TextColumn getConnectionColumn() {
+    public StringColumn getConnectionColumn() {
         return connectionColumn;
     }
 
@@ -84,7 +81,7 @@ public class ErrorSamplerExecutionSummary {
      * Full table name column.
      * @return Table name column.
      */
-    public TextColumn getTableColumn() {
+    public StringColumn getTableColumn() {
         return tableColumn;
     }
 

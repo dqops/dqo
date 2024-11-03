@@ -1,0 +1,6 @@
+{% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+{%- call lib.render_error_sampler() -%}
+    {{lib.render_target_column('analyzed_table')}} IS NOT NULL AND
+    {{lib.render_target_column('analyzed_table')}} ~
+                        '(^|[ \t.,:;"''`|\n\r])((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])([ \t.,:;"''`|\n\r]|$)' = TRUE
+{%- endcall -%}

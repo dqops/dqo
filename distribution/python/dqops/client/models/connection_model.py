@@ -9,6 +9,7 @@ from ..types import UNSET, Unset
 if TYPE_CHECKING:
     from ..models.big_query_parameters_spec import BigQueryParametersSpec
     from ..models.check_search_filters import CheckSearchFilters
+    from ..models.click_house_parameters_spec import ClickHouseParametersSpec
     from ..models.connection_model_advanced_properties import (
         ConnectionModelAdvancedProperties,
     )
@@ -19,10 +20,12 @@ if TYPE_CHECKING:
     )
     from ..models.duckdb_parameters_spec import DuckdbParametersSpec
     from ..models.hana_parameters_spec import HanaParametersSpec
+    from ..models.maria_db_parameters_spec import MariaDbParametersSpec
     from ..models.mysql_parameters_spec import MysqlParametersSpec
     from ..models.oracle_parameters_spec import OracleParametersSpec
     from ..models.postgresql_parameters_spec import PostgresqlParametersSpec
     from ..models.presto_parameters_spec import PrestoParametersSpec
+    from ..models.quest_db_parameters_spec import QuestDbParametersSpec
     from ..models.redshift_parameters_spec import RedshiftParametersSpec
     from ..models.snowflake_parameters_spec import SnowflakeParametersSpec
     from ..models.spark_parameters_spec import SparkParametersSpec
@@ -30,6 +33,7 @@ if TYPE_CHECKING:
     from ..models.statistics_collector_search_filters import (
         StatisticsCollectorSearchFilters,
     )
+    from ..models.teradata_parameters_spec import TeradataParametersSpec
     from ..models.trino_parameters_spec import TrinoParametersSpec
 
 
@@ -64,6 +68,10 @@ class ConnectionModel:
         databricks (Union[Unset, DatabricksParametersSpec]):
         hana (Union[Unset, HanaParametersSpec]):
         db2 (Union[Unset, Db2ParametersSpec]):
+        mariadb (Union[Unset, MariaDbParametersSpec]):
+        clickhouse (Union[Unset, ClickHouseParametersSpec]):
+        questdb (Union[Unset, QuestDbParametersSpec]):
+        teradata (Union[Unset, TeradataParametersSpec]):
         run_checks_job_template (Union[Unset, CheckSearchFilters]): Target data quality checks filter, identifies which
             checks on which tables and columns should be executed.
         run_profiling_checks_job_template (Union[Unset, CheckSearchFilters]): Target data quality checks filter,
@@ -106,6 +114,10 @@ class ConnectionModel:
     databricks: Union[Unset, "DatabricksParametersSpec"] = UNSET
     hana: Union[Unset, "HanaParametersSpec"] = UNSET
     db2: Union[Unset, "Db2ParametersSpec"] = UNSET
+    mariadb: Union[Unset, "MariaDbParametersSpec"] = UNSET
+    clickhouse: Union[Unset, "ClickHouseParametersSpec"] = UNSET
+    questdb: Union[Unset, "QuestDbParametersSpec"] = UNSET
+    teradata: Union[Unset, "TeradataParametersSpec"] = UNSET
     run_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
     run_profiling_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
     run_monitoring_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
@@ -186,6 +198,22 @@ class ConnectionModel:
         db2: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.db2, Unset):
             db2 = self.db2.to_dict()
+
+        mariadb: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.mariadb, Unset):
+            mariadb = self.mariadb.to_dict()
+
+        clickhouse: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.clickhouse, Unset):
+            clickhouse = self.clickhouse.to_dict()
+
+        questdb: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.questdb, Unset):
+            questdb = self.questdb.to_dict()
+
+        teradata: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.teradata, Unset):
+            teradata = self.teradata.to_dict()
 
         run_checks_job_template: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.run_checks_job_template, Unset):
@@ -270,6 +298,14 @@ class ConnectionModel:
             field_dict["hana"] = hana
         if db2 is not UNSET:
             field_dict["db2"] = db2
+        if mariadb is not UNSET:
+            field_dict["mariadb"] = mariadb
+        if clickhouse is not UNSET:
+            field_dict["clickhouse"] = clickhouse
+        if questdb is not UNSET:
+            field_dict["questdb"] = questdb
+        if teradata is not UNSET:
+            field_dict["teradata"] = teradata
         if run_checks_job_template is not UNSET:
             field_dict["run_checks_job_template"] = run_checks_job_template
         if run_profiling_checks_job_template is not UNSET:
@@ -309,6 +345,7 @@ class ConnectionModel:
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.big_query_parameters_spec import BigQueryParametersSpec
         from ..models.check_search_filters import CheckSearchFilters
+        from ..models.click_house_parameters_spec import ClickHouseParametersSpec
         from ..models.connection_model_advanced_properties import (
             ConnectionModelAdvancedProperties,
         )
@@ -319,10 +356,12 @@ class ConnectionModel:
         )
         from ..models.duckdb_parameters_spec import DuckdbParametersSpec
         from ..models.hana_parameters_spec import HanaParametersSpec
+        from ..models.maria_db_parameters_spec import MariaDbParametersSpec
         from ..models.mysql_parameters_spec import MysqlParametersSpec
         from ..models.oracle_parameters_spec import OracleParametersSpec
         from ..models.postgresql_parameters_spec import PostgresqlParametersSpec
         from ..models.presto_parameters_spec import PrestoParametersSpec
+        from ..models.quest_db_parameters_spec import QuestDbParametersSpec
         from ..models.redshift_parameters_spec import RedshiftParametersSpec
         from ..models.snowflake_parameters_spec import SnowflakeParametersSpec
         from ..models.spark_parameters_spec import SparkParametersSpec
@@ -330,6 +369,7 @@ class ConnectionModel:
         from ..models.statistics_collector_search_filters import (
             StatisticsCollectorSearchFilters,
         )
+        from ..models.teradata_parameters_spec import TeradataParametersSpec
         from ..models.trino_parameters_spec import TrinoParametersSpec
 
         d = src_dict.copy()
@@ -446,6 +486,34 @@ class ConnectionModel:
         else:
             db2 = Db2ParametersSpec.from_dict(_db2)
 
+        _mariadb = d.pop("mariadb", UNSET)
+        mariadb: Union[Unset, MariaDbParametersSpec]
+        if isinstance(_mariadb, Unset):
+            mariadb = UNSET
+        else:
+            mariadb = MariaDbParametersSpec.from_dict(_mariadb)
+
+        _clickhouse = d.pop("clickhouse", UNSET)
+        clickhouse: Union[Unset, ClickHouseParametersSpec]
+        if isinstance(_clickhouse, Unset):
+            clickhouse = UNSET
+        else:
+            clickhouse = ClickHouseParametersSpec.from_dict(_clickhouse)
+
+        _questdb = d.pop("questdb", UNSET)
+        questdb: Union[Unset, QuestDbParametersSpec]
+        if isinstance(_questdb, Unset):
+            questdb = UNSET
+        else:
+            questdb = QuestDbParametersSpec.from_dict(_questdb)
+
+        _teradata = d.pop("teradata", UNSET)
+        teradata: Union[Unset, TeradataParametersSpec]
+        if isinstance(_teradata, Unset):
+            teradata = UNSET
+        else:
+            teradata = TeradataParametersSpec.from_dict(_teradata)
+
         _run_checks_job_template = d.pop("run_checks_job_template", UNSET)
         run_checks_job_template: Union[Unset, CheckSearchFilters]
         if isinstance(_run_checks_job_template, Unset):
@@ -549,6 +617,10 @@ class ConnectionModel:
             databricks=databricks,
             hana=hana,
             db2=db2,
+            mariadb=mariadb,
+            clickhouse=clickhouse,
+            questdb=questdb,
+            teradata=teradata,
             run_checks_job_template=run_checks_job_template,
             run_profiling_checks_job_template=run_profiling_checks_job_template,
             run_monitoring_checks_job_template=run_monitoring_checks_job_template,

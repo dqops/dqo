@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { useHistory, useLocation, useRouteMatch } from 'react-router-dom';
 import { DqoJobChangeModelStatusEnum } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
+import { setIncidentNavigation } from '../../redux/actions/incidents.actions';
 import {
   setAdvisorJobId,
   setAdvisorObject,
@@ -57,6 +58,9 @@ const Header = () => {
   const { tabs, activeTab } = useSelector(
     (state: IRootState) => state.source[checkTypes || CheckTypes.SOURCES]
   );
+  const { incidentNavigation } = useSelector(
+    (state: IRootState) => state.incidents
+  );
   const { activeTab: homeActiveTab } = useSelector(
     (state: IRootState) => state.source['home']
   );
@@ -73,6 +77,32 @@ const Header = () => {
     let url = '';
     let value = '';
 
+    if (incidentNavigation) {
+      const url = ROUTES.TABLE_LEVEL_PAGE(
+        newCheckTypes,
+        incidentNavigation.connection,
+        incidentNavigation.schema,
+        incidentNavigation.table,
+        getFirstLevelTableTab(newCheckTypes)
+      );
+      const value = ROUTES.TABLE_LEVEL_VALUE(
+        newCheckTypes,
+        incidentNavigation.connection,
+        incidentNavigation.schema,
+        incidentNavigation.table
+      );
+      dispatch(
+        addFirstLevelTab(newCheckTypes, {
+          url,
+          value,
+          label: incidentNavigation.table
+        })
+      );
+      dispatch(setIncidentNavigation(undefined));
+      history.push(url);
+    }
+
+    dispatch(setIncidentNavigation(undefined));
     if (match.path === ROUTES.PATTERNS.CONNECTION) {
       const newTab = getFirstLevelConnectionTab(newCheckTypes);
 
@@ -142,7 +172,7 @@ const Header = () => {
         column
       );
     }
-    console.log('url', url);
+
     if (!url) {
       url = `/` + newCheckTypes;
       history.push(url);
@@ -371,8 +401,8 @@ const Header = () => {
         </div>
       </div>
       <div className="flex">
-        <DomainSwitch />
         <HelpMenu />
+        <DomainSwitch />
         <SynchronizeButton />
         <NotificationMenu />
         <UserProfile />

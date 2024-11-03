@@ -135,7 +135,7 @@ public class InstanceCloudLoginServiceImpl implements InstanceCloudLoginService 
         synchronized (this.lock) {
             Instant keyLatestExpiresAt = Instant.now().plus(15, ChronoUnit.MINUTES);
             if (this.grantingTicketPayloadSignedObject == null ||
-                    this.grantingTicketPayloadSignedObject.getTarget().getExpiresAt().isAfter(keyLatestExpiresAt)) {
+                    this.grantingTicketPayloadSignedObject.getTarget().getExpiresAt().isBefore(keyLatestExpiresAt)) {
                 DqoUserPrincipal userPrincipalForAdministrator = this.principalProvider.createLocalInstanceAdminPrincipal();
 
                 UserDomainIdentity userIdentity = userPrincipalForAdministrator.getDataDomainIdentity();

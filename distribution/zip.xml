@@ -23,6 +23,13 @@
             <outputDirectory>/lib</outputDirectory>
         </fileSet>
         <fileSet>
+            <directory>${project.basedir}/../home/lib/anomalies</directory>
+            <includes>
+                <include>*.py</include>
+            </includes>
+            <outputDirectory>/lib/anomalies</outputDirectory>
+        </fileSet>
+        <fileSet>
             <directory>${project.basedir}/../home/lib</directory>
             <includes>
                 <include>*.txt</include>

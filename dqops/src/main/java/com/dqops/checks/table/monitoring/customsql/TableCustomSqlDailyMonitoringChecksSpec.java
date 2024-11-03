@@ -19,10 +19,7 @@ import com.dqops.checks.AbstractCheckCategorySpec;
 import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
-import com.dqops.checks.table.checkspecs.customsql.TableSqlAggregateExpressionCheckSpec;
-import com.dqops.checks.table.checkspecs.customsql.TableSqlConditionFailedCheckSpec;
-import com.dqops.checks.table.checkspecs.customsql.TableSqlConditionPassedPercentCheckSpec;
-import com.dqops.checks.table.checkspecs.customsql.TableSqlImportCustomResultCheckSpec;
+import com.dqops.checks.table.checkspecs.customsql.*;
 import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -47,6 +44,7 @@ public class TableCustomSqlDailyMonitoringChecksSpec extends AbstractCheckCatego
             put("daily_sql_condition_failed_on_table", o -> o.dailySqlConditionFailedOnTable);
             put("daily_sql_condition_passed_percent_on_table", o -> o.dailySqlConditionPassedPercentOnTable);
             put("daily_sql_aggregate_expression_on_table", o -> o.dailySqlAggregateExpressionOnTable);
+            put("daily_sql_invalid_record_count_on_table", o -> o.dailySqlInvalidRecordCountOnTable);
             put("daily_import_custom_result_on_table", o -> o.dailyImportCustomResultOnTable);
         }
     };
@@ -62,6 +60,12 @@ public class TableCustomSqlDailyMonitoringChecksSpec extends AbstractCheckCatego
 
     @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the expected range. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private TableSqlAggregateExpressionCheckSpec dailySqlAggregateExpressionOnTable;
+
+    @JsonPropertyDescription("Runs a custom query that retrieves invalid records found in a table and returns the number of them," +
+            " and raises an issue if too many failures were detected. " +
+            "This check is used for setting testing queries or ready queries used by users in their own systems (legacy SQL queries). " +
+            "For example, when this check is applied on a *age* column, the condition can find invalid records in which the *age* is lower than 18 using an SQL query: `SELECT age FROM {table} WHERE age < 18`.")
+    private TableSqlInvalidRecordCountCheckSpec dailySqlInvalidRecordCountOnTable;
 
     @JsonPropertyDescription("Runs a custom query that retrieves a result of a data quality check performed in the data engineering, whose result (the severity level) is pulled from a separate table.")
     private TableSqlImportCustomResultCheckSpec dailyImportCustomResultOnTable;
@@ -119,6 +123,24 @@ public class TableCustomSqlDailyMonitoringChecksSpec extends AbstractCheckCatego
         this.setDirtyIf(!Objects.equals(this.dailySqlAggregateExpressionOnTable, dailySqlAggregateExpressionOnTable));
         this.dailySqlAggregateExpressionOnTable = dailySqlAggregateExpressionOnTable;
         propagateHierarchyIdToField(dailySqlAggregateExpressionOnTable, "daily_sql_aggregate_expression_on_table");
+    }
+
+    /**
+     * Returns a check specification.
+     * @return New check specification.
+     */
+    public TableSqlInvalidRecordCountCheckSpec getDailySqlInvalidRecordCountOnTable() {
+        return dailySqlInvalidRecordCountOnTable;
+    }
+
+    /**
+     * Sets a new check specification.
+     * @param dailySqlInvalidRecordCountOnTable Check specification.
+     */
+    public void setDailySqlInvalidRecordCountOnTable(TableSqlInvalidRecordCountCheckSpec dailySqlInvalidRecordCountOnTable) {
+        this.setDirtyIf(!Objects.equals(this.dailySqlInvalidRecordCountOnTable, dailySqlInvalidRecordCountOnTable));
+        this.dailySqlInvalidRecordCountOnTable = dailySqlInvalidRecordCountOnTable;
+        propagateHierarchyIdToField(dailySqlInvalidRecordCountOnTable, "daily_sql_invalid_record_count_on_table");
     }
 
     /**

@@ -19,10 +19,7 @@ import com.dqops.checks.AbstractCheckCategorySpec;
 import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
-import com.dqops.checks.table.checkspecs.customsql.TableSqlAggregateExpressionCheckSpec;
-import com.dqops.checks.table.checkspecs.customsql.TableSqlConditionFailedCheckSpec;
-import com.dqops.checks.table.checkspecs.customsql.TableSqlConditionPassedPercentCheckSpec;
-import com.dqops.checks.table.checkspecs.customsql.TableSqlImportCustomResultCheckSpec;
+import com.dqops.checks.table.checkspecs.customsql.*;
 import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -47,6 +44,7 @@ public class TableCustomSqlMonthlyMonitoringChecksSpec extends AbstractCheckCate
             put("monthly_sql_condition_failed_on_table", o -> o.monthlySqlConditionFailedOnTable);
             put("monthly_sql_condition_passed_percent_on_table", o -> o.monthlySqlConditionPassedPercentOnTable);
             put("monthly_sql_aggregate_expression_on_table", o -> o.monthlySqlAggregateExpressionOnTable);
+            put("monthly_sql_invalid_record_count_on_table", o -> o.monthlySqlInvalidRecordCountOnTable);
             put("monthly_import_custom_result_on_table", o -> o.monthlyImportCustomResultOnTable);
         }
     };
@@ -62,6 +60,12 @@ public class TableCustomSqlMonthlyMonitoringChecksSpec extends AbstractCheckCate
 
     @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the expected range. Stores the most recent value for each month when the data quality check was evaluated.")
     private TableSqlAggregateExpressionCheckSpec monthlySqlAggregateExpressionOnTable;
+
+    @JsonPropertyDescription("Runs a custom query that retrieves invalid records found in a table and returns the number of them," +
+            " and raises an issue if too many failures were detected. " +
+            "This check is used for setting testing queries or ready queries used by users in their own systems (legacy SQL queries). " +
+            "For example, when this check is applied on a *age* column, the condition can find invalid records in which the *age* is lower than 18 using an SQL query: `SELECT age FROM {table} WHERE age < 18`.")
+    private TableSqlInvalidRecordCountCheckSpec monthlySqlInvalidRecordCountOnTable;
 
     @JsonPropertyDescription("Runs a custom query that retrieves a result of a data quality check performed in the data engineering, whose result (the severity level) is pulled from a separate table.")
     private TableSqlImportCustomResultCheckSpec monthlyImportCustomResultOnTable;
@@ -118,6 +122,24 @@ public class TableCustomSqlMonthlyMonitoringChecksSpec extends AbstractCheckCate
         this.setDirtyIf(!Objects.equals(this.monthlySqlAggregateExpressionOnTable, monthlySqlAggregateExpressionOnTable));
         this.monthlySqlAggregateExpressionOnTable = monthlySqlAggregateExpressionOnTable;
         propagateHierarchyIdToField(monthlySqlAggregateExpressionOnTable, "monthly_sql_aggregate_expression_on_table");
+    }
+
+    /**
+     * Returns a check specification.
+     * @return New check specification.
+     */
+    public TableSqlInvalidRecordCountCheckSpec getMonthlySqlInvalidRecordCountOnTable() {
+        return monthlySqlInvalidRecordCountOnTable;
+    }
+
+    /**
+     * Sets a new check specification.
+     * @param monthlySqlInvalidRecordCountOnTable Check specification.
+     */
+    public void setMonthlySqlInvalidRecordCountOnTable(TableSqlInvalidRecordCountCheckSpec monthlySqlInvalidRecordCountOnTable) {
+        this.setDirtyIf(!Objects.equals(this.monthlySqlInvalidRecordCountOnTable, monthlySqlInvalidRecordCountOnTable));
+        this.monthlySqlInvalidRecordCountOnTable = monthlySqlInvalidRecordCountOnTable;
+        propagateHierarchyIdToField(monthlySqlInvalidRecordCountOnTable, "monthly_sql_invalid_record_count_on_table");
     }
 
     /**

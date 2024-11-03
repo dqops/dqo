@@ -1,0 +1,9 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/DashboardYaml-schema.json
+apiVersion: dqo/v1
+kind: dashboards
+spec:
+- folder_name: Profiling
+- folder_name: Monitoring
+- folder_name: Partitions
+- folder_name: DQOps usage
+- folder_name: Aggregated results for all check types

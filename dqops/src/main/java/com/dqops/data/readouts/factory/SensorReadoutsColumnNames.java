@@ -227,6 +227,7 @@ public class SensorReadoutsColumnNames {
 
             COLUMN_NAME_COLUMN_NAME,
             DATA_GROUP_NAME_COLUMN_NAME,
+            DATA_GROUP_HASH_COLUMN_NAME,
             TABLE_COMPARISON_NAME_COLUMN_NAME,
 
             DURATION_MS_COLUMN_NAME,
@@ -238,5 +239,37 @@ public class SensorReadoutsColumnNames {
             PROVIDER_COLUMN_NAME,
             QUALITY_DIMENSION_COLUMN_NAME,
             SENSOR_NAME_COLUMN_NAME
+    };
+
+    /**
+     * List of column names that a sensor can return. It is used when we run checks in a special mode where historical sensor readouts are validated again by rules without running the sensors.
+     */
+    public static final String[] SENSOR_READOUT_COLUMN_NAMES_RETURNED_BY_SENSORS = new String[] {
+            ACTUAL_VALUE_COLUMN_NAME,
+            EXPECTED_VALUE_COLUMN_NAME,
+            CHECK_HASH_COLUMN_NAME,
+            TIME_PERIOD_COLUMN_NAME,
+            TIME_PERIOD_UTC_COLUMN_NAME,
+            DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "1",
+            DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "2",
+            DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "3",
+            DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "4",
+            DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "5",
+            DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "6",
+            DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "7",
+            DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "8",
+            DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "9"
+    };
+
+    /**
+     * A list of a minimum set of columns from sensor readouts that are used to feed time series sensors with historical data.
+     */
+    public static final String[] SENSOR_READOUT_COLUMN_NAMES_HISTORIC_DATA = new String[] {
+            TIME_PERIOD_COLUMN_NAME,
+            TIME_PERIOD_UTC_COLUMN_NAME,
+            CHECK_HASH_COLUMN_NAME,
+            DATA_GROUP_HASH_COLUMN_NAME,
+            ACTUAL_VALUE_COLUMN_NAME,
+            EXPECTED_VALUE_COLUMN_NAME
     };
 }

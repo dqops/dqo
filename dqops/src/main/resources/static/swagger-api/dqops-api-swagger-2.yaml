@@ -16947,6 +16947,12 @@ definitions:
           \ (measure) is an anomaly, because the value is outside the regular range\
           \ of previous readouts. The default time window of 90 time periods (days,\
           \ etc.) is used, but at least 30 readouts must exist to run the calculation."
+      use_ai:
+        type: "boolean"
+        description: "Use an AI model to predict anomalies. WARNING: anomaly detection\
+          \ by AI models is not supported in an open-source distribution of DQOps.\
+          \ Please contact DQOps support to upgrade your instance to a closed-source\
+          \ DQOps distribution."
   AnomalyDifferencingPercentileMovingAverageRuleFatal01PctParametersSpec:
     type: "object"
     properties:
@@ -16957,6 +16963,12 @@ definitions:
           \ (measure) is an anomaly, because the value is outside the regular range\
           \ of previous readouts. The default time window of 90 time periods (days,\
           \ etc.) is used, but at least 30 readouts must exist to run the calculation."
+      use_ai:
+        type: "boolean"
+        description: "Use an AI model to predict anomalies. WARNING: anomaly detection\
+          \ by AI models is not supported in an open-source distribution of DQOps.\
+          \ Please contact DQOps support to upgrade your instance to a closed-source\
+          \ DQOps distribution."
   AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec:
     type: "object"
     properties:
@@ -16967,6 +16979,12 @@ definitions:
           \ (measure) is an anomaly, because the value is outside the regular range\
           \ of previous readouts. The default time window of 90 time periods (days,\
           \ etc.) is used, but at least 30 readouts must exist to run the calculation."
+      use_ai:
+        type: "boolean"
+        description: "Use an AI model to predict anomalies. WARNING: anomaly detection\
+          \ by AI models is not supported in an open-source distribution of DQOps.\
+          \ Please contact DQOps support to upgrade your instance to a closed-source\
+          \ DQOps distribution."
   AnomalyPartitionRowCountRuleError05PctParametersSpec:
     type: "object"
     properties:
@@ -16977,6 +16995,12 @@ definitions:
           \ is an anomaly because the value is outside the regular range of previous\
           \ partition volume measures. The default time window of 90 time periods\
           \ (days, etc.) is used, but at least 30 readouts must exist to run the calculation."
+      use_ai:
+        type: "boolean"
+        description: "Use an AI model to predict anomalies. WARNING: anomaly detection\
+          \ by AI models is not supported in an open-source distribution of DQOps.\
+          \ Please contact DQOps support to upgrade your instance to a closed-source\
+          \ DQOps distribution."
   AnomalyPartitionRowCountRuleFatal01PctParametersSpec:
     type: "object"
     properties:
@@ -16987,6 +17011,12 @@ definitions:
           \ is an anomaly because the value is outside the regular range of previous\
           \ partition volume measures. The default time window of 90 time periods\
           \ (days, etc.) is used, but at least 30 readouts must exist to run the calculation."
+      use_ai:
+        type: "boolean"
+        description: "Use an AI model to predict anomalies. WARNING: anomaly detection\
+          \ by AI models is not supported in an open-source distribution of DQOps.\
+          \ Please contact DQOps support to upgrade your instance to a closed-source\
+          \ DQOps distribution."
   AnomalyPartitionRowCountRuleWarning1PctParametersSpec:
     type: "object"
     properties:
@@ -16997,6 +17027,12 @@ definitions:
           \ is an anomaly because the value is outside the regular range of previous\
           \ partition volume measures. The default time window of 90 time periods\
           \ (days, etc.) is used, but at least 30 readouts must exist to run the calculation."
+      use_ai:
+        type: "boolean"
+        description: "Use an AI model to predict anomalies. WARNING: anomaly detection\
+          \ by AI models is not supported in an open-source distribution of DQOps.\
+          \ Please contact DQOps support to upgrade your instance to a closed-source\
+          \ DQOps distribution."
   AnomalyStationaryCountValuesRuleError05PctParametersSpec:
     type: "object"
     properties:
@@ -17007,6 +17043,12 @@ definitions:
           \ is an anomaly because the value is outside the regular range of counts.\
           \ The default time window of 90 time periods (days, etc.) is used, but at\
           \ least 30 readouts must exist to run the calculation."
+      use_ai:
+        type: "boolean"
+        description: "Use an AI model to predict anomalies. WARNING: anomaly detection\
+          \ by AI models is not supported in an open-source distribution of DQOps.\
+          \ Please contact DQOps support to upgrade your instance to a closed-source\
+          \ DQOps distribution."
   AnomalyStationaryCountValuesRuleFatal01PctParametersSpec:
     type: "object"
     properties:
@@ -17017,6 +17059,12 @@ definitions:
           \ is an anomaly because the value is outside the regular range of counts.\
           \ The default time window of 90 time periods (days, etc.) is used, but at\
           \ least 30 readouts must exist to run the calculation."
+      use_ai:
+        type: "boolean"
+        description: "Use an AI model to predict anomalies. WARNING: anomaly detection\
+          \ by AI models is not supported in an open-source distribution of DQOps.\
+          \ Please contact DQOps support to upgrade your instance to a closed-source\
+          \ DQOps distribution."
   AnomalyStationaryCountValuesRuleWarning1PctParametersSpec:
     type: "object"
     properties:
@@ -17027,6 +17075,12 @@ definitions:
           \ is an anomaly because the value is outside the regular range of counts.\
           \ The default time window of 90 time periods (days, etc.) is used, but at\
           \ least 30 readouts must exist to run the calculation."
+      use_ai:
+        type: "boolean"
+        description: "Use an AI model to predict anomalies. WARNING: anomaly detection\
+          \ by AI models is not supported in an open-source distribution of DQOps.\
+          \ Please contact DQOps support to upgrade your instance to a closed-source\
+          \ DQOps distribution."
   AnomalyStationaryPercentValuesRuleError05PctParametersSpec:
     type: "object"
     properties:
@@ -17037,6 +17091,12 @@ definitions:
           \ is an anomaly because the value is outside the regular range of captured\
           \ percentage measures. The default time window of 90 time periods (days,\
           \ etc.) is used, but at least 30 readouts must exist to run the calculation."
+      use_ai:
+        type: "boolean"
+        description: "Use an AI model to predict anomalies. WARNING: anomaly detection\
+          \ by AI models is not supported in an open-source distribution of DQOps.\
+          \ Please contact DQOps support to upgrade your instance to a closed-source\
+          \ DQOps distribution."
   AnomalyStationaryPercentValuesRuleFatal01PctParametersSpec:
     type: "object"
     properties:
@@ -17047,6 +17107,12 @@ definitions:
           \ is an anomaly because the value is outside the regular range of captured\
           \ percentage measures. The default time window of 90 time periods (days,\
           \ etc.) is used, but at least 30 readouts must exist to run the calculation."
+      use_ai:
+        type: "boolean"
+        description: "Use an AI model to predict anomalies. WARNING: anomaly detection\
+          \ by AI models is not supported in an open-source distribution of DQOps.\
+          \ Please contact DQOps support to upgrade your instance to a closed-source\
+          \ DQOps distribution."
   AnomalyStationaryPercentValuesRuleWarning1PctParametersSpec:
     type: "object"
     properties:
@@ -17057,6 +17123,12 @@ definitions:
           \ is an anomaly because the value is outside the regular range of captured\
           \ percentage measures. The default time window of 90 time periods (days,\
           \ etc.) is used, but at least 30 readouts must exist to run the calculation."
+      use_ai:
+        type: "boolean"
+        description: "Use an AI model to predict anomalies. WARNING: anomaly detection\
+          \ by AI models is not supported in an open-source distribution of DQOps.\
+          \ Please contact DQOps support to upgrade your instance to a closed-source\
+          \ DQOps distribution."
   AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec:
     type: "object"
     properties:
@@ -17067,6 +17139,12 @@ definitions:
           \ (measure) is an anomaly, because the value is outside the regular range\
           \ of previous readouts. The default time window of 90 time periods (days,\
           \ etc.) is used, but at least 30 readouts must exist to run the calculation."
+      use_ai:
+        type: "boolean"
+        description: "Use an AI model to predict anomalies. WARNING: anomaly detection\
+          \ by AI models is not supported in an open-source distribution of DQOps.\
+          \ Please contact DQOps support to upgrade your instance to a closed-source\
+          \ DQOps distribution."
   AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec:
     type: "object"
     properties:
@@ -17077,6 +17155,12 @@ definitions:
           \ (measure) is an anomaly, because the value is outside the regular range\
           \ of previous readouts. The default time window of 90 time periods (days,\
           \ etc.) is used, but at least 30 readouts must exist to run the calculation."
+      use_ai:
+        type: "boolean"
+        description: "Use an AI model to predict anomalies. WARNING: anomaly detection\
+          \ by AI models is not supported in an open-source distribution of DQOps.\
+          \ Please contact DQOps support to upgrade your instance to a closed-source\
+          \ DQOps distribution."
   AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec:
     type: "object"
     properties:
@@ -17087,6 +17171,12 @@ definitions:
           \ (measure) is an anomaly, because the value is outside the regular range\
           \ of previous readouts. The default time window of 90 time periods (days,\
           \ etc.) is used, but at least 30 readouts must exist to run the calculation."
+      use_ai:
+        type: "boolean"
+        description: "Use an AI model to predict anomalies. WARNING: anomaly detection\
+          \ by AI models is not supported in an open-source distribution of DQOps.\
+          \ Please contact DQOps support to upgrade your instance to a closed-source\
+          \ DQOps distribution."
   AnomalyTimelinessDelayRuleError05PctParametersSpec:
     type: "object"
     properties:
@@ -17097,6 +17187,12 @@ definitions:
           \ an anomaly because the value is outside the regular range of previous\
           \ delays. The default time window of 90 time periods (days, etc.) is used,\
           \ but at least 30 readouts must exist to run the calculation."
+      use_ai:
+        type: "boolean"
+        description: "Use an AI model to predict anomalies. WARNING: anomaly detection\
+          \ by AI models is not supported in an open-source distribution of DQOps.\
+          \ Please contact DQOps support to upgrade your instance to a closed-source\
+          \ DQOps distribution."
   AnomalyTimelinessDelayRuleFatal01PctParametersSpec:
     type: "object"
     properties:
@@ -17107,6 +17203,12 @@ definitions:
           \ an anomaly because the value is outside the regular range of previous\
           \ delays. The default time window of 90 time periods (days, etc.) is used,\
           \ but at least 30 readouts must exist to run the calculation."
+      use_ai:
+        type: "boolean"
+        description: "Use an AI model to predict anomalies. WARNING: anomaly detection\
+          \ by AI models is not supported in an open-source distribution of DQOps.\
+          \ Please contact DQOps support to upgrade your instance to a closed-source\
+          \ DQOps distribution."
   AnomalyTimelinessDelayRuleWarning1PctParametersSpec:
     type: "object"
     properties:
@@ -17117,6 +17219,12 @@ definitions:
           \ an anomaly because the value is outside the regular range of previous\
           \ delays. The default time window of 90 time periods (days, etc.) is used,\
           \ but at least 30 readouts must exist to run the calculation."
+      use_ai:
+        type: "boolean"
+        description: "Use an AI model to predict anomalies. WARNING: anomaly detection\
+          \ by AI models is not supported in an open-source distribution of DQOps.\
+          \ Please contact DQOps support to upgrade your instance to a closed-source\
+          \ DQOps distribution."
   AuthenticatedDashboardModel:
     type: "object"
     properties:
@@ -18519,6 +18627,35 @@ definitions:
           $ref: "#/definitions/ParameterDefinitionSpec"
     description: "Model depicting a named data quality check that can potentially\
       \ be enabled, regardless to its position in hierarchy tree."
+  ClickHouseParametersSpec:
+    type: "object"
+    properties:
+      host:
+        type: "string"
+        description: "ClickHouse host name. Supports also a ${CLICKHOUSE_HOST} configuration\
+          \ with a custom environment variable."
+      port:
+        type: "string"
+        description: "ClickHouse port number. The default port is 30015. Supports\
+          \ also a ${CLICKHOUSE_PORT} configuration with a custom environment variable."
+      database:
+        type: "string"
+        description: "ClickHouse instance number. Supports also a ${CLICKHOUSE_DATABASE_NAME}\
+          \ configuration with a custom environment variable."
+      user:
+        type: "string"
+        description: "ClickHouse user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}\
+          \ format to use dynamic substitution."
+      password:
+        type: "string"
+        description: "ClickHouse database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}\
+          \ format to use dynamic substitution."
+      properties:
+        type: "object"
+        description: "A dictionary of custom JDBC parameters that are added to the\
+          \ JDBC connection string, a key/value dictionary."
+        additionalProperties:
+          type: "string"
   CloudSynchronizationFoldersStatusModel:
     type: "object"
     properties:
@@ -21213,6 +21350,15 @@ definitions:
           \ etc.) is not outside the expected range. Stores the most recent captured\
           \ value for each day when the data quality check was evaluated."
         $ref: "#/definitions/ColumnSqlAggregateExpressionCheckSpec"
+      daily_sql_invalid_value_count_on_column:
+        description: "Runs a custom query that retrieves invalid values found in a\
+          \ column and returns the number of them, and raises an issue if too many\
+          \ failures were detected. This check is used for setting testing queries\
+          \ or ready queries used by users in their own systems (legacy SQL queries).\
+          \ For example, when this check is applied on a column. The condition can\
+          \ find invalid values in the column which have values lower than 18 using\
+          \ an SQL query: `SELECT {column} FROM {table} WHERE {column} < 18`."
+        $ref: "#/definitions/ColumnSqlInvalidValueCountCheckSpec"
       daily_import_custom_result_on_column:
         description: "Runs a custom query that retrieves a result of a data quality\
           \ check performed in the data engineering, whose result (the severity level)\
@@ -21283,6 +21429,15 @@ definitions:
           \ etc.) is not outside the expected range. Stores the most recent check\
           \ result for each month when the data quality check was evaluated."
         $ref: "#/definitions/ColumnSqlAggregateExpressionCheckSpec"
+      monthly_sql_invalid_value_count_on_column:
+        description: "Runs a custom query that retrieves invalid values found in a\
+          \ column and returns the number of them, and raises an issue if too many\
+          \ failures were detected. This check is used for setting testing queries\
+          \ or ready queries used by users in their own systems (legacy SQL queries).\
+          \ For example, when this check is applied on a column. The condition can\
+          \ find invalid values in the column which have values lower than 18 using\
+          \ an SQL query: `SELECT {column} FROM {table} WHERE {column} < 18`."
+        $ref: "#/definitions/ColumnSqlInvalidValueCountCheckSpec"
       monthly_import_custom_result_on_column:
         description: "Runs a custom query that retrieves a result of a data quality\
           \ check performed in the data engineering, whose result (the severity level)\
@@ -21350,6 +21505,15 @@ definitions:
         description: "Verifies that a custom aggregated SQL expression (MIN, MAX,\
           \ etc.) is not outside the expected range."
         $ref: "#/definitions/ColumnSqlAggregateExpressionCheckSpec"
+      profile_sql_invalid_value_count_on_column:
+        description: "Runs a custom query that retrieves invalid values found in a\
+          \ column and returns the number of them, and raises an issue if too many\
+          \ failures were detected. This check is used for setting testing queries\
+          \ or ready queries used by users in their own systems (legacy SQL queries).\
+          \ For example, when this check is applied on a column. The condition can\
+          \ find invalid values in the column which have values lower than 18 using\
+          \ an SQL query: `SELECT {column} FROM {table} WHERE {column} < 18`."
+        $ref: "#/definitions/ColumnSqlInvalidValueCountCheckSpec"
       profile_import_custom_result_on_column:
         description: "Runs a custom query that retrieves a result of a data quality\
           \ check performed in the data engineering, whose result (the severity level)\
@@ -31805,6 +31969,95 @@ definitions:
           \ DQOps data lake. The query can use a {table_name} placeholder that is\
           \ replaced with a table name for which the results are imported, and a {column_name}\
           \ placeholder replaced with the column name."
+  ColumnSqlInvalidValueCountCheckSpec:
+    type: "object"
+    properties:
+      schedule_override:
+        description: "Run check scheduling configuration. Specifies the schedule (a\
+          \ cron expression) when the data quality checks are executed by the scheduler."
+        $ref: "#/definitions/CronScheduleSpec"
+      comments:
+        type: "array"
+        description: "Comments for change tracking. Please put comments in this collection\
+          \ because YAML comments may be removed when the YAML file is modified by\
+          \ the tool (serialization and deserialization will remove non tracked comments)."
+        items:
+          $ref: "#/definitions/CommentSpec"
+      disabled:
+        type: "boolean"
+        description: "Disables the data quality check. Only enabled data quality checks\
+          \ and monitorings are executed. The check should be disabled if it should\
+          \ not work, but the configuration of the sensor and rules should be preserved\
+          \ in the configuration."
+      exclude_from_kpi:
+        type: "boolean"
+        description: "Data quality check results (alerts) are included in the data\
+          \ quality KPI calculation by default. Set this field to true in order to\
+          \ exclude this data quality check from the data quality KPI calculation."
+      include_in_sla:
+        type: "boolean"
+        description: "Marks the data quality check as part of a data quality SLA (Data\
+          \ Contract). The data quality SLA is a set of critical data quality checks\
+          \ that must always pass and are considered as a Data Contract for the dataset."
+      quality_dimension:
+        type: "string"
+        description: "Configures a custom data quality dimension name that is different\
+          \ than the built-in dimensions (Timeliness, Validity, etc.)."
+      display_name:
+        type: "string"
+        description: "Data quality check display name that can be assigned to the\
+          \ check, otherwise the check_display_name stored in the parquet result files\
+          \ is the check_name."
+      data_grouping:
+        type: "string"
+        description: "Data grouping configuration name that should be applied to this\
+          \ data quality check. The data grouping is used to group the check's result\
+          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
+          \ group of rows. Use the name of one of data grouping configurations defined\
+          \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
+      do_not_schedule:
+        type: "boolean"
+        description: "Disables running this check by a DQOps CRON scheduler. When\
+          \ a check is disabled from scheduling, it can be only triggered from the\
+          \ user interface or by submitting \"run checks\" job."
+      parameters:
+        description: "Sensor parameters with the custom SQL query, using a {column}\
+          \ placeholder to reference the current column."
+        $ref: "#/definitions/ColumnSqlInvalidValueCountSensorParametersSpec"
+      warning:
+        description: "Alerting threshold that raises a data quality warning when a\
+          \ given number of rows failed the custom SQL condition (expression). The\
+          \ warning is considered as a passed data quality check."
+        $ref: "#/definitions/MaxCountRule0WarningParametersSpec"
+      error:
+        description: "Default alerting threshold for a maximum number of rows failing\
+          \ the custom SQL condition (expression) that raises a data quality error\
+          \ (alert)."
+        $ref: "#/definitions/MaxCountRule0ErrorParametersSpec"
+      fatal:
+        description: "Alerting threshold that raises a fatal data quality issue when\
+          \ a given number of rows failed the custom SQL condition (expression). A\
+          \ fatal issue indicates a serious data quality problem that should result\
+          \ in stopping the data pipelines."
+        $ref: "#/definitions/MaxCountRule100ParametersSpec"
+  ColumnSqlInvalidValueCountSensorParametersSpec:
+    type: "object"
+    properties:
+      filter:
+        type: "string"
+        description: "SQL WHERE clause added to the sensor query. Both the table level\
+          \ filter and a sensor query filter are added, separated by an AND operator."
+      sql_query:
+        type: "string"
+        description: "SQL query that returns invalid values. The expression can use\
+          \ {table} and {column} placeholder that are replaced with a full table name\
+          \ and the analyzed column name."
   ColumnStatisticsCollectorsRootCategoriesSpec:
     type: "object"
     properties:
@@ -36388,19 +36641,23 @@ definitions:
           \ etc."
         enum:
         - "bigquery"
+        - "clickhouse"
         - "databricks"
+        - "db2"
+        - "duckdb"
+        - "hana"
+        - "mariadb"
         - "mysql"
         - "oracle"
         - "postgresql"
-        - "duckdb"
         - "presto"
+        - "questdb"
         - "redshift"
         - "snowflake"
         - "spark"
         - "sqlserver"
+        - "teradata"
         - "trino"
-        - "hana"
-        - "db2"
       bigquery:
         description: "BigQuery connection parameters. Specify parameters in the bigquery\
           \ section."
@@ -36444,6 +36701,18 @@ definitions:
       db2:
         description: "DB2 connection parameters."
         $ref: "#/definitions/Db2ParametersSpec"
+      mariadb:
+        description: "MariaDB connection parameters."
+        $ref: "#/definitions/MariaDbParametersSpec"
+      clickhouse:
+        description: "ClickHouse connection parameters."
+        $ref: "#/definitions/ClickHouseParametersSpec"
+      questdb:
+        description: "QuestDB connection parameters."
+        $ref: "#/definitions/QuestDbParametersSpec"
+      teradata:
+        description: "Teradata connection parameters."
+        $ref: "#/definitions/TeradataParametersSpec"
       run_checks_job_template:
         description: "Configured parameters for the \"check run\" job that should\
           \ be pushed to the job queue in order to run all checks within this connection."
@@ -36509,19 +36778,23 @@ definitions:
         description: "Database provider type (required)."
         enum:
         - "bigquery"
+        - "clickhouse"
         - "databricks"
+        - "db2"
+        - "duckdb"
+        - "hana"
+        - "mariadb"
         - "mysql"
         - "oracle"
         - "postgresql"
-        - "duckdb"
         - "presto"
+        - "questdb"
         - "redshift"
         - "snowflake"
         - "spark"
         - "sqlserver"
+        - "teradata"
         - "trino"
-        - "hana"
-        - "db2"
       bigquery:
         description: "BigQuery connection parameters. Specify parameters in the bigquery\
           \ section."
@@ -36578,6 +36851,22 @@ definitions:
         description: "DB2 connection parameters. Specify parameters in the db2 section\
           \ or set the url (which is the DB2 JDBC url)."
         $ref: "#/definitions/Db2ParametersSpec"
+      mariadb:
+        description: "MariaDB connection parameters. Specify parameters in the mariadb\
+          \ section or set the url (which is the MariaDB JDBC url)."
+        $ref: "#/definitions/MariaDbParametersSpec"
+      clickhouse:
+        description: "ClickHouse connection parameters. Specify parameters in the\
+          \ clickhouse section or set the url (which is the ClickHouse JDBC url)."
+        $ref: "#/definitions/ClickHouseParametersSpec"
+      questdb:
+        description: "QuestDB connection parameters. Specify parameters in the questdb\
+          \ section or set the url (which is the QuestDB JDBC url)."
+        $ref: "#/definitions/QuestDbParametersSpec"
+      teradata:
+        description: "Teradata connection parameters. Specify parameters in the teradata\
+          \ section or set the url (which is the Teradata JDBC url)."
+        $ref: "#/definitions/TeradataParametersSpec"
       parallel_jobs_limit:
         type: "integer"
         format: "int32"
@@ -37787,6 +38076,10 @@ definitions:
         type: "boolean"
         description: "User can synchronize data to a data catalog. The instance must\
           \ be configured correctly and the user must have at least an EDITOR role."
+      can_use_ai_anomaly_detection:
+        type: "boolean"
+        description: "The DQOps instance is a paid version with advanced AI anomaly\
+          \ prediction."
     description: "The model that describes the current user and his access rights."
   DqoUserRolesModel:
     type: "object"
@@ -38944,6 +39237,35 @@ definitions:
         description: "Enables the job scheduler for this domain."
     description: "Model that describes a local data domain. It is also used to create\
       \ new data domains."
+  MariaDbParametersSpec:
+    type: "object"
+    properties:
+      host:
+        type: "string"
+        description: "MariaDB host name. Supports also a ${MARIADB_HOST} configuration\
+          \ with a custom environment variable."
+      port:
+        type: "string"
+        description: "MariaDB port number. The default port is 3306. Supports also\
+          \ a ${MARIADB_PORT} configuration with a custom environment variable."
+      database:
+        type: "string"
+        description: "MariaDB database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}\
+          \ format to use dynamic substitution."
+      user:
+        type: "string"
+        description: "MariaDB user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}\
+          \ format to use dynamic substitution."
+      password:
+        type: "string"
+        description: "MariaDB database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}\
+          \ format to use dynamic substitution."
+      properties:
+        type: "object"
+        description: "A dictionary of custom JDBC parameters that are added to the\
+          \ JDBC connection string, a key/value dictionary."
+        additionalProperties:
+          type: "string"
   MaxCountRule0ErrorParametersSpec:
     type: "object"
     properties:
@@ -39319,6 +39641,7 @@ definitions:
         enum:
         - "textarea"
         - "column_names"
+        - "requires_paid_version"
       required:
         type: "boolean"
         description: "True when the value for the parameter must be provided."
@@ -39448,6 +39771,13 @@ definitions:
         - "require"
         - "verify-ca"
         - "verify-full"
+      postgresql_engine_type:
+        type: "string"
+        description: "Postgresql engine type. Supports also a ${POSTGRESQL_ENGINE}\
+          \ configuration with a custom environment variable."
+        enum:
+        - "postgresql"
+        - "timescale"
       properties:
         type: "object"
         description: "A dictionary of custom JDBC parameters that are added to the\
@@ -39527,19 +39857,23 @@ definitions:
         description: "Provider type."
         enum:
         - "bigquery"
+        - "clickhouse"
         - "databricks"
+        - "db2"
+        - "duckdb"
+        - "hana"
+        - "mariadb"
         - "mysql"
         - "oracle"
         - "postgresql"
-        - "duckdb"
         - "presto"
+        - "questdb"
         - "redshift"
         - "snowflake"
         - "spark"
         - "sqlserver"
+        - "teradata"
         - "trino"
-        - "hana"
-        - "db2"
       custom:
         type: "boolean"
         description: "This connection specific template is a custom sensor template\
@@ -39561,19 +39895,23 @@ definitions:
         description: "Provider type."
         enum:
         - "bigquery"
+        - "clickhouse"
         - "databricks"
+        - "db2"
+        - "duckdb"
+        - "hana"
+        - "mariadb"
         - "mysql"
         - "oracle"
         - "postgresql"
-        - "duckdb"
         - "presto"
+        - "questdb"
         - "redshift"
         - "snowflake"
         - "spark"
         - "sqlserver"
+        - "teradata"
         - "trino"
-        - "hana"
-        - "db2"
       providerSensorDefinitionSpec:
         description: "Provider specific sensor definition specification"
         $ref: "#/definitions/ProviderSensorDefinitionSpec"
@@ -39633,6 +39971,35 @@ definitions:
         $ref: "#/definitions/DeleteStoredDataQueueJobParameters"
     description: "Model that returns the form definition and the form data to edit\
       \ all checks within a single category."
+  QuestDbParametersSpec:
+    type: "object"
+    properties:
+      host:
+        type: "string"
+        description: "QuestDB host name. Supports also a ${QUESTDB_HOST} configuration\
+          \ with a custom environment variable."
+      port:
+        type: "string"
+        description: "QuestDB port number. The default port is 8812. Supports also\
+          \ a ${QUESTDB_PORT} configuration with a custom environment variable."
+      database:
+        type: "string"
+        description: "QuestDB database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}\
+          \ format to use dynamic substitution."
+      user:
+        type: "string"
+        description: "QuestDB user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}\
+          \ format to use dynamic substitution."
+      password:
+        type: "string"
+        description: "QuestDB database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}\
+          \ format to use dynamic substitution."
+      properties:
+        type: "object"
+        description: "A dictionary of custom JDBC parameters that are added to the\
+          \ JDBC connection string, a key/value dictionary."
+        additionalProperties:
+          type: "string"
   RedshiftParametersSpec:
     type: "object"
     properties:
@@ -39919,6 +40286,16 @@ definitions:
         type: "boolean"
         description: "Set the value to true to collect error samples for failed data\
           \ quality checks."
+      execution_target:
+        type: "string"
+        description: "Set the data quality check execution mode. The default mode\
+          \ sensors_and_rules will both collect metrics and validate them with rules.\
+          \ Alternatively, it is possible to run only sensors, or validate existing\
+          \ data with rules."
+        enum:
+        - "sensors_and_rules"
+        - "only_sensors"
+        - "only_rules"
       run_checks_result:
         description: "The result of running the check, updated when the run checks\
           \ job finishes. Contains the count of executed checks."
@@ -39942,6 +40319,16 @@ definitions:
         description: "Set the value to true to collect error samples for failed data\
           \ quality checks. Set the value to false to disable error sampling collection\
           \ despite any other settings on the table or check level."
+      execution_target:
+        type: "string"
+        description: "Set the data quality check execution mode. The default mode\
+          \ sensors_and_rules will both collect metrics and validate them with rules.\
+          \ Alternatively, it is possible to run only sensors, or validate existing\
+          \ data with rules."
+        enum:
+        - "sensors_and_rules"
+        - "only_sensors"
+        - "only_rules"
       dummy_execution:
         type: "boolean"
         description: "Set the value to true when the data quality checks should be\
@@ -40426,6 +40813,11 @@ definitions:
         type: "integer"
         format: "int32"
         description: "Table similarity score. Lower numbers indicate higher similarity."
+      similarity_pct:
+        type: "number"
+        format: "double"
+        description: "A similarity score as a percentage. A value 100.0 means that\
+          \ the tables are probably equal."
       connection_name:
         type: "string"
         description: "Connection name"
@@ -41857,6 +42249,15 @@ definitions:
           \ etc.) is not outside the expected range. Stores the most recent captured\
           \ value for each day when the data quality check was evaluated."
         $ref: "#/definitions/TableSqlAggregateExpressionCheckSpec"
+      daily_sql_invalid_record_count_on_table:
+        description: "Runs a custom query that retrieves invalid records found in\
+          \ a table and returns the number of them, and raises an issue if too many\
+          \ failures were detected. This check is used for setting testing queries\
+          \ or ready queries used by users in their own systems (legacy SQL queries).\
+          \ For example, when this check is applied on a *age* column, the condition\
+          \ can find invalid records in which the *age* is lower than 18 using an\
+          \ SQL query: `SELECT age FROM {table} WHERE age < 18`."
+        $ref: "#/definitions/TableSqlInvalidRecordCountCheckSpec"
       daily_import_custom_result_on_table:
         description: "Runs a custom query that retrieves a result of a data quality\
           \ check performed in the data engineering, whose result (the severity level)\
@@ -41926,6 +42327,15 @@ definitions:
           \ etc.) is not outside the expected range. Stores the most recent value\
           \ for each month when the data quality check was evaluated."
         $ref: "#/definitions/TableSqlAggregateExpressionCheckSpec"
+      monthly_sql_invalid_record_count_on_table:
+        description: "Runs a custom query that retrieves invalid records found in\
+          \ a table and returns the number of them, and raises an issue if too many\
+          \ failures were detected. This check is used for setting testing queries\
+          \ or ready queries used by users in their own systems (legacy SQL queries).\
+          \ For example, when this check is applied on a *age* column, the condition\
+          \ can find invalid records in which the *age* is lower than 18 using an\
+          \ SQL query: `SELECT age FROM {table} WHERE age < 18`."
+        $ref: "#/definitions/TableSqlInvalidRecordCountCheckSpec"
       monthly_import_custom_result_on_table:
         description: "Runs a custom query that retrieves a result of a data quality\
           \ check performed in the data engineering, whose result (the severity level)\
@@ -41991,6 +42401,15 @@ definitions:
         description: "Verifies that a custom aggregated SQL expression (MIN, MAX,\
           \ etc.) is not outside the expected range."
         $ref: "#/definitions/TableSqlAggregateExpressionCheckSpec"
+      profile_sql_invalid_record_count_on_table:
+        description: "Runs a custom query that retrieves invalid records found in\
+          \ a table and returns the number of them, and raises an issue if too many\
+          \ failures were detected. This check is used for setting testing queries\
+          \ or ready queries used by users in their own systems (legacy SQL queries).\
+          \ For example, when this check is applied on a *age* column, the condition\
+          \ can find invalid records in which the *age* is lower than 18 using an\
+          \ SQL query: `SELECT age FROM {table} WHERE age < 18`."
+        $ref: "#/definitions/TableSqlInvalidRecordCountCheckSpec"
       profile_import_custom_result_on_table:
         description: "Runs a custom query that retrieves a result of a data quality\
           \ check performed in the data engineering, whose result (the severity level)\
@@ -44782,6 +45201,95 @@ definitions:
           \ return *actual_value* and *expected_value* results that are imported into\
           \ DQOps data lake. The query can use a {table_name} placeholder that is\
           \ replaced with a table name for which the results are imported."
+  TableSqlInvalidRecordCountCheckSpec:
+    type: "object"
+    properties:
+      schedule_override:
+        description: "Run check scheduling configuration. Specifies the schedule (a\
+          \ cron expression) when the data quality checks are executed by the scheduler."
+        $ref: "#/definitions/CronScheduleSpec"
+      comments:
+        type: "array"
+        description: "Comments for change tracking. Please put comments in this collection\
+          \ because YAML comments may be removed when the YAML file is modified by\
+          \ the tool (serialization and deserialization will remove non tracked comments)."
+        items:
+          $ref: "#/definitions/CommentSpec"
+      disabled:
+        type: "boolean"
+        description: "Disables the data quality check. Only enabled data quality checks\
+          \ and monitorings are executed. The check should be disabled if it should\
+          \ not work, but the configuration of the sensor and rules should be preserved\
+          \ in the configuration."
+      exclude_from_kpi:
+        type: "boolean"
+        description: "Data quality check results (alerts) are included in the data\
+          \ quality KPI calculation by default. Set this field to true in order to\
+          \ exclude this data quality check from the data quality KPI calculation."
+      include_in_sla:
+        type: "boolean"
+        description: "Marks the data quality check as part of a data quality SLA (Data\
+          \ Contract). The data quality SLA is a set of critical data quality checks\
+          \ that must always pass and are considered as a Data Contract for the dataset."
+      quality_dimension:
+        type: "string"
+        description: "Configures a custom data quality dimension name that is different\
+          \ than the built-in dimensions (Timeliness, Validity, etc.)."
+      display_name:
+        type: "string"
+        description: "Data quality check display name that can be assigned to the\
+          \ check, otherwise the check_display_name stored in the parquet result files\
+          \ is the check_name."
+      data_grouping:
+        type: "string"
+        description: "Data grouping configuration name that should be applied to this\
+          \ data quality check. The data grouping is used to group the check's result\
+          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
+          \ group of rows. Use the name of one of data grouping configurations defined\
+          \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
+      do_not_schedule:
+        type: "boolean"
+        description: "Disables running this check by a DQOps CRON scheduler. When\
+          \ a check is disabled from scheduling, it can be only triggered from the\
+          \ user interface or by submitting \"run checks\" job."
+      parameters:
+        description: "Sensor parameters with the custom SQL query, using a {table}\
+          \ placeholder to reference the current table."
+        $ref: "#/definitions/TableSqlInvalidRecordCountSensorParametersSpec"
+      warning:
+        description: "Alerting threshold that raises a data quality warning when a\
+          \ given number of rows failed the custom SQL condition (expression). The\
+          \ warning is considered as a passed data quality check."
+        $ref: "#/definitions/MaxCountRule0WarningParametersSpec"
+      error:
+        description: "Default alerting threshold for a maximum number of rows failing\
+          \ the custom SQL condition (expression) that raises a data quality error\
+          \ (alert)."
+        $ref: "#/definitions/MaxCountRule0ErrorParametersSpec"
+      fatal:
+        description: "Alerting threshold that raises a fatal data quality issue when\
+          \ a given number of rows failed the custom SQL condition (expression). A\
+          \ fatal issue indicates a serious data quality problem that should result\
+          \ in stopping the data pipelines."
+        $ref: "#/definitions/MaxCountRule100ParametersSpec"
+  TableSqlInvalidRecordCountSensorParametersSpec:
+    type: "object"
+    properties:
+      filter:
+        type: "string"
+        description: "SQL WHERE clause added to the sensor query. Both the table level\
+          \ filter and a sensor query filter are added, separated by an AND operator."
+      sql_query:
+        type: "string"
+        description: "SQL query that returns invalid values. The condition is evaluated\
+          \ for each row. The expression can use a {table} placeholder that is replaced\
+          \ with a full table name."
   TableStatisticsCollectorsRootCategoriesSpec:
     type: "object"
     properties:
@@ -45358,6 +45866,33 @@ definitions:
         $ref: "#/definitions/Duration"
       durationEstimated:
         type: "boolean"
+  TeradataParametersSpec:
+    type: "object"
+    properties:
+      host:
+        type: "string"
+        description: "Teradata host name. Supports also a ${TERADATA_HOST} configuration\
+          \ with a custom environment variable."
+      port:
+        type: "string"
+        description: "Teradata port number. The default port is 1025. Supports also\
+          \ a ${TERADATA_PORT} configuration with a custom environment variable."
+      user:
+        type: "string"
+        description: "Teradata user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}\
+          \ format to use dynamic substitution."
+      password:
+        type: "string"
+        description: "Teradata database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}\
+          \ format to use dynamic substitution."
+      properties:
+        type: "object"
+        description: "A dictionary of custom JDBC parameters that are added to the\
+          \ JDBC connection string, a key/value dictionary."
+        additionalProperties:
+          type: "string"
+      database:
+        type: "string"
   TimeWindowFilterParameters:
     type: "object"
     properties:

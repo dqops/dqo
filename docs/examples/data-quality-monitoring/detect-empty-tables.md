@@ -2,7 +2,7 @@
 title: How to detect empty tables using data observability checks
 ---
 # How to detect empty tables using data observability checks
-This sample shows how to use the default DQOps data observability checks to detect empty tables and view the results on data quality dashboards.
+This sample shows how to use the default DQOps data observability checks to detect empty tables.
 
 ## Overview
 
@@ -48,7 +48,7 @@ A detailed explanation of [how to start DQOps platform and run the example is de
 
 To navigate to a list of checks prepared in the example using the [user interface](../../dqo-concepts/dqops-user-interface-overview.md):
 
-![Navigating to a list of checks](https://dqops.com/docs/images/examples/detect-empty-tables-navigating-to-a-list-of-checks.png){ loading=lazy; width="1200px" }
+![Navigating to a list of checks](https://dqops.com/docs/images/examples/detect-empty-tables-navigating-to-a-list-of-checks2.png){ loading=lazy; width="1200px" }
 
 1. Go to the **Monitoring** section.
 
@@ -60,7 +60,7 @@ To navigate to a list of checks prepared in the example using the [user interfac
     On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../data-sources/index.md).
 
 
-3. Select the **Daily checks** tab.
+3. Select the **Data quality checks editor** tab.
 
     This tab displays a list of data quality checks in the check editor.
     Here you can view the list of all table monitoring checks. Noticed the checks that have been activated upon importing new tables have switched on the toggle button.
@@ -74,14 +74,14 @@ Run the activated [daily_row_count](../../checks/table/volume/row-count.md) chec
 
 You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
 
-![Run check](https://dqops.com/docs/images/examples/detect-empty-tables-run-checks.png){ loading=lazy; width="1200px" }
+![Run check](https://dqops.com/docs/images/examples/detect-empty-tables-run-checks2.png){ loading=lazy; width="1200px" }
 
 
 ### **View detailed check results**
 
 Access the detailed results by clicking the **Results** button. The results should be similar to the one below.
 
-![Daily row count check results](https://dqops.com/docs/images/examples/detect-empty-tables-checks-results.png){ loading=lazy; width="1200px" }
+![Daily row count check results](https://dqops.com/docs/images/examples/detect-empty-tables-checks-results2.png){ loading=lazy; width="1200px" }
 
 Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
 The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
@@ -98,32 +98,6 @@ Synchronize the results with your DQOps cloud account using the **Synchronize** 
 of the user interface.
 
 Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
-
-
-### **Review the results on the data quality dashboards**
-
-To review the results on the [data quality dashboards](../../working-with-dqo/review-the-data-quality-results-on-dashboards.md)
-go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. 
-
-Below you can see the results displayed on the **Current table status** dashboard located in the Current status group.     
-    
-This dashboard allows data engineers and data owners to quickly evaluate the data quality of monitored
-tables. The dashboards display a color-coded status that indicates the severity level detected by run
-checks. When the status is green, it means that the monitored table has no data quality issues. However, if the status
-is yellow, orange, or red, it indicates that there were some issues detected. The dashboard also displays the number
-of detected issues per severity threshold, making it easier to identify and address tables and columns with issues.
- 
-This dashboard allow filtering data by:
- 
-* time frame,
-* connection,
-* schema,
-* data quality dimension,
-* check category,
-* data group,
-* table.
- 
-![Daily row count check results on Current table status dashboard](https://dqops.com/docs/images/examples/daily-row-count-check-results-on-current-table-status-dashboard.png){ loading=lazy; width="1200px" }
 
 ## YAML configuration file
 

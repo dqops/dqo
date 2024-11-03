@@ -31,6 +31,11 @@ import java.util.function.Function;
  */
 public interface LocalFileSystemCache extends DisposableBean {
     /**
+     * Starts a local file system cache.
+     */
+    void start();
+
+    /**
      * Retrieves a list of folders, calling the load callback to load the data if it is missing in the cache.
      *
      * @param key             Cache key.

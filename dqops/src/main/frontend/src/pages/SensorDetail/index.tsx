@@ -36,6 +36,10 @@ const tabs = [
     value: ProviderSensorModelProviderTypeEnum.bigquery
   },
   {
+    label: 'ClickHouse',
+    value: ProviderSensorModelProviderTypeEnum.clickhouse
+  },
+  {
     label: 'Databricks',
     value: ProviderSensorModelProviderTypeEnum.databricks
   },
@@ -66,6 +70,10 @@ const tabs = [
   {
     label: 'Presto',
     value: ProviderSensorModelProviderTypeEnum.presto
+  },
+  {
+    label: 'QuestDB',
+    value: ProviderSensorModelProviderTypeEnum.questdb
   },
   {
     label: 'Redshift',

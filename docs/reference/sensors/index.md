@@ -39,6 +39,7 @@ title: Sensors
 |[*sql_condition_failed_percent*](./table/custom_sql-table-sensors.md#sql-condition-failed-percent)|Table level sensor that uses a custom SQL condition (an SQL expression that returns a boolean value) to count the percentage of rows that do not meet the condition.|
 |[*sql_condition_passed_count*](./table/custom_sql-table-sensors.md#sql-condition-passed-count)|Table level sensor that uses a custom SQL condition (an SQL expression that returns a boolean value) to count rows that meet the condition.|
 |[*sql_condition_passed_percent*](./table/custom_sql-table-sensors.md#sql-condition-passed-percent)|Table level sensor that uses a custom SQL condition (an SQL expression that returns a boolean value) to count the percentage of rows that meet the condition.|
+|[*sql_invalid_record_count*](./table/custom_sql-table-sensors.md#sql-invalid-record-count)|Table level sensor that uses a custom SQL query to count rows of invalid values.|
 
 
 
@@ -227,6 +228,7 @@ title: Sensors
 |[*sql_condition_failed_percent*](./column/custom_sql-column-sensors.md#sql-condition-failed-percent)|Column level sensor that uses a custom SQL condition (an SQL expression that returns a boolean value) to count the percentage of rows that do not meet the condition.|
 |[*sql_condition_passed_count*](./column/custom_sql-column-sensors.md#sql-condition-passed-count)|Column level sensor that uses a custom SQL condition (an SQL expression that returns a boolean value) to count rows that meet the condition.|
 |[*sql_condition_passed_percent*](./column/custom_sql-column-sensors.md#sql-condition-passed-percent)|Column level sensor that uses a custom SQL condition (an SQL expression that returns a boolean value) to count the percentage of rows that meet the condition.|
+|[*sql_invalid_value_count*](./column/custom_sql-column-sensors.md#sql-invalid-value-count)|Column level sensor that uses a custom SQL query to count rows of invalid values.|
 
 
 

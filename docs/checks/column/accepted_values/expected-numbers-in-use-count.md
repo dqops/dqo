@@ -184,6 +184,55 @@ spec:
                 MAX(2) AS expected_value
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
             ```
+    ??? example "ClickHouse"
+
+        === "Sensor template for ClickHouse"
+
+            ```sql+jinja
+            {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {{ values_list|join(', ') -}}
+            {% endmacro %}
+            
+            {%- macro actual_value() -%}
+                {%- if 'expected_values' not in parameters or parameters.expected_values | length == 0 -%}
+                0
+                {%- else -%}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                {{ actual_value() }} AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for ClickHouse"
+
+            ```sql
+            SELECT
+                COUNT(DISTINCT
+                    CASE
+                        WHEN analyzed_table."target_column" IN (2, 3)
+                            THEN analyzed_table."target_column"
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX(2) AS expected_value
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            ```
     ??? example "Databricks"
 
         === "Sensor template for Databricks"
@@ -406,6 +455,62 @@ spec:
                     original_table.*
                 FROM "<target_schema>"."<target_table>" original_table
             ) analyzed_table
+            ```
+    ??? example "MariaDB"
+
+        === "Sensor template for MariaDB"
+
+            ```sql+jinja
+            {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {{values_list|join(', ')}}
+            {% endmacro %}
+            
+            {%- macro render_else() -%}
+                {%- if parameters.expected_values|length == 0 -%}
+                0
+                {%- else -%}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE {{render_else()}}
+                END AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MariaDB"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE COUNT(DISTINCT
+                    CASE
+                        WHEN analyzed_table.`target_column` IN (2, 3
+            )
+                            THEN analyzed_table.`target_column`
+                        ELSE NULL
+                    END
+                )
+                END AS actual_value,
+                MAX(2) AS expected_value
+            FROM `<target_table>` AS analyzed_table
             ```
     ??? example "MySQL"
 
@@ -635,6 +740,66 @@ spec:
                 SELECT
                     original_table.*
                 FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            ```
+    ??? example "QuestDB"
+
+        === "Sensor template for QuestDB"
+
+            ```sql+jinja
+            {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {{values_list|join(', ')}}
+            {% endmacro %}
+            
+            {%- macro render_actual_value() -%}
+                {%- if parameters.expected_values|length == 0 -%}
+                0
+                {%- else -%}
+                COUNT_DISTINCT(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                {{render_actual_value()}} AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM(
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for QuestDB"
+
+            ```sql
+            SELECT
+                COUNT_DISTINCT(
+                    CASE
+                        WHEN analyzed_table."target_column" IN (2, 3
+            )
+                            THEN analyzed_table."target_column"
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX(2) AS expected_value
+            FROM(
+                SELECT
+                    original_table.*
+                FROM "<target_table>" original_table
             ) analyzed_table
             ```
     ??? example "Redshift"
@@ -854,6 +1019,55 @@ spec:
                 MAX(2) AS expected_value
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
             ```
+    ??? example "Teradata"
+
+        === "Sensor template for Teradata"
+
+            ```sql+jinja
+            {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {{ values_list|join(', ') -}}
+            {% endmacro %}
+            
+            {%- macro actual_value() -%}
+                {%- if 'expected_values' not in parameters or parameters.expected_values | length == 0 -%}
+                0
+                {%- else -%}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                {{ actual_value() }} AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Teradata"
+
+            ```sql
+            SELECT
+                COUNT(DISTINCT
+                    CASE
+                        WHEN analyzed_table."target_column" IN (2, 3)
+                            THEN analyzed_table."target_column"
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX(2) AS expected_value
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            ```
     ??? example "Trino"
 
         === "Sensor template for Trino"
@@ -1013,6 +1227,57 @@ Expand the *Configure with data grouping* section to see additional examples for
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
+            ```
+    ??? example "ClickHouse"
+
+        === "Sensor template for ClickHouse"
+            ```sql+jinja
+            {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {{ values_list|join(', ') -}}
+            {% endmacro %}
+            
+            {%- macro actual_value() -%}
+                {%- if 'expected_values' not in parameters or parameters.expected_values | length == 0 -%}
+                0
+                {%- else -%}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                {{ actual_value() }} AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for ClickHouse"
+            ```sql
+            SELECT
+                COUNT(DISTINCT
+                    CASE
+                        WHEN analyzed_table."target_column" IN (2, 3)
+                            THEN analyzed_table."target_column"
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX(2) AS expected_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
             GROUP BY grouping_level_1, grouping_level_2
             ORDER BY grouping_level_1, grouping_level_2
             ```
@@ -1252,6 +1517,64 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2
                 FROM "<target_schema>"."<target_table>" original_table
             ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
+            ```
+    ??? example "MariaDB"
+
+        === "Sensor template for MariaDB"
+            ```sql+jinja
+            {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {{values_list|join(', ')}}
+            {% endmacro %}
+            
+            {%- macro render_else() -%}
+                {%- if parameters.expected_values|length == 0 -%}
+                0
+                {%- else -%}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE {{render_else()}}
+                END AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MariaDB"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE COUNT(DISTINCT
+                    CASE
+                        WHEN analyzed_table.`target_column` IN (2, 3
+            )
+                            THEN analyzed_table.`target_column`
+                        ELSE NULL
+                    END
+                )
+                END AS actual_value,
+                MAX(2) AS expected_value,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2
+            FROM `<target_table>` AS analyzed_table
             GROUP BY grouping_level_1, grouping_level_2
             ORDER BY grouping_level_1, grouping_level_2
             ```
@@ -1499,6 +1822,72 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."country" AS grouping_level_1,
                 original_table."state" AS grouping_level_2
                 FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
+            ```
+    ??? example "QuestDB"
+
+        === "Sensor template for QuestDB"
+            ```sql+jinja
+            {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {{values_list|join(', ')}}
+            {% endmacro %}
+            
+            {%- macro render_actual_value() -%}
+                {%- if parameters.expected_values|length == 0 -%}
+                0
+                {%- else -%}
+                COUNT_DISTINCT(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                {{render_actual_value()}} AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM(
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for QuestDB"
+            ```sql
+            SELECT
+                COUNT_DISTINCT(
+                    CASE
+                        WHEN analyzed_table."target_column" IN (2, 3
+            )
+                            THEN analyzed_table."target_column"
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX(2) AS expected_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            FROM(
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2
+                FROM "<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2
             ORDER BY grouping_level_1, grouping_level_2
@@ -1731,6 +2120,57 @@ Expand the *Configure with data grouping* section to see additional examples for
                 
             
                 
+            ```
+    ??? example "Teradata"
+
+        === "Sensor template for Teradata"
+            ```sql+jinja
+            {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {{ values_list|join(', ') -}}
+            {% endmacro %}
+            
+            {%- macro actual_value() -%}
+                {%- if 'expected_values' not in parameters or parameters.expected_values | length == 0 -%}
+                0
+                {%- else -%}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                {{ actual_value() }} AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Teradata"
+            ```sql
+            SELECT
+                COUNT(DISTINCT
+                    CASE
+                        WHEN analyzed_table."target_column" IN (2, 3)
+                            THEN analyzed_table."target_column"
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX(2) AS expected_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Trino"
 
@@ -1974,6 +2414,55 @@ spec:
                 MAX(2) AS expected_value
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
             ```
+    ??? example "ClickHouse"
+
+        === "Sensor template for ClickHouse"
+
+            ```sql+jinja
+            {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {{ values_list|join(', ') -}}
+            {% endmacro %}
+            
+            {%- macro actual_value() -%}
+                {%- if 'expected_values' not in parameters or parameters.expected_values | length == 0 -%}
+                0
+                {%- else -%}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                {{ actual_value() }} AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for ClickHouse"
+
+            ```sql
+            SELECT
+                COUNT(DISTINCT
+                    CASE
+                        WHEN analyzed_table."target_column" IN (2, 3)
+                            THEN analyzed_table."target_column"
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX(2) AS expected_value
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            ```
     ??? example "Databricks"
 
         === "Sensor template for Databricks"
@@ -2196,6 +2685,62 @@ spec:
                     original_table.*
                 FROM "<target_schema>"."<target_table>" original_table
             ) analyzed_table
+            ```
+    ??? example "MariaDB"
+
+        === "Sensor template for MariaDB"
+
+            ```sql+jinja
+            {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {{values_list|join(', ')}}
+            {% endmacro %}
+            
+            {%- macro render_else() -%}
+                {%- if parameters.expected_values|length == 0 -%}
+                0
+                {%- else -%}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE {{render_else()}}
+                END AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MariaDB"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE COUNT(DISTINCT
+                    CASE
+                        WHEN analyzed_table.`target_column` IN (2, 3
+            )
+                            THEN analyzed_table.`target_column`
+                        ELSE NULL
+                    END
+                )
+                END AS actual_value,
+                MAX(2) AS expected_value
+            FROM `<target_table>` AS analyzed_table
             ```
     ??? example "MySQL"
 
@@ -2425,6 +2970,66 @@ spec:
                 SELECT
                     original_table.*
                 FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            ```
+    ??? example "QuestDB"
+
+        === "Sensor template for QuestDB"
+
+            ```sql+jinja
+            {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {{values_list|join(', ')}}
+            {% endmacro %}
+            
+            {%- macro render_actual_value() -%}
+                {%- if parameters.expected_values|length == 0 -%}
+                0
+                {%- else -%}
+                COUNT_DISTINCT(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                {{render_actual_value()}} AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM(
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for QuestDB"
+
+            ```sql
+            SELECT
+                COUNT_DISTINCT(
+                    CASE
+                        WHEN analyzed_table."target_column" IN (2, 3
+            )
+                            THEN analyzed_table."target_column"
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX(2) AS expected_value
+            FROM(
+                SELECT
+                    original_table.*
+                FROM "<target_table>" original_table
             ) analyzed_table
             ```
     ??? example "Redshift"
@@ -2644,6 +3249,55 @@ spec:
                 MAX(2) AS expected_value
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
             ```
+    ??? example "Teradata"
+
+        === "Sensor template for Teradata"
+
+            ```sql+jinja
+            {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {{ values_list|join(', ') -}}
+            {% endmacro %}
+            
+            {%- macro actual_value() -%}
+                {%- if 'expected_values' not in parameters or parameters.expected_values | length == 0 -%}
+                0
+                {%- else -%}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                {{ actual_value() }} AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Teradata"
+
+            ```sql
+            SELECT
+                COUNT(DISTINCT
+                    CASE
+                        WHEN analyzed_table."target_column" IN (2, 3)
+                            THEN analyzed_table."target_column"
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX(2) AS expected_value
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            ```
     ??? example "Trino"
 
         === "Sensor template for Trino"
@@ -2804,6 +3458,57 @@ Expand the *Configure with data grouping* section to see additional examples for
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
+            ```
+    ??? example "ClickHouse"
+
+        === "Sensor template for ClickHouse"
+            ```sql+jinja
+            {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {{ values_list|join(', ') -}}
+            {% endmacro %}
+            
+            {%- macro actual_value() -%}
+                {%- if 'expected_values' not in parameters or parameters.expected_values | length == 0 -%}
+                0
+                {%- else -%}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                {{ actual_value() }} AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for ClickHouse"
+            ```sql
+            SELECT
+                COUNT(DISTINCT
+                    CASE
+                        WHEN analyzed_table."target_column" IN (2, 3)
+                            THEN analyzed_table."target_column"
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX(2) AS expected_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
             GROUP BY grouping_level_1, grouping_level_2
             ORDER BY grouping_level_1, grouping_level_2
             ```
@@ -3043,6 +3748,64 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2
                 FROM "<target_schema>"."<target_table>" original_table
             ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
+            ```
+    ??? example "MariaDB"
+
+        === "Sensor template for MariaDB"
+            ```sql+jinja
+            {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {{values_list|join(', ')}}
+            {% endmacro %}
+            
+            {%- macro render_else() -%}
+                {%- if parameters.expected_values|length == 0 -%}
+                0
+                {%- else -%}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE {{render_else()}}
+                END AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MariaDB"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE COUNT(DISTINCT
+                    CASE
+                        WHEN analyzed_table.`target_column` IN (2, 3
+            )
+                            THEN analyzed_table.`target_column`
+                        ELSE NULL
+                    END
+                )
+                END AS actual_value,
+                MAX(2) AS expected_value,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2
+            FROM `<target_table>` AS analyzed_table
             GROUP BY grouping_level_1, grouping_level_2
             ORDER BY grouping_level_1, grouping_level_2
             ```
@@ -3290,6 +4053,72 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."country" AS grouping_level_1,
                 original_table."state" AS grouping_level_2
                 FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
+            ```
+    ??? example "QuestDB"
+
+        === "Sensor template for QuestDB"
+            ```sql+jinja
+            {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {{values_list|join(', ')}}
+            {% endmacro %}
+            
+            {%- macro render_actual_value() -%}
+                {%- if parameters.expected_values|length == 0 -%}
+                0
+                {%- else -%}
+                COUNT_DISTINCT(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                {{render_actual_value()}} AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM(
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for QuestDB"
+            ```sql
+            SELECT
+                COUNT_DISTINCT(
+                    CASE
+                        WHEN analyzed_table."target_column" IN (2, 3
+            )
+                            THEN analyzed_table."target_column"
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX(2) AS expected_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            FROM(
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2
+                FROM "<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2
             ORDER BY grouping_level_1, grouping_level_2
@@ -3522,6 +4351,57 @@ Expand the *Configure with data grouping* section to see additional examples for
                 
             
                 
+            ```
+    ??? example "Teradata"
+
+        === "Sensor template for Teradata"
+            ```sql+jinja
+            {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {{ values_list|join(', ') -}}
+            {% endmacro %}
+            
+            {%- macro actual_value() -%}
+                {%- if 'expected_values' not in parameters or parameters.expected_values | length == 0 -%}
+                0
+                {%- else -%}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                {{ actual_value() }} AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Teradata"
+            ```sql
+            SELECT
+                COUNT(DISTINCT
+                    CASE
+                        WHEN analyzed_table."target_column" IN (2, 3)
+                            THEN analyzed_table."target_column"
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX(2) AS expected_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Trino"
 
@@ -3765,6 +4645,55 @@ spec:
                 MAX(2) AS expected_value
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
             ```
+    ??? example "ClickHouse"
+
+        === "Sensor template for ClickHouse"
+
+            ```sql+jinja
+            {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {{ values_list|join(', ') -}}
+            {% endmacro %}
+            
+            {%- macro actual_value() -%}
+                {%- if 'expected_values' not in parameters or parameters.expected_values | length == 0 -%}
+                0
+                {%- else -%}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                {{ actual_value() }} AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for ClickHouse"
+
+            ```sql
+            SELECT
+                COUNT(DISTINCT
+                    CASE
+                        WHEN analyzed_table."target_column" IN (2, 3)
+                            THEN analyzed_table."target_column"
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX(2) AS expected_value
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            ```
     ??? example "Databricks"
 
         === "Sensor template for Databricks"
@@ -3987,6 +4916,62 @@ spec:
                     original_table.*
                 FROM "<target_schema>"."<target_table>" original_table
             ) analyzed_table
+            ```
+    ??? example "MariaDB"
+
+        === "Sensor template for MariaDB"
+
+            ```sql+jinja
+            {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {{values_list|join(', ')}}
+            {% endmacro %}
+            
+            {%- macro render_else() -%}
+                {%- if parameters.expected_values|length == 0 -%}
+                0
+                {%- else -%}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE {{render_else()}}
+                END AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MariaDB"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE COUNT(DISTINCT
+                    CASE
+                        WHEN analyzed_table.`target_column` IN (2, 3
+            )
+                            THEN analyzed_table.`target_column`
+                        ELSE NULL
+                    END
+                )
+                END AS actual_value,
+                MAX(2) AS expected_value
+            FROM `<target_table>` AS analyzed_table
             ```
     ??? example "MySQL"
 
@@ -4216,6 +5201,66 @@ spec:
                 SELECT
                     original_table.*
                 FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            ```
+    ??? example "QuestDB"
+
+        === "Sensor template for QuestDB"
+
+            ```sql+jinja
+            {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {{values_list|join(', ')}}
+            {% endmacro %}
+            
+            {%- macro render_actual_value() -%}
+                {%- if parameters.expected_values|length == 0 -%}
+                0
+                {%- else -%}
+                COUNT_DISTINCT(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                {{render_actual_value()}} AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM(
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for QuestDB"
+
+            ```sql
+            SELECT
+                COUNT_DISTINCT(
+                    CASE
+                        WHEN analyzed_table."target_column" IN (2, 3
+            )
+                            THEN analyzed_table."target_column"
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX(2) AS expected_value
+            FROM(
+                SELECT
+                    original_table.*
+                FROM "<target_table>" original_table
             ) analyzed_table
             ```
     ??? example "Redshift"
@@ -4435,6 +5480,55 @@ spec:
                 MAX(2) AS expected_value
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
             ```
+    ??? example "Teradata"
+
+        === "Sensor template for Teradata"
+
+            ```sql+jinja
+            {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {{ values_list|join(', ') -}}
+            {% endmacro %}
+            
+            {%- macro actual_value() -%}
+                {%- if 'expected_values' not in parameters or parameters.expected_values | length == 0 -%}
+                0
+                {%- else -%}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                {{ actual_value() }} AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Teradata"
+
+            ```sql
+            SELECT
+                COUNT(DISTINCT
+                    CASE
+                        WHEN analyzed_table."target_column" IN (2, 3)
+                            THEN analyzed_table."target_column"
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX(2) AS expected_value
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            ```
     ??? example "Trino"
 
         === "Sensor template for Trino"
@@ -4595,6 +5689,57 @@ Expand the *Configure with data grouping* section to see additional examples for
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
+            ```
+    ??? example "ClickHouse"
+
+        === "Sensor template for ClickHouse"
+            ```sql+jinja
+            {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {{ values_list|join(', ') -}}
+            {% endmacro %}
+            
+            {%- macro actual_value() -%}
+                {%- if 'expected_values' not in parameters or parameters.expected_values | length == 0 -%}
+                0
+                {%- else -%}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                {{ actual_value() }} AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for ClickHouse"
+            ```sql
+            SELECT
+                COUNT(DISTINCT
+                    CASE
+                        WHEN analyzed_table."target_column" IN (2, 3)
+                            THEN analyzed_table."target_column"
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX(2) AS expected_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
             GROUP BY grouping_level_1, grouping_level_2
             ORDER BY grouping_level_1, grouping_level_2
             ```
@@ -4834,6 +5979,64 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2
                 FROM "<target_schema>"."<target_table>" original_table
             ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
+            ```
+    ??? example "MariaDB"
+
+        === "Sensor template for MariaDB"
+            ```sql+jinja
+            {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {{values_list|join(', ')}}
+            {% endmacro %}
+            
+            {%- macro render_else() -%}
+                {%- if parameters.expected_values|length == 0 -%}
+                0
+                {%- else -%}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE {{render_else()}}
+                END AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MariaDB"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE COUNT(DISTINCT
+                    CASE
+                        WHEN analyzed_table.`target_column` IN (2, 3
+            )
+                            THEN analyzed_table.`target_column`
+                        ELSE NULL
+                    END
+                )
+                END AS actual_value,
+                MAX(2) AS expected_value,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2
+            FROM `<target_table>` AS analyzed_table
             GROUP BY grouping_level_1, grouping_level_2
             ORDER BY grouping_level_1, grouping_level_2
             ```
@@ -5081,6 +6284,72 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."country" AS grouping_level_1,
                 original_table."state" AS grouping_level_2
                 FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
+            ```
+    ??? example "QuestDB"
+
+        === "Sensor template for QuestDB"
+            ```sql+jinja
+            {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {{values_list|join(', ')}}
+            {% endmacro %}
+            
+            {%- macro render_actual_value() -%}
+                {%- if parameters.expected_values|length == 0 -%}
+                0
+                {%- else -%}
+                COUNT_DISTINCT(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                {{render_actual_value()}} AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM(
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for QuestDB"
+            ```sql
+            SELECT
+                COUNT_DISTINCT(
+                    CASE
+                        WHEN analyzed_table."target_column" IN (2, 3
+            )
+                            THEN analyzed_table."target_column"
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX(2) AS expected_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            FROM(
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2
+                FROM "<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2
             ORDER BY grouping_level_1, grouping_level_2
@@ -5313,6 +6582,57 @@ Expand the *Configure with data grouping* section to see additional examples for
                 
             
                 
+            ```
+    ??? example "Teradata"
+
+        === "Sensor template for Teradata"
+            ```sql+jinja
+            {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {{ values_list|join(', ') -}}
+            {% endmacro %}
+            
+            {%- macro actual_value() -%}
+                {%- if 'expected_values' not in parameters or parameters.expected_values | length == 0 -%}
+                0
+                {%- else -%}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                {{ actual_value() }} AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Teradata"
+            ```sql
+            SELECT
+                COUNT(DISTINCT
+                    CASE
+                        WHEN analyzed_table."target_column" IN (2, 3)
+                            THEN analyzed_table."target_column"
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX(2) AS expected_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Trino"
 
@@ -5570,6 +6890,59 @@ spec:
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
+    ??? example "ClickHouse"
+
+        === "Sensor template for ClickHouse"
+
+            ```sql+jinja
+            {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {{ values_list|join(', ') -}}
+            {% endmacro %}
+            
+            {%- macro actual_value() -%}
+                {%- if 'expected_values' not in parameters or parameters.expected_values | length == 0 -%}
+                0
+                {%- else -%}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                {{ actual_value() }} AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for ClickHouse"
+
+            ```sql
+            SELECT
+                COUNT(DISTINCT
+                    CASE
+                        WHEN analyzed_table."target_column" IN (2, 3)
+                            THEN analyzed_table."target_column"
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX(2) AS expected_value,
+                CAST(analyzed_table."date_column" AS DATE) AS time_period,
+                toDateTime64(CAST(analyzed_table."date_column" AS DATE), 3) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "Databricks"
 
         === "Sensor template for Databricks"
@@ -5810,6 +7183,66 @@ spec:
                 TO_TIMESTAMP(CAST(original_table."date_column" AS DATE)) AS time_period_utc
                 FROM "<target_schema>"."<target_table>" original_table
             ) analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "MariaDB"
+
+        === "Sensor template for MariaDB"
+
+            ```sql+jinja
+            {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {{values_list|join(', ')}}
+            {% endmacro %}
+            
+            {%- macro render_else() -%}
+                {%- if parameters.expected_values|length == 0 -%}
+                0
+                {%- else -%}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE {{render_else()}}
+                END AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MariaDB"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE COUNT(DISTINCT
+                    CASE
+                        WHEN analyzed_table.`target_column` IN (2, 3
+            )
+                            THEN analyzed_table.`target_column`
+                        ELSE NULL
+                    END
+                )
+                END AS actual_value,
+                MAX(2) AS expected_value,
+                DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-%d 00:00:00') AS time_period,
+                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-%d 00:00:00'))) AS time_period_utc
+            FROM `<target_table>` AS analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -6059,6 +7492,72 @@ spec:
                 CAST(original_table."date_column" AS date) AS time_period,
                 CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
                 FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "QuestDB"
+
+        === "Sensor template for QuestDB"
+
+            ```sql+jinja
+            {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {{values_list|join(', ')}}
+            {% endmacro %}
+            
+            {%- macro render_actual_value() -%}
+                {%- if parameters.expected_values|length == 0 -%}
+                0
+                {%- else -%}
+                COUNT_DISTINCT(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                {{render_actual_value()}} AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM(
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for QuestDB"
+
+            ```sql
+            SELECT
+                COUNT_DISTINCT(
+                    CASE
+                        WHEN analyzed_table."target_column" IN (2, 3
+            )
+                            THEN analyzed_table."target_column"
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX(2) AS expected_value,
+                time_period,
+                time_period_utc
+            FROM(
+                SELECT
+                    original_table.*,
+                CAST(DATE_TRUNC('day', original_table."date_column") AS DATE) AS time_period,
+                CAST((CAST(DATE_TRUNC('day', original_table."date_column") AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                FROM "<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -6298,6 +7797,59 @@ spec:
             
                 
             ```
+    ??? example "Teradata"
+
+        === "Sensor template for Teradata"
+
+            ```sql+jinja
+            {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {{ values_list|join(', ') -}}
+            {% endmacro %}
+            
+            {%- macro actual_value() -%}
+                {%- if 'expected_values' not in parameters or parameters.expected_values | length == 0 -%}
+                0
+                {%- else -%}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                {{ actual_value() }} AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Teradata"
+
+            ```sql
+            SELECT
+                COUNT(DISTINCT
+                    CASE
+                        WHEN analyzed_table."target_column" IN (2, 3)
+                            THEN analyzed_table."target_column"
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX(2) AS expected_value,
+                CAST(analyzed_table."date_column" AS DATE) AS time_period,
+                CAST(CAST(analyzed_table."date_column" AS DATE) AS TIMESTAMP) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "Trino"
 
         === "Sensor template for Trino"
@@ -6476,6 +8028,59 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(analyzed_table.`date_column` AS DATE) AS time_period,
                 TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "ClickHouse"
+
+        === "Sensor template for ClickHouse"
+            ```sql+jinja
+            {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {{ values_list|join(', ') -}}
+            {% endmacro %}
+            
+            {%- macro actual_value() -%}
+                {%- if 'expected_values' not in parameters or parameters.expected_values | length == 0 -%}
+                0
+                {%- else -%}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                {{ actual_value() }} AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for ClickHouse"
+            ```sql
+            SELECT
+                COUNT(DISTINCT
+                    CASE
+                        WHEN analyzed_table."target_column" IN (2, 3)
+                            THEN analyzed_table."target_column"
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX(2) AS expected_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                CAST(analyzed_table."date_column" AS DATE) AS time_period,
+                toDateTime64(CAST(analyzed_table."date_column" AS DATE), 3) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -6727,6 +8332,66 @@ Expand the *Configure with data grouping* section to see additional examples for
                 TO_TIMESTAMP(CAST(original_table."date_column" AS DATE)) AS time_period_utc
                 FROM "<target_schema>"."<target_table>" original_table
             ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "MariaDB"
+
+        === "Sensor template for MariaDB"
+            ```sql+jinja
+            {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {{values_list|join(', ')}}
+            {% endmacro %}
+            
+            {%- macro render_else() -%}
+                {%- if parameters.expected_values|length == 0 -%}
+                0
+                {%- else -%}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE {{render_else()}}
+                END AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MariaDB"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE COUNT(DISTINCT
+                    CASE
+                        WHEN analyzed_table.`target_column` IN (2, 3
+            )
+                            THEN analyzed_table.`target_column`
+                        ELSE NULL
+                    END
+                )
+                END AS actual_value,
+                MAX(2) AS expected_value,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2,
+                DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-%d 00:00:00') AS time_period,
+                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-%d 00:00:00'))) AS time_period_utc
+            FROM `<target_table>` AS analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -6990,6 +8655,76 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "QuestDB"
+
+        === "Sensor template for QuestDB"
+            ```sql+jinja
+            {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {{values_list|join(', ')}}
+            {% endmacro %}
+            
+            {%- macro render_actual_value() -%}
+                {%- if parameters.expected_values|length == 0 -%}
+                0
+                {%- else -%}
+                COUNT_DISTINCT(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                {{render_actual_value()}} AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM(
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for QuestDB"
+            ```sql
+            SELECT
+                COUNT_DISTINCT(
+                    CASE
+                        WHEN analyzed_table."target_column" IN (2, 3
+            )
+                            THEN analyzed_table."target_column"
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX(2) AS expected_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2,
+                time_period,
+                time_period_utc
+            FROM(
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                CAST(DATE_TRUNC('day', original_table."date_column") AS DATE) AS time_period,
+                CAST((CAST(DATE_TRUNC('day', original_table."date_column") AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                FROM "<target_table>" original_table
+            ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "Redshift"
 
         === "Sensor template for Redshift"
@@ -7224,6 +8959,59 @@ Expand the *Configure with data grouping* section to see additional examples for
             ORDER BY level_1, level_2CAST(analyzed_table.[date_column] AS date)
             
                 
+            ```
+    ??? example "Teradata"
+
+        === "Sensor template for Teradata"
+            ```sql+jinja
+            {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {{ values_list|join(', ') -}}
+            {% endmacro %}
+            
+            {%- macro actual_value() -%}
+                {%- if 'expected_values' not in parameters or parameters.expected_values | length == 0 -%}
+                0
+                {%- else -%}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                {{ actual_value() }} AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Teradata"
+            ```sql
+            SELECT
+                COUNT(DISTINCT
+                    CASE
+                        WHEN analyzed_table."target_column" IN (2, 3)
+                            THEN analyzed_table."target_column"
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX(2) AS expected_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                CAST(analyzed_table."date_column" AS DATE) AS time_period,
+                CAST(CAST(analyzed_table."date_column" AS DATE) AS TIMESTAMP) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
     ??? example "Trino"
 
@@ -7485,6 +9273,59 @@ spec:
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
+    ??? example "ClickHouse"
+
+        === "Sensor template for ClickHouse"
+
+            ```sql+jinja
+            {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {{ values_list|join(', ') -}}
+            {% endmacro %}
+            
+            {%- macro actual_value() -%}
+                {%- if 'expected_values' not in parameters or parameters.expected_values | length == 0 -%}
+                0
+                {%- else -%}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                {{ actual_value() }} AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for ClickHouse"
+
+            ```sql
+            SELECT
+                COUNT(DISTINCT
+                    CASE
+                        WHEN analyzed_table."target_column" IN (2, 3)
+                            THEN analyzed_table."target_column"
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX(2) AS expected_value,
+                DATE_TRUNC('month', CAST(analyzed_table."date_column" AS DATE)) AS time_period,
+                toDateTime64(DATE_TRUNC('month', CAST(analyzed_table."date_column" AS DATE)), 3) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "Databricks"
 
         === "Sensor template for Databricks"
@@ -7725,6 +9566,66 @@ spec:
                 TO_TIMESTAMP(SERIES_ROUND(CAST(original_table."date_column" AS DATE), 'INTERVAL 1 MONTH', ROUND_DOWN)) AS time_period_utc
                 FROM "<target_schema>"."<target_table>" original_table
             ) analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "MariaDB"
+
+        === "Sensor template for MariaDB"
+
+            ```sql+jinja
+            {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {{values_list|join(', ')}}
+            {% endmacro %}
+            
+            {%- macro render_else() -%}
+                {%- if parameters.expected_values|length == 0 -%}
+                0
+                {%- else -%}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE {{render_else()}}
+                END AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MariaDB"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE COUNT(DISTINCT
+                    CASE
+                        WHEN analyzed_table.`target_column` IN (2, 3
+            )
+                            THEN analyzed_table.`target_column`
+                        ELSE NULL
+                    END
+                )
+                END AS actual_value,
+                MAX(2) AS expected_value,
+                DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-01 00:00:00') AS time_period,
+                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-01 00:00:00'))) AS time_period_utc
+            FROM `<target_table>` AS analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -7974,6 +9875,72 @@ spec:
                 DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
                 FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "QuestDB"
+
+        === "Sensor template for QuestDB"
+
+            ```sql+jinja
+            {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {{values_list|join(', ')}}
+            {% endmacro %}
+            
+            {%- macro render_actual_value() -%}
+                {%- if parameters.expected_values|length == 0 -%}
+                0
+                {%- else -%}
+                COUNT_DISTINCT(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                {{render_actual_value()}} AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM(
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for QuestDB"
+
+            ```sql
+            SELECT
+                COUNT_DISTINCT(
+                    CASE
+                        WHEN analyzed_table."target_column" IN (2, 3
+            )
+                            THEN analyzed_table."target_column"
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX(2) AS expected_value,
+                time_period,
+                time_period_utc
+            FROM(
+                SELECT
+                    original_table.*,
+                CAST(DATE_TRUNC('month', original_table."date_column") AS DATE) AS time_period,
+                CAST((CAST(DATE_TRUNC('month', original_table."date_column") AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                FROM "<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -8213,6 +10180,59 @@ spec:
             
                 
             ```
+    ??? example "Teradata"
+
+        === "Sensor template for Teradata"
+
+            ```sql+jinja
+            {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {{ values_list|join(', ') -}}
+            {% endmacro %}
+            
+            {%- macro actual_value() -%}
+                {%- if 'expected_values' not in parameters or parameters.expected_values | length == 0 -%}
+                0
+                {%- else -%}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                {{ actual_value() }} AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Teradata"
+
+            ```sql
+            SELECT
+                COUNT(DISTINCT
+                    CASE
+                        WHEN analyzed_table."target_column" IN (2, 3)
+                            THEN analyzed_table."target_column"
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX(2) AS expected_value,
+                TRUNC(CAST(analyzed_table."date_column" AS DATE), 'MM') AS time_period,
+                CAST(TRUNC(CAST(analyzed_table."date_column" AS DATE), 'MM') AS TIMESTAMP) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "Trino"
 
         === "Sensor template for Trino"
@@ -8391,6 +10411,59 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_TRUNC(CAST(analyzed_table.`date_column` AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`date_column` AS DATE), MONTH)) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "ClickHouse"
+
+        === "Sensor template for ClickHouse"
+            ```sql+jinja
+            {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {{ values_list|join(', ') -}}
+            {% endmacro %}
+            
+            {%- macro actual_value() -%}
+                {%- if 'expected_values' not in parameters or parameters.expected_values | length == 0 -%}
+                0
+                {%- else -%}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                {{ actual_value() }} AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for ClickHouse"
+            ```sql
+            SELECT
+                COUNT(DISTINCT
+                    CASE
+                        WHEN analyzed_table."target_column" IN (2, 3)
+                            THEN analyzed_table."target_column"
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX(2) AS expected_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                DATE_TRUNC('month', CAST(analyzed_table."date_column" AS DATE)) AS time_period,
+                toDateTime64(DATE_TRUNC('month', CAST(analyzed_table."date_column" AS DATE)), 3) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -8642,6 +10715,66 @@ Expand the *Configure with data grouping* section to see additional examples for
                 TO_TIMESTAMP(SERIES_ROUND(CAST(original_table."date_column" AS DATE), 'INTERVAL 1 MONTH', ROUND_DOWN)) AS time_period_utc
                 FROM "<target_schema>"."<target_table>" original_table
             ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "MariaDB"
+
+        === "Sensor template for MariaDB"
+            ```sql+jinja
+            {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {{values_list|join(', ')}}
+            {% endmacro %}
+            
+            {%- macro render_else() -%}
+                {%- if parameters.expected_values|length == 0 -%}
+                0
+                {%- else -%}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE {{render_else()}}
+                END AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MariaDB"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE COUNT(DISTINCT
+                    CASE
+                        WHEN analyzed_table.`target_column` IN (2, 3
+            )
+                            THEN analyzed_table.`target_column`
+                        ELSE NULL
+                    END
+                )
+                END AS actual_value,
+                MAX(2) AS expected_value,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2,
+                DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-01 00:00:00') AS time_period,
+                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-01 00:00:00'))) AS time_period_utc
+            FROM `<target_table>` AS analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -8905,6 +11038,76 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "QuestDB"
+
+        === "Sensor template for QuestDB"
+            ```sql+jinja
+            {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {{values_list|join(', ')}}
+            {% endmacro %}
+            
+            {%- macro render_actual_value() -%}
+                {%- if parameters.expected_values|length == 0 -%}
+                0
+                {%- else -%}
+                COUNT_DISTINCT(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                {{render_actual_value()}} AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM(
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for QuestDB"
+            ```sql
+            SELECT
+                COUNT_DISTINCT(
+                    CASE
+                        WHEN analyzed_table."target_column" IN (2, 3
+            )
+                            THEN analyzed_table."target_column"
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX(2) AS expected_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2,
+                time_period,
+                time_period_utc
+            FROM(
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                CAST(DATE_TRUNC('month', original_table."date_column") AS DATE) AS time_period,
+                CAST((CAST(DATE_TRUNC('month', original_table."date_column") AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                FROM "<target_table>" original_table
+            ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "Redshift"
 
         === "Sensor template for Redshift"
@@ -9139,6 +11342,59 @@ Expand the *Configure with data grouping* section to see additional examples for
             ORDER BY level_1, level_2DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1)
             
                 
+            ```
+    ??? example "Teradata"
+
+        === "Sensor template for Teradata"
+            ```sql+jinja
+            {% import '/dialects/teradata.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {{ values_list|join(', ') -}}
+            {% endmacro %}
+            
+            {%- macro actual_value() -%}
+                {%- if 'expected_values' not in parameters or parameters.expected_values | length == 0 -%}
+                0
+                {%- else -%}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                {{ actual_value() }} AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Teradata"
+            ```sql
+            SELECT
+                COUNT(DISTINCT
+                    CASE
+                        WHEN analyzed_table."target_column" IN (2, 3)
+                            THEN analyzed_table."target_column"
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX(2) AS expected_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                TRUNC(CAST(analyzed_table."date_column" AS DATE), 'MM') AS time_period,
+                CAST(TRUNC(CAST(analyzed_table."date_column" AS DATE), 'MM') AS TIMESTAMP) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
     ??? example "Trino"
 
