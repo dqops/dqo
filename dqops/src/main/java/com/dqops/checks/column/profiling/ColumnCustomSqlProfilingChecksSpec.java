@@ -19,10 +19,7 @@ import com.dqops.checks.AbstractCheckCategorySpec;
 import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
-import com.dqops.checks.column.checkspecs.customsql.ColumnSqlAggregateExpressionCheckSpec;
-import com.dqops.checks.column.checkspecs.customsql.ColumnSqlConditionFailedCheckSpec;
-import com.dqops.checks.column.checkspecs.customsql.ColumnSqlConditionPassedPercentCheckSpec;
-import com.dqops.checks.column.checkspecs.customsql.ColumnSqlImportCustomResultCheckSpec;
+import com.dqops.checks.column.checkspecs.customsql.*;
 import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -66,7 +63,7 @@ public class ColumnCustomSqlProfilingChecksSpec extends AbstractCheckCategorySpe
             " and raises an issue if too many failures were detected. " +
             "This check is used for setting testing queries or ready queries used by users in their own systems (legacy SQL queries). " +
             "For example, when this check is applied on a column, the condition can verify that the column has lower value than 18 using an SQL expression: `{alias}.{column} < 18`.")
-    private ColumnSqlConditionFailedCheckSpec profileSqlInvalidValueCountOnColumn;
+    private ColumnSqlInvalidValueCountCheckSpec profileSqlInvalidValueCountOnColumn;
 
     @JsonPropertyDescription("Runs a custom query that retrieves a result of a data quality check performed in the data engineering, whose result (the severity level) is pulled from a separate table.")
     private ColumnSqlImportCustomResultCheckSpec profileImportCustomResultOnColumn;
@@ -129,7 +126,7 @@ public class ColumnCustomSqlProfilingChecksSpec extends AbstractCheckCategorySpe
      * Returns a check specification.
      * @return New check specification.
      */
-    public ColumnSqlConditionFailedCheckSpec getProfileSqlInvalidValueCountOnColumn() {
+    public ColumnSqlInvalidValueCountCheckSpec getProfileSqlInvalidValueCountOnColumn() {
         return profileSqlInvalidValueCountOnColumn;
     }
 
@@ -137,7 +134,7 @@ public class ColumnCustomSqlProfilingChecksSpec extends AbstractCheckCategorySpe
      * Sets a new check specification.
      * @param profileSqlInvalidValueCountOnColumn Check specification.
      */
-    public void setProfileSqlInvalidValueCountOnColumn(ColumnSqlConditionFailedCheckSpec profileSqlInvalidValueCountOnColumn) {
+    public void setProfileSqlInvalidValueCountOnColumn(ColumnSqlInvalidValueCountCheckSpec profileSqlInvalidValueCountOnColumn) {
         this.setDirtyIf(!Objects.equals(this.profileSqlInvalidValueCountOnColumn, profileSqlInvalidValueCountOnColumn));
         this.profileSqlInvalidValueCountOnColumn = profileSqlInvalidValueCountOnColumn;
         propagateHierarchyIdToField(profileSqlInvalidValueCountOnColumn, "profile_sql_invalid_value_count_on_column");

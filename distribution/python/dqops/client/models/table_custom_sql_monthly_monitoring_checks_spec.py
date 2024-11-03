@@ -21,6 +21,9 @@ if TYPE_CHECKING:
     from ..models.table_sql_import_custom_result_check_spec import (
         TableSqlImportCustomResultCheckSpec,
     )
+    from ..models.table_sql_invalid_record_count_check_spec import (
+        TableSqlInvalidRecordCountCheckSpec,
+    )
 
 
 T = TypeVar("T", bound="TableCustomSqlMonthlyMonitoringChecksSpec")
@@ -36,6 +39,7 @@ class TableCustomSqlMonthlyMonitoringChecksSpec:
         monthly_sql_condition_failed_on_table (Union[Unset, TableSqlConditionFailedCheckSpec]):
         monthly_sql_condition_passed_percent_on_table (Union[Unset, TableSqlConditionPassedPercentCheckSpec]):
         monthly_sql_aggregate_expression_on_table (Union[Unset, TableSqlAggregateExpressionCheckSpec]):
+        monthly_sql_invalid_record_count_on_table (Union[Unset, TableSqlInvalidRecordCountCheckSpec]):
         monthly_import_custom_result_on_table (Union[Unset, TableSqlImportCustomResultCheckSpec]):
     """
 
@@ -50,6 +54,9 @@ class TableCustomSqlMonthlyMonitoringChecksSpec:
     ] = UNSET
     monthly_sql_aggregate_expression_on_table: Union[
         Unset, "TableSqlAggregateExpressionCheckSpec"
+    ] = UNSET
+    monthly_sql_invalid_record_count_on_table: Union[
+        Unset, "TableSqlInvalidRecordCountCheckSpec"
     ] = UNSET
     monthly_import_custom_result_on_table: Union[
         Unset, "TableSqlImportCustomResultCheckSpec"
@@ -81,6 +88,12 @@ class TableCustomSqlMonthlyMonitoringChecksSpec:
                 self.monthly_sql_aggregate_expression_on_table.to_dict()
             )
 
+        monthly_sql_invalid_record_count_on_table: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.monthly_sql_invalid_record_count_on_table, Unset):
+            monthly_sql_invalid_record_count_on_table = (
+                self.monthly_sql_invalid_record_count_on_table.to_dict()
+            )
+
         monthly_import_custom_result_on_table: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.monthly_import_custom_result_on_table, Unset):
             monthly_import_custom_result_on_table = (
@@ -103,6 +116,10 @@ class TableCustomSqlMonthlyMonitoringChecksSpec:
         if monthly_sql_aggregate_expression_on_table is not UNSET:
             field_dict["monthly_sql_aggregate_expression_on_table"] = (
                 monthly_sql_aggregate_expression_on_table
+            )
+        if monthly_sql_invalid_record_count_on_table is not UNSET:
+            field_dict["monthly_sql_invalid_record_count_on_table"] = (
+                monthly_sql_invalid_record_count_on_table
             )
         if monthly_import_custom_result_on_table is not UNSET:
             field_dict["monthly_import_custom_result_on_table"] = (
@@ -127,6 +144,9 @@ class TableCustomSqlMonthlyMonitoringChecksSpec:
         )
         from ..models.table_sql_import_custom_result_check_spec import (
             TableSqlImportCustomResultCheckSpec,
+        )
+        from ..models.table_sql_invalid_record_count_check_spec import (
+            TableSqlInvalidRecordCountCheckSpec,
         )
 
         d = src_dict.copy()
@@ -188,6 +208,21 @@ class TableCustomSqlMonthlyMonitoringChecksSpec:
                 )
             )
 
+        _monthly_sql_invalid_record_count_on_table = d.pop(
+            "monthly_sql_invalid_record_count_on_table", UNSET
+        )
+        monthly_sql_invalid_record_count_on_table: Union[
+            Unset, TableSqlInvalidRecordCountCheckSpec
+        ]
+        if isinstance(_monthly_sql_invalid_record_count_on_table, Unset):
+            monthly_sql_invalid_record_count_on_table = UNSET
+        else:
+            monthly_sql_invalid_record_count_on_table = (
+                TableSqlInvalidRecordCountCheckSpec.from_dict(
+                    _monthly_sql_invalid_record_count_on_table
+                )
+            )
+
         _monthly_import_custom_result_on_table = d.pop(
             "monthly_import_custom_result_on_table", UNSET
         )
@@ -208,6 +243,7 @@ class TableCustomSqlMonthlyMonitoringChecksSpec:
             monthly_sql_condition_failed_on_table=monthly_sql_condition_failed_on_table,
             monthly_sql_condition_passed_percent_on_table=monthly_sql_condition_passed_percent_on_table,
             monthly_sql_aggregate_expression_on_table=monthly_sql_aggregate_expression_on_table,
+            monthly_sql_invalid_record_count_on_table=monthly_sql_invalid_record_count_on_table,
             monthly_import_custom_result_on_table=monthly_import_custom_result_on_table,
         )
 

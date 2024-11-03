@@ -21,6 +21,9 @@ if TYPE_CHECKING:
     from ..models.column_sql_import_custom_result_check_spec import (
         ColumnSqlImportCustomResultCheckSpec,
     )
+    from ..models.column_sql_invalid_value_count_check_spec import (
+        ColumnSqlInvalidValueCountCheckSpec,
+    )
 
 
 T = TypeVar("T", bound="ColumnCustomSqlDailyMonitoringChecksSpec")
@@ -36,6 +39,7 @@ class ColumnCustomSqlDailyMonitoringChecksSpec:
         daily_sql_condition_failed_on_column (Union[Unset, ColumnSqlConditionFailedCheckSpec]):
         daily_sql_condition_passed_percent_on_column (Union[Unset, ColumnSqlConditionPassedPercentCheckSpec]):
         daily_sql_aggregate_expression_on_column (Union[Unset, ColumnSqlAggregateExpressionCheckSpec]):
+        daily_sql_invalid_value_count_on_column (Union[Unset, ColumnSqlInvalidValueCountCheckSpec]):
         daily_import_custom_result_on_column (Union[Unset, ColumnSqlImportCustomResultCheckSpec]):
     """
 
@@ -50,6 +54,9 @@ class ColumnCustomSqlDailyMonitoringChecksSpec:
     ] = UNSET
     daily_sql_aggregate_expression_on_column: Union[
         Unset, "ColumnSqlAggregateExpressionCheckSpec"
+    ] = UNSET
+    daily_sql_invalid_value_count_on_column: Union[
+        Unset, "ColumnSqlInvalidValueCountCheckSpec"
     ] = UNSET
     daily_import_custom_result_on_column: Union[
         Unset, "ColumnSqlImportCustomResultCheckSpec"
@@ -81,6 +88,12 @@ class ColumnCustomSqlDailyMonitoringChecksSpec:
                 self.daily_sql_aggregate_expression_on_column.to_dict()
             )
 
+        daily_sql_invalid_value_count_on_column: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.daily_sql_invalid_value_count_on_column, Unset):
+            daily_sql_invalid_value_count_on_column = (
+                self.daily_sql_invalid_value_count_on_column.to_dict()
+            )
+
         daily_import_custom_result_on_column: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.daily_import_custom_result_on_column, Unset):
             daily_import_custom_result_on_column = (
@@ -103,6 +116,10 @@ class ColumnCustomSqlDailyMonitoringChecksSpec:
         if daily_sql_aggregate_expression_on_column is not UNSET:
             field_dict["daily_sql_aggregate_expression_on_column"] = (
                 daily_sql_aggregate_expression_on_column
+            )
+        if daily_sql_invalid_value_count_on_column is not UNSET:
+            field_dict["daily_sql_invalid_value_count_on_column"] = (
+                daily_sql_invalid_value_count_on_column
             )
         if daily_import_custom_result_on_column is not UNSET:
             field_dict["daily_import_custom_result_on_column"] = (
@@ -127,6 +144,9 @@ class ColumnCustomSqlDailyMonitoringChecksSpec:
         )
         from ..models.column_sql_import_custom_result_check_spec import (
             ColumnSqlImportCustomResultCheckSpec,
+        )
+        from ..models.column_sql_invalid_value_count_check_spec import (
+            ColumnSqlInvalidValueCountCheckSpec,
         )
 
         d = src_dict.copy()
@@ -188,6 +208,21 @@ class ColumnCustomSqlDailyMonitoringChecksSpec:
                 )
             )
 
+        _daily_sql_invalid_value_count_on_column = d.pop(
+            "daily_sql_invalid_value_count_on_column", UNSET
+        )
+        daily_sql_invalid_value_count_on_column: Union[
+            Unset, ColumnSqlInvalidValueCountCheckSpec
+        ]
+        if isinstance(_daily_sql_invalid_value_count_on_column, Unset):
+            daily_sql_invalid_value_count_on_column = UNSET
+        else:
+            daily_sql_invalid_value_count_on_column = (
+                ColumnSqlInvalidValueCountCheckSpec.from_dict(
+                    _daily_sql_invalid_value_count_on_column
+                )
+            )
+
         _daily_import_custom_result_on_column = d.pop(
             "daily_import_custom_result_on_column", UNSET
         )
@@ -208,6 +243,7 @@ class ColumnCustomSqlDailyMonitoringChecksSpec:
             daily_sql_condition_failed_on_column=daily_sql_condition_failed_on_column,
             daily_sql_condition_passed_percent_on_column=daily_sql_condition_passed_percent_on_column,
             daily_sql_aggregate_expression_on_column=daily_sql_aggregate_expression_on_column,
+            daily_sql_invalid_value_count_on_column=daily_sql_invalid_value_count_on_column,
             daily_import_custom_result_on_column=daily_import_custom_result_on_column,
         )
 

@@ -1096,6 +1096,12 @@ from .column_sql_import_custom_result_check_spec import (
 from .column_sql_import_custom_result_sensor_parameters_spec import (
     ColumnSqlImportCustomResultSensorParametersSpec,
 )
+from .column_sql_invalid_value_count_check_spec import (
+    ColumnSqlInvalidValueCountCheckSpec,
+)
+from .column_sql_invalid_value_count_sensor_parameters_spec import (
+    ColumnSqlInvalidValueCountSensorParametersSpec,
+)
 from .column_statistics_collectors_root_categories_spec import (
     ColumnStatisticsCollectorsRootCategoriesSpec,
 )
@@ -1994,6 +2000,12 @@ from .table_sql_import_custom_result_check_spec import (
 from .table_sql_import_custom_result_sensor_parameters_spec import (
     TableSqlImportCustomResultSensorParametersSpec,
 )
+from .table_sql_invalid_record_count_check_spec import (
+    TableSqlInvalidRecordCountCheckSpec,
+)
+from .table_sql_invalid_record_count_sensor_parameters_spec import (
+    TableSqlInvalidRecordCountSensorParametersSpec,
+)
 from .table_statistics_collectors_root_categories_spec import (
     TableStatisticsCollectorsRootCategoriesSpec,
 )
@@ -2566,6 +2578,8 @@ __all__ = (
     "ColumnSqlConditionPassedPercentSensorParametersSpec",
     "ColumnSqlImportCustomResultCheckSpec",
     "ColumnSqlImportCustomResultSensorParametersSpec",
+    "ColumnSqlInvalidValueCountCheckSpec",
+    "ColumnSqlInvalidValueCountSensorParametersSpec",
     "ColumnStatisticsCollectorsRootCategoriesSpec",
     "ColumnStatisticsModel",
     "ColumnStringsExpectedTextsInTopValuesCountSensorParametersSpec",
@@ -3060,6 +3074,8 @@ __all__ = (
     "TableSqlConditionPassedPercentSensorParametersSpec",
     "TableSqlImportCustomResultCheckSpec",
     "TableSqlImportCustomResultSensorParametersSpec",
+    "TableSqlInvalidRecordCountCheckSpec",
+    "TableSqlInvalidRecordCountSensorParametersSpec",
     "TableStatisticsCollectorsRootCategoriesSpec",
     "TableStatisticsModel",
     "TableTimelinessDailyMonitoringChecksSpec",

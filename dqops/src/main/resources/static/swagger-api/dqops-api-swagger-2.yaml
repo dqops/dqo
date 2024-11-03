@@ -21358,7 +21358,7 @@ definitions:
           \ For example, when this check is applied on a column, the condition can\
           \ verify that the column has lower value than 18 using an SQL expression:\
           \ `{alias}.{column} < 18`."
-        $ref: "#/definitions/ColumnSqlConditionFailedCheckSpec"
+        $ref: "#/definitions/ColumnSqlInvalidValueCountCheckSpec"
       daily_import_custom_result_on_column:
         description: "Runs a custom query that retrieves a result of a data quality\
           \ check performed in the data engineering, whose result (the severity level)\
@@ -21437,7 +21437,7 @@ definitions:
           \ For example, when this check is applied on a column, the condition can\
           \ verify that the column has lower value than 18 using an SQL expression:\
           \ `{alias}.{column} < 18`."
-        $ref: "#/definitions/ColumnSqlConditionFailedCheckSpec"
+        $ref: "#/definitions/ColumnSqlInvalidValueCountCheckSpec"
       monthly_import_custom_result_on_column:
         description: "Runs a custom query that retrieves a result of a data quality\
           \ check performed in the data engineering, whose result (the severity level)\
@@ -21513,7 +21513,7 @@ definitions:
           \ For example, when this check is applied on a column, the condition can\
           \ verify that the column has lower value than 18 using an SQL expression:\
           \ `{alias}.{column} < 18`."
-        $ref: "#/definitions/ColumnSqlConditionFailedCheckSpec"
+        $ref: "#/definitions/ColumnSqlInvalidValueCountCheckSpec"
       profile_import_custom_result_on_column:
         description: "Runs a custom query that retrieves a result of a data quality\
           \ check performed in the data engineering, whose result (the severity level)\
@@ -31969,6 +31969,95 @@ definitions:
           \ DQOps data lake. The query can use a {table_name} placeholder that is\
           \ replaced with a table name for which the results are imported, and a {column_name}\
           \ placeholder replaced with the column name."
+  ColumnSqlInvalidValueCountCheckSpec:
+    type: "object"
+    properties:
+      schedule_override:
+        description: "Run check scheduling configuration. Specifies the schedule (a\
+          \ cron expression) when the data quality checks are executed by the scheduler."
+        $ref: "#/definitions/CronScheduleSpec"
+      comments:
+        type: "array"
+        description: "Comments for change tracking. Please put comments in this collection\
+          \ because YAML comments may be removed when the YAML file is modified by\
+          \ the tool (serialization and deserialization will remove non tracked comments)."
+        items:
+          $ref: "#/definitions/CommentSpec"
+      disabled:
+        type: "boolean"
+        description: "Disables the data quality check. Only enabled data quality checks\
+          \ and monitorings are executed. The check should be disabled if it should\
+          \ not work, but the configuration of the sensor and rules should be preserved\
+          \ in the configuration."
+      exclude_from_kpi:
+        type: "boolean"
+        description: "Data quality check results (alerts) are included in the data\
+          \ quality KPI calculation by default. Set this field to true in order to\
+          \ exclude this data quality check from the data quality KPI calculation."
+      include_in_sla:
+        type: "boolean"
+        description: "Marks the data quality check as part of a data quality SLA (Data\
+          \ Contract). The data quality SLA is a set of critical data quality checks\
+          \ that must always pass and are considered as a Data Contract for the dataset."
+      quality_dimension:
+        type: "string"
+        description: "Configures a custom data quality dimension name that is different\
+          \ than the built-in dimensions (Timeliness, Validity, etc.)."
+      display_name:
+        type: "string"
+        description: "Data quality check display name that can be assigned to the\
+          \ check, otherwise the check_display_name stored in the parquet result files\
+          \ is the check_name."
+      data_grouping:
+        type: "string"
+        description: "Data grouping configuration name that should be applied to this\
+          \ data quality check. The data grouping is used to group the check's result\
+          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
+          \ group of rows. Use the name of one of data grouping configurations defined\
+          \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
+      do_not_schedule:
+        type: "boolean"
+        description: "Disables running this check by a DQOps CRON scheduler. When\
+          \ a check is disabled from scheduling, it can be only triggered from the\
+          \ user interface or by submitting \"run checks\" job."
+      parameters:
+        description: "Sensor parameters with the custom SQL query, using a {column}\
+          \ placeholder to reference the current column."
+        $ref: "#/definitions/ColumnSqlInvalidValueCountSensorParametersSpec"
+      warning:
+        description: "Alerting threshold that raises a data quality warning when a\
+          \ given number of rows failed the custom SQL condition (expression). The\
+          \ warning is considered as a passed data quality check."
+        $ref: "#/definitions/MaxCountRule0WarningParametersSpec"
+      error:
+        description: "Default alerting threshold for a maximum number of rows failing\
+          \ the custom SQL condition (expression) that raises a data quality error\
+          \ (alert)."
+        $ref: "#/definitions/MaxCountRule0ErrorParametersSpec"
+      fatal:
+        description: "Alerting threshold that raises a fatal data quality issue when\
+          \ a given number of rows failed the custom SQL condition (expression). A\
+          \ fatal issue indicates a serious data quality problem that should result\
+          \ in stopping the data pipelines."
+        $ref: "#/definitions/MaxCountRule100ParametersSpec"
+  ColumnSqlInvalidValueCountSensorParametersSpec:
+    type: "object"
+    properties:
+      filter:
+        type: "string"
+        description: "SQL WHERE clause added to the sensor query. Both the table level\
+          \ filter and a sensor query filter are added, separated by an AND operator."
+      sql_query:
+        type: "string"
+        description: "SQL query that returns invalid values. The expression can use\
+          \ {table} and {column} placeholder that are replaced with a full table name\
+          \ and the analyzed column name."
   ColumnStatisticsCollectorsRootCategoriesSpec:
     type: "object"
     properties:

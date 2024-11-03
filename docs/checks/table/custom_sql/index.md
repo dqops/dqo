@@ -57,6 +57,20 @@ A table-level check that calculates a given SQL aggregate expression on a table 
 
 
 
+### [sql invalid record count on table](./sql-invalid-record-count-on-table.md)
+A table-level check that uses a custom SQL query that return invalid values from column.
+ Use the {alias} token to reference the tested table. This data quality check can be used to compare columns on the same table.
+ For example, when this check is applied on a *age* column, the condition can verify that the *age* is lower than 18 using an SQL expression: &#x60;{alias}.age &lt; 18&#x60;
+
+
+| Data quality check name | Friendly name | Check type | Description | Standard |
+|-------------------------|---------------|------------|-------------|----------|
+|[<span class="no-wrap-code">`profile_sql_invalid_record_count_on_table`</span>](./sql-invalid-record-count-on-table.md#profile-sql-invalid-record-count-on-table)|Custom SELECT SQL that returns invalid records|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Runs a custom query that retrieves invalid records found in a table and returns the number of them, and raises an issue if too many failures were detected. This check is used for setting testing queries or ready queries used by users in their own systems (legacy SQL queries). For example, when this check is applied on a *age* column, the condition can verify that the *age* is lower than 18 using an SQL expression: &#x60;{alias}.age &lt; 18&#x60;.|:material-check-bold:|
+|[<span class="no-wrap-code">`daily_sql_invalid_record_count_on_table`</span>](./sql-invalid-record-count-on-table.md#daily-sql-invalid-record-count-on-table)|Custom SELECT SQL that returns invalid records|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Runs a custom query that retrieves invalid records found in a table and returns the number of them, and raises an issue if too many failures were detected. This check is used for setting testing queries or ready queries used by users in their own systems (legacy SQL queries). For example, when this check is applied on a *age* column, the condition can verify that the *age* is lower than 18 using an SQL expression: &#x60;{alias}.age &lt; 18&#x60;.|:material-check-bold:|
+|[<span class="no-wrap-code">`monthly_sql_invalid_record_count_on_table`</span>](./sql-invalid-record-count-on-table.md#monthly-sql-invalid-record-count-on-table)|Custom SELECT SQL that returns invalid records|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Runs a custom query that retrieves invalid records found in a table and returns the number of them, and raises an issue if too many failures were detected. This check is used for setting testing queries or ready queries used by users in their own systems (legacy SQL queries). For example, when this check is applied on a *age* column, the condition can verify that the *age* is lower than 18 using an SQL expression: &#x60;{alias}.age &lt; 18&#x60;.|:material-check-bold:|
+
+
+
 ### [import custom result on table](./import-custom-result-on-table.md)
 A table-level check that uses a custom SQL SELECT statement to retrieve a result of running a custom data quality check that was hardcoded
  in the data pipeline, and the result was stored in a separate table. The SQL query that is configured in this external data quality results importer must be

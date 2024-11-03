@@ -1,0 +1,13 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: check
+spec:
+  sensor_name: column/custom_sql/sql_invalid_value_count
+  rule_name: comparison/max_count
+  help_text: "Runs a custom query that retrieves invalid values found in a column\
+    \ and returns the number of them, and raises an issue if too many failures were\
+    \ detected. This check is used for setting testing queries or ready queries used\
+    \ by users in their own systems (legacy SQL queries). For example, when this check\
+    \ is applied on a column, the condition can verify that the column has lower value\
+    \ than 18 using an SQL expression: `{alias}.{column} < 18`."
+  default_severity: error

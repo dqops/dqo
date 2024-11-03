@@ -21,6 +21,9 @@ if TYPE_CHECKING:
     from ..models.column_sql_import_custom_result_check_spec import (
         ColumnSqlImportCustomResultCheckSpec,
     )
+    from ..models.column_sql_invalid_value_count_check_spec import (
+        ColumnSqlInvalidValueCountCheckSpec,
+    )
 
 
 T = TypeVar("T", bound="ColumnCustomSqlProfilingChecksSpec")
@@ -36,6 +39,7 @@ class ColumnCustomSqlProfilingChecksSpec:
         profile_sql_condition_failed_on_column (Union[Unset, ColumnSqlConditionFailedCheckSpec]):
         profile_sql_condition_passed_percent_on_column (Union[Unset, ColumnSqlConditionPassedPercentCheckSpec]):
         profile_sql_aggregate_expression_on_column (Union[Unset, ColumnSqlAggregateExpressionCheckSpec]):
+        profile_sql_invalid_value_count_on_column (Union[Unset, ColumnSqlInvalidValueCountCheckSpec]):
         profile_import_custom_result_on_column (Union[Unset, ColumnSqlImportCustomResultCheckSpec]):
     """
 
@@ -50,6 +54,9 @@ class ColumnCustomSqlProfilingChecksSpec:
     ] = UNSET
     profile_sql_aggregate_expression_on_column: Union[
         Unset, "ColumnSqlAggregateExpressionCheckSpec"
+    ] = UNSET
+    profile_sql_invalid_value_count_on_column: Union[
+        Unset, "ColumnSqlInvalidValueCountCheckSpec"
     ] = UNSET
     profile_import_custom_result_on_column: Union[
         Unset, "ColumnSqlImportCustomResultCheckSpec"
@@ -81,6 +88,12 @@ class ColumnCustomSqlProfilingChecksSpec:
                 self.profile_sql_aggregate_expression_on_column.to_dict()
             )
 
+        profile_sql_invalid_value_count_on_column: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_sql_invalid_value_count_on_column, Unset):
+            profile_sql_invalid_value_count_on_column = (
+                self.profile_sql_invalid_value_count_on_column.to_dict()
+            )
+
         profile_import_custom_result_on_column: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.profile_import_custom_result_on_column, Unset):
             profile_import_custom_result_on_column = (
@@ -103,6 +116,10 @@ class ColumnCustomSqlProfilingChecksSpec:
         if profile_sql_aggregate_expression_on_column is not UNSET:
             field_dict["profile_sql_aggregate_expression_on_column"] = (
                 profile_sql_aggregate_expression_on_column
+            )
+        if profile_sql_invalid_value_count_on_column is not UNSET:
+            field_dict["profile_sql_invalid_value_count_on_column"] = (
+                profile_sql_invalid_value_count_on_column
             )
         if profile_import_custom_result_on_column is not UNSET:
             field_dict["profile_import_custom_result_on_column"] = (
@@ -127,6 +144,9 @@ class ColumnCustomSqlProfilingChecksSpec:
         )
         from ..models.column_sql_import_custom_result_check_spec import (
             ColumnSqlImportCustomResultCheckSpec,
+        )
+        from ..models.column_sql_invalid_value_count_check_spec import (
+            ColumnSqlInvalidValueCountCheckSpec,
         )
 
         d = src_dict.copy()
@@ -184,6 +204,21 @@ class ColumnCustomSqlProfilingChecksSpec:
                 )
             )
 
+        _profile_sql_invalid_value_count_on_column = d.pop(
+            "profile_sql_invalid_value_count_on_column", UNSET
+        )
+        profile_sql_invalid_value_count_on_column: Union[
+            Unset, ColumnSqlInvalidValueCountCheckSpec
+        ]
+        if isinstance(_profile_sql_invalid_value_count_on_column, Unset):
+            profile_sql_invalid_value_count_on_column = UNSET
+        else:
+            profile_sql_invalid_value_count_on_column = (
+                ColumnSqlInvalidValueCountCheckSpec.from_dict(
+                    _profile_sql_invalid_value_count_on_column
+                )
+            )
+
         _profile_import_custom_result_on_column = d.pop(
             "profile_import_custom_result_on_column", UNSET
         )
@@ -204,6 +239,7 @@ class ColumnCustomSqlProfilingChecksSpec:
             profile_sql_condition_failed_on_column=profile_sql_condition_failed_on_column,
             profile_sql_condition_passed_percent_on_column=profile_sql_condition_passed_percent_on_column,
             profile_sql_aggregate_expression_on_column=profile_sql_aggregate_expression_on_column,
+            profile_sql_invalid_value_count_on_column=profile_sql_invalid_value_count_on_column,
             profile_import_custom_result_on_column=profile_import_custom_result_on_column,
         )
 
