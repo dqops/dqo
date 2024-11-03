@@ -73,8 +73,8 @@ A table-level check that calculates a given SQL aggregate expression on a table 
 
 ### [sql invalid record count on table](./table/custom_sql/sql-invalid-record-count-on-table.md)
 A table-level check that uses a custom SQL query that return invalid values from column.
- Use the {alias} token to reference the tested table. This data quality check can be used to compare columns on the same table.
- For example, when this check is applied on a *age* column, the condition can verify that the *age* is lower than 18 using an SQL expression: &#x60;{alias}.age &lt; 18&#x60;
+ Use the {table} token to reference the tested table. This data quality check can be used to compare columns on the same table.
+ For example, when this check is applied on a *age* column, the condition can find invalid records in which the *age* is lower than 18 using an SQL query: &#x60;SELECT age FROM {table} WHERE age &lt; 18&#x60;.
 
 
 
@@ -640,8 +640,8 @@ A column-level check that calculates a given SQL aggregate expression on a colum
 ### [sql invalid value count on column](./column/custom_sql/sql-invalid-value-count-on-column.md)
 A column-level check that uses a custom SQL query that return invalid values from column.
  This check is used for setting testing queries or ready queries used by users in their own systems (legacy SQL queries).
- Use the {alias} token to reference the tested table, and the {column} to reference the column that is tested.
- For example, when this check is applied on a column, the condition can verify that the column has lower value than 18 using an SQL expression: &#x60;{alias}.{column} &lt; 18&#x60;.
+ Use the {table} token to reference the tested table, and the {column} to reference the column that is tested.
+ For example, when this check is applied on a column. The condition can find invalid values in the column which have values lower than 18 using an SQL query: &#x60;SELECT {column} FROM {table} WHERE {column} &lt; 18&#x60;.
 
 
 

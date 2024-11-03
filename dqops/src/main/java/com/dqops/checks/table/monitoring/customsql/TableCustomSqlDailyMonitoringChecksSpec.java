@@ -64,7 +64,7 @@ public class TableCustomSqlDailyMonitoringChecksSpec extends AbstractCheckCatego
     @JsonPropertyDescription("Runs a custom query that retrieves invalid records found in a table and returns the number of them," +
             " and raises an issue if too many failures were detected. " +
             "This check is used for setting testing queries or ready queries used by users in their own systems (legacy SQL queries). " +
-            "For example, when this check is applied on a *age* column, the condition can verify that the *age* is lower than 18 using an SQL expression: `{alias}.age < 18`.")
+            "For example, when this check is applied on a *age* column, the condition can find invalid records in which the *age* is lower than 18 using an SQL query: `SELECT age FROM {table} WHERE age < 18`.")
     private TableSqlInvalidRecordCountCheckSpec dailySqlInvalidRecordCountOnTable;
 
     @JsonPropertyDescription("Runs a custom query that retrieves a result of a data quality check performed in the data engineering, whose result (the severity level) is pulled from a separate table.")

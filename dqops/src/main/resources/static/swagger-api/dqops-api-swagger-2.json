@@ -23981,7 +23981,7 @@
           "$ref" : "#/definitions/ColumnSqlAggregateExpressionCheckSpec"
         },
         "daily_sql_invalid_value_count_on_column" : {
-          "description" : "Runs a custom query that retrieves invalid values found in a column and returns the number of them, and raises an issue if too many failures were detected. This check is used for setting testing queries or ready queries used by users in their own systems (legacy SQL queries). For example, when this check is applied on a column, the condition can verify that the column has lower value than 18 using an SQL expression: `{alias}.{column} < 18`.",
+          "description" : "Runs a custom query that retrieves invalid values found in a column and returns the number of them, and raises an issue if too many failures were detected. This check is used for setting testing queries or ready queries used by users in their own systems (legacy SQL queries). For example, when this check is applied on a column. The condition can find invalid values in the column which have values lower than 18 using an SQL query: `SELECT {column} FROM {table} WHERE {column} < 18`.",
           "$ref" : "#/definitions/ColumnSqlInvalidValueCountCheckSpec"
         },
         "daily_import_custom_result_on_column" : {
@@ -24041,7 +24041,7 @@
           "$ref" : "#/definitions/ColumnSqlAggregateExpressionCheckSpec"
         },
         "monthly_sql_invalid_value_count_on_column" : {
-          "description" : "Runs a custom query that retrieves invalid values found in a column and returns the number of them, and raises an issue if too many failures were detected. This check is used for setting testing queries or ready queries used by users in their own systems (legacy SQL queries). For example, when this check is applied on a column, the condition can verify that the column has lower value than 18 using an SQL expression: `{alias}.{column} < 18`.",
+          "description" : "Runs a custom query that retrieves invalid values found in a column and returns the number of them, and raises an issue if too many failures were detected. This check is used for setting testing queries or ready queries used by users in their own systems (legacy SQL queries). For example, when this check is applied on a column. The condition can find invalid values in the column which have values lower than 18 using an SQL query: `SELECT {column} FROM {table} WHERE {column} < 18`.",
           "$ref" : "#/definitions/ColumnSqlInvalidValueCountCheckSpec"
         },
         "monthly_import_custom_result_on_column" : {
@@ -24101,7 +24101,7 @@
           "$ref" : "#/definitions/ColumnSqlAggregateExpressionCheckSpec"
         },
         "profile_sql_invalid_value_count_on_column" : {
-          "description" : "Runs a custom query that retrieves invalid values found in a column and returns the number of them, and raises an issue if too many failures were detected. This check is used for setting testing queries or ready queries used by users in their own systems (legacy SQL queries). For example, when this check is applied on a column, the condition can verify that the column has lower value than 18 using an SQL expression: `{alias}.{column} < 18`.",
+          "description" : "Runs a custom query that retrieves invalid values found in a column and returns the number of them, and raises an issue if too many failures were detected. This check is used for setting testing queries or ready queries used by users in their own systems (legacy SQL queries). For example, when this check is applied on a column. The condition can find invalid values in the column which have values lower than 18 using an SQL query: `SELECT {column} FROM {table} WHERE {column} < 18`.",
           "$ref" : "#/definitions/ColumnSqlInvalidValueCountCheckSpec"
         },
         "profile_import_custom_result_on_column" : {
@@ -43516,7 +43516,7 @@
           "$ref" : "#/definitions/TableSqlAggregateExpressionCheckSpec"
         },
         "daily_sql_invalid_record_count_on_table" : {
-          "description" : "Runs a custom query that retrieves invalid records found in a table and returns the number of them, and raises an issue if too many failures were detected. This check is used for setting testing queries or ready queries used by users in their own systems (legacy SQL queries). For example, when this check is applied on a *age* column, the condition can verify that the *age* is lower than 18 using an SQL expression: `{alias}.age < 18`.",
+          "description" : "Runs a custom query that retrieves invalid records found in a table and returns the number of them, and raises an issue if too many failures were detected. This check is used for setting testing queries or ready queries used by users in their own systems (legacy SQL queries). For example, when this check is applied on a *age* column, the condition can find invalid records in which the *age* is lower than 18 using an SQL query: `SELECT age FROM {table} WHERE age < 18`.",
           "$ref" : "#/definitions/TableSqlInvalidRecordCountCheckSpec"
         },
         "daily_import_custom_result_on_table" : {
@@ -43576,7 +43576,7 @@
           "$ref" : "#/definitions/TableSqlAggregateExpressionCheckSpec"
         },
         "monthly_sql_invalid_record_count_on_table" : {
-          "description" : "Runs a custom query that retrieves invalid records found in a table and returns the number of them, and raises an issue if too many failures were detected. This check is used for setting testing queries or ready queries used by users in their own systems (legacy SQL queries). For example, when this check is applied on a *age* column, the condition can verify that the *age* is lower than 18 using an SQL expression: `{alias}.age < 18`.",
+          "description" : "Runs a custom query that retrieves invalid records found in a table and returns the number of them, and raises an issue if too many failures were detected. This check is used for setting testing queries or ready queries used by users in their own systems (legacy SQL queries). For example, when this check is applied on a *age* column, the condition can find invalid records in which the *age* is lower than 18 using an SQL query: `SELECT age FROM {table} WHERE age < 18`.",
           "$ref" : "#/definitions/TableSqlInvalidRecordCountCheckSpec"
         },
         "monthly_import_custom_result_on_table" : {
@@ -43636,7 +43636,7 @@
           "$ref" : "#/definitions/TableSqlAggregateExpressionCheckSpec"
         },
         "profile_sql_invalid_record_count_on_table" : {
-          "description" : "Runs a custom query that retrieves invalid records found in a table and returns the number of them, and raises an issue if too many failures were detected. This check is used for setting testing queries or ready queries used by users in their own systems (legacy SQL queries). For example, when this check is applied on a *age* column, the condition can verify that the *age* is lower than 18 using an SQL expression: `{alias}.age < 18`.",
+          "description" : "Runs a custom query that retrieves invalid records found in a table and returns the number of them, and raises an issue if too many failures were detected. This check is used for setting testing queries or ready queries used by users in their own systems (legacy SQL queries). For example, when this check is applied on a *age* column, the condition can find invalid records in which the *age* is lower than 18 using an SQL query: `SELECT age FROM {table} WHERE age < 18`.",
           "$ref" : "#/definitions/TableSqlInvalidRecordCountCheckSpec"
         },
         "profile_import_custom_result_on_table" : {

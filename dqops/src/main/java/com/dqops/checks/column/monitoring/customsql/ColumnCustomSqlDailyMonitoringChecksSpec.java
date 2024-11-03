@@ -63,7 +63,7 @@ public class ColumnCustomSqlDailyMonitoringChecksSpec extends AbstractCheckCateg
     @JsonPropertyDescription("Runs a custom query that retrieves invalid values found in a column and returns the number of them," +
             " and raises an issue if too many failures were detected. " +
             "This check is used for setting testing queries or ready queries used by users in their own systems (legacy SQL queries). " +
-            "For example, when this check is applied on a column, the condition can verify that the column has lower value than 18 using an SQL expression: `{alias}.{column} < 18`.")
+            "For example, when this check is applied on a column. The condition can find invalid values in the column which have values lower than 18 using an SQL query: `SELECT {column} FROM {table} WHERE {column} < 18`.")
     private ColumnSqlInvalidValueCountCheckSpec dailySqlInvalidValueCountOnColumn;
 
     @JsonPropertyDescription("Runs a custom query that retrieves a result of a data quality check performed in the data engineering, whose result (the severity level) is pulled from a separate table.")

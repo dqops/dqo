@@ -37,8 +37,8 @@ import java.util.Objects;
 /**
  * A column-level check that uses a custom SQL query that return invalid values from column.
  * This check is used for setting testing queries or ready queries used by users in their own systems (legacy SQL queries).
- * Use the {alias} token to reference the tested table, and the {column} to reference the column that is tested.
- * For example, when this check is applied on a column, the condition can verify that the column has lower value than 18 using an SQL expression: `{alias}.{column} < 18`.
+ * Use the {table} token to reference the tested table, and the {column} to reference the column that is tested.
+ * For example, when this check is applied on a column. The condition can find invalid values in the column which have values lower than 18 using an SQL query: `SELECT {column} FROM {table} WHERE {column} < 18`.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

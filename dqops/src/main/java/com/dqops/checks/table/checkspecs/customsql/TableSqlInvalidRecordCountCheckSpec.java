@@ -37,8 +37,8 @@ import java.util.Objects;
 
 /**
  * A table-level check that uses a custom SQL query that return invalid values from column.
- * Use the {alias} token to reference the tested table. This data quality check can be used to compare columns on the same table.
- * For example, when this check is applied on a *age* column, the condition can verify that the *age* is lower than 18 using an SQL expression: `{alias}.age < 18`
+ * Use the {table} token to reference the tested table. This data quality check can be used to compare columns on the same table.
+ * For example, when this check is applied on a *age* column, the condition can find invalid records in which the *age* is lower than 18 using an SQL query: `SELECT age FROM {table} WHERE age < 18`.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

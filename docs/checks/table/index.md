@@ -73,8 +73,8 @@ A table-level check that calculates a given SQL aggregate expression on a table 
 
 ### [sql invalid record count on table](./custom_sql/sql-invalid-record-count-on-table.md)
 A table-level check that uses a custom SQL query that return invalid values from column.
- Use the {alias} token to reference the tested table. This data quality check can be used to compare columns on the same table.
- For example, when this check is applied on a *age* column, the condition can verify that the *age* is lower than 18 using an SQL expression: &#x60;{alias}.age &lt; 18&#x60;
+ Use the {table} token to reference the tested table. This data quality check can be used to compare columns on the same table.
+ For example, when this check is applied on a *age* column, the condition can find invalid records in which the *age* is lower than 18 using an SQL query: &#x60;SELECT age FROM {table} WHERE age &lt; 18&#x60;.
 
 
 
