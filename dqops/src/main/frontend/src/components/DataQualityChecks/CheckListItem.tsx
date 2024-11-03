@@ -540,6 +540,7 @@ const CheckListItem = ({
             )}
             {(!job ||
               job?.status === DqoJobHistoryEntryModelStatusEnum.finished ||
+              job?.status === DqoJobHistoryEntryModelStatusEnum.cancelled ||
               job?.status === DqoJobHistoryEntryModelStatusEnum.failed) &&
               isDefaultEditing !== true &&
               isAlreadyDeleted !== true && (

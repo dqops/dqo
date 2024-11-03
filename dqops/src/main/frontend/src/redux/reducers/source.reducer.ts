@@ -642,7 +642,8 @@ const connectionReducer = (state = initialState, action: Action) => {
         loading: false,
         dailyMonitoring: action.data,
         isUpdatedDailyMonitoring: false,
-        error: null
+        error: null,
+        ruleParametersConfigured: getRuleParametersConfigured(action.data)
       });
     case SOURCE_ACTION.GET_TABLE_DAILY_MONITORING_CHECKS_ERROR:
       return setActiveTabState(state, action, {
