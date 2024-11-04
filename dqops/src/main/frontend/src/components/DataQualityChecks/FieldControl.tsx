@@ -1,10 +1,12 @@
 import clsx from 'clsx';
 import React, { useMemo } from 'react';
+import { useSelector } from 'react-redux';
 import {
   FieldModel,
   ParameterDefinitionSpecDataTypeEnum,
   ParameterDefinitionSpecDisplayHintEnum
 } from '../../api';
+import { IRootState } from '../../redux/reducers';
 import CheckboxColumn from '../Checkbox/CheckBoxColumn';
 import ColumnsRecordDialog from '../ColumnsRecordDialog/ColumnsRecordDialog';
 import ExtendedTextAre from '../ExtendedTextArea';
@@ -35,6 +37,7 @@ const FieldControl = ({
   onSave,
   checkBoxNotRed
 }: ISensorParametersFieldSettingsProps) => {
+  const { userProfile } = useSelector((state: IRootState) => state.job);
   const type = field?.definition?.data_type;
   const label = field?.definition?.display_name;
   const tooltip = field?.definition?.help_text;
@@ -81,10 +84,21 @@ const FieldControl = ({
     (value === undefined ||
       value === '' ||
       (Array.isArray(value) && value.length === 0));
+
+  const isActionInvalid =
+    field.definition?.field_name === 'use_ai' &&
+    userProfile.can_use_ai_anomaly_detection !== true;
+
   return (
     <div>
       {type === 'boolean' && (
-        <div className=" mb-4">
+        <div className="relative mb-4">
+          {isActionInvalid && value && (
+            <div
+              className="absolute !h-15 !w-18 border-3 border-red-500 left-0 !z-[99]"
+              style={{ left: '-5px', pointerEvents: 'none' }}
+            ></div>
+          )}
           <CheckboxColumn
             onChange={(value) => handleChange({ boolean_value: value })}
             checked={value}
