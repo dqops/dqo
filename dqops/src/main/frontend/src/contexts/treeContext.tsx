@@ -1330,7 +1330,6 @@ function TreeProvider(props: any) {
       const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
 
       const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
-
       let url = '';
       let value = '';
       if (node.level === TREE_LEVEL.TABLE_CHECKS) {
@@ -1340,7 +1339,7 @@ function TreeProvider(props: any) {
           schemaNode?.label ?? '',
           tableNode?.label ?? ''
         );
-        value = ROUTES.TABLE_PROFILING_VALUE(
+        value = ROUTES.TABLE_PROFILING(
           checkType,
           connectionNode?.label ?? '',
           schemaNode?.label ?? '',
@@ -1354,7 +1353,7 @@ function TreeProvider(props: any) {
           tableNode?.label ?? '',
           'daily'
         );
-        value = ROUTES.TABLE_MONITORING_VALUE(
+        value = ROUTES.TABLE_MONITORING(
           checkType,
           connectionNode?.label ?? '',
           schemaNode?.label ?? '',
@@ -1369,7 +1368,7 @@ function TreeProvider(props: any) {
           tableNode?.label ?? '',
           'monthly'
         );
-        value = ROUTES.TABLE_MONITORING_VALUE(
+        value = ROUTES.TABLE_MONITORING(
           checkType,
           connectionNode?.label ?? '',
           schemaNode?.label ?? '',
@@ -1384,7 +1383,7 @@ function TreeProvider(props: any) {
           tableNode?.label ?? '',
           'daily'
         );
-        value = ROUTES.TABLE_PARTITIONED_VALUE(
+        value = ROUTES.TABLE_PARTITIONED(
           checkType,
           connectionNode?.label ?? '',
           schemaNode?.label ?? '',
@@ -1399,7 +1398,7 @@ function TreeProvider(props: any) {
           tableNode?.label ?? '',
           'monthly'
         );
-        value = ROUTES.TABLE_PARTITIONED_VALUE(
+        value = ROUTES.TABLE_PARTITIONED(
           checkType,
           connectionNode?.label ?? '',
           schemaNode?.label ?? '',

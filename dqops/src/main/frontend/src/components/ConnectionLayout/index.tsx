@@ -42,7 +42,12 @@ import {
   getFirstLevelActiveTab,
   getFirstLevelState
 } from '../../redux/selectors';
-import { getIsAnyChecksEnabled, useDecodedParams } from '../../utils';
+import {
+  getIsAnyChecksEnabled,
+  getRouteValidLabel,
+  isValidRouteWithoutTab,
+  useDecodedParams
+} from '../../utils';
 import ConfirmDialog from '../CustomTree/ConfirmDialog';
 
 interface ConnectionLayoutProps {
@@ -175,7 +180,7 @@ const ConnectionLayout = ({ route }: ConnectionLayoutProps) => {
 
     if (foundRoute) {
       const params = match.params as any;
-      if (params?.tab) {
+      if (params?.tab || isValidRouteWithoutTab(foundRoute)) {
         let newRoute = foundRoute;
         let routeWithoutTab = foundRoute;
         const segments = foundRoute.split('/');
@@ -187,13 +192,11 @@ const ConnectionLayout = ({ route }: ConnectionLayoutProps) => {
           newRoute = newRoute.replace(`:${key}`, String(value));
           routeWithoutTab = routeWithoutTab.replace(`:${key}`, String(value));
         });
-
         dispatch(
           addFirstLevelTab(checkTypes, {
             url: newRoute,
             value: routeWithoutTab,
-            label:
-              routeWithoutTab.split('/')[routeWithoutTab.split('/').length - 1]
+            label: getRouteValidLabel(routeWithoutTab)
           })
         );
       }
