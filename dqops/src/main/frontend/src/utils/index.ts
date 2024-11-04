@@ -962,24 +962,32 @@ export const getRouteValidLabel = (route: string) => {
   if (route.includes('/columns/all')) {
     return 'Columns';
   }
-  // if (route.endsWith('checks/advanced-profiling')) {
-  //   return 'Profiling checks';
-  // }
-  // if (route.endsWith('monitoring/daily')) {
-  //   return 'Daily monitoring';
-  // }
-  // if (route.endsWith('monitoring/monthly')) {
-  //   return 'Monthly monitoring';
-  // }
-  // if (route.endsWith('partitioned/daily')) {
-  //   return 'Daily partitioned checks';
-  // }
-  // if (route.endsWith('partitioned/monthly')) {
-  //   return 'Monthly partitioned checks';
-  // }
+  if (route.endsWith('checks/advanced-profiling')) {
+    return 'Profiling checks';
+  }
+  if (route.endsWith('monitoring/daily')) {
+    return 'Daily monitoring';
+  }
+  if (route.endsWith('monitoring/monthly')) {
+    return 'Monthly monitoring';
+  }
+  if (route.endsWith('partitioned/daily')) {
+    return 'Daily period checks';
+  }
+  if (route.endsWith('partitioned/monthly')) {
+    return 'Monthly period checks';
+  }
   return route.split('/')[route.split('/').length - 1];
 };
 
 export const isValidRouteWithoutTab = (route: string) => {
-  return route.endsWith('/columns/all');
+  return (
+    route.endsWith('/columns/all') ||
+    route.endsWith('monitoring/daily') ||
+    route.endsWith('monitoring/monthly') ||
+    route.endsWith('partitioned/daily') ||
+    route.endsWith('partitioned/monthly') ||
+    route.endsWith('checks/advanced-profiling') ||
+    route.endsWith('/:category/:checkName')
+  );
 };
