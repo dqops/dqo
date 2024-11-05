@@ -98,7 +98,7 @@ Each table has a **Show more** button. Clicking this button will navigate you to
 
 To view and manage incidents that occur during data quality monitoring, navigate to the **Incidents** section.
 
-![Incidents screen](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/incidents-screen5.png){ loading=lazy; width="1200px" }
+![Incidents screen](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/incidents-screen6.png){ loading=lazy; width="1200px" }
 
 On the left side of this screen, there is a list displaying the connections and the number of incidents that have
 occurred for each one. On the right panel, you can view incidents for the connections you have selected, and you can
@@ -119,6 +119,17 @@ For each incident the following information is provided:
 By default, incidents are grouped by table name, data quality dimension and check category. To change the grouping method click the **Configure** button in the upper right which
 will link you to the **Incidents and Notifications** tab in the **Data Source** section.
 Change the level of grouping for data quality incidents and click the **Save** button.
+
+### **Delete incidents**
+
+To delete incidents, click on the three-dot icon located to the right of the connection name.
+
+![Delete incidents](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/delete-incidents2.png){ loading=lazy; width="1200px" }
+
+This will open a **Delete data** popup window with the "Incidents" checkbox preselected. In this window, you can refine 
+your delete options by selecting a specific column, schema, or table, as well as specifying a time range or choosing a particular incident status.
+
+![Delete incidents - popup window](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/delete-incidents-popup-window1.png){ loading=lazy width="900px" }
 
 ### **Filter incidents**
 
