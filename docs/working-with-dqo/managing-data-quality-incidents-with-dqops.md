@@ -122,11 +122,11 @@ Change the level of grouping for data quality incidents and click the **Save** b
 
 ### **Delete incidents**
 
-To delete incidents, click on the three-dot icon located to the right of the connection name.
+To delete incidents for the whole connection, click on the three-dot icon located to the right of the connection name.
 
 ![Delete incidents](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/delete-incidents2.png){ loading=lazy; width="1200px" }
 
-This will open a **Delete data** popup window with the "Incidents" checkbox preselected. In this window, you can refine 
+This will open a **Delete data** popup window with the **Incidents** checkbox preselected. In this window, you can refine 
 your delete options by selecting a specific column, schema, or table, as well as specifying a time range or choosing a particular incident status.
 
 ![Delete incidents - popup window](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/delete-incidents-popup-window1.png){ loading=lazy width="900px" }
