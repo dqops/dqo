@@ -1,0 +1,29 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/ConnectionYaml-schema.json
+apiVersion: dqo/v1
+kind: source
+spec:
+  provider_type: postgresql
+  postgresql:
+    host: localhost
+    port: 5432
+    database: postgres_dev
+    user: postgres
+    password: Gola1984
+    sslmode: disable
+    postgresql_engine_type: postgresql
+  schedules:
+    profiling:
+      cron_expression: 0 1 1 * *
+    monitoring_daily:
+      cron_expression: 0 12 * * *
+    monitoring_monthly:
+      cron_expression: 0 12 * * *
+    partitioned_daily:
+      cron_expression: 0 12 * * *
+    partitioned_monthly:
+      cron_expression: 0 12 * * *
+  incident_grouping:
+    grouping_level: table_dimension_category
+    minimum_severity: warning
+    max_incident_length_days: 60
+    mute_for_days: 60

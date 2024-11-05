@@ -1,0 +1,4 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/DefaultNotificationsYaml-schema.json
+apiVersion: dqo/v1
+kind: default_notifications
+spec: {}

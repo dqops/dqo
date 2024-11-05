@@ -1,0 +1,8 @@
+.credentials/
+.data/
+.index/
+.logs/
+bin/
+jars/
+.venv/
+.localsettings.dqosettings.yaml
