@@ -138,6 +138,7 @@ nav:
       - Data quality monitoring:
           - Detect empty tables: "examples/data-quality-monitoring/detect-empty-tables.md"
           - Running checks with a scheduler: "examples/data-quality-monitoring/running-checks-with-a-scheduler.md"
+          - Moving configured checks between environments: "examples/data-quality-monitoring/moving-configured-checks-between-environments.md"
   - Working with DQOps:
       - "working-with-dqo/index.md"
       - Daily monitoring of data quality: "working-with-dqo/daily-monitoring-of-data-quality.md"
