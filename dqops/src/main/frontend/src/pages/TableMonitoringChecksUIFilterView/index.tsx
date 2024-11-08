@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { CheckContainerModel, CheckResultsOverviewDataModel } from '../../api';
-import Button from "../../components/Button";
+import Button from '../../components/Button';
 import DataQualityChecks from '../../components/DataQualityChecks';
 import SvgIcon from '../../components/SvgIcon';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
@@ -9,14 +9,40 @@ import {
   getTableMonitoringChecksModelFilter,
   setTableUpdatedMonitoringChecksModelFilter
 } from '../../redux/actions/table.actions';
-import { getFirstLevelActiveTab, getFirstLevelState } from "../../redux/selectors";
-import { CheckResultOverviewApi, TableApiClient } from "../../services/apiClient";
-import { CheckTypes } from "../../shared/routes";
+import {
+  getFirstLevelActiveTab,
+  getFirstLevelState
+} from '../../redux/selectors';
+import {
+  CheckResultOverviewApi,
+  TableApiClient
+} from '../../services/apiClient';
+import { CheckTypes } from '../../shared/routes';
 import { useDecodedParams } from '../../utils';
 
 const TableMonitoringChecksUIFilterView = () => {
-  const { checkTypes, connection: connectionName, schema: schemaName, table: tableName, timePartitioned, category, checkName }: { checkTypes: CheckTypes, connection: string, schema: string, table: string, timePartitioned: 'daily' | 'monthly', category: string, checkName: string } = useDecodedParams();
-  const { monitoringChecksUIFilter, isUpdatedMonitoringChecksUIFilter, loading } = useSelector(getFirstLevelState(checkTypes));
+  const {
+    checkTypes,
+    connection: connectionName,
+    schema: schemaName,
+    table: tableName,
+    timePartitioned,
+    category,
+    checkName
+  }: {
+    checkTypes: CheckTypes;
+    connection: string;
+    schema: string;
+    table: string;
+    timePartitioned: 'daily' | 'monthly';
+    category: string;
+    checkName: string;
+  } = useDecodedParams();
+  const {
+    monitoringChecksUIFilter,
+    isUpdatedMonitoringChecksUIFilter,
+    loading
+  } = useSelector(getFirstLevelState(checkTypes));
   const dispatch = useActionDispatch();
   const [checkResultsOverview, setCheckResultsOverview] = useState<
     CheckResultsOverviewDataModel[]
@@ -50,7 +76,14 @@ const TableMonitoringChecksUIFilterView = () => {
         checkName
       )
     );
-  }, [connectionName, schemaName, tableName, category, checkName]);
+  }, [
+    connectionName,
+    schemaName,
+    tableName,
+    category,
+    checkName,
+    firstLevelActiveTab
+  ]);
 
   const onUpdate = async () => {
     setIsUpdating(true);
