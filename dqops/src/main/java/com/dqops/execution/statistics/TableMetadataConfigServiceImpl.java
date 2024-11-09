@@ -117,6 +117,9 @@ public class TableMetadataConfigServiceImpl implements TableMetadataConfigServic
 
             for (StatisticsResultsForColumnModel columnStatistics : statisticsResultsForTableModel.getColumns().values()) {
                 StatisticsMetricModel maxValueMetric = columnStatistics.getMetricByCollectorName(ColumnRangeMaxValueStatisticsCollectorSpec.COLLECTOR_NAME);
+                if (maxValueMetric == null) {
+                    continue;
+                }
 
                 Instant maxDate = DateTypesConverter.toInstant(maxValueMetric.getResult(), defaultTimeZoneId);
                 if (maxDate == null) {
