@@ -1,0 +1,70 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  incremental_time_window:
+    daily_partitioning_recent_days: 7
+    monthly_partitioning_recent_months: 1
+  monitoring_checks:
+    daily:
+      volume:
+        daily_row_count:
+          warning:
+            min_count: 100
+  columns:
+    order_id:
+      type_snapshot:
+        column_type: INTEGER
+        nullable: true
+        precision: 0
+    user_id:
+      type_snapshot:
+        column_type: INTEGER
+        nullable: true
+        precision: 0
+    status:
+      type_snapshot:
+        column_type: TEXT
+        nullable: true
+        length: 1073741824
+    gender:
+      type_snapshot:
+        column_type: '"CHAR"'
+        nullable: true
+    created_at:
+      type_snapshot:
+        column_type: TEXT
+        nullable: true
+        length: 1073741824
+      monitoring_checks:
+        daily:
+          nulls:
+            daily_nulls_count:
+              error:
+                max_count: 0
+    returned_at:
+      type_snapshot:
+        column_type: TEXT
+        nullable: true
+        length: 1073741824
+      monitoring_checks:
+        daily:
+          nulls:
+            daily_nulls_count:
+              error:
+                max_count: 800
+    shipped_at:
+      type_snapshot:
+        column_type: TEXT
+        nullable: true
+        length: 1073741824
+    delivered_at:
+      type_snapshot:
+        column_type: TEXT
+        nullable: true
+        length: 1073741824
+    num_of_item:
+      type_snapshot:
+        column_type: INTEGER
+        nullable: true
+        precision: 0

@@ -1,10 +1,11 @@
 # Schedules overview
-Read this guide to learn how to configure the scheduling of data quality checks at various levels.
+Read this guide to learn how to configure the scheduling of tables import and data quality checks execution at various levels.
 
 ## Overview
 
 With DQOps, you can easily customize when checks are run by setting schedules. You can set schedules for an entire connection,
-table, or individual check. When you import a new table, DQOPs automatically set the schedule to run check daily at 12:00 a.m.
+table, or individual check. When you import a new table, DQOps automatically schedules profiling checks to run at 12:00 PM on the 1st of every month
+and daily monitoring checks at 12:00 PM. Additionally, you can customize the schedule for automatic table imports from a connection.
 
 To modify the schedule you can use the user interface as described below or [manually modify the YAML configuration file as described here.](./configuring-schedules-by-modifying-yaml-file.md)
 
@@ -27,7 +28,7 @@ when you import the data source.
 
 To change the default schedule configuration, follow these steps:
 
-![Change default schedule configuration](https://dqops.com/docs/images/working-with-dqo/schedules/default-schedules-configuration.png){ loading=lazy; width="1200px" }
+![Change default schedule configuration](https://dqops.com/docs/images/working-with-dqo/schedules/default-schedules-configuration3.png){ loading=lazy; width="1200px" }
 
 1. Go to the **Configuration** section.
 2. Click on the **Default schedules** option in the three view on the left.
@@ -39,18 +40,16 @@ To change the default schedule configuration, follow these steps:
 
 To set up or modify a schedule for the entire connection or table, follow these steps:
 
-![Navigating to schedule configuration](https://dqops.com/docs/images/working-with-dqo/schedules/navigating-to-schedule-configuration.png){ loading=lazy; width="1200px" }
+![Navigating to schedule configuration](https://dqops.com/docs/images/working-with-dqo/schedules/navigating-to-schedule-configuration3.png){ loading=lazy; width="1200px" }
 
-1. Navigate to the **Data Source** section.
+1. Navigate to the **Data sources** section.
 2. Choose the connection or table where you want to set or modify the schedule from the tree view on the left.
 3. Click on the **Schedule** tab.
 4. Select the check type:
 
     - Profiling
-    - Monitoring Daily
-    - Monitoring Monthly
-    - Partition Daily
-    - Partition Monthly
+    - Monitoring (in the paid version, you can select Daily and Monthly checks)
+    - Partition (in the paid version, you can select Daily and Monthly partitioned checks)
    
 5. Specify the schedule using a [Unix cron expression](./cron-formatting.md) or select one of the options provided.
 6. Once you have set the schedule, click on the **Save** button to save your changes.
@@ -65,14 +64,14 @@ On the [Check editor screen](../../dqo-concepts/dqops-user-interface-overview.md
 check if the schedule is enabled, where it is configured, what the effective cron expression is, and when the next check
 execution will take place.
 
-![Scheduling status](https://dqops.com/docs/images/working-with-dqo/schedules/scheduling-status.png){ loading=lazy; width="1200px" }
+![Scheduling status](https://dqops.com/docs/images/working-with-dqo/schedules/scheduling-status3.png){ loading=lazy; width="1200px" }
 
 
-## Configure a schedule at check level.
+## Configure a schedule at check level
 
 To set up a schedule for a specific check, follow these steps:
 
-![Configuring a schedule at check level](https://dqops.com/docs/images/working-with-dqo/schedules/configuring-schedule-at-check-level.png){ loading=lazy; width="1200px" }
+![Configuring a schedule at check level](https://dqops.com/docs/images/working-with-dqo/schedules/configuring-schedule-at-check-level3.png){ loading=lazy; width="1200px" }
 
 1. Navigate to the section with a check type of interest (**Profiling**, **Monitoring checks** or **Partition checks**).
 2. Choose table or column of interest from the tree view on the left.
@@ -83,6 +82,22 @@ To set up a schedule for a specific check, follow these steps:
 Please note that any changes made to the schedule at the check level will override the schedule set for the entire 
 connection or table.
 
+## Configure schedule for automatic tables import
+
+You can configure an automatic import schedule for tables from a connection to keep your data fresh and up-to-date.
+
+To set up or modify a table import schedule, follow these steps:
+
+![Navigating to table auto import schedule configuration](https://dqops.com/docs/images/working-with-dqo/schedules/navigating-to-table-auto-import-schedule-configuration1.png){ loading=lazy; width="1200px" }
+
+1. Navigate to the **Data sources** section.
+2. Choose the connection where you want to set or modify the tables aout import schedule from the tree view on the left.
+3. Click on the **Schedule** tab.
+4. Select the **Tables import** tab. 
+5. Define the import schedule using a [Unix cron expression](./cron-formatting.md) or choose one of the provided options.
+    You can also add schema filters or specify the full name of the table, or use part of the table’s name. 
+6. Click the **Save** button to confirm your changes.
+
 ## Start and stop a scheduler
 
 In DQOps, the scheduler is started as a default. 
@@ -90,7 +105,7 @@ In DQOps, the scheduler is started as a default.
 To start or stop the scheduler use the user interface. Simply switch on or off the **Jobs scheduler** using the button in the Notifications window
 on the [right upper right corner of the navigation bar](../../dqo-concepts/dqops-user-interface-overview.md).
 
-![Notifications - Scheduler](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/notification-panel.png)
+![Start/stop scheduler](https://dqops.com/docs/images/working-with-dqo/schedules/starting-and-stopping-scheduler1.png)
 
 To initiate a scheduler in the DQOps Shell, simply enter the command `scheduler start`. To stop the scheduler, use the 
 command `scheduler stop`. For further information on the `scheduler` commands, please refer to the [Command-line interface section](../../command-line-interface/scheduler.md). 
@@ -107,7 +122,7 @@ To terminate dqo running in the background, simply use the Ctrl+C.
 For more information on the `run` command, please refer to the [Command-line interface section](../../command-line-interface/run.md).
 
 
-## Synchronize data
+## Data synchronization scheduling
 
 All the YAML configuration files with data source metadata and schedules configuration are stored in `/sources` folder. 
 You can read more about the [data storage in DQOps here](../../dqo-concepts/data-storage-of-data-quality-results.md). 

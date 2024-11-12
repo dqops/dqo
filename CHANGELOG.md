@@ -1,11 +1,5 @@
-# 1.9.1
+# 1.10.1
 
-* Data lineage editor suggests similar source and target tables
-* Fixes in the management of tabs
-* ClickHouse connector
-* Teradata connector
-* Small UI fixes
-* Performance improvements in the anomaly detection code
-* Other performance optimizations
-* Run Python rules in parallel to speed up anomaly detection when tables have a different number of enabled checks
+* Small UI fixes to open pages directly from an URL.
+* Fix problems when installing on Windows using pip, when Python was installed from Windows Store and uses a deeply nested folder structure
 

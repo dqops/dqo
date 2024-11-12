@@ -113,7 +113,7 @@ const ScheduleDetail = () => {
                 value: CheckRunMonitoringScheduleGroup.partitioned_monthly
               },
               {
-                label: 'Import tables',
+                label: 'Tables import',
                 value: 'import_tables'
               }
             ]
@@ -132,7 +132,7 @@ const ScheduleDetail = () => {
                 value: CheckRunMonitoringScheduleGroup.partitioned_daily
               },
               {
-                label: 'Import tables',
+                label: 'Tables import',
                 value: 'import_tables'
               }
             ];

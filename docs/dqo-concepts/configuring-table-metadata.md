@@ -119,6 +119,13 @@ The core elements found on the *.dqotable.yaml* file are described in the table 
     | 11   | `spec.columns`                                                                                         | A node that contains an array of columns for which the data quality checks are configured.                                                                                                                                          |               |
     | 12   | `spec.columns.<first_column_name>`                                                                     | An example column named *first_column_name*. The column level data quality checks for this column are configured inside this node.                                                                                                  |               |
 
+## Table auto import configration
+
+You can configure automatic synchronization of metadata to keep your data fresh and up to date.
+
+Follow the link to learn [how to set up or modify automatic table import schedule](../working-with-dqo/configure-scheduling-of-data-quality-checks/index.md#configure-schedule-for-automatic-tables-import).
+
+![Navigating to table auto import schedule configuration](https://dqops.com/docs/images/working-with-dqo/schedules/navigating-to-table-auto-import-schedule-configuration1.png){ loading=lazy; width="1200px" }
 
 ## Configuring columns
 The list of columns is stored in the `spec.columns` node in the *.dqotable.yaml* file.

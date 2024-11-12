@@ -136,6 +136,8 @@ the 3rd party system should be added and saved. Incident linking can be also aut
 the [set_incident_issue_url](../client/operations/incidents.md#set_incident_issue_url) operation from a Python
 code or by calling the DQOps REST API directly.
 
+[Incident can be deleted](../working-with-dqo/managing-data-quality-incidents-with-dqops.md#delete-incidents) using the three-dot icon located to the right of the connection name.
+
 When a single incident is clicked, DQOps shows the incident detail screen. The url to this screen can be copied
 to the clipboard and send to another DQOps user, who can review the issue. Also, the link is shown
 in the [Slack incident notifications](../integrations/slack/configuring-slack-notifications.md).

@@ -52,16 +52,18 @@ To navigate to a **Basic data statistic** in the example using the [user interfa
 ![Navigating to the Basic data statistics](https://dqops.com/docs/images/examples/navigating-to-the-basic-data-statistic-detect-datatype-in-text-changed2.png){ loading=lazy; width="1200px" }
 
 1. Go to the **Profiling** section.
-  
+
+    In the profiling section, there is a process that provides a high-level overview that helps uncover data quality issues, risks, and overall trends. Data profiling provides key insights into the data that companies can use to their advantage.
+
 
 2. Select the table or column mentioned in the example description from the **tree view** on the left.
 
-   On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../data-sources/index.md).
+    On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../data-sources/index.md).
 
 
 3. Select the **Basic data statistic** tab.
 
-   This tab allows you to collect basic statistics about data sources during the data profiling stage. To do this, click the **Collect statistics** button in the upper right corner.
+    This tab allows you to collect basic statistics about data sources during the data profiling stage. To do this, click the **Collect statistics** button in the upper right corner.
 
 ## Run the example using the user interface
 
@@ -75,17 +77,18 @@ To navigate to a list of checks prepared in the example using the [user interfac
 
 1. Go to the **Monitoring** section.
 
-   The **Monitoring Checks** section enables the configuration of data quality checks that are designed for the daily and monthly monitoring of your data source.
+    The **Monitoring Checks** section enables the configuration of data quality checks that are designed for the daily and monthly monitoring of your data source.
 
 
 2. Select the table or column mentioned in the example description from the **tree view** on the left.
 
-On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../data-sources/index.md).
+    On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../data-sources/index.md).
 
 
 3. Select the **Data quality checks editor** tab.
 
-   This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../dqo-concepts/dqops-user-interface-overview.md#check-editor).
+    This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../dqo-concepts/dqops-user-interface-overview.md#check-editor).
+
 
 ### **Run checks**
 

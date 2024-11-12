@@ -1,0 +1,19 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableLevelDataQualityPolicyYaml-schema.json
+apiVersion: dqo/v1
+kind: default_table_checks
+spec:
+  priority: 1000
+  description: "Monitors data volume of the whole table (using daily monitoring checks)\
+    \ and for each daily partition, using daily partition checks."
+  monitoring_checks:
+    daily:
+      volume:
+        daily_row_count_anomaly:
+          warning:
+            anomaly_percent: 0.1
+  partitioned_checks:
+    daily:
+      volume:
+        daily_partition_row_count_anomaly:
+          warning:
+            anomaly_percent: 0.1
