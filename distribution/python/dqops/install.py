@@ -62,7 +62,9 @@ def install_dqo(dest: str, dqo_tag: str, dqo_version: str):
     download_to_file(dqo_tag, dqo_version, distribution_local_name)
 
     with zipfile.ZipFile(distribution_local_name, "r") as zip_ref:
-        zip_ref.extractall(dest)
+        os_platform = sys.platform.lower()[0:3]
+        dest_path = ("\\\\?\\" if os_platform == "win" else "") + os.path.abspath(dest)
+        zip_ref.extractall(dest_path)
 
     if os.path.exists(distribution_local_name):
         os.remove(distribution_local_name)
