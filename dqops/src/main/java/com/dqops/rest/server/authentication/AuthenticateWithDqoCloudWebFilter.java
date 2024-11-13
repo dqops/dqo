@@ -274,7 +274,9 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
 
                 exchange.getResponse().setStatusCode(HttpStatusCode.valueOf(303));
                 exchange.getResponse().getHeaders().add("Location", dqoCloudLoginUrl);
-                return exchange.getResponse().writeAndFlushWith(Mono.empty());
+
+                return exchange.getSession().flatMap(session -> session.invalidate())
+                        .then(exchange.getResponse().writeAndFlushWith(Mono.empty()));
             }
             catch (Exception ex) {
                 log.error("Cannot create a DQOps Cloud login url: " + ex.getMessage(), ex);
