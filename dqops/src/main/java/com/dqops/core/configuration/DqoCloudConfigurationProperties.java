@@ -28,6 +28,7 @@ import org.springframework.context.annotation.Configuration;
 public class DqoCloudConfigurationProperties implements Cloneable {
     private String apiKey;
     private String apiKeyRequestUrl;
+    private String logoutUrl;
     private String uiBaseUrl;
     private String restApiBaseUrl;
     private int apiKeyPickupTimeoutSeconds = 10 * 60;
@@ -71,6 +72,22 @@ public class DqoCloudConfigurationProperties implements Cloneable {
      */
     public void setApiKeyRequestUrl(String apiKeyRequestUrl) {
         this.apiKeyRequestUrl = apiKeyRequestUrl;
+    }
+
+    /**
+     * Returns the logout url.
+     * @return Logout url.
+     */
+    public String getLogoutUrl() {
+        return logoutUrl;
+    }
+
+    /**
+     * Sets the logout url.
+     * @param logoutUrl Logout url.
+     */
+    public void setLogoutUrl(String logoutUrl) {
+        this.logoutUrl = logoutUrl;
     }
 
     /**

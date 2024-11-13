@@ -210,6 +210,51 @@ public class InstanceCloudLoginServiceImpl implements InstanceCloudLoginService 
     }
 
     /**
+     * Builds a url to the DQOps Cloud's logout page with the ticket granting ticket and the return url.
+     *
+     * @param returnUrl Return url.
+     * @return Url to the DQOps Cloud's login page to redirect to.
+     */
+    @Override
+    public String makeDqoLogoutUrl(String returnUrl) {
+        String returnBaseUrl = this.getReturnBaseUrl();
+        if (this.dqoInstanceConfigurationProperties.isValidateReturnBaseUrl() && !returnUrl.startsWith(returnBaseUrl)) {
+            throw new DqoRuntimeException("Invalid return url. The valid return url for this DQOps instance must begin with " + returnBaseUrl +
+                    ". You can change the configuration by setting the --dqo.instance.return-base-url or setting the environment variable " +
+                    "DQO_INSTANCE_RETURN_BASE_URL to the base url of your DQOps instance, for example --dqo.instance.return-base-url=https://dqoinstance.yourcompany.com");
+        }
+
+        String ticketGrantingTicket = this.getTicketGrantingTicket();
+        DqoUserPrincipal userPrincipalForAdministrator = this.principalProvider.createLocalInstanceAdminPrincipal();
+        DqoCloudApiKey apiKey = this.dqoCloudApiKeyProvider.getApiKey(userPrincipalForAdministrator.getDataDomainIdentity());
+
+        try {
+            if (!returnUrl.startsWith(returnBaseUrl)) {
+                URI originalReturnUri = new URI(returnUrl);
+                URIBuilder returnUrlBuilder = new URIBuilder(returnBaseUrl);
+                returnUrlBuilder.setPath(originalReturnUri.getPath());
+                if (originalReturnUri.getRawQuery() != null) {
+                    returnUrlBuilder.setCustomQuery(originalReturnUri.getRawQuery());
+                }
+                returnUrl = returnUrlBuilder.build().toString();
+            }
+
+            URIBuilder uriBuilder = new URIBuilder(this.dqoCloudConfigurationProperties.getLogoutUrl());
+            uriBuilder.addParameter("tgt", ticketGrantingTicket);
+            if (!Strings.isNullOrEmpty(apiKey.getApiKeyPayload().getAccountName())) {
+                uriBuilder.addParameter("account", apiKey.getApiKeyPayload().getAccountName());
+            }
+            uriBuilder.addParameter("returnUrl", returnUrl);
+
+            String dqoLoginUrl = uriBuilder.build().toString();
+            return dqoLoginUrl;
+        }
+        catch (Exception ex) {
+            throw new DqoRuntimeException("Invalid DQOps Cloud base url, error: " + ex.getMessage(), ex);
+        }
+    }
+
+    /**
      * Creates a signed authentication token from a refresh token.
      * @param refreshToken Refresh token.
      * @return Signed authentication token.

@@ -79,6 +79,11 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
     public static final String ISSUE_TOKEN_REQUEST_PATH = "/tokenissuer";
 
     /**
+     * A special URL that performs a logout, clears the authentication cookie and redirects the user to the login server.
+     */
+    public static final String LOGOUT_PATH = "/logout";
+
+    /**
      * Health check url.
      */
     public static final String HEALTHCHECK_REQUEST_PATH = "/api/ishealthy";
@@ -242,6 +247,40 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
             return chain
                     .filter(mutatedExchange)
                     .then();
+        }
+
+        if (Objects.equals(requestPath, LOGOUT_PATH)) {
+            String hostHeader = request.getHeaders().getHost().getHostString();
+
+            int portPrefixIndex = hostHeader.indexOf(':');
+            if (portPrefixIndex > 0) {
+                hostHeader = hostHeader.substring(0, portPrefixIndex);
+            }
+
+            ResponseCookie dqoAccessTokenCookie = ResponseCookie.from(AUTHENTICATION_TOKEN_COOKIE, "")
+                    .maxAge(0L)
+                    .path("/")
+                    .domain(hostHeader)
+                    .build();
+            exchange.getResponse().getCookies().add(AUTHENTICATION_TOKEN_COOKIE, dqoAccessTokenCookie);
+
+            try {
+                String returnUrl = exchange.getRequest().getURI().resolve("/").toString();
+                String dqoCloudLoginUrl = this.instanceCloudLoginService.makeDqoLogoutUrl(returnUrl);
+
+                if (log.isDebugEnabled()) {
+                    log.debug("Redirecting the user to logout and authenticate with DQOps Cloud federated authentication at " + dqoCloudLoginUrl);
+                }
+
+                exchange.getResponse().setStatusCode(HttpStatusCode.valueOf(303));
+                exchange.getResponse().getHeaders().add("Location", dqoCloudLoginUrl);
+                return exchange.getResponse().writeAndFlushWith(Mono.empty());
+            }
+            catch (Exception ex) {
+                log.error("Cannot create a DQOps Cloud login url: " + ex.getMessage(), ex);
+                exchange.getResponse().setStatusCode(HttpStatusCode.valueOf(500));
+                return exchange.getResponse().writeAndFlushWith(Mono.empty());
+            }
         }
 
         if (Objects.equals(requestPath, ISSUE_TOKEN_REQUEST_PATH)) {

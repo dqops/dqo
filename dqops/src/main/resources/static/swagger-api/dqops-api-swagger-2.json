@@ -39351,6 +39351,10 @@
         "can_use_ai_anomaly_detection" : {
           "type" : "boolean",
           "description" : "The DQOps instance is a paid version with advanced AI anomaly prediction."
+        },
+        "can_logout" : {
+          "type" : "boolean",
+          "description" : "This instance uses federated authentication and the user can log out."
         }
       },
       "description" : "The model that describes the current user and his access rights."

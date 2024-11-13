@@ -255,6 +255,14 @@ export default function UserProfile({ name, email }: UserProfile) {
               </div>
             </>
           )}
+          {userProfile.can_logout === true && (
+            <a
+              href="/logout"
+              className="block text-teal-500 text-sm underline mb-3 ml-1"
+            >
+              Logout
+            </a>
+          )}
         </div>
         <ChangePrincipalPasswordDialog
           open={open}
