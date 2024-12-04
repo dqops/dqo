@@ -424,6 +424,8 @@ These checks can:
 Data observability tools often use these types of checks. They continuously monitor your data and store historical values to make it easier to spot these anomalies.
 You can use an open-source data observability tool DQOps, which supports those type of checks out of the box.
 
+Data cleaning fixes errors automatically, like typos or missing values. Data cleansing goes deeper, ensuring data is correct, often with manual checks.
+
 
 ## What's next
 
