@@ -1,7 +1,7 @@
 ---
-title: sql aggregate expression on column data quality checks
+title: Sql aggregate expression on column data quality checks, SQL examples
 ---
-# sql aggregate expression on column data quality checks
+# Sql aggregate expression on column data quality checks, SQL examples
 
 A column-level check that calculates a given SQL aggregate expression on a column and verifies if the value is within a range of accepted values.
 

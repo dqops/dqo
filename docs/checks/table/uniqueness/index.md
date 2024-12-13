@@ -1,7 +1,7 @@
 ---
-title: table level uniqueness data quality checks
+title: List of table level uniqueness data quality checks
 ---
-# table level uniqueness data quality checks
+# List of table level uniqueness data quality checks
 
 This is a list of uniqueness table data quality checks supported by DQOps and a brief description of what data quality issued they detect.
 

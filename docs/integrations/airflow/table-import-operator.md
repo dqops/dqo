@@ -1,5 +1,8 @@
-# Table import operator
-Read this reference to learn how to use the DQOps Apache Airflow operator for importing metadata of tables to DQOps for further data quality monitoring.
+---
+title: Airflow Table Import Operator with Example DAG
+---
+# Airflow Table Import Operator with Example DAG
+Read this reference to learn how to use the Apache Airflow operator for importing metadata of tables for further data quality monitoring and testing.
 
 ## Overview
 

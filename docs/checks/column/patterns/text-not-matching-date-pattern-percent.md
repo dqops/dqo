@@ -1,7 +1,7 @@
 ---
-title: text not matching date pattern percent data quality checks
+title: Text not matching date pattern percent data quality checks, SQL examples
 ---
-# text not matching date pattern percent data quality checks
+# Text not matching date pattern percent data quality checks, SQL examples
 
 This check validates the date format of dates stored in text columns.
  It measures the percentage of incorrectly formatted dates and raises a data quality issue when the rate is above a threshold.

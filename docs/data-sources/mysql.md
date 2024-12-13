@@ -1,8 +1,8 @@
 ---
-title: How to set up data quality monitoring and data observability for MySQL
+title: How to Monitor MySQL? Data Observability Configuration
 ---
-# How to set up data quality monitoring and data observability for MySQL
-Data observability and data monitoring for MySQL. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
+# How to Monitor MySQL? Data Observability Configuration
+Learn how to monitor MySQL and enable data observability to detect schema changes, data anomalies, volume fluctuations, and data quality issues.
 
 ## Overview
 

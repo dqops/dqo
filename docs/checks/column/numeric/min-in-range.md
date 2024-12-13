@@ -1,7 +1,7 @@
 ---
-title: min in range data quality checks
+title: Min in range data quality checks, SQL examples
 ---
-# min in range data quality checks
+# Min in range data quality checks, SQL examples
 
 This check finds a minimum value in a numeric column. It verifies that the minimum value is within the range of accepted values
  and raises a data quality issue when it is not within a valid range.

@@ -1,7 +1,7 @@
 ---
-title: DQOps data quality sampling sensors
+title: DQOps data quality sampling sensors, SQL examples
 ---
-# DQOps data quality sampling sensors
+# DQOps data quality sampling sensors, SQL examples
 All [data quality sensors](../../../dqo-concepts/definition-of-data-quality-sensors.md) in the **sampling** category supported by DQOps are listed below. Those sensors are measured on a column level.
 
 ---

@@ -1,7 +1,7 @@
 ---
-title: distinct count anomaly data quality checks
+title: Distinct count anomaly data quality checks, SQL examples
 ---
-# distinct count anomaly data quality checks
+# Distinct count anomaly data quality checks, SQL examples
 
 This check monitors the count of distinct values and detects anomalies in the changes of the distinct count. It monitors a 90-day time window.
  The check is configured by setting a desired percentage of anomalies to identify as data quality issues.

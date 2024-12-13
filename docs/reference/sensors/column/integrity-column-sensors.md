@@ -1,7 +1,7 @@
 ---
-title: DQOps data quality integrity sensors
+title: DQOps data quality integrity sensors, SQL examples
 ---
-# DQOps data quality integrity sensors
+# DQOps data quality integrity sensors, SQL examples
 All [data quality sensors](../../../dqo-concepts/definition-of-data-quality-sensors.md) in the **integrity** category supported by DQOps are listed below. Those sensors are measured on a column level.
 
 ---

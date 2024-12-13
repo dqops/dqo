@@ -1,7 +1,7 @@
 ---
-title: data staleness data quality checks
+title: Data staleness data quality checks, SQL examples
 ---
-# data staleness data quality checks
+# Data staleness data quality checks, SQL examples
 
 A table-level check that calculates the time difference between the last timestamp when any data was loaded into a table and the current time.
  This check can only be use when a data pipeline, ETL process, or trigger in the data warehouse is filling an extra column with the timestamp when the data loading job was loaded.

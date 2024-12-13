@@ -1,7 +1,7 @@
 ---
-title: column level uniqueness data quality checks
+title: List of column level uniqueness data quality checks
 ---
-# column level uniqueness data quality checks
+# List of column level uniqueness data quality checks
 
 This is a list of uniqueness column data quality checks supported by DQOps and a brief description of what data quality issued they detect.
 

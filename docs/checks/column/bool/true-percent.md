@@ -1,7 +1,7 @@
 ---
-title: true percent data quality checks
+title: True percent data quality checks, SQL examples
 ---
-# true percent data quality checks
+# True percent data quality checks, SQL examples
 
 This check measures the percentage of **true** values in a boolean column. It raises a data quality issue when the measured percentage is outside the accepted range.
 

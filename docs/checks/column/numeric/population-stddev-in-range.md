@@ -1,7 +1,7 @@
 ---
-title: population stddev in range data quality checks
+title: Population stddev in range data quality checks, SQL examples
 ---
-# population stddev in range data quality checks
+# Population stddev in range data quality checks, SQL examples
 
 This check calculates the population standard deviation of numeric values. It verifies that the population standard deviation is within the range of accepted values
  and raises a data quality issue when it is not within a valid range.

@@ -1,5 +1,7 @@
-# DQOps data lineage support
-
+---
+title: Marquez Data Lineage and Data Quality Integration
+---
+# Marquez Data Lineage and Data Quality Integration
 DQOps has built-in data lineage, which allows users to easily trace data helping them identify the root cause of data quality issues more efficiently.
 
 It helps organizations track data back to its source, making it easier to identify where quality issues begin by  

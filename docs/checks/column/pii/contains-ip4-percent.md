@@ -1,7 +1,7 @@
 ---
-title: contains ip4 percent data quality checks
+title: Contains ip4 percent data quality checks, SQL examples
 ---
-# contains ip4 percent data quality checks
+# Contains ip4 percent data quality checks, SQL examples
 
 This check detects IP4 addresses inside text columns. It measures the percentage of columns containing an IP4 address and raises a data quality issue when too many rows contain IP4 addresses.
 

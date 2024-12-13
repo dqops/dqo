@@ -1,7 +1,7 @@
 ---
-title: distinct count data quality checks
+title: Distinct count data quality checks, SQL examples
 ---
-# distinct count data quality checks
+# Distinct count data quality checks, SQL examples
 
 This check counts distinct values and verifies if the distinct count is within an accepted range. It raises a data quality issue when the distinct count is below or above the accepted range.
 

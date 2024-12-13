@@ -1,7 +1,7 @@
 ---
-title: Incremental data quality monitoring for partitioned data
+title: Incremental Data Quality Monitoring for Partitioned Data with Examples
 ---
-# Incremental data quality monitoring for partitioned data
+# Incremental Data Quality Monitoring for Partitioned Data with Examples
 This guide shows how to detect data quality issues in time-based or partitioned data, monitoring very big or append-only tables, detecting issues ahead of time.
 
 ## Measuring the quality of partitioned data

@@ -1,7 +1,7 @@
 ---
-title: number below min value percent data quality checks
+title: Number below min value percent data quality checks, SQL examples
 ---
-# number below min value percent data quality checks
+# Number below min value percent data quality checks, SQL examples
 
 This check finds numeric values smaller than the minimum accepted value. It measures the percentage of values that are too small.
  This check raises a data quality issue when the percentage of values that are too small exceeds the maximum accepted percentage.

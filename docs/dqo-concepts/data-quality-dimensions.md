@@ -1,8 +1,8 @@
 ---
-title: How to measure data quality dimensions - list of data quality checks
+title: What are Data Quality Dimensions? Definitions, Examples and Best Practices
 ---
 
-# How to measure data quality dimensions - list of data quality checks
+# What are Data Quality Dimensions? Definitions, Examples and Best Practices
 Data quality dimensions are standards for evaluating the quality of data, to make sure it's suitable for its intended use. They are measured by quality checks.
 
 ## What is a data quality dimension?

@@ -1,7 +1,7 @@
 ---
-title: Data quality incident management, grouping and notifications
+title: Data Quality Incident Management, Grouping and Notifications
 ---
-# Data quality incident management, grouping and notifications
+# Data Quality Incident Management, Grouping and Notifications
 This guide shows how DQOps correlates similar data quality issues into data quality incidents, and how the incident notification workflow works. 
 
 ## What is a data quality incident?

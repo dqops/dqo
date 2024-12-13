@@ -1,7 +1,7 @@
 ---
-title: text length above max length percent data quality checks
+title: Text length above max length percent data quality checks, SQL examples
 ---
-# text length above max length percent data quality checks
+# Text length above max length percent data quality checks, SQL examples
 
 This check finds texts that are longer than the maximum accepted text length.
  It measures the percentage of texts that are too long and raises a data quality issue when too many invalid texts are found.

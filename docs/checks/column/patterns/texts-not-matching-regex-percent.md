@@ -1,7 +1,7 @@
 ---
-title: texts not matching regex percent data quality checks
+title: Texts not matching regex percent data quality checks, SQL examples
 ---
-# texts not matching regex percent data quality checks
+# Texts not matching regex percent data quality checks, SQL examples
 
 This check validates text values using a pattern defined as a regular expression.
  It measures the percentage of invalid values and raises a data quality issue when the rate is above a threshold.

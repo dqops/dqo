@@ -1,7 +1,7 @@
 ---
-title: text min length data quality checks
+title: Text min length data quality checks, SQL examples
 ---
-# text min length data quality checks
+# Text min length data quality checks, SQL examples
 
 This check finds the length of the shortest text in a column. DQOps validates the shortest length using a range rule.
  DQOps raises an issue when the minimum text length is outside a range of accepted values.

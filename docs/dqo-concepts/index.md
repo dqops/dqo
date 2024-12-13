@@ -1,7 +1,7 @@
 ---
-title: DQOps Data Quality Operations Center concepts
+title: DQOps Data Quality Operations Center Concepts
 ---
-# DQOps Data Quality Operations Center concepts
+# DQOps Data Quality Operations Center Concepts
 Follow this guide to learn each concept of DQOps Data Quality Operations Center to start measuring data quality for data sources.
 
 ## Introduction

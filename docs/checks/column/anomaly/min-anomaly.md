@@ -1,7 +1,7 @@
 ---
-title: min anomaly data quality checks
+title: Min anomaly data quality checks, SQL examples
 ---
-# min anomaly data quality checks
+# Min anomaly data quality checks, SQL examples
 
 This check finds a minimum value in a numeric column and detects anomalies in a time series of previous minimum values.
  It raises a data quality issue when the current minimum value is in the top *anomaly_percent* percentage of the most outstanding

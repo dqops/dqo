@@ -1,7 +1,7 @@
 ---
-title: column exists data quality checks
+title: Column exists data quality checks, SQL examples
 ---
-# column exists data quality checks
+# Column exists data quality checks, SQL examples
 
 A column-level check that reads the metadata of the monitored table and verifies if the column still exists in the data source.
  The data quality sensor returns a value of 1.0 when the column is found or 0.0 when the column is not found.

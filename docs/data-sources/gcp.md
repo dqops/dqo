@@ -1,9 +1,8 @@
 ---
-title: How to set up data quality monitoring and data observability for Google Cloud Storage
+title: How to Monitor GCP Cloud Storage? Data Observability Configuration
 ---
-
-# How to set up data quality monitoring and data observability for Google Cloud Storage
-Data observability and data monitoring for Cloud Storage buckets. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
+# How to Monitor GCP Cloud Storage? Data Observability Configuration
+Learn how to monitor GCP Cloud Storage and enable data observability to detect schema changes, data anomalies, volume fluctuations, and data quality issues.
 
 ## Prerequisites
 

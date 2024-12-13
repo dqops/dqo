@@ -1,7 +1,7 @@
 ---
-title: DQOps data quality pii sensors
+title: DQOps data quality pii sensors, SQL examples
 ---
-# DQOps data quality pii sensors
+# DQOps data quality pii sensors, SQL examples
 All [data quality sensors](../../../dqo-concepts/definition-of-data-quality-sensors.md) in the **pii** category supported by DQOps are listed below. Those sensors are measured on a column level.
 
 ---

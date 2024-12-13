@@ -1,7 +1,7 @@
 ---
-title: text valid country code percent data quality checks
+title: Text valid country code percent data quality checks, SQL examples
 ---
-# text valid country code percent data quality checks
+# Text valid country code percent data quality checks, SQL examples
 
 This check measures the percentage of text values that are valid two-letter country codes.
  It raises a data quality issue when the percentage of valid country codes (excluding null values) falls below a minimum accepted rate.

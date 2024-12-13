@@ -1,7 +1,7 @@
 ---
-title: DQOps data quality volume sensors
+title: DQOps data quality volume sensors, SQL examples
 ---
-# DQOps data quality volume sensors
+# DQOps data quality volume sensors, SQL examples
 All [data quality sensors](../../../dqo-concepts/definition-of-data-quality-sensors.md) in the **volume** category supported by DQOps are listed below. Those sensors are measured on a table level.
 
 ---

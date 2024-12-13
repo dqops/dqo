@@ -1,7 +1,7 @@
 ---
-title: duplicate record percent data quality checks
+title: Duplicate record percent data quality checks, SQL examples
 ---
-# duplicate record percent data quality checks
+# Duplicate record percent data quality checks, SQL examples
 
 This check measures the percentage of duplicate records values. It raises a data quality issue when the percentage of duplicates is above a minimum accepted value.
  The default threshold is 0% duplicate values.

@@ -1,7 +1,7 @@
 ---
-title: nulls percent change data quality checks
+title: Nulls percent change data quality checks, SQL examples
 ---
-# nulls percent change data quality checks
+# Nulls percent change data quality checks, SQL examples
 
 Detects relative increases or decreases in the percentage of null values since the last measured percentage.
  Measures the percentage of null values for each day.

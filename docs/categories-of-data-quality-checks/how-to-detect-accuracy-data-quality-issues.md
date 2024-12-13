@@ -1,8 +1,8 @@
 ---
-title: How to detect data accuracy issues
+title: How to Detect Data Accuracy Issues? Examples and Best Practices
 ---
-# How to detect data accuracy issues
-Data accuracy checks in DQOps compare an aggregated value in a tested table to the same aggregated value in a reference table.
+# How to Detect Data Accuracy Issues? Examples and Best Practices
+Data accuracy checks compare an aggregated value in a tested table to the same aggregated value in a reference table to detect differences.
 
 The accuracy checks in DQOps are configured in the `accuracy` category of data quality checks.
 

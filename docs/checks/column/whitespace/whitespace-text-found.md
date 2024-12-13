@@ -1,7 +1,7 @@
 ---
-title: whitespace text found data quality checks
+title: Whitespace text found data quality checks, SQL examples
 ---
-# whitespace text found data quality checks
+# Whitespace text found data quality checks, SQL examples
 
 This check detects empty texts containing only spaces and other whitespace characters.
  This check counts whitespace-only texts and raises a data quality issue when their count exceeds a *max_count* parameter value.

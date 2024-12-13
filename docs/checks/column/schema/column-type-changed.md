@@ -1,7 +1,7 @@
 ---
-title: column type changed data quality checks
+title: Column type changed data quality checks, SQL examples
 ---
-# column type changed data quality checks
+# Column type changed data quality checks, SQL examples
 
 A column-level check that detects if the data type of the column has changed since the last retrieval.
  This check calculates the hash of all the components of the column&#x27;s data type: the data type name, length, scale, precision and nullability.

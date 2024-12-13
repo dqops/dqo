@@ -1,7 +1,7 @@
 ---
-title: DQOps data quality datetime sensors
+title: DQOps data quality datetime sensors, SQL examples
 ---
-# DQOps data quality datetime sensors
+# DQOps data quality datetime sensors, SQL examples
 All [data quality sensors](../../../dqo-concepts/definition-of-data-quality-sensors.md) in the **datetime** category supported by DQOps are listed below. Those sensors are measured on a column level.
 
 ---

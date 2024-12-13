@@ -1,8 +1,8 @@
 ---
-title: How to set up data quality monitoring and data observability for Parquet files
+title: How to Monitor Parquet Files? Data Observability Configuration
 ---
-# How to set up data quality monitoring and data observability for Parquet files
-Data observability and data monitoring for Parquet files. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
+# How to Monitor Parquet Files? Data Observability Configuration
+Learn how to monitor Parquet files and enable data observability to detect schema changes, data anomalies, volume fluctuations, and data quality issues.
 
 ## Overview
 

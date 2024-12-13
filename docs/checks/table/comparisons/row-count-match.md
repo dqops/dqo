@@ -1,7 +1,7 @@
 ---
-title: row count match data quality checks
+title: Row count match data quality checks, SQL examples
 ---
-# row count match data quality checks
+# Row count match data quality checks, SQL examples
 
 Table level comparison check that compares the row count of the current (parent) table with the row count of the reference table.
 

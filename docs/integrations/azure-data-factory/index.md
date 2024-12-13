@@ -1,8 +1,8 @@
 ---
-title: How to activate data observability with Azure Data Factory
+title: How to Run Data Quality Checks in Azure Data Factory
 ---
-# How to activate data observability with Azure Data Factory
-Read this guide to learn how to use the DQOps API in Azure Data Factory to activate monitoring.
+# How to Run Data Quality Checks in Azure Data Factory
+Read this guide to learn how to use data quality checks in Azure Data Factory data pipelines, and how to handle data quality issues.
 
 ## Overview
 

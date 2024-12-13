@@ -1,7 +1,7 @@
 ---
-title: nulls percent anomaly data quality checks
+title: Nulls percent anomaly data quality checks, SQL examples
 ---
-# nulls percent anomaly data quality checks
+# Nulls percent anomaly data quality checks, SQL examples
 
 Detects day-to-day anomalies in the percentage of *null* values. Measures the percentage of rows having a *null* value.
  Raises a data quality issue when the rate of null values increases or decreases too much.

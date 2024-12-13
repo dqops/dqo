@@ -1,7 +1,7 @@
 ---
-title: text parsable to boolean percent data quality checks
+title: Text parsable to boolean percent data quality checks, SQL examples
 ---
-# text parsable to boolean percent data quality checks
+# Text parsable to boolean percent data quality checks, SQL examples
 
 Verifies that values in a text column are convertible to a boolean value.
  Texts are convertible to a boolean value when they are one of the well-known boolean placeholders: &#x27;0&#x27;, &#x27;1&#x27;, &#x27;true&#x27;, &#x27;false&#x27;, &#x27;yes&#x27;, &#x27;no&#x27;, &#x27;y&#x27;, &#x27;n&#x27;.

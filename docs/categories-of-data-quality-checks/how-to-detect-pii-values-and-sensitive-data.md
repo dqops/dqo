@@ -1,7 +1,7 @@
 ---
-title: How to detect PII (Personal Identifiable Information) data
+title: How to Detect PII Data? Examples and Best Practices
 ---
-# How to detect PII (Personal Identifiable Information) data
+# How to Detect PII Data? Examples and Best Practices
 Read this guide to learn how to detect the presence of Personal Identifiable Information such as emails or phone numbers in tables.
 
 The data quality checks that detect PII values are configured in the `pii` category in DQOps.

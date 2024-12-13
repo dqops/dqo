@@ -1,7 +1,7 @@
 ---
-title: invalid latitude data quality checks
+title: Invalid latitude data quality checks, SQL examples
 ---
-# invalid latitude data quality checks
+# Invalid latitude data quality checks, SQL examples
 
 This check finds numeric values that are not valid latitude coordinates. A valid latitude coordinate is in the range -90...90. It counts the values outside a valid range for a latitude.
  This check raises a data quality issue when the count of invalid values exceeds the maximum accepted count.

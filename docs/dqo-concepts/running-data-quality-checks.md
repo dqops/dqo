@@ -1,8 +1,8 @@
 ---
-title: How to run data quality checks with filters
+title: How to Run Data Quality Checks - Examples and Best Practices
 ---
-# How to run data quality checks with filters
-Read this guide to learn how to run data quality checks in DQOps and what filtering options are available to run only the checks you want.
+# How to Run Data Quality Checks - Examples and Best Practices
+Read this guide to learn how to run data quality checks and how to filter target connections, datasets, columns, quality dimensions or data quality checks.
 
 ## Overview
 

@@ -1,7 +1,7 @@
 ---
-title: row count change 1 day data quality checks
+title: Row count change 1 day data quality checks, SQL examples
 ---
-# row count change 1 day data quality checks
+# Row count change 1 day data quality checks, SQL examples
 
 This check compares the current table volume (the row count) to the row count from the previous day.
  It raises a data quality issue when the change in row count (increase or decrease) since yesterday exceeds a maximum accepted percentage of change.

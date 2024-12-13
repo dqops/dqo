@@ -1,8 +1,8 @@
 ---
-title: How to measure data quality KPI metrics - definition and formula
+title: How to Measure Data Quality KPI Metrics - Definition and Examples
 ---
-# How to measure data quality KPI metrics - definition and formula
-Learn how to measure the data quality KPI metrics with DQOps, what is the formula used to calculate the score, and how to improve data quality following KPIs.
+# How to Measure Data Quality KPI Metrics - Definition and Examples
+Learn how to measure the data quality KPI metrics, what is the formula used to calculate the score, and how to improve quality by tracking KPIs on dashboards.
 
 ## Purpose of data quality KPIs
 

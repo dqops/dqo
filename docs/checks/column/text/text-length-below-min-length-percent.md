@@ -1,7 +1,7 @@
 ---
-title: text length below min length percent data quality checks
+title: Text length below min length percent data quality checks, SQL examples
 ---
-# text length below min length percent data quality checks
+# Text length below min length percent data quality checks, SQL examples
 
 This check finds texts that are shorter than the minimum accepted text length.
  It measures the percentage of too short texts and raises a data quality issue when too many invalid texts are found.

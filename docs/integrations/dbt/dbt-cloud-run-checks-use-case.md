@@ -1,5 +1,8 @@
-# DQOps run checks example with the DbtCloud
-This example shows how to integrate DbtCloud jobs with running data quality checks with DQOps.
+---
+title: How to Run Data Quality Checks with DbtCloud with Example
+---
+# How to Run Data Quality Checks with DbtCloud with Example
+This example shows how to integrate DbtCloud jobs with running data quality checks, and how to create a full data pipeline in Apache Airflow.
 
 ## Integration example
 

@@ -1,8 +1,8 @@
 ---
-title: Data quality rule mining
+title: What is Data Quality Rule Mining? Examples and Best Practices
 ---
-# Data quality rule mining
-Read this guide to learn how DQOps automatically configures (mines) the rule thresholds in data quality checks to find the most common data quality issues.
+# What is Data Quality Rule Mining? Examples and Best Practices
+Read this guide to learn how to automatically configure (mine) the rule thresholds in data quality checks to find the most common data quality issues.
 
 ## Definition
 Data quality rule mining automatically configures data quality checks, focusing on finding the most probable data quality issues.

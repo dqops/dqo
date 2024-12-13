@@ -1,7 +1,7 @@
 ---
-title: DQOps data quality range sensors
+title: DQOps data quality range sensors, SQL examples
 ---
-# DQOps data quality range sensors
+# DQOps data quality range sensors, SQL examples
 All [data quality sensors](../../../dqo-concepts/definition-of-data-quality-sensors.md) in the **range** category supported by DQOps are listed below. Those sensors are measured on a column level.
 
 ---

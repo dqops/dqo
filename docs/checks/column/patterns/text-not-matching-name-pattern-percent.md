@@ -1,7 +1,7 @@
 ---
-title: text not matching name pattern percent data quality checks
+title: Text not matching name pattern percent data quality checks, SQL examples
 ---
-# text not matching name pattern percent data quality checks
+# Text not matching name pattern percent data quality checks, SQL examples
 
 This check verifies if values stored in a text column contain only letters and are usable as literal identifiers.
  It measures the percentage of invalid literal identifiers and raises a data quality issue when the rate is above a threshold.

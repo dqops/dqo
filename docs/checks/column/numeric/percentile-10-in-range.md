@@ -1,7 +1,7 @@
 ---
-title: percentile 10 in range data quality checks
+title: Percentile 10 in range data quality checks, SQL examples
 ---
-# percentile 10 in range data quality checks
+# Percentile 10 in range data quality checks, SQL examples
 
 This check finds the 10th percentile value in a numeric column. The 10th percentile is a value greater than 10% of the smallest values and smaller than the remaining 90% of other values.
  This check verifies that the 10th percentile is within the range of accepted values and raises a data quality issue when it is not within a valid range.

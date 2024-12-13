@@ -1,8 +1,8 @@
 ---
-title: How to set up data quality monitoring and data observability for Microsoft SQL Server
+title: How to Monitor SQL Server? Data Observability Configuration
 ---
-# How to set up data quality monitoring and data observability for Microsoft SQL Server
-Data observability and data monitoring for Microsoft SQL Server. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
+# How to Monitor SQL Server? Data Observability Configuration
+Learn how to monitor SQL Server and enable data observability to detect schema changes, data anomalies, volume fluctuations, and data quality issues.
 
 ## Overview
 

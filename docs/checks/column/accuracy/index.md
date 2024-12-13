@@ -1,7 +1,7 @@
 ---
-title: column level accuracy data quality checks
+title: List of column level accuracy data quality checks
 ---
-# column level accuracy data quality checks
+# List of column level accuracy data quality checks
 
 This is a list of accuracy column data quality checks supported by DQOps and a brief description of what data quality issued they detect.
 

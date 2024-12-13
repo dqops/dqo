@@ -1,7 +1,7 @@
 ---
-title: sql invalid value count on column data quality checks
+title: Sql invalid value count on column data quality checks, SQL examples
 ---
-# sql invalid value count on column data quality checks
+# Sql invalid value count on column data quality checks, SQL examples
 
 A column-level check that uses a custom SQL query that return invalid values from column.
  This check is used for setting testing queries or ready queries used by users in their own systems (legacy SQL queries).

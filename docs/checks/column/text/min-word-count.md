@@ -1,7 +1,7 @@
 ---
-title: min word count data quality checks
+title: Min word count data quality checks, SQL examples
 ---
-# min word count data quality checks
+# Min word count data quality checks, SQL examples
 
 This check finds the lowest count of words in text in a column. DQOps validates the shortest length using a range rule.
  DQOps raises an issue when the minimum word count is outside a range of accepted values.

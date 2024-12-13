@@ -1,7 +1,7 @@
 ---
-title: What is a data quality check
+title: What is a Data Quality Check? Definition, Examples and Best Practices
 ---
-# What is a data quality check
+# What is a Data Quality Check? Definition, Examples and Best Practices
 Data quality checks are responsible for detecting data quality issues, and asserting the data quality requirements for monitored data sources.
 
 ## Data quality check definition

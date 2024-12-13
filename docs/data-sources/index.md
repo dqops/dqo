@@ -2,7 +2,7 @@
 glightbox: false
 ---
 
-# Supported data sources
+# Supported Data Sources in DQOps
 The list of data sources supported by DQOps for running data quality checks, and measuring the data quality.
 
 ## Overview 

@@ -1,7 +1,7 @@
 ---
-title: sample stddev in range data quality checks
+title: Sample stddev in range data quality checks, SQL examples
 ---
-# sample stddev in range data quality checks
+# Sample stddev in range data quality checks, SQL examples
 
 This check calculates the standard deviation of numeric values. It verifies that the standard deviation is within the range of accepted values
  and raises a data quality issue when it is not within a valid range.

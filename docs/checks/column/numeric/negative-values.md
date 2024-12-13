@@ -1,7 +1,7 @@
 ---
-title: negative values data quality checks
+title: Negative values data quality checks, SQL examples
 ---
-# negative values data quality checks
+# Negative values data quality checks, SQL examples
 
 This check finds and counts negative values in a numeric column. It raises a data quality issue when the count of negative values is above the maximum accepted count.
 

@@ -1,7 +1,7 @@
 ---
-title: valid longitude percent data quality checks
+title: Valid longitude percent data quality checks, SQL examples
 ---
-# valid longitude percent data quality checks
+# Valid longitude percent data quality checks, SQL examples
 
 This check verifies that numeric values are valid longitude coordinates. A valid longitude coordinate is in the range --180...180.
  It measures the percentage of values within a valid range for a longitude.

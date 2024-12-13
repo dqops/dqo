@@ -1,8 +1,8 @@
 ---
-title: How to set up data quality monitoring and data observability for Amazon Redshift
+title: How to Monitor Amazon Redshift? Data Observability Configuration
 ---
-# How to set up data quality monitoring and data observability for Amazon Redshift
-Data observability and data monitoring for Amazon Redshift. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
+# How to Monitor Amazon Redshift? Data Observability Configuration
+Learn how to monitor Amazon Redshift and enable data observability to detect schema changes, data anomalies, volume fluctuations, and data quality issues.
 
 ## Overview
 

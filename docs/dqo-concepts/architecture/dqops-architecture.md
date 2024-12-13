@@ -1,7 +1,7 @@
 ---
-title: DQOps data quality engine architecture
+title: DQOps Data Quality Engine Architecture
 ---
-# DQOps data quality engine architecture
+# DQOps Data Quality Engine Architecture
 This guide shows the components of a DQOps environment, and what are the possible deployment options for a SaaS-hosted, on-premise, or hybrid environment.
 
 ## Overview

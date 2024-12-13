@@ -1,7 +1,7 @@
 ---
-title: How to reconcile data with table comparison checks
+title: How to Reconcile Data with Table Comparison Checks, Examples
 ---
-# How to reconcile data with table comparison checks
+# How to Reconcile Data with Table Comparison Checks, Examples
 Read this guide to learn how to reconcile data across data sources to find discrepancies using table comparison data quality checks.
 
 Data reconciliation checks are defined in the `comparisons` category in DQOps.

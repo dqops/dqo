@@ -1,7 +1,7 @@
 ---
-title: empty text found data quality checks
+title: Empty text found data quality checks, SQL examples
 ---
-# empty text found data quality checks
+# Empty text found data quality checks, SQL examples
 
 This check detects empty texts that are not null. Empty texts have a length of zero.
  The database treats them as values different than nulls, and some databases allow the storage of both null and empty values.

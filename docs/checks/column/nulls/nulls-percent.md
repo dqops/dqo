@@ -1,7 +1,7 @@
 ---
-title: nulls percent data quality checks
+title: Nulls percent data quality checks, SQL examples
 ---
-# nulls percent data quality checks
+# Nulls percent data quality checks, SQL examples
 
 Detects incomplete columns that contain any *null* values. Measures the percentage of rows having a null value.
  Raises a data quality issue when the percentage of null values is above a *max_percent* threshold.

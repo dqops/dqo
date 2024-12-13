@@ -1,7 +1,7 @@
 ---
-title: invalid usa zipcode format percent data quality checks
+title: Invalid usa zipcode format percent data quality checks, SQL examples
 ---
-# invalid usa zipcode format percent data quality checks
+# Invalid usa zipcode format percent data quality checks, SQL examples
 
 This check validates the format of a USA zip code inside text columns.
  It measures the percentage of columns containing invalid zip codes and raises a data quality issue when the rate is above a threshold.

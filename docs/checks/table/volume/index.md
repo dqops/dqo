@@ -1,7 +1,7 @@
 ---
-title: table level volume data quality checks
+title: List of table level volume data quality checks
 ---
-# table level volume data quality checks
+# List of table level volume data quality checks
 
 This is a list of volume table data quality checks supported by DQOps and a brief description of what data quality issued they detect.
 

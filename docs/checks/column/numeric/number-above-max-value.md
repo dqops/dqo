@@ -1,7 +1,7 @@
 ---
-title: number above max value data quality checks
+title: Number above max value data quality checks, SQL examples
 ---
-# number above max value data quality checks
+# Number above max value data quality checks, SQL examples
 
 This check finds numeric values bigger than the maximum accepted value. It counts the values that are too big.
  This check raises a data quality issue when the count of too big values exceeds the maximum accepted count.

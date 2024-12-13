@@ -1,7 +1,7 @@
 ---
-title: number above max value percent data quality checks
+title: Number above max value percent data quality checks, SQL examples
 ---
-# number above max value percent data quality checks
+# Number above max value percent data quality checks, SQL examples
 
 This check finds numeric values bigger than the maximum accepted value. It measures the percentage of values that are too big.
  This check raises a data quality issue when the percentage of values that are too big exceeds the maximum accepted percentage.

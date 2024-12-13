@@ -50,6 +50,7 @@ public class HandlebarsDocumentationUtilities {
         handlebars.registerHelper("checkmark", checkmarkHelper);
         handlebars.registerHelper("single-line", singleLineHelper);
         handlebars.registerHelper("lowercase", lowercaseHelper);
+        handlebars.registerHelper("first-uppercase", firstUppercaseHelper);
         handlebars.registerHelper("indent", indentHelper);
         handlebars.registerHelper("contains", containsHelper);
         handlebars.registerHelper("var", variableHelper);
@@ -278,6 +279,15 @@ public class HandlebarsDocumentationUtilities {
         }
 
         return s.toLowerCase(Locale.ROOT);
+    };
+
+    private static final Helper<String> firstUppercaseHelper = (s, _ignore) -> {
+        if (s == null) {
+            return null;
+        }
+
+        String lowerCase = s.toLowerCase(Locale.ROOT);
+        return lowerCase.substring(0, 1).toUpperCase(Locale.ROOT) + lowerCase.substring(1);
     };
 
     private static final Helper<String> indentHelper = (s, o) -> {

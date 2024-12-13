@@ -1,7 +1,7 @@
 ---
-title: null placeholder text percent data quality checks
+title: Null placeholder text percent data quality checks, SQL examples
 ---
-# null placeholder text percent data quality checks
+# Null placeholder text percent data quality checks, SQL examples
 
 This check detects text values that are well-known equivalents (placeholders) of a null value, such as *null*, *None*, *n/a*.
  This check measures the percentage of null placeholder values and raises a data quality issue when their rate exceeds a *max_percent* parameter value.

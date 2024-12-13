@@ -1,7 +1,7 @@
 ---
-title: Data quality checks
+title: List of Data quality checks
 ---
-# Data quality checks
+# List of Data quality checks
 
 This is a list of data quality checks supported by DQOps, broken down by a category and a brief description of what data quality issues they detect.
 

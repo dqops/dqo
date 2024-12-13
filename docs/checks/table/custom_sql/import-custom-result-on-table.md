@@ -1,7 +1,7 @@
 ---
-title: import custom result on table data quality checks
+title: Import custom result on table data quality checks, SQL examples
 ---
-# import custom result on table data quality checks
+# Import custom result on table data quality checks, SQL examples
 
 A table-level check that uses a custom SQL SELECT statement to retrieve a result of running a custom data quality check that was hardcoded
  in the data pipeline, and the result was stored in a separate table. The SQL query that is configured in this external data quality results importer must be

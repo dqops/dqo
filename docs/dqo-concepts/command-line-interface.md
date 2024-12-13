@@ -1,8 +1,9 @@
 ---
-title: Working with DQOps command-line interface
+title: How to Run Data Quality Checks from Command Line? Example Scripts
 ---
-# Working with DQOps command-line interface
-Read this guide to understand the concept of DQOps command line interface.
+# How to Run Data Quality Checks from Command Line? Example Scripts
+Learn how to trigger testing data quality from a command-line interface, or integrate data quality into shell scripts and data pipelines written in Bash.
+
 
 ## Overview
 
@@ -68,7 +69,7 @@ dqo> check run --help
 
 You can find the complete list of commands and parameters in the [command-line](../command-line-interface/index.md) interface section.
 
-## Integrating DQOps into shell scripts
+## Running data quality checks from a Shell script
 All DQOps commands can be executed directly from the operating system shell, such as **bash** or Windows Command Line.
 DQOps script [`dqo`](../command-line-interface/dqo.md) (on Linux/MacOS) or `dqo.com` on Windows always returns the error of executing the command as an exit code.
 

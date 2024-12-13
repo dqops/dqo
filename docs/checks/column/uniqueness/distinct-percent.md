@@ -1,7 +1,7 @@
 ---
-title: distinct percent data quality checks
+title: Distinct percent data quality checks, SQL examples
 ---
-# distinct percent data quality checks
+# Distinct percent data quality checks, SQL examples
 
 This check measures the percentage of distinct values in all non-null values. It verifies that the percentage of distinct values meets a minimum and maximum values.
  The default value of 100% distinct values ensures the column has no duplicate values.

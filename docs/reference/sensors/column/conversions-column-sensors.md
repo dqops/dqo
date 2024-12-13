@@ -1,7 +1,7 @@
 ---
-title: DQOps data quality conversions sensors
+title: DQOps data quality conversions sensors, SQL examples
 ---
-# DQOps data quality conversions sensors
+# DQOps data quality conversions sensors, SQL examples
 All [data quality sensors](../../../dqo-concepts/definition-of-data-quality-sensors.md) in the **conversions** category supported by DQOps are listed below. Those sensors are measured on a column level.
 
 ---

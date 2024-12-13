@@ -1,7 +1,7 @@
 ---
-title: median change 1 day data quality checks
+title: Median change 1 day data quality checks, SQL examples
 ---
-# median change 1 day data quality checks
+# Median change 1 day data quality checks, SQL examples
 
 This check detects that the median of numeric values has changed more than *max_percent* from the median value measured one day ago (yesterday).
 

@@ -1,7 +1,7 @@
 ---
-title: contains ip6 percent data quality checks
+title: Contains ip6 percent data quality checks, SQL examples
 ---
-# contains ip6 percent data quality checks
+# Contains ip6 percent data quality checks, SQL examples
 
 This check detects IP6 addresses inside text columns. It measures the percentage of columns containing an IP6 address and raises a data quality issue when too many rows contain IP6 addresses.
 

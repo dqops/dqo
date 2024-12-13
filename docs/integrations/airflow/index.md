@@ -1,4 +1,7 @@
-# Airflow integration
+---
+title: Airflow Operator for Data Quality Testing
+---
+# Airflow Operator for Data Quality Testing
 This overview shows the list of Apache Airflow operators provided by DQOps that you can use to monitor data quality directly in the data pipelines. 
 
 ## Overview

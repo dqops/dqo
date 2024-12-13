@@ -1,7 +1,7 @@
 ---
-title: text surrounded by whitespace percent data quality checks
+title: Text surrounded by whitespace percent data quality checks, SQL examples
 ---
-# text surrounded by whitespace percent data quality checks
+# Text surrounded by whitespace percent data quality checks, SQL examples
 
 This check detects text values that contain additional whitespace characters before or after the text.
  This check measures the percentage of text value surrounded by whitespace characters (on any side) and

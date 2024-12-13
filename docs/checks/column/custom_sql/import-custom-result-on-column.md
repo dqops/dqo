@@ -1,7 +1,7 @@
 ---
-title: import custom result on column data quality checks
+title: Import custom result on column data quality checks, SQL examples
 ---
-# import custom result on column data quality checks
+# Import custom result on column data quality checks, SQL examples
 
 Column level check that uses a custom SQL SELECT statement to retrieve a result of running a custom data quality check on a column by a custom
  data quality check, hardcoded in the data pipeline. The result is retrieved by querying a separate **logging table**, whose schema is not fixed.

@@ -1,7 +1,7 @@
 ---
-title: max word count data quality checks
+title: Max word count data quality checks, SQL examples
 ---
-# max word count data quality checks
+# Max word count data quality checks, SQL examples
 
 This check finds the highest count of words in text in a column. DQOps validates the maximum length using a range rule.
  DQOps raises an issue when the maximum word count is outside a range of accepted values.

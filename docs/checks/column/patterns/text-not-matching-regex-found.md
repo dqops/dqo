@@ -1,7 +1,7 @@
 ---
-title: text not matching regex found data quality checks
+title: Text not matching regex found data quality checks, SQL examples
 ---
-# text not matching regex found data quality checks
+# Text not matching regex found data quality checks, SQL examples
 
 This check validates text values using a pattern defined as a regular expression.
  It counts the number of invalid values and raises a data quality issue when the number exceeds a threshold.

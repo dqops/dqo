@@ -1,7 +1,7 @@
 ---
-title: not nulls count data quality checks
+title: Not nulls count data quality checks, SQL examples
 ---
-# not nulls count data quality checks
+# Not nulls count data quality checks, SQL examples
 
 Verifies that a column contains a minimum number of non-null values.
  The default value of the *min_count* parameter is 1 to detect at least one value in a monitored column.

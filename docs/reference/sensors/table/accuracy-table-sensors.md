@@ -1,7 +1,7 @@
 ---
-title: DQOps data quality accuracy sensors
+title: DQOps data quality accuracy sensors, SQL examples
 ---
-# DQOps data quality accuracy sensors
+# DQOps data quality accuracy sensors, SQL examples
 All [data quality sensors](../../../dqo-concepts/definition-of-data-quality-sensors.md) in the **accuracy** category supported by DQOps are listed below. Those sensors are measured on a table level.
 
 ---

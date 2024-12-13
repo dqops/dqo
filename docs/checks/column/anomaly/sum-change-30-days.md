@@ -1,7 +1,7 @@
 ---
-title: sum change 30 days data quality checks
+title: Sum change 30 days data quality checks, SQL examples
 ---
-# sum change 30 days data quality checks
+# Sum change 30 days data quality checks, SQL examples
 
 This check detects that the sum of numeric values has changed more than *max_percent* from the sum measured thirty days ago.
  This check aims to overcome a monthly seasonability and compare a value to a similar value a month ago.

@@ -1,5 +1,9 @@
-# Wait for job operator
-Read this guide to understand how to start data quality jobs in DQOps from Apache Airflow DAG, and how to wait for long-running data quality jobs.
+---
+title: Airflow Wait for Job Operator with Example DAG
+---
+
+# Airflow Wait for Job Operator with Example DAG
+Read this guide to understand how to start data quality jobs from Apache Airflow DAG, how to wait for long-running data quality jobs, and how to handle errors.
 
 ## Overview
 

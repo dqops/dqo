@@ -1,7 +1,7 @@
 ---
-title: text not matching date pattern found data quality checks
+title: Text not matching date pattern found data quality checks, SQL examples
 ---
-# text not matching date pattern found data quality checks
+# Text not matching date pattern found data quality checks, SQL examples
 
 This check detects dates in the wrong format inside text columns using a regular expression.
  It counts the number of incorrectly formatted dates and raises a data quality issue when the number exceeds a threshold.

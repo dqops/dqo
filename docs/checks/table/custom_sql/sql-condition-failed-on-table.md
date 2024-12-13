@@ -1,7 +1,7 @@
 ---
-title: sql condition failed on table data quality checks
+title: Sql condition failed on table data quality checks, SQL examples
 ---
-# sql condition failed on table data quality checks
+# Sql condition failed on table data quality checks, SQL examples
 
 A table-level check that uses a custom SQL expression on each row to verify (assert) that all rows pass a custom condition defined as an SQL condition.
  Use the {alias} token to reference the tested table. This data quality check can be used to compare columns on the same table.

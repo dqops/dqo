@@ -1,5 +1,8 @@
-# Create and run table comparisons 
-Read this manual to understand how to compare tables between data sources using DQOps. Table comparison (reconciliation) enables detection of data accuracy issues.
+---
+title: How to Perform Table Comparisons? Examples and Possible Errors 
+---
+# How to Perform Table Comparisons? Examples and Possible Errors
+Learn how to compare tables between data sources. A table comparison (data reconciliation) enables detection of discrepancies and data accuracy issues.
 
 ## Overview
 

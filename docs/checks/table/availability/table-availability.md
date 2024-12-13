@@ -1,7 +1,7 @@
 ---
-title: table availability data quality checks
+title: Table availability data quality checks, SQL examples
 ---
-# table availability data quality checks
+# Table availability data quality checks, SQL examples
 
 A table-level check that ensures a query can be successfully executed on a table without server errors. It also verifies that the table exists and is accessible (queryable).
  The actual value (the result of the check) indicates the number of failures. If the table is accessible and a simple query can be executed without errors, the result will be 0.0.

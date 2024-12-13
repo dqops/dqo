@@ -1,8 +1,8 @@
 ---
-title: Data quality monitoring checks for data observability
+title: What are Data Quality Monitoring Checks? Examples and Best Practices
 ---
-# Data quality monitoring checks for data observability
-This guide shows how the data quality monitoring checks in DQOps are observing the data sources, and tracking the data quality with data quality KPIs.
+# What are Data Quality Monitoring Checks? Examples and Best Practices
+Data quality monitoring checks are testing tables and columns with both custom checks, and data observability checks to detect schema changes and anomalies. 
 
 ## What are data monitoring checks?
 The monitoring checks in DQOps, also called checkpoints, are responsible for continuous monitoring the data quality of data sources.

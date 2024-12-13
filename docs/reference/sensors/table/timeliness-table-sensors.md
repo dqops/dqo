@@ -1,7 +1,7 @@
 ---
-title: DQOps data quality timeliness sensors
+title: DQOps data quality timeliness sensors, SQL examples
 ---
-# DQOps data quality timeliness sensors
+# DQOps data quality timeliness sensors, SQL examples
 All [data quality sensors](../../../dqo-concepts/definition-of-data-quality-sensors.md) in the **timeliness** category supported by DQOps are listed below. Those sensors are measured on a table level.
 
 ---

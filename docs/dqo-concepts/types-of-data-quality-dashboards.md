@@ -1,7 +1,7 @@
 ---
-title: Types of data quality dashboards
+title: Types of Data Quality Dashboards - Examples and Best Practices
 ---
-# Types of data quality dashboards
+# Types of Data Quality Dashboards - Examples and Best Practices
 Data quality dashboards provide a centralized view of key metrics, allowing data teams to monitor and improve the health and reliability of their data.
 
 ## Overview

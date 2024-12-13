@@ -1,7 +1,7 @@
 ---
-title: null count match data quality checks
+title: Null count match data quality checks, SQL examples
 ---
-# null count match data quality checks
+# Null count match data quality checks, SQL examples
 
 A column-level check that ensures that compares the count of null values in the tested column to the count of null values in a reference column from the reference table.
  Compares the count of null values for each group of data. The data is grouped using a GROUP BY clause and groups are matched between the tested (parent) table and the reference table (the source of truth).

@@ -1,7 +1,7 @@
 ---
-title: distinct count change data quality checks
+title: Distinct count change data quality checks, SQL examples
 ---
-# distinct count change data quality checks
+# Distinct count change data quality checks, SQL examples
 
 This check monitors the count of distinct values and compares it to the last known value. It raises a data quality issue when the change exceeds an accepted threshold.
 

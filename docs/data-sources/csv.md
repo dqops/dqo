@@ -1,8 +1,8 @@
 ---
-title: How to set up data quality monitoring and data observability for CSV files
+title: How to Monitor CSV Files? Data Observability Configuration
 ---
-# How to set up data quality monitoring and data observability for CSV files
-Data observability and data monitoring for CSV files. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
+# How to Monitor CSV Files? Data Observability Configuration
+Learn how to monitor CSV Files and enable data observability to detect schema changes, data anomalies, volume fluctuations, and data quality issues.
 
 ## Overview
 

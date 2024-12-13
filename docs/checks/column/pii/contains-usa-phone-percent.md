@@ -1,7 +1,7 @@
 ---
-title: contains usa phone percent data quality checks
+title: Contains usa phone percent data quality checks, SQL examples
 ---
-# contains usa phone percent data quality checks
+# Contains usa phone percent data quality checks, SQL examples
 
 This check detects USA phone numbers inside text columns. It measures the percentage of columns containing a phone number and raises a data quality issue when too many rows contain phone numbers.
 

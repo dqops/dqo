@@ -1,8 +1,8 @@
 ---
-title: How to set up data quality monitoring and data observability for QuestDB
+title: How to Monitor QuestDB? Data Observability Configuration
 ---
-# How to set up data quality monitoring and data observability for QuestDB
-Data observability and data monitoring for QuestDB. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
+# How to Monitor QuestDB? Data Observability Configuration
+Learn how to monitor QuestDB and enable data observability to detect schema changes, data anomalies, volume fluctuations, and data quality issues.
 
 ## Overview
 

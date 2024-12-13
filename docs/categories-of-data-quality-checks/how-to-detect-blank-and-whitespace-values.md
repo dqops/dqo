@@ -1,7 +1,7 @@
 ---
-title: How to detect whitespace and null value placeholders
+title: How to Detect Whitespace and NULL Value Placeholders? Examples
 ---
-# How to detect whitespace and null value placeholders
+# How to Detect Whitespace and NULL Value Placeholders? Examples
 Read this guide to learn how to detect whitespaces, such as spaces, tabs, or special texts equivalent to a null value in text columns using SQL checks.
 
 The data quality checks for detecting whitespace and empty value placeholders are configured in the `whitespace` category in DQOps.

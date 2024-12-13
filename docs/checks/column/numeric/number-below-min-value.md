@@ -1,7 +1,7 @@
 ---
-title: number below min value data quality checks
+title: Number below min value data quality checks, SQL examples
 ---
-# number below min value data quality checks
+# Number below min value data quality checks, SQL examples
 
 This check finds numeric values smaller than the minimum accepted value. It counts the values that are too small.
  This check raises a data quality issue when the count of too small values exceeds the maximum accepted count.

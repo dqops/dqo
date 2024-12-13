@@ -1,7 +1,7 @@
 ---
-title: lookup key found percent data quality checks
+title: Lookup key found percent data quality checks, SQL examples
 ---
-# lookup key found percent data quality checks
+# Lookup key found percent data quality checks, SQL examples
 
 This check detects invalid values that are not present in a dictionary table. The lookup uses an outer join query within the same database.
  This check measures the percentage of valid keys found in the dictionary table.
