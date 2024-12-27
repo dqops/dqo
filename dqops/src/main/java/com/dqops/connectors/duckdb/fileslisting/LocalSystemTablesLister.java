@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -34,7 +35,7 @@ public class LocalSystemTablesLister implements TablesLister {
         String pathPrefixString = duckdb.getDirectories().get(schemaName);
         File[] files = Path.of(pathPrefixString).toFile().listFiles();
         if(files == null){
-            return null;
+            return new ArrayList<>();
         }
         String folderPrefix = StringUtils.removeEnd(StringUtils.removeEnd(pathPrefixString, "/"), "\\");
 
