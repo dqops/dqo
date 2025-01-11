@@ -20370,6 +20370,15 @@
         }
       }
     },
+    "AvroFileFormatSpec" : {
+      "type" : "object",
+      "properties" : {
+        "filename" : {
+          "type" : "boolean",
+          "description" : "Whether or not an extra filename column should be included in the result."
+        }
+      }
+    },
     "BetweenFloatsRuleParametersSpec" : {
       "type" : "object",
       "properties" : {
@@ -39393,7 +39402,7 @@
         "files_format_type" : {
           "type" : "string",
           "description" : "Type of source files format for DuckDB.",
-          "enum" : [ "csv", "json", "parquet", "iceberg", "delta_lake" ]
+          "enum" : [ "csv", "json", "parquet", "avro", "iceberg", "delta_lake" ]
         },
         "database" : {
           "type" : "string",
@@ -39417,6 +39426,10 @@
         "parquet" : {
           "description" : "Parquet file format specification.",
           "$ref" : "#/definitions/ParquetFileFormatSpec"
+        },
+        "avro" : {
+          "description" : "Avro file format specification.",
+          "$ref" : "#/definitions/AvroFileFormatSpec"
         },
         "iceberg" : {
           "description" : "Iceberg file format specification.",
@@ -39941,6 +39954,10 @@
         "parquet" : {
           "description" : "Parquet file format specification.",
           "$ref" : "#/definitions/ParquetFileFormatSpec"
+        },
+        "avro" : {
+          "description" : "Avro file format specification.",
+          "$ref" : "#/definitions/AvroFileFormatSpec"
         },
         "iceberg" : {
           "description" : "Iceberg file format specification.",

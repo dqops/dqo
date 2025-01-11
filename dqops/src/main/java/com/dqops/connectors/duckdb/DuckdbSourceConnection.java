@@ -273,7 +273,8 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
                 "aws",
                 "azure",
                 "iceberg",
-                "delta"
+                "delta",
+                "avro"
         );
     }
 
@@ -293,6 +294,10 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
             availableExtensionList.stream().forEach(extensionName -> {
                 try {
                     String installExtensionQuery = "INSTALL " + extensionName;
+                    if (Objects.equals(extensionName, "avro")) {
+                        installExtensionQuery += " FROM community"; // https://duckdb.org/2024/12/09/duckdb-avro-extension.html
+                    }
+
                     this.executeCommand(installExtensionQuery, JobCancellationToken.createDummyJobCancellationToken());
                     String loadExtensionQuery = "LOAD " + extensionName;
                     this.executeCommand(loadExtensionQuery, JobCancellationToken.createDummyJobCancellationToken());

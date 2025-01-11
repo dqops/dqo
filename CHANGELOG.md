@@ -1,5 +1,5 @@
-# 1.10.1
+# 1.11.0
 
-* Small UI fixes to open pages directly from an URL.
-* Fix problems when installing on Windows using pip, when Python was installed from Windows Store and uses a deeply nested folder structure
-
+* Fixing problems when importing files from a non-existing folder
+* Upgrade DuckDB to 1.1.3
+* Support Avro files

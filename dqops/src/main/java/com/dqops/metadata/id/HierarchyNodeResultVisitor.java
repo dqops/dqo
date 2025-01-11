@@ -78,6 +78,7 @@ import com.dqops.metadata.sources.*;
 import com.dqops.metadata.sources.fileformat.FileFormatSpec;
 import com.dqops.metadata.sources.fileformat.FilePathListSpec;
 import com.dqops.metadata.sources.fileformat.ParquetFileFormatSpec;
+import com.dqops.metadata.sources.fileformat.avro.AvroFileFormatSpec;
 import com.dqops.metadata.sources.fileformat.csv.CsvFileFormatSpec;
 import com.dqops.metadata.sources.fileformat.deltalake.DeltaLakeFileFormatSpec;
 import com.dqops.metadata.sources.fileformat.iceberg.IcebergFileFormatSpec;
@@ -1032,4 +1033,12 @@ public interface HierarchyNodeResultVisitor<P, R> {
      * @return Accept's result.
      */
     R accept(ConnectionSimilarityIndexListImpl connectionSimilarityIndexWrappers, P parameter);
+
+    /**
+     * Accepts an Avro file configuration settings.
+     * @param avroFileFormatSpec Avro connection settings.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(AvroFileFormatSpec avroFileFormatSpec, P parameter);
 }

@@ -152,6 +152,9 @@ const CreateConnection = () => {
           case 'Parquet':
             fileFormat = DuckdbParametersSpecFilesFormatTypeEnum.parquet;
             break;
+          case 'Avro':
+            fileFormat = DuckdbParametersSpecFilesFormatTypeEnum.avro;
+            break;
           case 'Iceberg':
             fileFormat = DuckdbParametersSpecFilesFormatTypeEnum.iceberg;
             break;

@@ -26,6 +26,7 @@ import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.sources.BaseProviderParametersSpec;
+import com.dqops.metadata.sources.fileformat.avro.AvroFileFormatSpec;
 import com.dqops.metadata.sources.fileformat.csv.CsvFileFormatSpec;
 import com.dqops.metadata.sources.fileformat.deltalake.DeltaLakeFileFormatSpec;
 import com.dqops.metadata.sources.fileformat.iceberg.IcebergFileFormatSpec;
@@ -64,6 +65,7 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
             put("csv", o -> o.csv);
             put("json", o -> o.json);
             put("parquet", o -> o.parquet);
+            put("avro", o -> o.avro);
             put("iceberg", o -> o.iceberg);
             put("delta_lake", o -> o.deltaLake);
         }
@@ -100,6 +102,11 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ParquetFileFormatSpec parquet;
+
+    @JsonPropertyDescription("Avro file format specification.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private AvroFileFormatSpec avro;
 
     @JsonPropertyDescription("Iceberg file format specification.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -279,6 +286,24 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
         setDirtyIf(!Objects.equals(this.parquet, parquet));
         this.parquet = parquet;
         propagateHierarchyIdToField(parquet, "parquet");
+    }
+
+    /**
+     * Returns the avro file format specification.
+     * @return Avro file format specification.
+     */
+    public AvroFileFormatSpec getAvro() {
+        return avro;
+    }
+
+    /**
+     * Sets the avro file format specification.
+     * @param avro Avro file format specification.
+     */
+    public void setAvro(AvroFileFormatSpec avro) {
+        setDirtyIf(!Objects.equals(this.avro, avro));
+        this.avro = avro;
+        propagateHierarchyIdToField(avro, "avro");
     }
 
     /**
@@ -551,6 +576,7 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
                 case csv: return getCsv() != null && getCsv().getHivePartitioning() != null && getCsv().getHivePartitioning();
                 case json: return getJson() != null && getJson().getHivePartitioning() != null && getJson().getHivePartitioning();
                 case parquet: return getParquet() != null && getParquet().getHivePartitioning() != null && getParquet().getHivePartitioning();
+                case avro: return false; // not supported by DuckDB
             }
         }
         return false;
@@ -588,6 +614,8 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
                 return fileTypeExtension + (compressionExtension == null ? "" : compressionExtension);
             }
         }
+        // avro does not support compression
+
         return fileTypeExtension;
     }
 
@@ -604,6 +632,7 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
             case csv: return this.getCsv() != null;
             case json: return this.getJson() != null;
             case parquet: return this.getParquet() != null;
+            case avro: return this.getAvro() != null;
             case iceberg: return this.getIceberg() != null;
             case delta_lake: return this.getDeltaLake() != null;
             default: throw new RuntimeException("The file format is not supported : " + filesFormatType);
@@ -680,6 +709,9 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
         }
         if(cloned.json != null){
             cloned.json = cloned.json.expandAndTrim(secretValueProvider, lookupContext);
+        }
+        if(cloned.avro != null){
+            cloned.avro = cloned.avro.expandAndTrim(secretValueProvider, lookupContext);
         }
         cloned.user = secretValueProvider.expandValue(cloned.user, lookupContext);
         cloned.password = secretValueProvider.expandValue(cloned.password, lookupContext);

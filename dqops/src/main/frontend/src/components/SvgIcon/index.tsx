@@ -38,6 +38,7 @@ import { ReactComponent as CommentSvg } from './svg/comment.svg';
 import { ReactComponent as ConfigurationSvg } from './svg/configuration.svg';
 import { ReactComponent as CopyTextSvg } from './svg/copy-text.svg';
 import { ReactComponent as CsvSvg } from './svg/csv-icon.svg';
+import { ReactComponent as AvroSvg } from './svg/avro-icon.svg';
 import { ReactComponent as DashboardsSvg } from './svg/dashboards.svg';
 import { ReactComponent as DataDictionarySvg } from './svg/data-dictionary.svg';
 import { ReactComponent as DataSourcesSvg } from './svg/data_sources.svg';
@@ -245,6 +246,7 @@ const iconsMap: any = {
   datadictionary: DataDictionarySvg,
   duckdb: DuckdbSvg,
   csv: CsvSvg,
+  avro: AvroSvg,
   json: JsonSvg,
   parquet: ParquetSvg,
   comment: CommentSvg,
