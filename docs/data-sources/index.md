@@ -59,6 +59,11 @@ DQOps supports the following data sources.
     <p>Amazon RDS for SQL Server</p>
   </a>
 
+  <a href="avro/" class="four-divs-element">
+    <img src="https://dqops.com/docs/images/data-sources/avro-icon.svg">
+    <p>Avro files</p>
+  </a>
+
   <a href="mysql/" class="four-divs-element">
     <img src="https://dqops.com/docs/images/data-sources/azure-database-mysql.svg">
     <p>Azure Database for MySQL</p>
@@ -234,8 +239,6 @@ DQOps supports the following data sources.
     <p>YugabyteDB</p>
   </a>
 
-  <div class="four-divs-element"></div>
-  <div class="four-divs-element"></div>
   <div class="four-divs-element"></div>
 
 </div>

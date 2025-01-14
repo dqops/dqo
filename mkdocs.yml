@@ -55,6 +55,7 @@ nav:
       - Amazon Redshift: "data-sources/redshift.md"
       - Amazon S3: "data-sources/aws.md"
       - Apache Spark: "data-sources/spark.md"
+      - Avro files: "data-sources/avro.md"
       - ClickHouse: "data-sources/clickhouse.md"
       - CSV files: "data-sources/csv.md"
       - Databricks: "data-sources/databricks.md"

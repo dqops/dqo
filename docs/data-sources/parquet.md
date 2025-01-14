@@ -231,8 +231,8 @@ Select the **duckdb** provider, which provides support for the Parquet file form
 
 !!! info "Windows file system"
 
-   When using the Windows file system remember to put a double backslash (\\) in the path on the CLI prompt. 
-   You can also use a single slash (/).
+    When using the Windows file system remember to put a double backslash (\\) in the path on the CLI prompt. 
+    You can also use a single slash (/).
 
 
 ```

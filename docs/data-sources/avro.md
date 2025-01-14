@@ -1,20 +1,20 @@
 ---
-title: How to Monitor JSON Files? Data Observability Configuration
+title: How to Monitor Avro Files? Data Observability Configuration
 ---
-# How to Monitor JSON Files? Data Observability Configuration
-Learn how to monitor JSON Files and enable data observability to detect schema changes, data anomalies, volume fluctuations, and data quality issues.
+# How to Monitor Avro Files? Data Observability Configuration
+Learn how to monitor Avro files and enable data observability to detect schema changes, data anomalies, volume fluctuations, and data quality issues.
 
 ## Overview
 
-DQOps supports monitoring of data quality in JSON files, which can be stored locally or remotely in cloud storage.
-When importing a JSON file, you can select either a single file or an entire directory containing multiple files.
-DQOps will create a table from the JSON file, which will allow you to profile it and monitor its data quality.
+DQOps supports monitoring of data quality in Avro files, which can be stored locally or remotely in cloud storage.
+When importing an Avro file, you can select either a single file or an entire directory containing multiple files.
+DQOps will create a table from the Avro file, which will allow you to profile it and monitor its data quality.
 
 ## Prerequisite credentials
 
 Additional configuration is required **only when using remote storage** (AWS S3, Azure Blob Storage or Google Cloud Storage).
 
-When using remote cloud storage, make sure your account has access to the remote directory containing JSON files.
+When using remote cloud storage, make sure your account has access to the remote directory containing Avro files.
 The permissions granted should allow you to list the files and directories, as well as read the contents of the files.
 
 !!! note "DQOps free version limits"
@@ -27,28 +27,28 @@ The permissions granted should allow you to list the files and directories, as w
     For more details, please [contact DQOps sales](https://dqops.com/contact-us/).
 
 
-## Add a connection to JSON files using the user interface
+## Add a connection to Avro files using the user interface
 
 ### **Navigate to the connection settings**
 
-To navigate to the JSON connection settings:
+To navigate to the Avro connection settings:
 
 1. Go to the Data Sources section and click the **+ Add connection** button in the upper left corner.
 
     ![Adding connection](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection2.png){ loading=lazy; width="1200px" }
 
-2. Select the JSON file connection option.
+2. Select the Avro file connection option.
 
-    ![Selecting JSON database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-json.png){ loading=lazy; width="1200px" }
+    ![Selecting Avro database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-avro.png){ loading=lazy; width="1200px" }
 
 
 ### **Fill in the connection settings**
 
-After navigating to the JSON connection settings, you will need to fill in its details.
+After navigating to the Avro connection settings, you will need to fill in its details.
 
-![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-json.png){ loading=lazy; width="1200px" }
+![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-avro.png){ loading=lazy; width="1200px" }
 
-| JSON connection settings  | Property name in YAML configuration file | Description                                                                                                                                                                                                                                                                                                                | 
+| Avro connection settings  | Property name in YAML configuration file | Description                                                                                                                                                                                                                                                                                                                | 
 |---------------------------|------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Connection name           |                                          | The name of the connection that will be created in DQOps. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters.                                                                                  |
 | Parallel jobs limit       |                                          | A limit on the number of jobs that can run simultaneously. Leave empty to disable the limit.                                                                                                                                                                                                                               |
@@ -76,67 +76,49 @@ After navigating to the JSON connection settings, you will need to fill in its d
 To import files, you need to set the path first. 
 The path can lead to files located either locally or remotely.
 
-The following example shows a folder structure with JSON files.
+The following example shows a folder structure with Avro files.
 
 ``` { .asc .annotate }
 /usr/share
     ├───...
-    └───clients_data(1)
-        ├───annual_report_2022.csv
-        ├───annual_report_2023.parquet
-        ├───market_dictionary.json
+    └───data(1)
+        ├───weather.avro
+        ├───to_be_ignored1.json
+        ├───to_be_ignored2.csv
+        ├───to_be_ignored3.parquet
         └───sales(2)
-            ├───dec_2023.json
-            ├───jan_2024.json
-            ├───feb_2024.json
+            ├───file1.json
+            ├───file2.json
+            ├───file3.json
             └───...
 ```
 
-1.  Setting the path prefix to the **/usr/share/clients_data** allows to load its children: market_dictionary.json or the sales folder with all files appearing directly in it (without subfolders of sales). The rest of files are omitted since they do not match the json file format. The path has to be absolute.
-2.  Setting the path prefix to the **/usr/share/clients_data/sales** allows to load a single file from the sales folder.
+1.  Setting the path prefix to the **/usr/share/data** allows to load its children: weather.avro or the sales folder with all files appearing directly in it (without subfolders of sales). The rest of files are omitted since they do not match the avro file format. The path has to be absolute.
+2.  Setting the path prefix to the **/usr/share/data/sales** allows to load a single file from the sales folder.
 
-If you want to load the market_dictionary.json or the sales folder with all files appearing directly in it (without subfolders of sales), set the path prefix to the /usr/share/clients_data.
-The rest of files are omitted since they do not match the json file format.
+If you want to load the weather.avro or the sales folder with all files appearing directly in it (without subfolders of sales), set the path prefix to the /usr/share/data.
+The rest of files are omitted since they do not match the Avro file format.
 The path has to be absolute.
 
-To load a single file from the sales folder, the path prefix must be set to the file’s parent folder: /usr/share/clients_data/sales
+To load a single file from the sales folder, the path prefix must be set to the file’s parent folder: /usr/share/data/sales
 
 
 ### Working with partitioned files
 
-To work with partitioned files, you need to set the `hive-partition` parameter in JSON format settings.
-The option can be found under the **Additional JSON format options** panel.
-
-Hive partitioning divides a table into multiple files based on the catalog structure.
-Each catalog level is associated with a column and the catalogs are named in the format of column_name=value.
-
-The partitions of the data set and types of columns are discovered automatically.
+The current version of the Avro extension for DuckDB that DQOps uses does not support Hive-partitioned data.
 
 
-### Additional JSON format options
+### Additional Avro format options
 
-JSON file format properties are detected automatically based on a sample of the file data.
-The default sample size is 20480 rows.
+Avro file format properties are detected automatically based on a sample of the file data.
 
-In **case of invalid import** of the data, expand the **Additional JSON format options** panel with file format options by clicking on it in UI.
+In **case of invalid import** of the data, expand the **Additional Avro format options** panel with file format options by clicking on it in UI.
 
-The following properties can be configured for a very specific JSON format.
+The following properties can be configured for a very specific Avro format.
 
-| Additional JSON format options | Property name in YAML configuration file | Description                                                                                                                                                                                     |
+| Additional Avro format options | Property name in YAML configuration file | Description                                                                                                                                                                                     |
 |--------------------------------|------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Compression                    | `compression`                            | The compression type for the file. By default, this will be detected automatically from the file extension (e.g., t.json.gz will use gzip, t.json will use none). Options are none, gzip, zstd. | 
-| Date format                    | `dateformat`                             | Specifies the date format used when parsing dates.                                                                                                                                              | 
-| Json Format                    | `format`                                 | Json format. Can be one of \['auto', 'unstructured', 'newline_delimited', 'array'\].                                                                                                            | 
-| Maximum depth                  | `maximum_depth`                          | Maximum nesting depth to which the automatic schema detection detects types. Set to -1 to fully detect nested JSON types.                                                                       | 
-| Maximum object size            | `maximum_object_size`                    | The maximum size of a JSON object (in bytes).                                                                                                                                                   | 
-| Records                        | `records`                                | Can be one of ['auto', 'true', 'false'].                                                                                                                                                        | 
-| Sample size                    | `sample_size`                            | The number of sample rows for automatic parameter detection.                                                                                                                                    | 
-| Timestamp format               | `timestampformat`                        | Specifies the date format used when parsing timestamps.                                                                                                                                         | 
-| Convert strings to integers    | `convert_strings_to_integers`            | Specifies whether strings representing integer values should be converted to a numerical type.                                                                                                  | 
 | Filename                       | `filename`                               | Specifies whether an additional file name column should be included in the result.                                                                                                              | 
-| Hive partitioning              | `hive_partitioning`                      | Specifies whether to interpret the path as a hive-partitioned path.                                                                                                                             | 
-| Ignore errors                  | `ignore_errors`                          | An option to ignore any parsing errors encountered - and instead ignore rows with errors.                                                                                                       | 
-| Auto detect                    | `auto_detect`                            | (Not available in UI) Whether to auto-detect detect the names of the keys and data types of the values automatically.                                                                           | 
 
 
 ### Environment variables in parameters
@@ -165,15 +147,15 @@ Click the **Save** connection button when the test is successful otherwise, you 
 ### Import metadata using the user interface
 
 When you add a new connection, it will appear in the tree view on the left, and you will be redirected to the Import Metadata screen.
-Now we can import JSON files.
+Now we can import Avro files.
 
 1. Import the selected virtual schemas by clicking on the **Import Tables** button next to the source schema name from which you want to import tables.
 
    ![Importing schemas](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/importing-schemas.png){ loading=lazy; width="1200px" }
 
-2. Select the tables (folders with JSON files or just the files) you want to import or import all tables using the buttons in the upper right corner.
+2. Select the tables (folders with Avro files or just the files) you want to import or import all tables using the buttons in the upper right corner.
 
-   ![Importing tables](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/importing-tables-json.png){ loading=lazy; width="1200px" }
+   ![Importing tables](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/importing-tables-avro.png){ loading=lazy; width="1200px" }
 
 Upon import, you will receive information that a new tables have been imported. You can then begin collecting basic statistics
 and profiling data by running default data profiling checks. Simply click on the **Start profiling** button to initiate this process.
@@ -216,20 +198,20 @@ Enter the table name and the path absolute to the file. Save the new table confi
 
     If you use the absolute file path, you only need to fill in the table name.
 
-![Register table](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/register-single-table-2.png){ loading=lazy; width="1200px" }
+![Register table](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/adding-table-avro.png){ loading=lazy; width="600px" }
 
 After saving the new table configuration, the new table will be present under the schema.
 You can view the list of columns by clicking on "Columns" under the table in the three view on the left.
 
 You can verify the import tables job in the notification panel on the right corner.
 
-![Register table](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/register-single-table-3.png){ loading=lazy; width="1200px" }
+![Register table](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/register-single-table-3.png){ loading=lazy; width="600px" }
 
 If the job completes successfully, the created table will be imported and ready to use.
 
 ![Register table](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/register-single-table-4.png){ loading=lazy; width="1200px" }
 
-## Add a JSON connection using DQOps Shell
+## Add a Avro connection using DQOps Shell
 
 To add a connection run the following command in DQOps Shell.
 
@@ -239,7 +221,7 @@ dqo> connection add
 
 Fill in the data you will be asked for. 
 
-Select the **duckdb** provider, which provides support for the JSON file format.
+Select the **duckdb** provider, which provides support for the Avro file format.
 
 !!! info "Windows file system"
 
@@ -279,8 +261,9 @@ Type of source files for DuckDB:
  [ 1] csv
  [ 2] json
  [ 3] parquet
-Please enter one of the [] values: 2
-Virtual schema names and paths (in a pattern schema=path): files=/usr/share/clients_data
+ [ 4] avro
+Please enter one of the [] values: 4
+Virtual schema names and paths (in a pattern schema=path): files=/usr/share/data
 Connection connection1 was successfully added.
 Run 'table import -c=connection1' to import tables.
 ```
@@ -291,8 +274,8 @@ You can also run the command with parameters to add a connection in just a singl
 dqo> connection add --name=connection1
 --provider=duckdb
 --duckdb-storage-type=local
---duckdb-files-format-type=json
---duckdb-directories=files=/usr/share/clients_data
+--duckdb-files-format-type=avro
+--duckdb-directories=files=/usr/share/data
 ```
 
 After adding connection run `table import -c=connection1` to select schemas and import tables.
@@ -318,7 +301,7 @@ character can be used at the beginning, middle, or end of the name.
 Connection configurations are stored in the YAML files in the `./sources` folder. The name of the connection is also
 the name of the folder where the configuration file is stored.
 
-Below is a sample YAML file showing an example configuration of the JSON data source connection.
+Below is a sample YAML file showing an example configuration of the Avro data source connection.
 
 ``` yaml
 apiVersion: dqo/v1
@@ -327,9 +310,9 @@ spec:
   provider_type: duckdb
   duckdb:
     read_mode: in_memory
-    source_files_type: json
+    source_files_type: avro
     directories:
-      files: /usr/share/clients_data
+      files: /usr/share/data
     storage_type: local
 ```
 
