@@ -1,7 +1,7 @@
 ---
-title: number in range percent data quality checks
+title: Number in range percent data quality checks, SQL examples
 ---
-# number in range percent data quality checks
+# Number in range percent data quality checks, SQL examples
 
 This check verifies that values in a numeric column are within an accepted range.
  It measures the percentage of values within the valid range and raises a data quality issue when the rate of valid values is below a minimum accepted percentage.

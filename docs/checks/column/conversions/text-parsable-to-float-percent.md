@@ -1,7 +1,7 @@
 ---
-title: text parsable to float percent data quality checks
+title: Text parsable to float percent data quality checks, SQL examples
 ---
-# text parsable to float percent data quality checks
+# Text parsable to float percent data quality checks, SQL examples
 
 Verifies that values in a text column can be parsed and converted to a float (or numeric) type.
  This check measures the percentage of valid values and raises a data quality issue when the percentage of valid values is below an accepted rate.

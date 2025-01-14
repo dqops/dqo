@@ -2,7 +2,7 @@
 glightbox: false
 ---
 
-# Supported data sources
+# Supported Data Sources in DQOps
 The list of data sources supported by DQOps for running data quality checks, and measuring the data quality.
 
 ## Overview 
@@ -57,6 +57,11 @@ DQOps supports the following data sources.
   <a href="sql-server/" class="four-divs-element">
     <img src="https://dqops.com/docs/images/data-sources/amazon-rds.svg">
     <p>Amazon RDS for SQL Server</p>
+  </a>
+
+  <a href="avro/" class="four-divs-element">
+    <img src="https://dqops.com/docs/images/data-sources/avro-icon.svg">
+    <p>Avro files</p>
   </a>
 
   <a href="mysql/" class="four-divs-element">
@@ -234,8 +239,6 @@ DQOps supports the following data sources.
     <p>YugabyteDB</p>
   </a>
 
-  <div class="four-divs-element"></div>
-  <div class="four-divs-element"></div>
   <div class="four-divs-element"></div>
 
 </div>

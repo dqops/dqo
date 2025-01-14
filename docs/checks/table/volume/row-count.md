@@ -1,7 +1,7 @@
 ---
-title: row count data quality checks
+title: Row count data quality checks, SQL examples
 ---
-# row count data quality checks
+# Row count data quality checks, SQL examples
 
 This check detects empty or too-small tables. It captures the row count of a tested table.
  This check raises a data quality issue when the row count is below a minimum accepted value.

@@ -1,5 +1,8 @@
-# Collect statistics operator
-The documentation and code samples of capturing statistics using DQOps from data sources, and integrating statistics collection directly in Apache Airflow.
+---
+title: Airflow Operator for Collecting Statistics - DAG Example
+---
+# Airflow Operator for Collecting Statistics - DAG Example
+The documentation and code samples of capturing statistics from data sources, and integrating statistics collection directly in Apache Airflow.
 
 ## Overview
 

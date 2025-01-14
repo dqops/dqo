@@ -1,7 +1,7 @@
 ---
-title: expected texts in top values count data quality checks
+title: Expected texts in top values count data quality checks, SQL examples
 ---
-# expected texts in top values count data quality checks
+# Expected texts in top values count data quality checks, SQL examples
 
 A column-level check that counts how many expected text values are among the TOP most popular values in the column.
  The check will first count the number of occurrences of each column&#x27;s value and will pick the TOP X most popular values (configurable by the &#x27;top&#x27; parameter).

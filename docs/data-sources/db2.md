@@ -1,8 +1,8 @@
 ---
-title: How to set up data quality monitoring and data observability for IBM DB2
+title: How to Monitor IBM DB2? Data Observability Configuration
 ---
-# How to set up data quality monitoring and data observability for IBM DB2
-Data observability and data monitoring for IBM Db2. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
+# How to Monitor IBM DB2? Data Observability Configuration
+Learn how to monitor IBM DB2 and enable data observability to detect schema changes, data anomalies, volume fluctuations, and data quality issues.
 
 ## Overview
 

@@ -1,7 +1,7 @@
 ---
-title: column level accepted values data quality checks
+title: List of column level accepted values data quality checks
 ---
-# column level accepted values data quality checks
+# List of column level accepted values data quality checks
 
 This is a list of accepted_values column data quality checks supported by DQOps and a brief description of what data quality issued they detect.
 

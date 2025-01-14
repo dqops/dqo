@@ -2,7 +2,7 @@
 title: Auditing data quality with time periods for partitioned or financial data
 ---
 # Auditing data quality with time periods for partitioned or financial data
-Read this guide to learn how DQOps captures the database local time when running data quality checks, to enable auditing data quality results.
+Learn how to analyze time-partitioned data, such as financial records, and huge datasets to detect data quality issues for daily or monthly time periods.
 
 ## Tested time periods
 Knowing the time when the data quality issue was present is essential for knowing when the issue has begun.

@@ -1,7 +1,7 @@
 ---
-title: median anomaly data quality checks
+title: Median anomaly data quality checks, SQL examples
 ---
-# median anomaly data quality checks
+# Median anomaly data quality checks, SQL examples
 
 This check calculates a median of values in a numeric column and detects anomalies in a time series of previous medians.
  It raises a data quality issue when the median is in the top *anomaly_percent* percentage of the most outstanding values in the time series.

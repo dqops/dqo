@@ -1,7 +1,7 @@
 ---
-title: null placeholder text found data quality checks
+title: Null placeholder text found data quality checks, SQL examples
 ---
-# null placeholder text found data quality checks
+# Null placeholder text found data quality checks, SQL examples
 
 This check detects text values that are well-known equivalents (placeholders) of a null value, such as *null*, *None*, *n/a*.
  This check counts null placeholder values and raises a data quality issue when their count exceeds a *max_count* parameter value.

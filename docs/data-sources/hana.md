@@ -1,8 +1,9 @@
 ---
-title: How to set up data quality monitoring and data observability for SAP HANA
+title: How to Monitor SAP HANA? Data Observability Configuration
 ---
-# How to set up data quality monitoring and data observability for SAP HANA
-Data observability and data monitoring for SAP HANA. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
+# How to Monitor SAP HANA? Data Observability Configuration
+Learn how to monitor SAP HANA and enable data observability to detect schema changes, data anomalies, volume fluctuations, and data quality issues.
+
 
 ## Overview
 

@@ -1,7 +1,7 @@
 ---
-title: number found in set percent data quality checks
+title: Number found in set percent data quality checks, SQL examples
 ---
-# number found in set percent data quality checks
+# Number found in set percent data quality checks, SQL examples
 
 A column-level check that calculates the percentage of rows for which the tested numeric column contains a value from a set of expected values.
  Columns with null values are also counted as a passing value (the sensor assumes that a &#x27;null&#x27; is also an expected and accepted value).

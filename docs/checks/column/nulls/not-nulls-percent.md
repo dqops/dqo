@@ -1,7 +1,7 @@
 ---
-title: not nulls percent data quality checks
+title: Not nulls percent data quality checks, SQL examples
 ---
-# not nulls percent data quality checks
+# Not nulls percent data quality checks, SQL examples
 
 Verifies that a column contains some null values by measuring the maximum percentage of rows that have non-null values.
  Raises a data quality issue when the percentage of non-null values is above *max_percentage*, which means that a column that is expected to have null values is

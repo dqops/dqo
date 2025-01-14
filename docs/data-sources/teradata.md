@@ -1,8 +1,8 @@
 ---
-title: How to set up data quality monitoring and data observability for Teradata
+title: How to Monitor Teradata? Data Observability Configuration
 ---
-# How to set up data quality monitoring and data observability for Teradata
-Data observability and data monitoring for Teradata. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
+# How to Monitor Teradata? Data Observability Configuration
+Learn how to monitor Teradata and enable data observability to detect schema changes, data anomalies, volume fluctuations, and data quality issues.
 
 ## Overview
 

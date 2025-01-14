@@ -1,8 +1,8 @@
 ---
-title: Data quality process
+title: What is Data Quality Process? Definition, Examples and Best Practices
 ---
-# Data quality process
-Read this guide to learn the whole DQOps data quality process, from data profiling and data quality assessment, to data observability and incident management.
+# What is Data Quality Process? Definition, Examples and Best Practices
+Read this guide to learn an end-to-end data quality process, from data profiling and data quality assessment, to data observability and incident management.
 
 ## Data quality process overview
 Ensuring data quality requires a process that has two main stages. 

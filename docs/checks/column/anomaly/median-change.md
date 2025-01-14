@@ -1,7 +1,7 @@
 ---
-title: median change data quality checks
+title: Median change data quality checks, SQL examples
 ---
-# median change data quality checks
+# Median change data quality checks, SQL examples
 
 This check detects that the median of numeric values has changed more than *max_percent* from the last measured median.
 

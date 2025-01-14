@@ -1,7 +1,7 @@
 ---
-title: whitespace text percent data quality checks
+title: Whitespace text percent data quality checks, SQL examples
 ---
-# whitespace text percent data quality checks
+# Whitespace text percent data quality checks, SQL examples
 
 This check detects empty texts containing only spaces and other whitespace characters.
  This check measures the percentage of whitespace-only texts and raises a data quality issue when their rate exceeds a *max_percent* parameter value.

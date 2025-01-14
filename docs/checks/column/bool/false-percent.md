@@ -1,7 +1,7 @@
 ---
-title: false percent data quality checks
+title: False percent data quality checks, SQL examples
 ---
-# false percent data quality checks
+# False percent data quality checks, SQL examples
 
 This check measures the percentage of **false** values in a boolean column. It raises a data quality issue when the measured percentage is outside the accepted range.
 

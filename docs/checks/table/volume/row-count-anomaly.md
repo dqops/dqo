@@ -1,7 +1,7 @@
 ---
-title: row count anomaly data quality checks
+title: Row count anomaly data quality checks, SQL examples
 ---
-# row count anomaly data quality checks
+# Row count anomaly data quality checks, SQL examples
 
 This check detects anomalies in the day-to-day changes to the table volume (the row count).
  It captures the row count for each day and compares the row count change (increase or decrease) since the previous day.

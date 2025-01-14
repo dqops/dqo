@@ -1,7 +1,7 @@
 ---
-title: reload lag data quality checks
+title: Reload lag data quality checks, SQL examples
 ---
-# reload lag data quality checks
+# Reload lag data quality checks, SQL examples
 
 A table-level check that calculates the maximum difference in days between ingestion timestamp and event timestamp values on any row.
  This check should be executed only as a partitioned check because this check finds the longest delay between the time that the row was created

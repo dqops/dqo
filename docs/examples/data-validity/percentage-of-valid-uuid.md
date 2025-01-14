@@ -1,7 +1,7 @@
 ---
-title: How to detect invalid UUID values using a data quality check
+title: How to Detect Invalid UUID Values Using Data Quality Checks? Examples
 ---
-# How to detect invalid UUID values using a data quality check
+# How to Detect Invalid UUID Values Using Data Quality Checks? Examples
 This sample shows how to use data quality checks to measure the percentage of valid UUID values in a column and view the results on data quality dashboards.
 
 ## Overview

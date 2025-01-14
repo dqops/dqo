@@ -1,7 +1,7 @@
 ---
-title: column count match data quality checks
+title: Column count match data quality checks, SQL examples
 ---
-# column count match data quality checks
+# Column count match data quality checks, SQL examples
 
 Table level comparison check that compares the column count of the current (parent) table with the column count of the reference table.
 

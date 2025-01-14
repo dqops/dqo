@@ -1,7 +1,7 @@
 ---
-title: DQOps data quality availability sensors
+title: DQOps data quality availability sensors, SQL examples
 ---
-# DQOps data quality availability sensors
+# DQOps data quality availability sensors, SQL examples
 All [data quality sensors](../../../dqo-concepts/definition-of-data-quality-sensors.md) in the **availability** category supported by DQOps are listed below. Those sensors are measured on a table level.
 
 ---

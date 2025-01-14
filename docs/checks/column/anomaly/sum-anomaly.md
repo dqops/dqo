@@ -1,7 +1,7 @@
 ---
-title: sum anomaly data quality checks
+title: Sum anomaly data quality checks, SQL examples
 ---
-# sum anomaly data quality checks
+# Sum anomaly data quality checks, SQL examples
 
 This check calculates a sum of values in a numeric column and detects anomalies in a time series of previous sums.
  It raises a data quality issue when the sum is in the top *anomaly_percent* percentage of the most outstanding values in the time series.

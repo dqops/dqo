@@ -6,6 +6,7 @@ import com.dqops.connectors.duckdb.config.DuckdbStorageType;
 import com.dqops.connectors.duckdb.fileslisting.aws.AwsConstants;
 import com.dqops.connectors.duckdb.fileslisting.azure.AzureConstants;
 import com.dqops.metadata.sources.TableSpec;
+import com.dqops.metadata.sources.fileformat.avro.AvroFileFormatSpec;
 import com.dqops.metadata.sources.fileformat.csv.CsvFileFormatSpec;
 import com.dqops.metadata.sources.fileformat.deltalake.DeltaLakeFileFormatSpec;
 import com.dqops.metadata.sources.fileformat.iceberg.IcebergFileFormatSpec;
@@ -145,6 +146,7 @@ public class FileFormatSpecProvider {
             case csv: fileFormatSpec.setCsv(new CsvFileFormatSpec()); break;
             case json: fileFormatSpec.setJson(new JsonFileFormatSpec()); break;
             case parquet: fileFormatSpec.setParquet(new ParquetFileFormatSpec()); break;
+            case avro: fileFormatSpec.setAvro(new AvroFileFormatSpec()); break;
             case iceberg: fileFormatSpec.setIceberg(new IcebergFileFormatSpec()); break;
             case delta_lake: fileFormatSpec.setDeltaLake(new DeltaLakeFileFormatSpec()); break;
             default: throw new RuntimeException("Can't fill default file format for files type: " + duckdbFilesFormatType);

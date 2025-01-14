@@ -1,7 +1,7 @@
 ---
-title: sql invalid record count on table data quality checks
+title: Sql invalid record count on table data quality checks, SQL examples
 ---
-# sql invalid record count on table data quality checks
+# Sql invalid record count on table data quality checks, SQL examples
 
 A table-level check that uses a custom SQL query that return invalid values from column.
  Use the {table} token to reference the tested table. This data quality check can be used to compare columns on the same table.

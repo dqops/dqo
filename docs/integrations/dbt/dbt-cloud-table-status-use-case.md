@@ -1,4 +1,7 @@
-# DQOps table status example with the DbtCloud
+---
+title: How to Handle Data Quality Issues in DbtCloud with Example
+---
+# How to Handle Data Quality Issues in DbtCloud with Example
 This guide shows how to detect the data quality status of tables observed by DQOps within DbtCloud jobs, allowing to prevent loading corrupted data.
 
 ## Integration example

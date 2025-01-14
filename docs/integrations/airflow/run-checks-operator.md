@@ -1,5 +1,8 @@
-# Run checks operator
-Read this reference to learn how to use the DQOps Apache Airflow operator for running data quality checks inside a DAG, with the description of parameters.
+---
+title: Airflow Operator for Running Data Quality Checks - DAG Example
+---
+# Airflow Operator for Running Data Quality Checks - DAG Example
+Read this reference to learn how to use the Apache Airflow operator for running data quality checks inside a DAG, with the description of parameters.
 
 ## Overview
 

@@ -1,7 +1,7 @@
 ---
-title: How to detect rows not passing an SQL condition on a table using a data quality check
+title: How to Detect Rows Not Passing an SQL Condition With Data Quality Checks
 ---
-# How to detect rows not passing an SQL condition on a table using a data quality check
+# How to Detect Rows Not Passing an SQL Condition With Data Quality Checks
 This sample shows how to use data quality checks to measure the percentage of passed SQL condition on table and view the results on data quality dashboards.
 
 ## Overview

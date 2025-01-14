@@ -1,7 +1,7 @@
 ---
-title: lookup key not found data quality checks
+title: Lookup key not found data quality checks, SQL examples
 ---
-# lookup key not found data quality checks
+# Lookup key not found data quality checks, SQL examples
 
 This check detects invalid values that are not present in a dictionary table. The lookup uses an outer join query within the same database.
  This check counts the number of values not found in the dictionary table. It raises a data quality issue when too many missing keys are discovered.

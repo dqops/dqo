@@ -1,7 +1,7 @@
 ---
-title: column list changed data quality checks
+title: Column list changed data quality checks, SQL examples
 ---
-# column list changed data quality checks
+# Column list changed data quality checks, SQL examples
 
 A table-level check that detects if the list of columns has changed since the last time the check was run.
  This check will retrieve the metadata of a tested table and calculate a hash of the column names. The hash will not depend on the order of columns, only on the column names.

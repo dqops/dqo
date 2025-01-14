@@ -1,7 +1,7 @@
 ---
-title: total not null count match percent data quality checks
+title: Total not null count match percent data quality checks, SQL examples
 ---
-# total not null count match percent data quality checks
+# Total not null count match percent data quality checks, SQL examples
 
 A column-level check that ensures that the difference between the count of null values in the tested column and the count of null values in another column in a referenced table is below a maximum accepted percentage of difference.
  This check runs an SQL query with an INNER JOIN clause to join another (referenced) table that must be defined in the same database.

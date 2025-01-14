@@ -1,7 +1,7 @@
 ---
-title: date in range percent data quality checks
+title: Date in range percent data quality checks, SQL examples
 ---
-# date in range percent data quality checks
+# Date in range percent data quality checks, SQL examples
 
 Verifies that the dates in date, datetime, or timestamp columns are within a reasonable range of dates.
  The default configuration detects fake dates such as 1900-01-01 and 2099-12-31.

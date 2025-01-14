@@ -1,7 +1,7 @@
 ---
-title: empty text percent data quality checks
+title: Empty text percent data quality checks, SQL examples
 ---
-# empty text percent data quality checks
+# Empty text percent data quality checks, SQL examples
 
 This check detects empty texts that are not null. Empty texts have a length of zero.
  This check measures the percentage of empty texts and raises a data quality issue when the rate of empty values exceeds a *max_percent* parameter value.

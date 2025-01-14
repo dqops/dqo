@@ -1,8 +1,8 @@
 ---
-title: How to detect table schema changes
+title: How to Detect Table Schema Changes? Examples and Best Practices
 ---
-# How to detect table schema changes
-Read this guide to learn how DQOps detects table schema changes, such as missing columns, data type changes, or reordering columns.
+# How to Detect Table Schema Changes? Examples and Best Practices
+Read this guide to learn how to detect table schema changes, such as missing columns, missing tables, data type changes, or reordering the columns.
 
 The table schema change detection checks are configured in the `schema` category in DQOps.
 

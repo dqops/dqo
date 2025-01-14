@@ -1,7 +1,7 @@
 ---
-title: row count change 30 days data quality checks
+title: Row count change 30 days data quality checks, SQL examples
 ---
-# row count change 30 days data quality checks
+# Row count change 30 days data quality checks, SQL examples
 
 This check compares the current table volume (the row count) to the row count 30 days ago.
  This check compares the table volume to a month ago value to overcome monthly seasonability.

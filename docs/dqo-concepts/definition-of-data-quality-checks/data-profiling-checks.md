@@ -1,8 +1,8 @@
 ---
-title: Data profiling checks
+title: What are Data Profiling Checks? Definition and Examples
 ---
-# Data profiling checks
-Read this guide to understand the purpose of data profiling checks in DQOps, and how they are used to evaluate the initial data quality status of tables.
+# What are Data Profiling Checks? Definition and Examples
+Data quality profiling checks are performing the initial data quality assessment of datasets to find common quality issues and create a data quality baseline.
 
 ## What are data profiling checks?
 The data profiling checks in DQOps are responsible for **assessing the initial data quality score** of data sources.

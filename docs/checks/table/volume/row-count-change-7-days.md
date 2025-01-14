@@ -1,7 +1,7 @@
 ---
-title: row count change 7 days data quality checks
+title: Row count change 7 days data quality checks, SQL examples
 ---
-# row count change 7 days data quality checks
+# Row count change 7 days data quality checks, SQL examples
 
 This check compares the current table volume (the row count) to the row count seven days ago.
  This check compares the table volume to a value a week ago to overcome weekly seasonability and to compare Mondays to Mondays, Tuesdays to Tuesdays, etc.

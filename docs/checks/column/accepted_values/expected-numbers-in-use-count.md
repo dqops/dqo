@@ -1,7 +1,7 @@
 ---
-title: expected numbers in use count data quality checks
+title: Expected numbers in use count data quality checks, SQL examples
 ---
-# expected numbers in use count data quality checks
+# Expected numbers in use count data quality checks, SQL examples
 
 A column-level check that counts unique values in a numeric column and counts how many values out of a list of expected numeric values were found in the column.
  The check raises a data quality issue when the threshold for the maximum number of missing has been exceeded (too many expected values were not found in the column).

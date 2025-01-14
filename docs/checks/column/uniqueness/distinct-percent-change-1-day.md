@@ -1,7 +1,7 @@
 ---
-title: distinct percent change 1 day data quality checks
+title: Distinct percent change 1 day data quality checks, SQL examples
 ---
-# distinct percent change 1 day data quality checks
+# Distinct percent change 1 day data quality checks, SQL examples
 
 This check monitors the percentage of distinct values and compares it to the measure from the previous day. It raises a data quality issue when the change exceeds an accepted threshold.
 

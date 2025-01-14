@@ -1,7 +1,7 @@
 ---
-title: mean anomaly data quality checks
+title: Mean anomaly data quality checks, SQL examples
 ---
-# mean anomaly data quality checks
+# Mean anomaly data quality checks, SQL examples
 
 This check calculates a mean (average) of values in a numeric column and detects anomalies in a time series of previous averages.
  It raises a data quality issue when the mean is in the top *anomaly_percent* percentage of the most outstanding values in the time series.

@@ -1,7 +1,7 @@
 ---
-title: invalid ip4 address format found data quality checks
+title: Invalid ip4 address format found data quality checks, SQL examples
 ---
-# invalid ip4 address format found data quality checks
+# Invalid ip4 address format found data quality checks, SQL examples
 
 This check detects invalid IP4 internet addresses in text columns using a regular expression.
  It counts the number of invalid addresses and raises a data quality issue when the number is above a threshold.

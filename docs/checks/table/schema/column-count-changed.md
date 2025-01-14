@@ -1,7 +1,7 @@
 ---
-title: column count changed data quality checks
+title: Column count changed data quality checks, SQL examples
 ---
-# column count changed data quality checks
+# Column count changed data quality checks, SQL examples
 
 A table-level check that detects if the number of columns in the table has changed since the last time the check (checkpoint) was run.
  This check retrieves the metadata of the monitored table from the data source, counts the number of columns and compares it to the last known number of columns

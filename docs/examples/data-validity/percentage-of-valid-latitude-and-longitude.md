@@ -1,7 +1,7 @@
 ---
-title: How to detect invalid latitude and longitude values using a data quality check
+title: How to Detect Invalid Latitude or Longitude with Data Quality Checks
 ---
-# How to detect invalid latitude and longitude values using a data quality check
+# How to Detect Invalid Latitude or Longitude with Data Quality Checks
 This sample shows how to use data quality checks to measure the percentage of valid latitude and longitude values and view the results on dashboards.
 
 ## Overview

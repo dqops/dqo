@@ -1,7 +1,7 @@
 ---
-title: mean change data quality checks
+title: Mean change data quality checks, SQL examples
 ---
-# mean change data quality checks
+# Mean change data quality checks, SQL examples
 
 This check detects that the mean (average) of numeric values has changed more than *max_percent* from the last measured mean.
 

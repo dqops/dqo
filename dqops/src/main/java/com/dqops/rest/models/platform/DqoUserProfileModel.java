@@ -229,6 +229,12 @@ public class DqoUserProfileModel {
     private boolean canUseAiAnomalyDetection;
 
     /**
+     * This instance uses federated authentication and the user can log out.
+     */
+    @JsonPropertyDescription("This instance uses federated authentication and the user can log out.")
+    private boolean canLogout;
+
+    /**
      * Creates a user profile model from the API key.
      * @param dqoCloudApiKey DQOps Cloud api key.
      * @param principal Calling user principal.
@@ -278,6 +284,7 @@ public class DqoUserProfileModel {
             model.setCanUseDataDomains(dqoCloudApiKey.getApiKeyPayload().getLicenseType() == DqoCloudLicenseType.ENTERPRISE);
             model.setCanUseAiAnomalyDetection(dqoCloudApiKey.getApiKeyPayload().getLicenseType() != DqoCloudLicenseType.FREE &&
                     dqoCloudApiKey.getApiKeyPayload().getExpiresAt() == null);
+            model.setCanLogout(principal.getUserTokenPayload() != null);
         } else {
             model.setTenant("Standalone");
             model.setLicenseType(DqoCloudLicenseType.FREE.name());

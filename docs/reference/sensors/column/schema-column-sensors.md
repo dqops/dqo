@@ -1,7 +1,7 @@
 ---
-title: DQOps data quality schema sensors
+title: DQOps data quality schema sensors, SQL examples
 ---
-# DQOps data quality schema sensors
+# DQOps data quality schema sensors, SQL examples
 All [data quality sensors](../../../dqo-concepts/definition-of-data-quality-sensors.md) in the **schema** category supported by DQOps are listed below. Those sensors are measured on a column level.
 
 ---

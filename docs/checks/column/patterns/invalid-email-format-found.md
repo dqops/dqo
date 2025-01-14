@@ -1,7 +1,7 @@
 ---
-title: invalid email format found data quality checks
+title: Invalid email format found data quality checks, SQL examples
 ---
-# invalid email format found data quality checks
+# Invalid email format found data quality checks, SQL examples
 
 This check detects invalid email addresses in text columns using a regular expression.
  It counts the number of invalid emails and raises a data quality issue when the number is above a threshold.

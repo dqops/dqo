@@ -1,7 +1,7 @@
 ---
-title: sum change 1 day data quality checks
+title: Sum change 1 day data quality checks, SQL examples
 ---
-# sum change 1 day data quality checks
+# Sum change 1 day data quality checks, SQL examples
 
 This check detects that the sum of numeric values has changed more than *max_percent* from the sum measured one day ago (yesterday).
 

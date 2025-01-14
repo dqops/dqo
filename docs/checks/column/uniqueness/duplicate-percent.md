@@ -1,7 +1,7 @@
 ---
-title: duplicate percent data quality checks
+title: Duplicate percent data quality checks, SQL examples
 ---
-# duplicate percent data quality checks
+# Duplicate percent data quality checks, SQL examples
 
 This check measures the percentage of duplicate values in all non-null values. It raises a data quality issue when the percentage of duplicates is above an accepted threshold.
  The default threshold is 0% duplicate values.

@@ -1,7 +1,7 @@
 ---
-title: max in range data quality checks
+title: Max in range data quality checks, SQL examples
 ---
-# max in range data quality checks
+# Max in range data quality checks, SQL examples
 
 This check finds a maximum value in a numeric column. It verifies that the maximum value is within the range of accepted values
  and raises a data quality issue when it is not within a valid range.

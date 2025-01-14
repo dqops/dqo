@@ -1,7 +1,7 @@
 ---
-title: invalid usa zipcode format found data quality checks
+title: Invalid usa zipcode format found data quality checks, SQL examples
 ---
-# invalid usa zipcode format found data quality checks
+# Invalid usa zipcode format found data quality checks, SQL examples
 
 This check validates the format of a USA zip code inside text columns.
  It counts the number of invalid zip code and raises a data quality issue when the rate is below a threshold.

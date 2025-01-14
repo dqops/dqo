@@ -1,7 +1,7 @@
 ---
-title: DQOps user interface overview
+title: How to Use DQOps User Interface - Overview
 ---
-# DQOps user interface overview
+# How to Use DQOps User Interface - Overview
 This guide introduces the concept of DQOps user interface, how the screen is organized, how to work with multiple tables, and navigate across the platform.
 
 ## Overview

@@ -1,7 +1,7 @@
 ---
-title: table level custom sql data quality checks
+title: List of table level custom sql data quality checks
 ---
-# table level custom sql data quality checks
+# List of table level custom sql data quality checks
 
 This is a list of custom_sql table data quality checks supported by DQOps and a brief description of what data quality issued they detect.
 

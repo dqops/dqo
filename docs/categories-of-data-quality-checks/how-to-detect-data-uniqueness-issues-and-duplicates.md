@@ -1,7 +1,7 @@
 ---
-title: How to detect duplicate data and measure data uniqueness
+title: How to detect duplicate data and measure uniqueness, examples
 ---
-# How to detect duplicate data and measure data uniqueness
+# How to detect duplicate data and measure uniqueness, examples
 Read this guide to learn how to detect duplicate data and how distinct values, data uniqueness, and duplicate data are related to each other.
 
 The data uniqueness and duplicate detection checks are configured in the `uniqueness` category in DQOps.

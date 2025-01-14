@@ -1,7 +1,7 @@
 ---
-title: invalid uuid format percent data quality checks
+title: Invalid uuid format percent data quality checks, SQL examples
 ---
-# invalid uuid format percent data quality checks
+# Invalid uuid format percent data quality checks, SQL examples
 
 This check validates the format of UUID values in text columns.
  It measures the percentage of invalid UUIDs and raises a data quality issue when the rate is above a threshold.

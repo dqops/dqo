@@ -1,13 +1,13 @@
 ---
-title: Types of data quality dashboards
+title: Types of Data Quality Dashboards - Examples and Best Practices
 ---
-# Types of data quality dashboards
-Read this guide to learn what kind of data quality dashboards are bundled with DQOps, what is their purpose, and how they allow to find affected tables.
+# Types of Data Quality Dashboards - Examples and Best Practices
+Data quality dashboards provide a centralized view of key metrics, allowing data teams to monitor and improve the health and reliability of their data.
 
 ## Overview
 
 DQOps has multiple built-in data quality dashboards for displaying [data quality KPI](definition-of-data-quality-kpis.md).
-Our dashboards use [Looker Studio](https://lookerstudio.google.com/overview) (formerly Google Data Studio) business 
+DQOps dashboards use [Looker Studio](https://lookerstudio.google.com/overview) (formerly Google Data Studio) business 
 intelligence environment. We chose Looker Studio because there is no per-user license fee, which allows granting access
 to all parties that might be involved in the issue resolution process.
 
@@ -420,6 +420,83 @@ This dashboard allows filtering data by:
 * check category.
 
 ![Checks no longer in use - summary tables dashboard](https://dqops.com/docs/images/concepts/data-quality-dashboards/checks-no-longer-in-use.png){ loading=lazy; width="1200px" }
+
+## FAQ
+The following knowledgebase answers the most popular questions about data quality dashboards. 
+
+### What are data quality dashboards?
+Data quality dashboards are interactive tools that visually track and analyze key data quality metrics. 
+Think of them as a central hub for all your data quality information. 
+They provide an overview of the health and reliability of your data,  presented in a way that's easy to understand and act on.
+
+These dashboards are used by various teams within an organization:
+
+* **Data engineers** rely on them to monitor data pipelines and pinpoint any issues affecting data reliability.
+* **Data analysts** use them to verify the trustworthiness of datasets before using them for analysis.
+* **Data owners** need them to ensure their databases meet data quality standards and quickly address any problems.
+
+Dashboards can present data quality metrics for various levels of granularity: 
+from entire data sources down to individual datasets, tables, files, or even columns. 
+They track these metrics across different data quality dimensions like accuracy, completeness, consistency, timeliness, and validity.
+
+Perhaps most importantly, data quality dashboards provide historical context. 
+By displaying trends over time, they show how data quality is improving (or declining) and highlight areas that need attention. 
+This allows teams to proactively address data quality issues and prevent them from impacting business decisions.
+
+### What are data quality dashboard examples?
+Data quality dashboards can be implemented on various levels within an organization to provide different perspectives on data health. 
+Here are a few examples:
+
+*  **Scorecard dashboards** offer a high-level overview, like a bird's-eye view of the current data quality status for each data source. 
+   These are useful for executives and managers who need a quick understanding of overall data health.
+
+*  **Operational dashboards** dive deeper, showing a prioritized list of tables with the lowest data quality scores. 
+   This helps data stewards and engineers focus their efforts on the areas that need the most attention. 
+   Imagine a dashboard that flags tables with the most missing values or those that haven't been updated recently.
+
+*  **Detailed dashboards** provide the most granular information, useful for root cause analysis of specific data quality problems. 
+   These might include:
+
+     * **Data volume history**: showing trends in data volume over time to identify anomalies or inconsistencies.
+     * **Open data quality issues**: a list of logged issues with their current status and assigned owners.
+     * **Data freshness metrics**: highlighting tables with outdated data that might need refreshing.
+
+### What is a data quality monitoring dashboard?
+Data quality monitoring dashboards provide a concise overview of the health of your most important datasets. 
+They display data quality scores across various dimensions (completeness, accuracy, etc.), 
+highlight potential problems like missing values or outdated tables, and help identify unreliable data pipelines.  
+Data teams use these dashboards to understand data health, plan improvements, and proactively address issues.
+
+### What is a data quality metrics dashboard?
+Data quality metrics dashboards focus on detailed data quality metrics for databases, sources, and tables.
+They display metrics across various data quality dimensions (completeness, timeliness, etc.) and may use advanced formulas 
+like data quality KPIs to show aggregated data quality scores. This helps pinpoint specific areas needing improvement.
+
+### What is a data quality dashboard template?
+A data quality dashboard template is a pre-built dashboard with predefined metrics and visualizations, often connected to a data quality metrics database. 
+Good templates are easy to customize, allowing you to add or remove metrics, adjust visualizations, and adapt to different data domains. 
+For example, DQOps offers over 50 customizable templates.
+
+### What is a data quality KPI dashboard?
+A data quality KPI dashboard tracks the overall health of your data using Key Performance Indicators (KPIs). 
+It presents a single, aggregated KPI score for each data asset (like a data source or database) and 
+also breaks down the score by data quality dimensions (completeness, timeliness, etc.). 
+This helps you quickly identify areas with low scores and pinpoint issues like outdated tables or incomplete data.
+
+### How to make a data quality dashboard in Power BI?
+To make a data quality dashboard in Power BI, you need a data quality metrics database,
+a defined data model, and visualizations for data sources and tables. 
+Define your data quality KPI formula and measure it for dimensions like completeness. 
+DQOps can simplify this by collecting and storing metrics in a data lake that you can replicate for Power BI.
+
+### How to measure data quality in a data warehouse?
+Measuring data quality in a data warehouse requires a multi-layered approach:
+
+* **Landing Zone**: Track timeliness, completeness, and validity of raw data as it enters the warehouse.
+* **Cleansing Zone**: Verify consistency and accuracy after data cleansing and transformation.
+* **Fact and Dimension Tables**: Use data reconciliation checks to ensure accuracy and consistency between related tables.
+
+Monitor these layers with a data observability tool and track key metrics on data quality dashboards for a comprehensive view of data health.
 
 ## What's next
 

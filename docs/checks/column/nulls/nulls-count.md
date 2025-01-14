@@ -1,7 +1,7 @@
 ---
-title: nulls count data quality checks
+title: Nulls count data quality checks, SQL examples
 ---
-# nulls count data quality checks
+# Nulls count data quality checks, SQL examples
 
 Detects incomplete columns that contain any *null* values. Counts the number of rows having a null value.
  Raises a data quality issue when the count of null values is above a *max_count* threshold.

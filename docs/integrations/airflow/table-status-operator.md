@@ -1,5 +1,8 @@
-# Table status operator
-Read this guide to learn how to use the Apache Airflow operator from DQOps to detect the last known data quality status of data sources.
+---
+title: Airflow Table Quality Status Operator with Example DAG
+---
+# Airflow Table Quality Status Operator with Example DAG
+Read this guide to learn how to use the Apache Airflow operator to detect the last known data quality status of data sources, and source or target tables.
 
 ## Overview
 

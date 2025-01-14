@@ -1,4 +1,7 @@
-# Overview of notifications with webhooks
+---
+title: How to Send Data Quality Notifications to Webhooks, with Examples
+---
+# How to Send Data Quality Notifications to Webhooks, with Examples
 This guide describes how to integrate DQOps with external ticketing systems or send data quality incident notifications, for example to Microsoft Teams.
 
 ## Overview

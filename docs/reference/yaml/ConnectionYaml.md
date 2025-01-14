@@ -133,12 +133,13 @@ The structure of this object is described below
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |<span class="no-wrap-code ">`read_mode`</span>|DuckDB read mode.|*enum*|*in_memory*<br/>*files*<br/>| | |
-|<span class="no-wrap-code ">`files_format_type`</span>|Type of source files format for DuckDB.|*enum*|*csv*<br/>*json*<br/>*parquet*<br/>*iceberg*<br/>*delta_lake*<br/>| | |
+|<span class="no-wrap-code ">`files_format_type`</span>|Type of source files format for DuckDB.|*enum*|*csv*<br/>*json*<br/>*parquet*<br/>*avro*<br/>*iceberg*<br/>*delta_lake*<br/>| | |
 |<span class="no-wrap-code ">`database`</span>|DuckDB database name for in-memory read mode. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
 |<span class="no-wrap-code ">`properties`</span>|A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.|*Dict[string, string]*| | | |
 |<span class="no-wrap-code ">[`csv`](./ConnectionYaml.md#csvfileformatspec)</span>|Csv file format specification.|*[CsvFileFormatSpec](./ConnectionYaml.md#csvfileformatspec)*| | | |
 |<span class="no-wrap-code ">[`json`](./ConnectionYaml.md#jsonfileformatspec)</span>|Json file format specification.|*[JsonFileFormatSpec](./ConnectionYaml.md#jsonfileformatspec)*| | | |
 |<span class="no-wrap-code ">[`parquet`](./ConnectionYaml.md#parquetfileformatspec)</span>|Parquet file format specification.|*[ParquetFileFormatSpec](./ConnectionYaml.md#parquetfileformatspec)*| | | |
+|<span class="no-wrap-code ">[`avro`](./ConnectionYaml.md#avrofileformatspec)</span>|Avro file format specification.|*[AvroFileFormatSpec](./ConnectionYaml.md#avrofileformatspec)*| | | |
 |<span class="no-wrap-code ">[`iceberg`](./ConnectionYaml.md#icebergfileformatspec)</span>|Iceberg file format specification.|*[IcebergFileFormatSpec](./ConnectionYaml.md#icebergfileformatspec)*| | | |
 |<span class="no-wrap-code ">[`delta_lake`](./ConnectionYaml.md#deltalakefileformatspec)</span>|Delta Lake file format specification.|*[DeltaLakeFileFormatSpec](./ConnectionYaml.md#deltalakefileformatspec)*| | | |
 |<span class="no-wrap-code ">`directories`</span>|Virtual schema name to directory mappings. The path must be an absolute path.|*Dict[string, string]*| | | |
@@ -230,6 +231,20 @@ The structure of this object is described below
 |<span class="no-wrap-code ">`union_by_name`</span>|Whether the columns of multiple schemas should be unified by name, rather than by position.|*boolean*| | | |
 |<span class="no-wrap-code ">`compression`</span>|The compression type for the file.|*enum*|*none*<br/>*auto*<br/>*gzip*<br/>*zstd*<br/>*snappy*<br/>*lz4*<br/>| | |
 |<span class="no-wrap-code ">`no_compression_extension`</span>|Whether the compression extension is present at the end of the file name.|*boolean*| | | |
+
+
+
+___
+
+## AvroFileFormatSpec
+Csv file format specification for querying data in the Avro format files.
+
+
+The structure of this object is described below
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|<span class="no-wrap-code ">`filename`</span>|Whether or not an extra filename column should be included in the result.|*boolean*| | | |
 
 
 

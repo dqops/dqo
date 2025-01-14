@@ -1,7 +1,7 @@
 ---
-title: How to detect out-of-range numbers in data
+title: How to detect out-of-range numbers? Examples and Best Practices
 ---
-# How to detect out-of-range numbers in data
+# How to detect out-of-range numbers? Examples and Best Practices
 Read this guide to learn how to detect numeric values that are out of an accepted range and how to raise a data quality issue.
 
 The data quality checks responsible for numeric values are configured in the `numeric` category in DQOps.

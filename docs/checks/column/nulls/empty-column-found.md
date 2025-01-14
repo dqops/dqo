@@ -1,7 +1,7 @@
 ---
-title: empty column found data quality checks
+title: Empty column found data quality checks, SQL examples
 ---
-# empty column found data quality checks
+# Empty column found data quality checks, SQL examples
 
 Detects empty columns that contain only *null* values. Counts the number of rows that have non-null values.
  Raises a data quality issue when the count of non-null values is below *min_count*.

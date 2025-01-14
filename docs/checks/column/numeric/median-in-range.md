@@ -1,7 +1,7 @@
 ---
-title: median in range data quality checks
+title: Median in range data quality checks, SQL examples
 ---
-# median in range data quality checks
+# Median in range data quality checks, SQL examples
 
 This check finds a median value in a numeric column. It verifies that the median value is within the range of accepted values
  and raises a data quality issue when it is not within a valid range.

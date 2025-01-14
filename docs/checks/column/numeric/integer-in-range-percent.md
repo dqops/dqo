@@ -1,7 +1,7 @@
 ---
-title: integer in range percent data quality checks
+title: Integer in range percent data quality checks, SQL examples
 ---
-# integer in range percent data quality checks
+# Integer in range percent data quality checks, SQL examples
 
 This check verifies that numeric values are within a range of accepted values.
  It measures the percentage of values in the range and raises a data quality issue when the percentage of valid values is below an accepted rate.

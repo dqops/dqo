@@ -1,5 +1,8 @@
-# Definition of a data quality rule
-Read this guide to understand what is a data quality rule in DQOps, and how it evaluates the data quality measures to detect data quality issues.
+---
+title: What is a Data Quality Rule? Definition and Examples
+---
+# What is a Data Quality Rule? Definition and Examples
+Read this guide to understand what is a data quality rule, how to set parameters, and how it evaluates the data quality measures to detect data quality issues.
 
 ## What are the rules in DQOps?
 

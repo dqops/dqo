@@ -1,7 +1,7 @@
 ---
-title: table level comparisons data quality checks
+title: List of table level comparisons data quality checks
 ---
-# table level comparisons data quality checks
+# List of table level comparisons data quality checks
 
 This is a list of comparisons table data quality checks supported by DQOps and a brief description of what data quality issued they detect.
 

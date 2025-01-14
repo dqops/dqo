@@ -1,7 +1,7 @@
 ---
-title: column level anomaly data quality checks
+title: List of column level anomaly data quality checks
 ---
-# column level anomaly data quality checks
+# List of column level anomaly data quality checks
 
 This is a list of anomaly column data quality checks supported by DQOps and a brief description of what data quality issued they detect.
 

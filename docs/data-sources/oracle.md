@@ -1,8 +1,8 @@
 ---
-title: How to set up data quality monitoring and data observability for Oracle
+title: How to Monitor Oracle? Data Observability Configuration
 ---
-# How to set up data quality monitoring and data observability for Oracle
-Data observability and data monitoring for Oracle. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
+# How to Monitor Oracle? Data Observability Configuration
+Learn how to monitor Oracle and enable data observability to detect schema changes, data anomalies, volume fluctuations, and data quality issues.
 
 ## Overview
 

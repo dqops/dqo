@@ -1,7 +1,7 @@
 ---
-title: mean change 7 days data quality checks
+title: Mean change 7 days data quality checks, SQL examples
 ---
-# mean change 7 days data quality checks
+# Mean change 7 days data quality checks, SQL examples
 
 This check detects that the mean (average) value of numeric values has changed more than *max_percent* from the mean value measured seven days ago.
  This check aims to overcome a weekly seasonability and compare Mondays to Mondays, Tuesdays to Tuesdays, etc.

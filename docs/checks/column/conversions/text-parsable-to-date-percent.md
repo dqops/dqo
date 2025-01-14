@@ -1,7 +1,7 @@
 ---
-title: text parsable to date percent data quality checks
+title: Text parsable to date percent data quality checks, SQL examples
 ---
-# text parsable to date percent data quality checks
+# Text parsable to date percent data quality checks, SQL examples
 
 Verifies that values in a text column can be parsed and converted to a date type.
  This check measures the percentage of valid values and raises a data quality issue when the percentage of valid values is below an accepted rate.

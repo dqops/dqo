@@ -1,7 +1,7 @@
 ---
-title: How to detect invalid dates
+title: How to Detect Invalid Dates? Examples and Best Practices
 ---
-# How to detect invalid dates
+# How to Detect Invalid Dates? Examples and Best Practices
 Read this guide to learn how to detect invalid dates in data, such as dates in the future or out of reasonable range and dates in a wrong format.
 
 The data quality checks that detect invalid dates are configured in the `datetime` category in DQOps.

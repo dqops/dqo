@@ -1,8 +1,9 @@
 ---
-title: How to detect anomalies in numeric data
+title: How to Detect Anomalies in Numeric Data? Examples and Best Practices
 ---
-# How to detect anomalies in numeric data
-Read this guide to learn how to detect anomaly data quality issues in numeric data using DQOps.
+# How to Detect Anomalies in Numeric Data? Examples and Best Practices
+Read this guide to learn how to detect data anomalies (outliers) in numeric data that has timestamp columns to identify time-series with historic values.
+
 The data quality checks are configured in the `anomaly` category in DQOps.
 
 ## What is an anomaly in data

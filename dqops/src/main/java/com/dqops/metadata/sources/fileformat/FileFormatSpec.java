@@ -11,6 +11,7 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 import com.dqops.metadata.sources.TableSpec;
+import com.dqops.metadata.sources.fileformat.avro.AvroFileFormatSpec;
 import com.dqops.metadata.sources.fileformat.csv.CsvFileFormatSpec;
 import com.dqops.metadata.sources.fileformat.deltalake.DeltaLakeFileFormatSpec;
 import com.dqops.metadata.sources.fileformat.iceberg.IcebergFileFormatSpec;
@@ -43,6 +44,7 @@ public class FileFormatSpec extends AbstractSpec {
             put("csv", o -> o.csv);
             put("json", o -> o.json);
             put("parquet", o -> o.parquet);
+            put("avro", o -> o.avro);
             put("iceberg", o -> o.iceberg);
             put("delta_lake", o -> o.deltaLake);
         }
@@ -62,6 +64,11 @@ public class FileFormatSpec extends AbstractSpec {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ParquetFileFormatSpec parquet;
+
+    @JsonPropertyDescription("Avro file format specification.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private AvroFileFormatSpec avro;
 
     @JsonPropertyDescription("Iceberg file format specification.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -133,6 +140,24 @@ public class FileFormatSpec extends AbstractSpec {
     }
 
     /**
+     * Returns the avro file format specification.
+     * @return Avro file format specification.
+     */
+    public AvroFileFormatSpec getAvro() {
+        return avro;
+    }
+
+    /**
+     * Sets the avro file format specification.
+     * @param avro Avro file format specification.
+     */
+    public void setAvro(AvroFileFormatSpec avro) {
+        setDirtyIf(!Objects.equals(this.avro, avro));
+        this.avro = avro;
+        propagateHierarchyIdToField(avro, "avro");
+    }
+
+    /**
      * Returns the Iceberg table format specification.
      * @return Iceberg table format specification.
      */
@@ -196,6 +221,7 @@ public class FileFormatSpec extends AbstractSpec {
                 case csv: return getCsv() != null && getCsv().getHivePartitioning() != null && getCsv().getHivePartitioning();
                 case json: return getJson() != null && getJson().getHivePartitioning() != null && getJson().getHivePartitioning();
                 case parquet: return getParquet() != null && getParquet().getHivePartitioning() != null && getParquet().getHivePartitioning();
+                case avro: return false; // not supported yet by DuckDB Avro extension
             }
         }
         return false;
@@ -222,6 +248,7 @@ public class FileFormatSpec extends AbstractSpec {
             case csv: return csv.buildSourceTableOptionsString(filePathList, tableSpec);
             case json: return json.buildSourceTableOptionsString(filePathList, tableSpec);
             case parquet: return parquet.buildSourceTableOptionsString(filePathList, tableSpec);
+            case avro: return avro.buildSourceTableOptionsString(filePathList, tableSpec);
             case iceberg: return iceberg.buildSourceTableOptionsString(filePathList, tableSpec);
             case delta_lake: return deltaLake.buildSourceTableOptionsString(filePathList, tableSpec);
             default: throw new RuntimeException("Cant create table options string for the given files: " + filePathList);
@@ -238,6 +265,7 @@ public class FileFormatSpec extends AbstractSpec {
             case csv: return this.getCsv() != null;
             case json: return this.getJson() != null;
             case parquet: return this.getParquet() != null;
+            case avro: return this.getAvro() != null;
             case iceberg: return this.getIceberg() != null;
             case delta_lake: return this.getDeltaLake() != null;
             default: throw new RuntimeException("The file format is not supported : " + duckdbFilesFormatType);
@@ -272,6 +300,9 @@ public class FileFormatSpec extends AbstractSpec {
             if (formatSpec.getCompression() != null && (formatSpec.getNoCompressionExtension() == null || !formatSpec.getNoCompressionExtension())) {
                 return fileTypeExtension + formatSpec.getCompression().getCompressionExtension();
             }
+        }
+        if (duckdbFilesFormatType.equals(DuckdbFilesFormatType.avro) && getAvro() != null) {
+            return fileTypeExtension; // compression not supported yet in DuckDB
         }
         return fileTypeExtension;
     }
@@ -332,6 +363,9 @@ public class FileFormatSpec extends AbstractSpec {
         }
         if (cloned.parquet != null) {
             cloned.parquet = cloned.parquet.deepClone();
+        }
+        if (cloned.avro != null) {
+            cloned.avro = cloned.avro.deepClone();
         }
         if (cloned.iceberg != null) {
             cloned.iceberg = cloned.iceberg.deepClone();

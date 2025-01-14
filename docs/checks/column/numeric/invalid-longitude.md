@@ -1,7 +1,7 @@
 ---
-title: invalid longitude data quality checks
+title: Invalid longitude data quality checks, SQL examples
 ---
-# invalid longitude data quality checks
+# Invalid longitude data quality checks, SQL examples
 
 This check finds numeric values that are not valid longitude coordinates. A valid longitude coordinate is in the range -180...180. It counts the values outside a valid range for a longitude.
  This check raises a data quality issue when the count of invalid values exceeds the maximum accepted count.

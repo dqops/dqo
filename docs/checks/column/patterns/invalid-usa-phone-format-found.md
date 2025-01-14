@@ -1,7 +1,7 @@
 ---
-title: invalid usa phone format found data quality checks
+title: Invalid usa phone format found data quality checks, SQL examples
 ---
-# invalid usa phone format found data quality checks
+# Invalid usa phone format found data quality checks, SQL examples
 
 This check validates the format of USA phone numbers inside text columns.
  It counts the number of invalid phone number and raises a data quality issue when too many rows contain phone numbers.

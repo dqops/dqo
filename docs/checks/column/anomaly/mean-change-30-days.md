@@ -1,7 +1,7 @@
 ---
-title: mean change 30 days data quality checks
+title: Mean change 30 days data quality checks, SQL examples
 ---
-# mean change 30 days data quality checks
+# Mean change 30 days data quality checks, SQL examples
 
 This check detects that the mean (average) of numeric values has changed more than *max_percent* from the mean value measured thirty days ago.
  This check aims to overcome a monthly seasonability and compare a value to a similar value a month ago.

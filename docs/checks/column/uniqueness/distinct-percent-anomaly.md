@@ -1,7 +1,7 @@
 ---
-title: distinct percent anomaly data quality checks
+title: Distinct percent anomaly data quality checks, SQL examples
 ---
-# distinct percent anomaly data quality checks
+# Distinct percent anomaly data quality checks, SQL examples
 
 This check monitors the percentage of distinct values and detects anomalies in the changes in this percentage. It monitors a 90-day time window.
  The check is configured by setting a desired percentage of anomalies to identify as data quality issues.

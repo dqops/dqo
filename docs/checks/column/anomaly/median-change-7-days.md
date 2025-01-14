@@ -1,7 +1,7 @@
 ---
-title: median change 7 days data quality checks
+title: Median change 7 days data quality checks, SQL examples
 ---
-# median change 7 days data quality checks
+# Median change 7 days data quality checks, SQL examples
 
 This check detects that the median of numeric values has changed more than *max_percent* from the median value measured seven days ago.
  This check aims to overcome a weekly seasonability and compare Mondays to Mondays, Tuesdays to Tuesdays, etc.

@@ -394,6 +394,12 @@ export const databaseOptions: IDatabaseOption[] = [
     displayName: 'CSV'
   },
   {
+    type: ConnectionModelProviderTypeEnum.duckdb,
+    name: 'Avro',
+    iconName: 'avro',
+    displayName: 'Avro'
+  },
+  {
     type: ConnectionModelProviderTypeEnum.databricks,
     name: 'Databricks',
     iconName: 'databricks',

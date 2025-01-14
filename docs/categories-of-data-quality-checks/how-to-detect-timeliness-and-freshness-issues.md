@@ -1,7 +1,7 @@
 ---
-title: How to measure data timeliness, freshness and staleness metrics
+title: How to Measure Data Timeliness, Freshness and Staleness Metrics
 ---
-# How to measure data timeliness, freshness and staleness metrics
+# How to Measure Data Timeliness, Freshness and Staleness Metrics
 Read this guide to learn how to measure data timeliness metrics, such as freshness (the most recent data) or staleness (when the data was loaded).
 
 The timeliness data quality checks are configured in the `timeliness` category in DQOps.

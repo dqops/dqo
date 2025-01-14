@@ -1,8 +1,8 @@
 ---
-title: Partitioned data quality checks
+title:  What are Partitioned Data Quality Checks? Definition and Examples
 ---
-# Partitioned data quality checks
-Read this guide to understand how data quality checks in DQOps are applied to analyzing partitioned data, or time-based data such as financial records.
+# What are Partitioned Data Quality Checks? Definition and Examples
+Partitioned data quality checks are detecting data quality issues in partitioned data, huge datasets, or time-based data such as transactions and events.
 
 ## What are partition checks?
 The partition(ed) checks in DQOps are responsible for monitoring data quality for date partitioned data, or to 

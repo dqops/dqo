@@ -254,6 +254,7 @@ const DatabaseConnection = ({
           nameOfDatabase === 'CSV' ||
           nameOfDatabase === 'Parquet' ||
           nameOfDatabase === 'JSON' ||
+          nameOfDatabase === 'Avro' ||
           nameOfDatabase === 'Iceberg' ||
           nameOfDatabase === 'Delta Lake'
         }

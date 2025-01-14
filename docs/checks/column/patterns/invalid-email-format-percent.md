@@ -1,7 +1,7 @@
 ---
-title: invalid email format percent data quality checks
+title: Invalid email format percent data quality checks, SQL examples
 ---
-# invalid email format percent data quality checks
+# Invalid email format percent data quality checks, SQL examples
 
 This check detects invalid email addresses in text columns using a regular expression.
  It calculated the percentage of invalid emails and raises a data quality issue when the percentage is above a threshold.

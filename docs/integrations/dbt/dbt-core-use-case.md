@@ -1,4 +1,7 @@
-# DQOps run checks example with the Dbt Core 
+---
+title: How to Run Data Quality Issues in Dbt Core with Example
+---
+# How to Run Data Quality Issues in Dbt Core with Example
 This example shows how to integrate dbt core jobs with running data quality checks with DQOps. 
 
 ## Integration example

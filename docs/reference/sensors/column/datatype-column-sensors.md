@@ -1,7 +1,7 @@
 ---
-title: DQOps data quality datatype sensors
+title: DQOps data quality datatype sensors, SQL examples
 ---
-# DQOps data quality datatype sensors
+# DQOps data quality datatype sensors, SQL examples
 All [data quality sensors](../../../dqo-concepts/definition-of-data-quality-sensors.md) in the **datatype** category supported by DQOps are listed below. Those sensors are measured on a column level.
 
 ---

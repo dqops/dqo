@@ -1,7 +1,7 @@
 ---
-title: max anomaly data quality checks
+title: Max anomaly data quality checks, SQL examples
 ---
-# max anomaly data quality checks
+# Max anomaly data quality checks, SQL examples
 
 This check finds a maximum value in a numeric column and detects anomalies in a time series of previous maximum values.
  It raises a data quality issue when the current maximum value is in the top *anomaly_percent* percentage of the most outstanding

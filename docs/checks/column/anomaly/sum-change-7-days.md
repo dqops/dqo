@@ -1,7 +1,7 @@
 ---
-title: sum change 7 days data quality checks
+title: Sum change 7 days data quality checks, SQL examples
 ---
-# sum change 7 days data quality checks
+# Sum change 7 days data quality checks, SQL examples
 
 This check detects that the sum of numeric values has changed more than *max_percent* from the sum measured seven days ago.
  This check aims to overcome a weekly seasonability and compare Mondays to Mondays, Tuesdays to Tuesdays, etc.

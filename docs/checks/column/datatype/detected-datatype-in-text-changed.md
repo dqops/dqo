@@ -1,7 +1,7 @@
 ---
-title: detected datatype in text changed data quality checks
+title: Detected datatype in text changed data quality checks, SQL examples
 ---
-# detected datatype in text changed data quality checks
+# Detected datatype in text changed data quality checks, SQL examples
 
 A column-level check that scans all values in a text column, finds the right data type and detects when the desired data type changes.
  The actual_value returned from the sensor can be one of seven codes: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 5 - timestamps, 6 - booleans, 7 - strings, 8 - mixed data types.

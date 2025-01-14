@@ -1,7 +1,7 @@
 ---
-title: DQOps user home folder
+title: DQOps User Home Folder
 ---
-# DQOps user home folder
+# DQOps User Home Folder
 Read this guide to understand how DQOps stores the configuration of data sources and activated data quality checks locally, allowing to version files in Git.
 
 ## What is the DQOps user home?

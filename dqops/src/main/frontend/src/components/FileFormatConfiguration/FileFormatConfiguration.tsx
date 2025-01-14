@@ -4,7 +4,8 @@ import {
   DuckdbParametersSpecFilesFormatTypeEnum,
   IcebergFileFormatSpec,
   JsonFileFormatSpec,
-  ParquetFileFormatSpec
+  ParquetFileFormatSpec,
+  AvroFileFormatSpec
 } from '../../api';
 import SectionWrapper from '../Dashboard/SectionWrapper';
 import Select from '../Select';
@@ -12,6 +13,7 @@ import CsvFormatConfiguration from './FormatsConfiguration/CsvFormatConfiguratio
 import IcebergFormatConfiguration from './FormatsConfiguration/IcebergFormatConfiguration';
 import JsonFormatConfiguration from './FormatsConfiguration/JsonFormatConfiguration';
 import ParquetFormatConfiguration from './FormatsConfiguration/ParquetFormatConfiguration';
+import AvroFormatConfiguration from './FormatsConfiguration/AvroFormatConfiguration';
 import { TConfiguration } from './TConfiguration';
 
 type TFileFormatConfigurationProps = {
@@ -36,6 +38,10 @@ const sourceFilesTypeOptions = [
   {
     label: 'Parquet',
     value: DuckdbParametersSpecFilesFormatTypeEnum.parquet
+  },
+  {
+    label: 'Avro',
+    value: DuckdbParametersSpecFilesFormatTypeEnum.avro
   },
   {
     label: 'Iceberg',
@@ -76,6 +82,12 @@ export default function FileFormatConfiguration({
     return fileFormatType === DuckdbParametersSpecFilesFormatTypeEnum.parquet;
   }
 
+  function isAvroFileFormatSpec(
+    config: TConfiguration
+  ): config is AvroFileFormatSpec {
+    return fileFormatType === DuckdbParametersSpecFilesFormatTypeEnum.avro;
+  }
+
   function isIcebergFileFormatSpec(
     config: TConfiguration
   ): config is IcebergFileFormatSpec {
@@ -103,6 +115,14 @@ export default function FileFormatConfiguration({
       case DuckdbParametersSpecFilesFormatTypeEnum.parquet: {
         return isParquetFileFormatSpec(configuration) ? (
           <ParquetFormatConfiguration
+            configuration={configuration}
+            onChangeConfiguration={onChangeConfiguration}
+          />
+        ) : null;
+      }
+      case DuckdbParametersSpecFilesFormatTypeEnum.avro: {
+        return isAvroFileFormatSpec(configuration) ? (
+          <AvroFormatConfiguration
             configuration={configuration}
             onChangeConfiguration={onChangeConfiguration}
           />

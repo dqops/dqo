@@ -1,7 +1,7 @@
 ---
-title: text match date format percent data quality checks
+title: Text match date format percent data quality checks, SQL examples
 ---
-# text match date format percent data quality checks
+# Text match date format percent data quality checks, SQL examples
 
 Verifies that the values in text columns match one of the predefined date formats, such as an ISO 8601 date.
  Measures the percentage of valid date strings and raises a data quality issue when too many invalid date strings are found.

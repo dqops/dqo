@@ -1,12 +1,13 @@
 ---
-title: How to set up data quality monitoring and data observability for MariaDB
+title: How to Monitor MariaDB? Data Observability Configuration
 ---
-# How to set up data quality monitoring and data observability for MariaDB
-Data observability and data monitoring for MariaDB. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
+# How to Monitor MariaDB? Data Observability Configuration
+Learn how to monitor MariaDB and enable data observability to detect schema changes, data anomalies, volume fluctuations, and data quality issues.
+
 
 ## Overview
 
-MariaDB is the fastest and most resource efficient real-time data warehouse and open-source database.
+MariaDB is a fast and resource efficient real-time data warehouse and an open-source database.
 
 ## Add a MariaDB connection using the user interface
 

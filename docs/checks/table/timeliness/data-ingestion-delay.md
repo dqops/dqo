@@ -1,7 +1,7 @@
 ---
-title: data ingestion delay data quality checks
+title: Data ingestion delay data quality checks, SQL examples
 ---
-# data ingestion delay data quality checks
+# Data ingestion delay data quality checks, SQL examples
 
 A table-level check that calculates the time difference between the most recent row in the table and the most recent timestamp when the last row was loaded into the data warehouse or data lake.
  To identify the most recent row, the check finds the maximum value of the timestamp column that should contain the last modification timestamp from the source.

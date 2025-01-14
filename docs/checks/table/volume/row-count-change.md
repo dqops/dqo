@@ -1,7 +1,7 @@
 ---
-title: row count change data quality checks
+title: Row count change data quality checks, SQL examples
 ---
-# row count change data quality checks
+# Row count change data quality checks, SQL examples
 
 This check compares the current table volume (the row count) to the last known row count.
  It raises a data quality issue when the change in row count (increase or decrease) exceeds a maximum accepted percentage of change.

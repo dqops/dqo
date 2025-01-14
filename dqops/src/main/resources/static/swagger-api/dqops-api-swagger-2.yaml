@@ -17252,6 +17252,13 @@ definitions:
       schedule:
         description: "Schedule for importing source tables using a CRON scheduler."
         $ref: "#/definitions/CronScheduleSpec"
+  AvroFileFormatSpec:
+    type: "object"
+    properties:
+      filename:
+        type: "boolean"
+        description: "Whether or not an extra filename column should be included in\
+          \ the result."
   BetweenFloatsRuleParametersSpec:
     type: "object"
     properties:
@@ -38080,6 +38087,10 @@ definitions:
         type: "boolean"
         description: "The DQOps instance is a paid version with advanced AI anomaly\
           \ prediction."
+      can_logout:
+        type: "boolean"
+        description: "This instance uses federated authentication and the user can\
+          \ log out."
     description: "The model that describes the current user and his access rights."
   DqoUserRolesModel:
     type: "object"
@@ -38128,6 +38139,7 @@ definitions:
         - "csv"
         - "json"
         - "parquet"
+        - "avro"
         - "iceberg"
         - "delta_lake"
       database:
@@ -38149,6 +38161,9 @@ definitions:
       parquet:
         description: "Parquet file format specification."
         $ref: "#/definitions/ParquetFileFormatSpec"
+      avro:
+        description: "Avro file format specification."
+        $ref: "#/definitions/AvroFileFormatSpec"
       iceberg:
         description: "Iceberg file format specification."
         $ref: "#/definitions/IcebergFileFormatSpec"
@@ -38622,6 +38637,9 @@ definitions:
       parquet:
         description: "Parquet file format specification."
         $ref: "#/definitions/ParquetFileFormatSpec"
+      avro:
+        description: "Avro file format specification."
+        $ref: "#/definitions/AvroFileFormatSpec"
       iceberg:
         description: "Iceberg file format specification."
         $ref: "#/definitions/IcebergFileFormatSpec"

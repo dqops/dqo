@@ -1,7 +1,7 @@
 ---
-title: duplicate record count data quality checks
+title: Duplicate record count data quality checks, SQL examples
 ---
-# duplicate record count data quality checks
+# Duplicate record count data quality checks, SQL examples
 
 This check counts duplicate records values. It raises a data quality issue when the number of duplicates is above a minimum accepted value.
  The default configuration detects duplicate rows by enforcing that the *min_count* of duplicates is zero.

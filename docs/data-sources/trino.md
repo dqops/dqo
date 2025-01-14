@@ -1,8 +1,8 @@
 ---
-title: How to set up data quality monitoring and data observability for Trino
+title: How to Monitor Trino? Data Observability Configuration
 ---
-# How to set up data quality monitoring and data observability for Trino
-Data observability and data monitoring for Trino. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
+# How to Monitor Trino? Data Observability Configuration
+Learn how to monitor Trino and enable data observability to detect schema changes, data anomalies, volume fluctuations, and data quality issues.
 
 ## Overview
 

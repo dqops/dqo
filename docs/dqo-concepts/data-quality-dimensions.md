@@ -1,9 +1,9 @@
 ---
-title: How to measure data quality dimensions - list of data quality checks
+title: What are Data Quality Dimensions? Definitions, Examples and Best Practices
 ---
 
-# How to measure data quality dimensions - list of data quality checks
-This guide provides the definition of data quality dimensions. Read this guide to learn the mapping of data quality checks to data quality dimensions. 
+# What are Data Quality Dimensions? Definitions, Examples and Best Practices
+Data quality dimensions are standards for evaluating the quality of data, to make sure it's suitable for its intended use. They are measured by quality checks.
 
 ## What is a data quality dimension?
 
@@ -476,6 +476,114 @@ The following table lists data quality checks that detect validity issues on col
 |[*contains_ip4_percent*](../checks/column/pii/contains-ip4-percent.md)|Detect IP4 addresses inside text columns|[pii](../categories-of-data-quality-checks/how-to-detect-pii-values-and-sensitive-data.md)|This check detects IP4 addresses inside text columns. It measures the percentage of columns containing an IP4 address and raises a data quality issue when too many rows contain IP4 addresses.| |
 |[*contains_ip6_percent*](../checks/column/pii/contains-ip6-percent.md)|Detect IP6 addresses inside text columns|[pii](../categories-of-data-quality-checks/how-to-detect-pii-values-and-sensitive-data.md)|This check detects IP6 addresses inside text columns. It measures the percentage of columns containing an IP6 address and raises a data quality issue when too many rows contain IP6 addresses.| |
 
+## FAQ
+The following knowledgebase answers the most popular questions about data quality dimensions.
+
+### What are data quality dimensions?
+Data quality dimensions are like a checklist for your data. They're a set of standards you use to see if your data is good enough to use. 
+These dimensions include things like accuracy (is the data correct?), completeness (is any data missing?),
+consistency (is the same data stored the same way everywhere?), timeliness (is the data up-to-date?), and validity (does the data match the rules it should follow?). 
+By checking your data against these dimensions, you can make sure it's reliable and useful for your needs.
+
+### What are data quality dimensions, with examples?
+Data quality dimensions are standards like accuracy, completeness, and timeliness used to measure how good your data is.
+For example, completeness is measured by counting NULL values, timeliness by calculating the age of the data, and validity by checking if the values match patterns and ranges. 
+DQOps provides a mapping of 150+ checks to dimensions, giving you a complete view of your data's health.
+
+### What are the 6 dimensions of data quality?
+The 6 core dimensions of data quality are accuracy (data is correct), completeness (no data is missing),
+consistency (data is the same across all systems), timeliness (data is up-to-date),
+validity (data conforms to defined rules), and uniqueness (no duplicate data exists). 
+These dimensions help ensure your data is reliable and usable.
+
+### Which dimension for measuring data quality means that the data conforms to a set of predefined standards and definitions such as type and format?
+Validity is a data quality dimension that ensures data conforms to a set of predefined standards and definitions, such as data type, format, range, or business rules. 
+For example, a valid email address must have an "@" symbol and a domain name, while a valid date must follow a specific format.
+
+### How to measure data quality?
+Data quality is measured by testing your data with checks designed for each core dimension. 
+These checks might count invalid records (like how many email addresses are formatted incorrectly) or measure how many rules your data passes.  
+The results of these checks give you a data quality score, which tells you how healthy your data is overall.
+
+### What is data completeness?
+Data completeness is a data quality dimension that measures if your dataset is complete. 
+This means all required columns contain values, those values aren't empty (like blanks or NULLs), the dataset has a minimum acceptable size, and related fields are present 
+(for example, if you have a "country" field, you should also have a "state" field for relevant entries).
+
+### What are data quality measures?
+Data quality measures are metrics that quantify the quality of your data for different dimensions, like completeness and validity.
+They provide numeric scores (often expressed as percentages) that are easy to understand and communicate to others.
+These measures can be tracked over time, allowing you to quickly notice if the overall data quality is decreasing and identify potential issues.
+
+### How to measure data integrity?
+Data integrity issues often pop up when you have related data in different tables. Imagine one table lists customer orders and another lists customer details. 
+If an order references a customer that doesn't exist in the customer table, that's a data integrity problem. 
+These problems are common in data lakes where the structure isn't as strict as in traditional databases.
+To catch these issues, you need special data quality checks that [look for invalid references between tables](../categories-of-data-quality-checks/how-to-detect-data-referential-integrity-issues.md).
+
+### What is data quality consistency?
+Data quality consistency checks if different copies of similar datasets match in time. 
+This is important because data is often stored in multiple places, and you need to make sure those copies are the same.
+Consistency is tested with data reconciliation checks, which compare data across different systems or time periods. 
+Additionally, modern data observability platforms can detect anomalies – unexpected changes in data patterns – which are another type of consistency issue.
+
+### What are data quality parameters?
+Data quality parameters are like settings that define what "good" data looks like for your needs. They're used to configure your expectations for data quality checks. There are two main types:
+
+* **Data quality rule parameters** set overall expectations for your data, like a minimum row count or a maximum number of allowed errors.
+* **Data quality check parameters** provide specific instructions for individual checks, like a list of valid country codes or a regular expression to validate email formats.
+
+By using these parameters, you can fine-tune your data quality checks and ensure they're accurately measuring the health of your data.
+
+### What are the types of data quality checks?
+Data quality check types provide a more detailed categorization of data quality checks than dimensions. 
+They focus on specific data quality issues and the methods used to detect them. 
+Some common types include:
+
+* **Pattern matching**: Verifying data conforms to expected formats (e.g., email addresses, phone numbers).
+* **Null value checks**: Counting the number of missing values in a dataset.
+* **Dataset comparison**: Reconciling data between different sources or time periods.
+* **Value range checks**: Ensuring data falls within acceptable boundaries.
+
+DQOps provides detailed documentation for 21 distinct [types of data quality checks](../categories-of-data-quality-checks/index.md),
+allowing you to address a wide range of potential data quality issues.
+
+### How to determine data quality?
+You determine data quality by profiling your datasets and testing them with data quality checks. 
+This process, called data quality assessment, helps you establish a data quality baseline, which is like an initial health check for your data.
+
+### What are data quality checks?
+Data quality checks are tests that verify the health of your data. 
+They make sure your dataset is error-free and meets your data quality requirements. 
+For example, a healthy dataset should have no missing or incorrect values. 
+These checks are usually run by data quality tools, which automate the process and provide detailed reports on your data's health.
+
+### What are examples of data quality consistency?
+Data consistency ensures that different copies of similar datasets match.
+Data consistency is typically tested with data reconciliation checks, which compare data across different systems. 
+Modern data observability platforms also support anomaly detection, which helps ensure data consistency over time by identifying unexpected changes or patterns.
+
+### What does the consistency dimension refer to when data quality is being measured?
+The consistency dimension in data quality ensures that different copies of your data match. 
+This means if you have the same data in multiple places, like a data warehouse and a data lake, they should be identical. 
+It also means that data behaves consistently over time, without unexpected changes or anomalies.
+To test consistency, you can use data reconciliation to compare different copies of data and anomaly detection to identify unusual patterns in time series data.
+
+### How to ensure data quality dimensions measurement strategy management and governance?
+Ensuring effective data quality dimension measurement requires a clear strategy and robust governance. 
+This involves a few key steps:
+
+* **Choose your dimensions**: Determine which data quality dimensions are most critical for your needs. This might depend on the type of data you're working with and how it's being used.
+
+* **Define your measurement method**: Outline how you'll measure each dimension. This could involve using data quality tools, 
+  implementing data observability solutions, or a combination of approaches.
+
+* **Establish data governance policies**:  Your data governance policies should clearly define which databases and dataset types must be measured for data quality compliance. 
+  This ensures consistency and accountability across your organization.
+
+By combining a well-defined strategy with strong governance, you can ensure that your data quality measurement process is effective and sustainable.
+
+
 ## What's more
 - Review the [types of data quality dashboards](types-of-data-quality-dashboards.md) that are provided with DQOps.
-- Learn how DQOps calculates [data quality KPIs per data quality dimension](definition-of-data-quality-kpis.md#monthly-with-data-quality-dimensions).
+- Learn how DQOps calculates [data quality KPIs for data quality dimensions](definition-of-data-quality-kpis.md#monthly-with-data-quality-dimensions).

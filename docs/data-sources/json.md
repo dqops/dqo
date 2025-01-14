@@ -1,8 +1,8 @@
 ---
-title: How to set up data quality monitoring and data observability for JSON files
+title: How to Monitor JSON Files? Data Observability Configuration
 ---
-# How to set up data quality monitoring and data observability for JSON files
-Data observability and data monitoring for JSON files. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
+# How to Monitor JSON Files? Data Observability Configuration
+Learn how to monitor JSON Files and enable data observability to detect schema changes, data anomalies, volume fluctuations, and data quality issues.
 
 ## Overview
 
@@ -243,8 +243,8 @@ Select the **duckdb** provider, which provides support for the JSON file format.
 
 !!! info "Windows file system"
 
-   When using the Windows file system remember to put a double backslash (\\) in the path on the CLI prompt.
-   You can also use a single slash (/).
+    When using the Windows file system remember to put a double backslash (\\) in the path on the CLI prompt.
+    You can also use a single slash (/).
 
 
 ```

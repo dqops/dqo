@@ -1,7 +1,7 @@
 ---
-title: sum change data quality checks
+title: Sum change data quality checks, SQL examples
 ---
-# sum change data quality checks
+# Sum change data quality checks, SQL examples
 
 This check detects that the sum of numeric values has changed more than *max_percent* from the last measured sum.
 

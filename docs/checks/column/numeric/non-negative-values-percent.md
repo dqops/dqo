@@ -1,7 +1,7 @@
 ---
-title: non negative values percent data quality checks
+title: Non negative values percent data quality checks, SQL examples
 ---
-# non negative values percent data quality checks
+# Non negative values percent data quality checks, SQL examples
 
 This check finds non-negative values in a numeric column.
  It measures the percentage of non-negative values and raises a data quality issue when the rate of non-negative values exceeds the maximum accepted percentage.

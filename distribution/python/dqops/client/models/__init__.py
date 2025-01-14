@@ -60,6 +60,7 @@ from .anomaly_timeliness_delay_rule_warning_1_pct_parameters_spec import (
 )
 from .authenticated_dashboard_model import AuthenticatedDashboardModel
 from .auto_import_tables_spec import AutoImportTablesSpec
+from .avro_file_format_spec import AvroFileFormatSpec
 from .aws_authentication_mode import AwsAuthenticationMode
 from .azure_authentication_mode import AzureAuthenticationMode
 from .between_floats_rule_parameters_spec import BetweenFloatsRuleParametersSpec
@@ -2154,6 +2155,7 @@ __all__ = (
     "AnomalyTimelinessDelayRuleWarning1PctParametersSpec",
     "AuthenticatedDashboardModel",
     "AutoImportTablesSpec",
+    "AvroFileFormatSpec",
     "AwsAuthenticationMode",
     "AzureAuthenticationMode",
     "BetweenFloatsRuleParametersSpec",

@@ -1,7 +1,7 @@
 ---
-title: text length in range percent data quality checks
+title: Text length in range percent data quality checks, SQL examples
 ---
-# text length in range percent data quality checks
+# Text length in range percent data quality checks, SQL examples
 
 This check verifies that the minimum and maximum lengths of text values are in the range of accepted values.
  It measures the percentage of texts with a valid length and raises a data quality issue when an insufficient number of texts have a valid length.

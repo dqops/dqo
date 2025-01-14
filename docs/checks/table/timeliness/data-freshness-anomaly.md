@@ -1,7 +1,7 @@
 ---
-title: data freshness anomaly data quality checks
+title: Data freshness anomaly data quality checks, SQL examples
 ---
-# data freshness anomaly data quality checks
+# Data freshness anomaly data quality checks, SQL examples
 
 This check calculates the most recent rows value and the current time and detects anomalies in a time series of previous averages.
  The timestamp column that is used for comparison is defined as the timestamp_columns.event_timestamp_column on the table configuration.

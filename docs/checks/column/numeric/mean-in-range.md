@@ -1,7 +1,7 @@
 ---
-title: mean in range data quality checks
+title: Mean in range data quality checks, SQL examples
 ---
-# mean in range data quality checks
+# Mean in range data quality checks, SQL examples
 
 This check calculates a mean (average) value in a numeric column. It verifies that the average value is within the range of accepted values
  and raises a data quality issue when it is not within a valid range.

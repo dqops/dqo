@@ -1,8 +1,8 @@
 ---
-title: How to detect data quality issues with data observability
+title: How to Detect Data Quality Issues with Data Observability
 ---
-# How to detect data quality issues with data observability
-Read this guide to learn how to automatically activate data quality checks in DQOps to profile data and monitor the most common data quality issues daily.
+# How to Detect Data Quality Issues with Data Observability
+Read this guide to learn how to automatically activate data quality checks to profile data and monitor the most common data quality issues or anomalies.
 
 ## Purpose of data observability
 Data observability is a critical practice within data management aimed at ensuring that

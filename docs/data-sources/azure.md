@@ -1,9 +1,8 @@
 ---
-title: How to set up data quality monitoring and data observability for Microsoft Azure
+title: How to Monitor Azure Blob Storage? Data Observability Configuration
 ---
-
-# How to set up data quality monitoring and data observability for Microsoft Azure storage
-Data observability and data monitoring for Azure Blob Storage. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
+# How to Monitor Azure Blob Storage? Data Observability Configuration
+Learn how to monitor Azure Blob Storage and enable data observability to detect schema changes, data anomalies, volume fluctuations, and data quality issues.
 
 ## Prerequisites
 

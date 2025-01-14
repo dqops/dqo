@@ -1,7 +1,7 @@
 ---
-title: text mean length data quality checks
+title: Text mean length data quality checks, SQL examples
 ---
-# text mean length data quality checks
+# Text mean length data quality checks, SQL examples
 
 This check calculates the average text length in a column. DQOps validates the mean length using a range rule.
  DQOps raises an issue when the mean text length is outside a range of accepted values.

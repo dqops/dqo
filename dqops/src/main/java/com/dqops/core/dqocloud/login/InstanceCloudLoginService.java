@@ -47,6 +47,14 @@ public interface InstanceCloudLoginService {
     String makeDqoLoginUrl(String returnUrl);
 
     /**
+     * Builds a url to the DQOps Cloud's logout page with the ticket granting ticket and the return url.
+     *
+     * @param returnUrl Return url.
+     * @return Url to the DQOps Cloud's login page to redirect to.
+     */
+    String makeDqoLogoutUrl(String returnUrl);
+
+    /**
      * Creates a signed authentication token from a refresh token.
      * @param refreshToken Refresh token.
      * @return Signed authentication token.

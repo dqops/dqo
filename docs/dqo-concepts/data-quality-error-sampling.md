@@ -1,8 +1,8 @@
 ---
-title: Data quality error sampling
+title: What is Data Quality Error Sampling? Examples and Best Practices
 ---
-# How to configure and use data quality error sampling in DQOps
-Read this guide to understand how to configure and use error sampling within DQOps to gain valuable insights into data quality issues.
+# What is Data Quality Error Sampling? Examples and Best Practices
+Read this guide to understand how to configure and use error sampling to gain valuable insights into data quality issues and see invalid values.
 
 ## Overview
 Error sampling in DQOps capture representative examples of data that fail to meet specified data quality criteria.

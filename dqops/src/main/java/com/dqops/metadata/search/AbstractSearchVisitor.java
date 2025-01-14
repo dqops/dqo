@@ -79,6 +79,7 @@ import com.dqops.metadata.sources.*;
 import com.dqops.metadata.sources.fileformat.FileFormatSpec;
 import com.dqops.metadata.sources.fileformat.FilePathListSpec;
 import com.dqops.metadata.sources.fileformat.ParquetFileFormatSpec;
+import com.dqops.metadata.sources.fileformat.avro.AvroFileFormatSpec;
 import com.dqops.metadata.sources.fileformat.csv.CsvFileFormatSpec;
 import com.dqops.metadata.sources.fileformat.deltalake.DeltaLakeFileFormatSpec;
 import com.dqops.metadata.sources.fileformat.iceberg.IcebergFileFormatSpec;
@@ -1378,6 +1379,18 @@ public abstract class AbstractSearchVisitor<T> implements HierarchyNodeResultVis
      */
     @Override
     public TreeNodeTraversalResult accept(ConnectionSimilarityIndexListImpl connectionSimilarityIndexWrappers, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts an Avro file configuration settings.
+     *
+     * @param avroFileFormatSpec Avro connection settings.
+     * @param parameter          Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(AvroFileFormatSpec avroFileFormatSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 }

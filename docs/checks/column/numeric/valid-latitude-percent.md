@@ -1,7 +1,7 @@
 ---
-title: valid latitude percent data quality checks
+title: Valid latitude percent data quality checks, SQL examples
 ---
-# valid latitude percent data quality checks
+# Valid latitude percent data quality checks, SQL examples
 
 This check verifies that numeric values are valid latitude coordinates.
  A valid latitude coordinate is in the range -90...90. It measures the percentage of values within a valid range for a latitude.

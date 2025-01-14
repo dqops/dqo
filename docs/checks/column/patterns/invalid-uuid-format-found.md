@@ -1,7 +1,7 @@
 ---
-title: invalid uuid format found data quality checks
+title: Invalid uuid format found data quality checks, SQL examples
 ---
-# invalid uuid format found data quality checks
+# Invalid uuid format found data quality checks, SQL examples
 
 This check detects invalid UUID identifiers in text columns using a regular expression.
  It counts the number of invalid UUIDs and raises a data quality issue when the number is above a threshold.

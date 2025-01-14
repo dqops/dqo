@@ -1,8 +1,8 @@
 ---
-title: How to set up data quality monitoring and data observability for PostgreSQL
+title: How to Monitor PostgreSQL? Data Observability Configuration
 ---
-# How to set up data quality monitoring and data observability for PostgreSQL
-Data observability and data monitoring for PostgreSQL. Detect schema changes, data anomalies, volume fluctuations, and other data quality issues.
+# How to Monitor PostgreSQL? Data Observability Configuration
+Learn how to monitor PostgreSQL and enable data observability to detect schema changes, data anomalies, volume fluctuations, and data quality issues.
 
 ## Overview
 

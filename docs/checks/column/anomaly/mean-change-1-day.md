@@ -1,7 +1,7 @@
 ---
-title: mean change 1 day data quality checks
+title: Mean change 1 day data quality checks, SQL examples
 ---
-# mean change 1 day data quality checks
+# Mean change 1 day data quality checks, SQL examples
 
 This check detects that the mean (average) of numeric values has changed more than *max_percent* from the mean value measured one day ago (yesterday).
 

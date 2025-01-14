@@ -1,7 +1,7 @@
 ---
-title: percentile 75 in range data quality checks
+title: Percentile 75 in range data quality checks, SQL examples
 ---
-# percentile 75 in range data quality checks
+# Percentile 75 in range data quality checks, SQL examples
 
 This check finds the 75th percentile value in a numeric column. The 75th percentile is a value greater than 75% of the smallest values and smaller than the remaining 25% of other values.
  This check verifies that the 75th percentile is within the range of accepted values and raises a data quality issue when it is not within a valid range.

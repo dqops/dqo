@@ -1,7 +1,7 @@
 ---
-title: column level datetime data quality checks
+title: List of column level datetime data quality checks
 ---
-# column level datetime data quality checks
+# List of column level datetime data quality checks
 
 This is a list of datetime column data quality checks supported by DQOps and a brief description of what data quality issued they detect.
 
