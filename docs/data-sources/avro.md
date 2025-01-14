@@ -177,7 +177,7 @@ and profiling data by running default data profiling checks. Simply click on the
     These checks capture a single data quality result for the entire table or column.
 
 
-### Register single file as table
+### Register a single file as a table
 
 After creating a connection, you can register a single table.
 
@@ -211,7 +211,7 @@ If the job completes successfully, the created table will be imported and ready 
 
 ![Register table](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/register-single-table-4.png){ loading=lazy; width="1200px" }
 
-## Add a Avro connection using DQOps Shell
+## Add an Avro connection using DQOps Shell
 
 To add a connection run the following command in DQOps Shell.
 

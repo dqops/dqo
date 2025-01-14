@@ -73,6 +73,7 @@ The model that describes the current user and his access rights.
 |<span class="no-wrap-code">`can_use_data_domains`</span>|User can use data domains. Support for data domains requires an ENTERPRISE license of DQOps.|*boolean*|
 |<span class="no-wrap-code">`can_synchronize_to_data_catalog`</span>|User can synchronize data to a data catalog. The instance must be configured correctly and the user must have at least an EDITOR role.|*boolean*|
 |<span class="no-wrap-code">`can_use_ai_anomaly_detection`</span>|The DQOps instance is a paid version with advanced AI anomaly prediction.|*boolean*|
+|<span class="no-wrap-code">`can_logout`</span>|This instance uses federated authentication and the user can log out.|*boolean*|
 
 
 ___

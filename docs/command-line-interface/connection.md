@@ -307,7 +307,7 @@ All parameters supported by the command are listed below.
 |<div id="connection add--duckdb-azure-tenant-id" class="no-wrap-code">`--duckdb-azure-tenant-id`</div>|Azure Tenant ID used by DuckDB Secret Manager. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--duckdb-database" class="no-wrap-code">`--duckdb-database`</div>|DuckDB database name for in-memory read mode. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--duckdb-directories" class="no-wrap-code">`--duckdb-directories`</div>|Virtual schema name to directory mappings. The path must be an absolute path.| ||
-|<div id="connection add--duckdb-files-format-type" class="no-wrap-code">`--duckdb-files-format-type`</div>|Type of source files format for DuckDB.| |*csv*<br/>*json*<br/>*parquet*<br/>*iceberg*<br/>*delta_lake*<br/>|
+|<div id="connection add--duckdb-files-format-type" class="no-wrap-code">`--duckdb-files-format-type`</div>|Type of source files format for DuckDB.| |*csv*<br/>*json*<br/>*parquet*<br/>*avro*<br/>*iceberg*<br/>*delta_lake*<br/>|
 |<div id="connection add--duckdb-password" class="no-wrap-code">`--duckdb-password`</div>|DuckDB password for a remote storage type. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--duckdb-read-mode" class="no-wrap-code">`--duckdb-read-mode`</div>|DuckDB read mode.| |*in_memory*<br/>*files*<br/>|
 |<div id="connection add--duckdb-region" class="no-wrap-code">`--duckdb-region`</div>|The region for the storage credentials. The value can be in the null format to use dynamic substitution.| ||
@@ -722,7 +722,7 @@ All parameters supported by the command are listed below.
 |<div id="connection update--duckdb-azure-tenant-id" class="no-wrap-code">`--duckdb-azure-tenant-id`</div>|Azure Tenant ID used by DuckDB Secret Manager. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update--duckdb-database" class="no-wrap-code">`--duckdb-database`</div>|DuckDB database name for in-memory read mode. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update--duckdb-directories" class="no-wrap-code">`--duckdb-directories`</div>|Virtual schema name to directory mappings. The path must be an absolute path.| ||
-|<div id="connection update--duckdb-files-format-type" class="no-wrap-code">`--duckdb-files-format-type`</div>|Type of source files format for DuckDB.| |*csv*<br/>*json*<br/>*parquet*<br/>*iceberg*<br/>*delta_lake*<br/>|
+|<div id="connection update--duckdb-files-format-type" class="no-wrap-code">`--duckdb-files-format-type`</div>|Type of source files format for DuckDB.| |*csv*<br/>*json*<br/>*parquet*<br/>*avro*<br/>*iceberg*<br/>*delta_lake*<br/>|
 |<div id="connection update--duckdb-password" class="no-wrap-code">`--duckdb-password`</div>|DuckDB password for a remote storage type. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update--duckdb-read-mode" class="no-wrap-code">`--duckdb-read-mode`</div>|DuckDB read mode.| |*in_memory*<br/>*files*<br/>|
 |<div id="connection update--duckdb-region" class="no-wrap-code">`--duckdb-region`</div>|The region for the storage credentials. The value can be in the null format to use dynamic substitution.| ||

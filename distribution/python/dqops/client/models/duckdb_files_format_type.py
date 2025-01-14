@@ -2,6 +2,7 @@ from enum import Enum
 
 
 class DuckdbFilesFormatType(str, Enum):
+    AVRO = "avro"
     CSV = "csv"
     DELTA_LAKE = "delta_lake"
     ICEBERG = "iceberg"

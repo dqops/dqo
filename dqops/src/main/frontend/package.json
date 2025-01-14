@@ -1,6 +1,6 @@
 {
   "name": "DQOps",
-  "version": "1.10.2",
+  "version": "1.11.0",
   "private": true,
   "dependencies": {
     "@codemirror/lang-python": "6.1.3",

@@ -11,6 +11,7 @@ from ..models.duckdb_storage_type import DuckdbStorageType
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
+    from ..models.avro_file_format_spec import AvroFileFormatSpec
     from ..models.csv_file_format_spec import CsvFileFormatSpec
     from ..models.delta_lake_file_format_spec import DeltaLakeFileFormatSpec
     from ..models.duckdb_parameters_spec_directories import (
@@ -40,6 +41,7 @@ class DuckdbParametersSpec:
         csv (Union[Unset, CsvFileFormatSpec]):
         json (Union[Unset, JsonFileFormatSpec]):
         parquet (Union[Unset, ParquetFileFormatSpec]):
+        avro (Union[Unset, AvroFileFormatSpec]):
         iceberg (Union[Unset, IcebergFileFormatSpec]):
         delta_lake (Union[Unset, DeltaLakeFileFormatSpec]):
         directories (Union[Unset, DuckdbParametersSpecDirectories]): Virtual schema name to directory mappings. The path
@@ -70,6 +72,7 @@ class DuckdbParametersSpec:
     csv: Union[Unset, "CsvFileFormatSpec"] = UNSET
     json: Union[Unset, "JsonFileFormatSpec"] = UNSET
     parquet: Union[Unset, "ParquetFileFormatSpec"] = UNSET
+    avro: Union[Unset, "AvroFileFormatSpec"] = UNSET
     iceberg: Union[Unset, "IcebergFileFormatSpec"] = UNSET
     delta_lake: Union[Unset, "DeltaLakeFileFormatSpec"] = UNSET
     directories: Union[Unset, "DuckdbParametersSpecDirectories"] = UNSET
@@ -110,6 +113,10 @@ class DuckdbParametersSpec:
         parquet: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.parquet, Unset):
             parquet = self.parquet.to_dict()
+
+        avro: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.avro, Unset):
+            avro = self.avro.to_dict()
 
         iceberg: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.iceberg, Unset):
@@ -160,6 +167,8 @@ class DuckdbParametersSpec:
             field_dict["json"] = json
         if parquet is not UNSET:
             field_dict["parquet"] = parquet
+        if avro is not UNSET:
+            field_dict["avro"] = avro
         if iceberg is not UNSET:
             field_dict["iceberg"] = iceberg
         if delta_lake is not UNSET:
@@ -191,6 +200,7 @@ class DuckdbParametersSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        from ..models.avro_file_format_spec import AvroFileFormatSpec
         from ..models.csv_file_format_spec import CsvFileFormatSpec
         from ..models.delta_lake_file_format_spec import DeltaLakeFileFormatSpec
         from ..models.duckdb_parameters_spec_directories import (
@@ -247,6 +257,13 @@ class DuckdbParametersSpec:
             parquet = UNSET
         else:
             parquet = ParquetFileFormatSpec.from_dict(_parquet)
+
+        _avro = d.pop("avro", UNSET)
+        avro: Union[Unset, AvroFileFormatSpec]
+        if isinstance(_avro, Unset):
+            avro = UNSET
+        else:
+            avro = AvroFileFormatSpec.from_dict(_avro)
 
         _iceberg = d.pop("iceberg", UNSET)
         iceberg: Union[Unset, IcebergFileFormatSpec]
@@ -314,6 +331,7 @@ class DuckdbParametersSpec:
             csv=csv,
             json=json,
             parquet=parquet,
+            avro=avro,
             iceberg=iceberg,
             delta_lake=delta_lake,
             directories=directories,
