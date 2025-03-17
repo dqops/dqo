@@ -30,7 +30,7 @@ fi
 
 if [ -z "$DQO_JAVA_OPTS" ]; then
   if [[ "$OSTYPE" == "darwin"* ]]; then
-    export DQO_JAVA_OPTS="-XX:MaxRAMPercentage=60.0 -Djavax.net.ssl.trustStoreType=KeychainStore"
+    export DQO_JAVA_OPTS="-XX:MaxRAMPercentage=60.0"
   else
     export DQO_JAVA_OPTS="-XX:MaxRAMPercentage=60.0"
   fi
