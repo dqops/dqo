@@ -92,7 +92,7 @@ public class OracleSourceConnection extends AbstractJdbcSourceConnection {
     @Override
     public List<SourceSchemaModel> listSchemas() {
         StringBuilder sqlBuilder = new StringBuilder();
-        sqlBuilder.append("SELECT OWNER AS schema_name FROM ");
+        sqlBuilder.append("SELECT DISTINCT OWNER AS schema_name FROM ");
         sqlBuilder.append(getInformationSchemaName());
         String listSchemataSql = sqlBuilder.toString();
         Table schemaRows = this.executeQuery(listSchemataSql, JobCancellationToken.createDummyJobCancellationToken(), null, false);
