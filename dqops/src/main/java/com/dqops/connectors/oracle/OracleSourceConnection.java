@@ -248,7 +248,7 @@ public class OracleSourceConnection extends AbstractJdbcSourceConnection {
     @Override
     public String buildListColumnsSql(String schemaName, List<String> tableNames) {
         StringBuilder sqlBuilder = new StringBuilder();
-        sqlBuilder.append("SELECT * FROM ALL_TAB_COLUMNS WHERE OWNER='");
+        sqlBuilder.append("SELECT table_name, column_name, nullable, data_type, char_length, data_length, data_precision, data_scale FROM ALL_TAB_COLUMNS WHERE OWNER='");
         sqlBuilder.append(schemaName.replace("'", "''"));
         sqlBuilder.append("'");
 
