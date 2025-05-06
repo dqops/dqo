@@ -171,6 +171,7 @@ The structure of this object is described below
 |<span class="no-wrap-code ">`auto_detect`</span>|Enables auto detection of CSV parameters.|*boolean*| | | |
 |<span class="no-wrap-code ">`compression`</span>|The compression type for the file. By default this will be detected automatically from the file extension (e.g., t.csv.gz will use gzip, t.csv will use none). Options are none, gzip, zstd.|*enum*|*none*<br/>*auto*<br/>*gzip*<br/>*zstd*<br/>*snappy*<br/>*lz4*<br/>| | |
 |<span class="no-wrap-code ">`no_compression_extension`</span>|Whether the compression extension is present at the end of the file name.|*boolean*| | | |
+|<span class="no-wrap-code ">`file_extension`</span>|Specifies a custom file name extension. The default is .csv.|*string*| | | |
 |<span class="no-wrap-code ">`dateformat`</span>|Specifies the date format to use when parsing dates.|*string*| | | |
 |<span class="no-wrap-code ">`decimal_separator`</span>|The decimal separator of numbers.|*string*| | | |
 |<span class="no-wrap-code ">`delim`</span>|Specifies the string that separates columns within each row (line) of the file.|*string*| | | |
@@ -200,6 +201,7 @@ The structure of this object is described below
 |<span class="no-wrap-code ">`auto_detect`</span>|Whether to auto-detect detect the names of the keys and data types of the values automatically.|*boolean*| | | |
 |<span class="no-wrap-code ">`compression`</span>|The compression type for the file. By default this will be detected automatically from the file extension (e.g., t.json.gz will use gzip, t.json will use none). Options are &#x27;none&#x27;, &#x27;gzip&#x27;, &#x27;zstd&#x27;, and &#x27;auto&#x27;.|*enum*|*none*<br/>*auto*<br/>*gzip*<br/>*zstd*<br/>*snappy*<br/>*lz4*<br/>| | |
 |<span class="no-wrap-code ">`no_compression_extension`</span>|Whether the compression extension is present at the end of the file name.|*boolean*| | | |
+|<span class="no-wrap-code ">`file_extension`</span>|Specifies a custom file name extension. The default is &quot;.json&quot;.|*string*| | | |
 |<span class="no-wrap-code ">`convert_strings_to_integers`</span>|Whether strings representing integer values should be converted to a numerical type.|*boolean*| | | |
 |<span class="no-wrap-code ">`dateformat`</span>|Specifies the date format to use when parsing dates.|*string*| | | |
 |<span class="no-wrap-code ">`filename`</span>|Whether or not an extra filename column should be included in the result.|*boolean*| | | |
@@ -231,6 +233,7 @@ The structure of this object is described below
 |<span class="no-wrap-code ">`union_by_name`</span>|Whether the columns of multiple schemas should be unified by name, rather than by position.|*boolean*| | | |
 |<span class="no-wrap-code ">`compression`</span>|The compression type for the file.|*enum*|*none*<br/>*auto*<br/>*gzip*<br/>*zstd*<br/>*snappy*<br/>*lz4*<br/>| | |
 |<span class="no-wrap-code ">`no_compression_extension`</span>|Whether the compression extension is present at the end of the file name.|*boolean*| | | |
+|<span class="no-wrap-code ">`file_extension`</span>|Specifies a custom file name extension. The default is &quot;.parquet&quot;.|*string*| | | |
 
 
 

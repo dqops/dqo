@@ -21,6 +21,7 @@ class CsvFileFormatSpec:
         compression (Union[Unset, CompressionType]):
         no_compression_extension (Union[Unset, bool]): Whether the compression extension is present at the end of the
             file name.
+        file_extension (Union[Unset, str]): Specifies a custom file name extension. The default is .csv.
         dateformat (Union[Unset, str]): Specifies the date format to use when parsing dates.
         decimal_separator (Union[Unset, str]): The decimal separator of numbers.
         delim (Union[Unset, str]): Specifies the string that separates columns within each row (line) of the file.
@@ -44,6 +45,7 @@ class CsvFileFormatSpec:
     auto_detect: Union[Unset, bool] = UNSET
     compression: Union[Unset, CompressionType] = UNSET
     no_compression_extension: Union[Unset, bool] = UNSET
+    file_extension: Union[Unset, str] = UNSET
     dateformat: Union[Unset, str] = UNSET
     decimal_separator: Union[Unset, str] = UNSET
     delim: Union[Unset, str] = UNSET
@@ -68,6 +70,7 @@ class CsvFileFormatSpec:
             compression = self.compression.value
 
         no_compression_extension = self.no_compression_extension
+        file_extension = self.file_extension
         dateformat = self.dateformat
         decimal_separator = self.decimal_separator
         delim = self.delim
@@ -98,6 +101,8 @@ class CsvFileFormatSpec:
             field_dict["compression"] = compression
         if no_compression_extension is not UNSET:
             field_dict["no_compression_extension"] = no_compression_extension
+        if file_extension is not UNSET:
+            field_dict["file_extension"] = file_extension
         if dateformat is not UNSET:
             field_dict["dateformat"] = dateformat
         if decimal_separator is not UNSET:
@@ -145,6 +150,8 @@ class CsvFileFormatSpec:
 
         no_compression_extension = d.pop("no_compression_extension", UNSET)
 
+        file_extension = d.pop("file_extension", UNSET)
+
         dateformat = d.pop("dateformat", UNSET)
 
         decimal_separator = d.pop("decimal_separator", UNSET)
@@ -182,6 +189,7 @@ class CsvFileFormatSpec:
             auto_detect=auto_detect,
             compression=compression,
             no_compression_extension=no_compression_extension,
+            file_extension=file_extension,
             dateformat=dateformat,
             decimal_separator=decimal_separator,
             delim=delim,

@@ -24,6 +24,7 @@ class ParquetFileFormatSpec:
         compression (Union[Unset, CompressionType]):
         no_compression_extension (Union[Unset, bool]): Whether the compression extension is present at the end of the
             file name.
+        file_extension (Union[Unset, str]): Specifies a custom file name extension. The default is ".parquet".
     """
 
     binary_as_string: Union[Unset, bool] = UNSET
@@ -33,6 +34,7 @@ class ParquetFileFormatSpec:
     union_by_name: Union[Unset, bool] = UNSET
     compression: Union[Unset, CompressionType] = UNSET
     no_compression_extension: Union[Unset, bool] = UNSET
+    file_extension: Union[Unset, str] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -46,6 +48,7 @@ class ParquetFileFormatSpec:
             compression = self.compression.value
 
         no_compression_extension = self.no_compression_extension
+        file_extension = self.file_extension
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -64,6 +67,8 @@ class ParquetFileFormatSpec:
             field_dict["compression"] = compression
         if no_compression_extension is not UNSET:
             field_dict["no_compression_extension"] = no_compression_extension
+        if file_extension is not UNSET:
+            field_dict["file_extension"] = file_extension
 
         return field_dict
 
@@ -89,6 +94,8 @@ class ParquetFileFormatSpec:
 
         no_compression_extension = d.pop("no_compression_extension", UNSET)
 
+        file_extension = d.pop("file_extension", UNSET)
+
         parquet_file_format_spec = cls(
             binary_as_string=binary_as_string,
             filename=filename,
@@ -97,6 +104,7 @@ class ParquetFileFormatSpec:
             union_by_name=union_by_name,
             compression=compression,
             no_compression_extension=no_compression_extension,
+            file_extension=file_extension,
         )
 
         parquet_file_format_spec.additional_properties = d

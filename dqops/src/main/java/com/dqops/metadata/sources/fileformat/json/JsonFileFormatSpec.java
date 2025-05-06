@@ -45,6 +45,10 @@ public class JsonFileFormatSpec extends AbstractSpec {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Boolean noCompressionExtension;
 
+    @JsonPropertyDescription("Specifies a custom file name extension. The default is \".json\".")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private String fileExtension;
+
     @JsonPropertyDescription("Whether strings representing integer values should be converted to a numerical type.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Boolean convertStringsToIntegers;
@@ -162,6 +166,25 @@ public class JsonFileFormatSpec extends AbstractSpec {
     public void setNoCompressionExtension(Boolean noCompressionExtension) {
         setDirtyIf(!Objects.equals(this.noCompressionExtension, noCompressionExtension));
         this.noCompressionExtension = noCompressionExtension;
+    }
+
+    /**
+     * Returns a custom file extension.
+     *
+     * @return Custom file extension
+     */
+    public String getFileExtension() {
+        return fileExtension;
+    }
+
+    /**
+     * Sets a custom file name extension.
+     *
+     * @param fileExtension Custom file name extension.
+     */
+    public void setFileExtension(String fileExtension) {
+        setDirtyIf(!Objects.equals(this.fileExtension, fileExtension));
+        this.fileExtension = fileExtension;
     }
 
     /**
@@ -382,6 +405,7 @@ public class JsonFileFormatSpec extends AbstractSpec {
      */
     public JsonFileFormatSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext lookupContext) {
         JsonFileFormatSpec cloned = this.deepClone();
+        cloned.fileExtension = secretValueProvider.expandValue(cloned.fileExtension, lookupContext);
         cloned.dateformat = secretValueProvider.expandValue(cloned.dateformat, lookupContext);
         cloned.timestampformat = secretValueProvider.expandValue(cloned.timestampformat, lookupContext);
         return cloned;

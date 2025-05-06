@@ -61,6 +61,11 @@ export default function CsvFormatConfiguration({
   const csvConfiguration: TConfigurationItemRow[] = useMemo(() => {
     return [
       {
+        label: 'File extension',
+        value: configuration?.file_extension,
+        onChange: (str) => onChangeConfiguration({ file_extension: str.toString() })
+      },
+      {
         label: 'Date format',
         value: configuration?.dateformat,
         onChange: (str) => onChangeConfiguration({ dateformat: str.toString() })

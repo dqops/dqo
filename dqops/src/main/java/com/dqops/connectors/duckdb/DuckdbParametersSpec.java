@@ -595,6 +595,12 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
 
         if (filesFormatType.equals(DuckdbFilesFormatType.csv) && getCsv() != null) {
             CsvFileFormatSpec formatSpec = getCsv();
+
+            if (formatSpec.getFileExtension() != null)
+            {
+                return formatSpec.getFileExtension();
+            }
+
             if (formatSpec.getCompression() != null && (formatSpec.getNoCompressionExtension() == null || !formatSpec.getNoCompressionExtension())) {
                 String compressionExtension = formatSpec.getCompression().getCompressionExtension();
                 return fileTypeExtension + (compressionExtension == null ? "" : compressionExtension);
@@ -602,6 +608,12 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
         }
         if (filesFormatType.equals(DuckdbFilesFormatType.json) && getJson() != null) {
             JsonFileFormatSpec formatSpec = getJson();
+
+            if (formatSpec.getFileExtension() != null)
+            {
+                return formatSpec.getFileExtension();
+            }
+
             if (formatSpec.getCompression() != null && (formatSpec.getNoCompressionExtension() == null || !formatSpec.getNoCompressionExtension())) {
                 String compressionExtension = formatSpec.getCompression().getCompressionExtension();
                 return fileTypeExtension + (compressionExtension == null ? "" : compressionExtension);
@@ -609,6 +621,12 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
         }
         if (filesFormatType.equals(DuckdbFilesFormatType.parquet) && getParquet() != null) {
             ParquetFileFormatSpec formatSpec = getParquet();
+
+            if (formatSpec.getFileExtension() != null)
+            {
+                return formatSpec.getFileExtension();
+            }
+
             if (formatSpec.getCompression() != null && (formatSpec.getNoCompressionExtension() == null || !formatSpec.getNoCompressionExtension())) {
                 String compressionExtension = formatSpec.getCompression().getCompressionExtension();
                 return fileTypeExtension + (compressionExtension == null ? "" : compressionExtension);

@@ -20,6 +20,8 @@ import com.dqops.core.secrets.SecretValueProviderObjectMother;
 import com.dqops.utils.BeanFactoryObjectMother;
 import org.apache.parquet.Strings;
 
+import java.util.Objects;
+
 /**
  * Object mother for the configuration.
  */
@@ -46,7 +48,9 @@ public final class DqoCloudConfigurationPropertiesObjectMother {
         DqoCloudConfigurationProperties dqoCloudConfigurationProperties = BeanFactoryObjectMother.getBeanFactory().getBean(DqoCloudConfigurationProperties.class);
         if (Strings.isNullOrEmpty(dqoCloudConfigurationProperties.getApiKey())) {
             String apiKey = SecretValueProviderObjectMother.resolveProperty(DevelopmentCredentialsSecretNames.TESTABLE_API_KEY);
-            dqoCloudConfigurationProperties.setApiKey(apiKey);
+            if (!Objects.equals(apiKey, "//testable-api-key")) {
+                dqoCloudConfigurationProperties.setApiKey(apiKey);
+            }
         }
     }
 }
