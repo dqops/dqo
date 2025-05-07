@@ -30,7 +30,7 @@ fi
 
 if [ -z "$DQO_JAVA_OPTS" ]; then
   if [[ "$OSTYPE" == "darwin"* ]]; then
-    export DQO_JAVA_OPTS="-XX:MaxRAMPercentage=60.0 -Djavax.net.ssl.trustStoreType=KeychainStore"
+    export DQO_JAVA_OPTS="-XX:MaxRAMPercentage=60.0"
   else
     export DQO_JAVA_OPTS="-XX:MaxRAMPercentage=60.0"
   fi
@@ -49,10 +49,4 @@ else
       echo Install Java 17 or newer and set JAVA_HOME to point to the Java installation directory.
       exit $returnedValue
   fi
-fi
-
-if [ -e "$DQO_USER_HOME/jars/paid/dqops-paid-bin.jar" ]; then
-  export INCLUDE_DQOPS_PAID_JAR="-Dloader.path=$DQO_USER_HOME/jars/paid/dqops-paid-bin.jar"
-else
-  export INCLUDE_DQOPS_PAID_JAR=
 fi

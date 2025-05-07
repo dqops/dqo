@@ -27,7 +27,7 @@
 	</parent>
 	<groupId>com.dqops</groupId>
 	<artifactId>dqo-dqops</artifactId>
-    <version>1.11.0</version>  <!-- DQOps Version, do not touch (changed automatically) -->
+    <version>1.11.1</version>  <!-- DQOps Version, do not touch (changed automatically) -->
 	<packaging>jar</packaging>
 	<name>dqo-dqops</name>
 	<description>DQOps Data Quality Operations Center</description>
@@ -36,7 +36,7 @@
 		<tablesaw.version>0.43.1</tablesaw.version>
 		<license.licenseName>apache_v2</license.licenseName>
 		<npm.build.script>build</npm.build.script>
-		<duckdb.version>1.1.3</duckdb.version>
+		<duckdb.version>1.2.2.0</duckdb.version>
 	</properties>
 
 	<licenses>
@@ -535,6 +535,7 @@
 			<artifactId>msal4j</artifactId>
 			<version>1.14.2</version>
 		</dependency>
+
 		<dependency>
 			<groupId>com.microsoft.identity</groupId>
 			<artifactId>common</artifactId>
@@ -660,18 +661,16 @@
 					<groupId>commons-logging</groupId>
 					<artifactId>commons-logging</artifactId>
 				</exclusion>
+				<exclusion>
+					<groupId>software.amazon.awssdk</groupId>
+					<artifactId>s3</artifactId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>com-amazon-athena</groupId>
 			<artifactId>athena-jdbc</artifactId>
 			<version>3.0.0</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.slf4j</groupId>
-					<artifactId>slf4j-api</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>com.singlestore</groupId>
@@ -682,6 +681,11 @@
 			<groupId>org.duckdb</groupId>
 			<artifactId>duckdb_jdbc</artifactId>
 			<version>${duckdb.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>2.0.9</version>
 		</dependency>
 
 		<!-- test dependencies -->
@@ -1096,6 +1100,23 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<configuration>
+					<outputDirectory>${project.build.directory}/dependencies</outputDirectory>
+					<includeScope>runtime</includeScope>
+				</configuration>
+				<executions>
+					<execution>
+						<id>collect-dependencies</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 
@@ -1490,7 +1511,7 @@
 				<dependency>
 					<groupId>com.teradata.jdbc</groupId>
 					<artifactId>terajdbc</artifactId>
-					<version>20.00.00.34</version>
+					<version>20.00.00.28</version>
 				</dependency>
 			</dependencies>
 		</profile>

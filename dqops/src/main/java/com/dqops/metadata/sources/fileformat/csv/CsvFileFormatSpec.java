@@ -54,6 +54,10 @@ public class CsvFileFormatSpec extends AbstractSpec {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Boolean noCompressionExtension;
 
+    @JsonPropertyDescription("Specifies a custom file name extension. The default is .csv.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private String fileExtension;
+
     @JsonPropertyDescription("Specifies the date format to use when parsing dates.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String dateformat;
@@ -226,6 +230,25 @@ public class CsvFileFormatSpec extends AbstractSpec {
     public void setNoCompressionExtension(Boolean noCompressionExtension) {
         setDirtyIf(!Objects.equals(this.noCompressionExtension, noCompressionExtension));
         this.noCompressionExtension = noCompressionExtension;
+    }
+
+    /**
+     * Returns a custom file extension.
+     *
+     * @return Custom file extension
+     */
+    public String getFileExtension() {
+        return fileExtension;
+    }
+
+    /**
+     * Sets a custom file name extension.
+     *
+     * @param fileExtension Custom file name extension.
+     */
+    public void setFileExtension(String fileExtension) {
+        setDirtyIf(!Objects.equals(this.fileExtension, fileExtension));
+        this.fileExtension = fileExtension;
     }
 
     /**
@@ -504,6 +527,7 @@ public class CsvFileFormatSpec extends AbstractSpec {
      */
     public CsvFileFormatSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext lookupContext) {
         CsvFileFormatSpec cloned = this.deepClone();
+        cloned.fileExtension = secretValueProvider.expandValue(cloned.fileExtension, lookupContext);
         cloned.dateformat = secretValueProvider.expandValue(cloned.dateformat, lookupContext);
         cloned.decimalSeparator = secretValueProvider.expandValue(cloned.decimalSeparator, lookupContext);
         cloned.delim = secretValueProvider.expandValue(cloned.delim, lookupContext);

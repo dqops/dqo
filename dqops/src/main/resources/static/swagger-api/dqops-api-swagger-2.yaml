@@ -37044,6 +37044,9 @@ definitions:
         type: "boolean"
         description: "Whether the compression extension is present at the end of the\
           \ file name."
+      file_extension:
+        type: "string"
+        description: "Specifies a custom file name extension. The default is .csv."
       dateformat:
         type: "string"
         description: "Specifies the date format to use when parsing dates."
@@ -39167,6 +39170,10 @@ definitions:
         type: "boolean"
         description: "Whether the compression extension is present at the end of the\
           \ file name."
+      file_extension:
+        type: "string"
+        description: "Specifies a custom file name extension. The default is \".json\"\
+          ."
       convert_strings_to_integers:
         type: "boolean"
         description: "Whether strings representing integer values should be converted\
@@ -39709,6 +39716,10 @@ definitions:
         type: "boolean"
         description: "Whether the compression extension is present at the end of the\
           \ file name."
+      file_extension:
+        type: "string"
+        description: "Specifies a custom file name extension. The default is \".parquet\"\
+          ."
   PartitionIncrementalTimeWindowSpec:
     type: "object"
     properties:

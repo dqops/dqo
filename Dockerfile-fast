@@ -53,9 +53,7 @@ RUN mkdir -p /etc/pki/tls/certs && ln -s /etc/ssl/certs/ca-certificates.crt /etc
 # copy spring dependencies
 ARG DEPENDENCY=/workspace/app/home
 COPY --from=dqo-libs ${DEPENDENCY}/jars /dqo/app/lib
-COPY --from=dqo-libs ${DEPENDENCY}/expanded/BOOT-INF/lib /dqo/app/lib
-COPY --from=dqo-libs ${DEPENDENCY}/expanded/META-INF /dqo/app/META-INF
-COPY --from=dqo-libs ${DEPENDENCY}/expanded/BOOT-INF/classes /dqo/app
+COPY --from=dqo-libs ${DEPENDENCY}/expanded /dqo/app
 
 WORKDIR /dqo/userhome
 ENTRYPOINT ["/dqo/home/bin/dqo_docker_entrypoint.sh"]

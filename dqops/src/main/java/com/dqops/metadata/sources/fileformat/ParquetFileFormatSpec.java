@@ -57,6 +57,10 @@ public class ParquetFileFormatSpec extends AbstractSpec {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Boolean noCompressionExtension;
 
+    @JsonPropertyDescription("Specifies a custom file name extension. The default is \".parquet\".")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private String fileExtension;
+
     /**
      * Formats the table options to be used in SQL query. The set (non null) options are added only.
      * @param filePathList The names of files with data.
@@ -183,6 +187,25 @@ public class ParquetFileFormatSpec extends AbstractSpec {
     public void setNoCompressionExtension(Boolean noCompressionExtension) {
         setDirtyIf(!Objects.equals(this.noCompressionExtension, noCompressionExtension));
         this.noCompressionExtension = noCompressionExtension;
+    }
+
+    /**
+     * Returns a custom file extension.
+     *
+     * @return Custom file extension
+     */
+    public String getFileExtension() {
+        return fileExtension;
+    }
+
+    /**
+     * Sets a custom file name extension.
+     *
+     * @param fileExtension Custom file name extension.
+     */
+    public void setFileExtension(String fileExtension) {
+        setDirtyIf(!Objects.equals(this.fileExtension, fileExtension));
+        this.fileExtension = fileExtension;
     }
 
     @Override

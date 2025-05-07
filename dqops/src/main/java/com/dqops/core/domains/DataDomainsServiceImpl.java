@@ -109,6 +109,10 @@ public class DataDomainsServiceImpl implements DataDomainsService {
 
             this.localDataDomainRegistry.replaceDataDomainList(newDataDomainList);
         }
+        catch (DqoDataDomainException dqoDataDomainException)
+        {
+            // invalid license, just return
+        }
         catch (Exception ex) {
             if (silent) {
                 log.error("Failed to download a list of data domains from DQOps Cloud, error: " + ex.getMessage(), ex);
