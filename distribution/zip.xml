@@ -65,10 +65,10 @@
             <directory>${project.basedir}/../home/settings</directory>
             <outputDirectory>/settings</outputDirectory>
         </fileSet>
-<!--        <fileSet>-->
-<!--            <directory>${project.basedir}/../lib/target/output/dqo-lib-${project.version}/jars</directory>-->
-<!--            <outputDirectory>/jars</outputDirectory>-->
-<!--        </fileSet>-->
+        <fileSet>
+            <directory>${project.basedir}/../dqops/target/dependencies</directory>
+            <outputDirectory>/jars</outputDirectory>
+        </fileSet>
     </fileSets>
     <files>
         <file>
@@ -124,8 +124,9 @@
             <outputDirectory>/bin</outputDirectory>
         </file>
         <file>
-            <source>${project.basedir}/../dqops/${project.build.directory}/dqo-dqops-${project.version}.jar</source>
+            <source>${project.basedir}/../dqops/${project.build.directory}/dqo-dqops-${project.version}.jar.original</source>
             <outputDirectory>/jars</outputDirectory>
+            <destName>dqo-dqops-${project.version}.jar</destName>
         </file>
     </files>
 </assembly>

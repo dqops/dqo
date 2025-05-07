@@ -44,10 +44,3 @@ if not "x%JAVA_HOME%"=="x" (
     exit /b 1
   )
 )
-
-if exist "%DQO_USER_HOME%\jars\paid\dqops-paid-bin.jar" (
-    SET INCLUDE_DQOPS_PAID_JAR=-Dloader.path="%DQO_USER_HOME%\jars\paid\dqops-paid-bin.jar"
-) else (
-    SET INCLUDE_DQOPS_PAID_JAR=
-)
-

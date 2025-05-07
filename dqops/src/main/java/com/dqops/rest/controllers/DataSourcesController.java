@@ -22,6 +22,7 @@ import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.rest.models.metadata.ConnectionModel;
 import com.dqops.rest.models.platform.SpringErrorPayload;
 import com.dqops.rest.models.remote.ConnectionTestModel;
+import com.dqops.rest.models.remote.ConnectionTestStatus;
 import com.dqops.rest.models.remote.RemoteTableListModel;
 import com.dqops.rest.models.remote.SchemaRemoteModel;
 import com.dqops.services.remote.connections.SourceConnectionsService;
@@ -103,8 +104,19 @@ public class DataSourcesController {
             connectionModel.copyToConnectionSpecification(connectionSpec);
             Boolean verifyNameUniquenessValue = verifyNameUniqueness.orElse(true);
 
-            connectionTestModel = sourceConnectionsService.testConnection(principal, connectionModel.getConnectionName(), connectionSpec, verifyNameUniquenessValue);
-            return new ResponseEntity<>(Mono.just(connectionTestModel), HttpStatus.OK);
+            try {
+                connectionTestModel = sourceConnectionsService.testConnection(principal, connectionModel.getConnectionName(), connectionSpec, verifyNameUniquenessValue);
+                return new ResponseEntity<>(Mono.just(connectionTestModel), HttpStatus.OK);
+            }
+            catch (Throwable ex)
+            {
+                ConnectionTestModel errorTestModel = new ConnectionTestModel() {{
+                    setConnectionTestResult(ConnectionTestStatus.FAILURE);
+                    setErrorMessage(ex.getMessage());
+                }};
+
+                return new ResponseEntity<>(Mono.just(errorTestModel), HttpStatus.OK);
+            }
         }));
     }
 

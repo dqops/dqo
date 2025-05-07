@@ -50,9 +50,3 @@ else
       exit $returnedValue
   fi
 fi
-
-if [ -e "$DQO_USER_HOME/jars/paid/dqops-paid-bin.jar" ]; then
-  export INCLUDE_DQOPS_PAID_JAR="-Dloader.path=$DQO_USER_HOME/jars/paid/dqops-paid-bin.jar"
-else
-  export INCLUDE_DQOPS_PAID_JAR=
-fi
