@@ -13,6 +13,7 @@ import { getAllJobs, getJobsChanges } from './redux/actions/job.actions';
 import { IRootState } from './redux/reducers';
 import Routes from './Routes';
 import { LogErrorsApi } from './services/apiClient';
+import { EnviromentApiClient } from './services/apiClient';
 
 import { CategoryScale } from 'chart.js';
 import Chart from 'chart.js/auto';
@@ -56,6 +57,12 @@ const App = () => {
         message: message?.toString()
       });
     };
+
+    EnviromentApiClient.getDqoSettings().then((res) => {
+      if (res.data?.properties?.['dqo.ui.application-name']) {
+        document.title = String(res.data?.properties?.['dqo.ui.application-name']);
+      }
+    });
   }, []);
 
   useEffect(() => {
