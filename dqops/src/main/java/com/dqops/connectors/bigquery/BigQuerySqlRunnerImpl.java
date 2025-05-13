@@ -17,10 +17,13 @@ package com.dqops.connectors.bigquery;
 
 import com.dqops.connectors.ConnectionQueryException;
 import com.dqops.connectors.RowCountLimitExceededException;
+import com.dqops.utils.python.StreamingPythonProcess;
 import com.google.cloud.bigquery.*;
 import com.google.common.base.Strings;
 import org.apache.commons.codec.binary.Hex;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import tech.tablesaw.api.Row;
 import tech.tablesaw.api.Table;
@@ -38,6 +41,8 @@ import java.util.Locale;
  */
 @Component
 public class BigQuerySqlRunnerImpl implements BigQuerySqlRunner {
+    private static final Logger LOG = LoggerFactory.getLogger(BigQuerySqlRunnerImpl.class);
+
     /**
      * Executes a query and returns a data frame with the results.
      * @param connection Connection object.
@@ -93,52 +98,68 @@ public class BigQuerySqlRunnerImpl implements BigQuerySqlRunner {
                     }
 
                     Field field = tableSchema.getFields().get(colIndex);
-                    LegacySQLTypeName legacyFieldType = field.getType();
-                    StandardSQLTypeName standardFieldType = legacyFieldType.getStandardType();
+                    try {
+                        LegacySQLTypeName legacyFieldType = field.getType();
+                        StandardSQLTypeName standardFieldType = legacyFieldType.getStandardType();
+                        if (field.getMode() == Field.Mode.REPEATED)
+                        {
+                            List<FieldValue> repeatedValues = fieldValue.getRepeatedValue();
+                            if (repeatedValues.size() == 0 || repeatedValues.get(0).isNull()) {
+                                continue;
+                            }
 
-                    switch (standardFieldType) {
-                        case BOOL:
-                            row.setBoolean(colIndex, fieldValue.getBooleanValue());
-                            break;
-                        case INT64:
-                            row.setLong(colIndex, fieldValue.getLongValue());
-                            break;
-                        case FLOAT64:
-                            row.setDouble(colIndex, fieldValue.getDoubleValue());
-                            break;
-                        case NUMERIC:
-                        case BIGNUMERIC:
-                            row.setDouble(colIndex, fieldValue.getNumericValue().doubleValue());
-                            break;
-                        case STRING:
-                            row.setString(colIndex, fieldValue.getStringValue());
-                            break;
-                        case BYTES:
-                            row.setText(colIndex, "0x" + new String(Hex.encodeHex(fieldValue.getBytesValue())));
-                            break;
-                        case STRUCT:
-                            row.setText(colIndex, fieldValue.getRecordValue().toString());
-                            break;
-                        case ARRAY:
-                            row.setText(colIndex, fieldValue.getRepeatedValue().toString());
-                            break;
-                        case GEOGRAPHY:
-                            row.setText(colIndex, fieldValue.getValue().toString());
-                            break;
-                        case TIMESTAMP:
-                            row.setInstant(colIndex, Instant.ofEpochMilli(fieldValue.getTimestampValue() / 1000));
-                            break;
-                        case DATE:
-                            row.setDate(colIndex, LocalDate.parse(fieldValue.getStringValue(), DateTimeFormatter.ISO_DATE));
-                            break;
-                        case TIME:
-                            row.setTime(colIndex, LocalTime.ofInstant(Instant.ofEpochMilli(fieldValue.getTimestampValue() / 1000), ZoneOffset.UTC));
-                            break;
-                        case DATETIME:
-                            row.setDateTime(colIndex, LocalDateTime.ofInstant(Instant.ofEpochMilli(fieldValue.getTimestampValue() / 1000), ZoneOffset.UTC));
-                            break;
-                        default:
-                            throw new RuntimeException("Unknown column type: " + standardFieldType.name());
+                            fieldValue = repeatedValues.get(0); // we take the first value of repeated columns
+                        }
+
+                        switch (standardFieldType) {
+                            case BOOL:
+                                row.setBoolean(colIndex, fieldValue.getBooleanValue());
+                                break;
+                            case INT64:
+                                row.setLong(colIndex, fieldValue.getLongValue());
+                                break;
+                            case FLOAT64:
+                                row.setDouble(colIndex, fieldValue.getDoubleValue());
+                                break;
+                            case NUMERIC:
+                            case BIGNUMERIC:
+                                row.setDouble(colIndex, fieldValue.getNumericValue().doubleValue());
+                                break;
+                            case STRING:
+                                row.setString(colIndex, fieldValue.getStringValue());
+                                break;
+                            case BYTES:
+                                row.setText(colIndex, "0x" + new String(Hex.encodeHex(fieldValue.getBytesValue())));
+                                break;
+                            case STRUCT:
+                                row.setText(colIndex, fieldValue.getRecordValue().toString());
+                                break;
+                            case ARRAY:
+                                row.setText(colIndex, fieldValue.getRepeatedValue().toString());
+                                break;
+                            case GEOGRAPHY:
+                                row.setText(colIndex, fieldValue.getValue().toString());
+                                break;
+                            case TIMESTAMP:
+                                row.setInstant(colIndex, Instant.ofEpochMilli(fieldValue.getTimestampValue() / 1000));
+                                break;
+                            case DATE:
+                                row.setDate(colIndex, LocalDate.parse(fieldValue.getStringValue(), DateTimeFormatter.ISO_DATE));
+                                break;
+                            case TIME:
+                                row.setTime(colIndex, LocalTime.ofInstant(Instant.ofEpochMilli(fieldValue.getTimestampValue() / 1000), ZoneOffset.UTC));
+                                break;
+                            case DATETIME:
+                                row.setDateTime(colIndex, LocalDateTime.ofInstant(Instant.ofEpochMilli(fieldValue.getTimestampValue() / 1000), ZoneOffset.UTC));
+                                break;
+                            default:
+                                throw new RuntimeException("Unknown column type: " + standardFieldType.name());
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        LOG.warn("Invalid column value for column: " + field.getName() + ", error: " + ex.getMessage(), ex);
+                        // ignore
                     }
                 }
             }
