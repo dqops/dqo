@@ -1,6 +1,4 @@
-# 1.11.1
+# 1.11.2
 
-* MacOS runner no longer adds a user certificate store.
-* Deduplicate the list of schemas on Oracle.
-* Upgrade DuckDB to 1.2.2.0
-* Jars are published as extracted (no spring fat jar)
+* Data synchronization preserves remote changes when local files were also modified
+* Support repeated (non-array) values in BigQuery after some schema changes in the INFORMATION_SCHEMA.COLUMNS management view.

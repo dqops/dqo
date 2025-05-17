@@ -39,6 +39,7 @@ import java.nio.file.Path;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * File system synchronization service that synchronizes files between two file systems. It could synchronize local files
@@ -108,9 +109,15 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
         FileSystemSynchronizationRoot sourceFileSystemRoot = localFileSystem.getFileSystemRoot();
         FolderMetadata currentLocalFolderIndex;
 
-        Collection<FileDifference> unsyncedTargetChanges;
+        Collection<FileDifference> unsyncedTargetChanges = lastRemoteFolderIndex.findFileDifferences(currentTargetFolderIndex);
         Set<Path> synchronizedLocalChanges = new LinkedHashSet<>();
+        Set<Path> filesChangedOnTarget = new HashSet<>();
         FolderMetadata newLocalFolderIndex = null;
+
+        if (unsyncedTargetChanges != null)
+        {
+            filesChangedOnTarget.addAll(unsyncedTargetChanges.stream().map(fileDifference -> fileDifference.getRelativePath()).collect(Collectors.toList()));
+        }
 
         this.synchronizationStatusTracker.changeFolderSynchronizationStatus(dqoRoot, userIdentity.getDataDomainFolder(), FolderSynchronizationStatus.synchronizing);
         try (AcquiredSharedReadLock acquiredSharedReadLock = this.userHomeLockManager.lockSharedRead(dqoRoot, userIdentity.getDataDomainFolder())) {
@@ -127,12 +134,17 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
                 Collection<FileDifference> localChanges = lastLocalFolderIndex.findFileDifferences(newLocalFolderIndex);
 
                 if (localChanges != null) {
-                    targetTableModifiedPartitions.addModifications(localChanges);
+                    List<FileDifference> localChangesNotChangedOnTarget =
+                            localChanges.stream()
+                                    .filter(localFileDifference -> !filesChangedOnTarget.contains(localFileDifference.getRelativePath()))
+                                    .collect(Collectors.toList());
+
+                    targetTableModifiedPartitions.addModifications(localChangesNotChangedOnTarget);
 
                     // upload source (local) changes to the remote file system
                     synchronizedLocalChanges = uploadLocalToRemoteAsync(dqoRoot, userIdentity, synchronizationListener,
                             localFileSystem, remoteFileSystem, targetFileSystemSynchronizationOperations,
-                            targetFileSystemRoot, newTargetFolderIndex, sourceFileSystemSynchronizationOperations, sourceFileSystemRoot, localChanges)
+                            targetFileSystemRoot, newTargetFolderIndex, sourceFileSystemSynchronizationOperations, sourceFileSystemRoot, localChangesNotChangedOnTarget)
                             .subscribeOn(Schedulers.parallel())
                             .block(Duration.ofSeconds(this.dqoCloudConfigurationProperties.getFileSynchronizationTimeLimitSeconds()));
                 }
@@ -143,7 +155,6 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
         Collection<FolderMetadata> emptyRemoteFolders =
                 (synchronizationDirection == FileSynchronizationDirection.full || synchronizationDirection == FileSynchronizationDirection.upload)
                         ? newTargetFolderIndex.detachEmptyFolders() : null;
-        unsyncedTargetChanges = lastRemoteFolderIndex.findFileDifferences(currentTargetFolderIndex);
 
         if (unsyncedTargetChanges != null || emptyRemoteFolders != null) {
             try (AcquiredExclusiveWriteLock acquiredExclusiveWriteLock = this.userHomeLockManager.lockExclusiveWrite(dqoRoot, userIdentity.getDataDomainFolder())) {

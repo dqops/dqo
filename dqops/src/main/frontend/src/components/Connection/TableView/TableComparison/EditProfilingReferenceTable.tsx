@@ -379,7 +379,10 @@ export const EditProfilingReferenceTable = ({
       try {
         const res = await JobApiClient.runChecks(undefined, false, undefined, {
           check_search_filters: categoryCheck
-            ? categoryCheck?.run_checks_job_template
+            ? {
+                ...categoryCheck?.run_checks_job_template,
+                checkTarget: undefined
+              }
             : {
                 connection: connection,
                 fullTableName: schema + '.' + table,
