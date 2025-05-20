@@ -1,0 +1,17 @@
+[Unit]
+Description=DQOps
+Requires=docker.service
+After=docker.service
+
+[Service]
+WorkingDirectory=/opt/dqops/userhome
+ExecStart=/bin/bash -c /opt/dqops/start.sh
+ExecStop=/usr/bin/docker stop dqops
+Restart=always
+RestartSec=1
+KillSignal=SIGINT
+SyslogIdentifier=DQOps
+User=root
+
+[Install]
+WantedBy=multi-user.target
