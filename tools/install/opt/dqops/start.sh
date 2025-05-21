@@ -19,9 +19,9 @@ fi
 
 docker run \
        --name dqops \
-       -d \
+       --rm \
        -p 80:8888 \
-       -v /opt/dqops/userhome:/dqo/home \
+       -v /opt/dqops/userhome:/dqo/userhome \
        --network=host \
        -e DQO_USER_INITIALIZE_USER_HOME=true \
        -e DQO_INSTANCE_RETURN_BASE_URL=$dqo_ui_url \
