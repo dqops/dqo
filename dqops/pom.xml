@@ -37,6 +37,7 @@
 		<license.licenseName>apache_v2</license.licenseName>
 		<npm.build.script>build</npm.build.script>
 		<duckdb.version>1.2.2.0</duckdb.version>
+		<duckdb.extensions.version>1.2.2</duckdb.extensions.version>
 	</properties>
 
 	<licenses>
@@ -1072,7 +1073,7 @@
 						<configuration>
 							<target>
 								<!-- set the plugin property to use the variable -->
-								<property name="duckdb.version" value="${duckdb.version}"/>
+								<property name="duckdb.extensions.version" value="${duckdb.extensions.version}"/>
 								<property name="project.basedir" value="${project.basedir}"/>
 
 								<!-- the definitions of platforms only - open duckdb-extensions-ant-build.xml to edit extensions -->

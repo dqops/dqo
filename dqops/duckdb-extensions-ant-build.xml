@@ -5,13 +5,13 @@
     </description>
 
     <property name="local_temp_path"
-              value="${project.basedir}/../lib/.duckdb/extensions/v${duckdb.version}/${duckdb.platform_name}"/>
+              value="${project.basedir}/../lib/.duckdb/extensions/v${duckdb.extensions.version}/${duckdb.platform_name}"/>
 
     <property name="local_platform_path"
-              value="${project.basedir}/../home/bin/.duckdb/extensions/v${duckdb.version}/${duckdb.platform_name}"/>
+              value="${project.basedir}/../home/bin/.duckdb/extensions/v${duckdb.extensions.version}/${duckdb.platform_name}"/>
 
     <property name="remote_platform_path"
-              value="http://extensions.duckdb.org/v${duckdb.version}/${duckdb.platform_name}"/>
+              value="http://extensions.duckdb.org/v${duckdb.extensions.version}/${duckdb.platform_name}"/>
 
     <target name="fetch-files">
         <mkdir dir="${local_temp_path}/"/>
