@@ -25,7 +25,7 @@ if exist "%~dp0dqops\pom.xml" (
     if not exist "%~dp0dqops\target\dqo-dqops-%DQO_VERSION%.jar" (
         if exist "%~dp0dqops" (
             pushd "%~dp0"
-            call "%~dp0\mvnw.cmd" package -DskipTests -Pbuild-with-jdk-11 -Prun-npm -f "%~dp0\pom.xml"
+            call "%~dp0\mvnw.cmd" package -DskipTests -Pbuild-with-jdk-11 -Pdisable-duckdb-extensions-download -Prun-npm -f "%~dp0\pom.xml"
             popd
             if ERRORLEVEL 1 (
                 echo DQO failed to compile

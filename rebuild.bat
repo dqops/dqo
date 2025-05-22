@@ -18,6 +18,6 @@
 pushd "%~dp0"
 
 call mvnw.cmd clean -f pom.xml
-call mvnw.cmd package -DskipTests -Pbuild-with-jdk-11 -Prun-npm -Djavax.net.ssl.trustStoreType=WINDOWS-ROOT
+call mvnw.cmd package -DskipTests -Pbuild-with-jdk-11 -Pdisable-duckdb-extensions-download -Prun-npm -Djavax.net.ssl.trustStoreType=WINDOWS-ROOT
 
 popd
