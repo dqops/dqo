@@ -1,12 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import {
-  DqoSettingsModel,
-  TableColumnsStatisticsModel
-} from '../../../../../api';
-import {
-  ColumnApiClient,
-  EnviromentApiClient
-} from '../../../../../services/apiClient';
+import { useSelector } from 'react-redux';
+import { TableColumnsStatisticsModel } from '../../../../../api';
+import { IRootState } from '../../../../../redux/reducers';
+import { ColumnApiClient } from '../../../../../services/apiClient';
 import { TParameters } from '../../../../../shared/constants';
 import { useDecodedParams } from '../../../../../utils';
 import { Option } from '../../../../Select';
@@ -42,7 +38,8 @@ export default function SelectColumnGrouping({
     schema: string;
     table: string;
   } = useDecodedParams();
-  const [profileSettings, setProfileSettings] = useState<DqoSettingsModel>();
+  const { userSettings } = useSelector((state: IRootState) => state.job || {});
+
   const [statistics, setStatistics] = useState<TableColumnsStatisticsModel>();
   const [listOfWarnings, setListOfWarnings] = useState<Array<boolean>>(
     Array(8).fill(false)
@@ -52,15 +49,6 @@ export default function SelectColumnGrouping({
   >(Array(8).fill(false));
   const [referenceTableStatistics, setReferenceTableStatistics] =
     useState<TableColumnsStatisticsModel>();
-
-  const fetchProfileSettings = async () => {
-    try {
-      const res = await EnviromentApiClient.getDqoSettings();
-      setProfileSettings(res.data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
 
   const getColumnsStatistics = async () => {
     try {
@@ -107,11 +95,9 @@ export default function SelectColumnGrouping({
 
     if (
       columnStatistics?.result === undefined ||
-      profileSettings?.properties?.[
-        'dqo.sensor.limits.sensor-readout-limit'
-      ] === undefined ||
-      columnStatistics?.result >
-        profileSettings?.properties?.['dqo.sensor.limits.sensor-readout-limit']
+      userSettings?.['dqo.sensor.limits.sensor-readout-limit'] === undefined ||
+      Number(columnStatistics?.result) >
+        Number(userSettings?.['dqo.sensor.limits.sensor-readout-limit'])
     ) {
       const tnp = reference ? listOfReferenceWarnings : listOfWarnings;
       tnp[index] = columnName.length > 0 ? true : false;
@@ -147,7 +133,6 @@ export default function SelectColumnGrouping({
 
   useEffect(() => {
     if (editConfigurationParameters.refTable) {
-      fetchProfileSettings();
       getColumnsStatistics();
       getReferenceTableStatistics();
     }
@@ -206,9 +191,7 @@ export default function SelectColumnGrouping({
           checkIfDistinctCountIsBiggerThanLimit
         }
         dqoLimit={Number(
-          profileSettings?.properties?.[
-            'dqo.sensor.limits.sensor-readout-limit'
-          ]
+          userSettings?.['dqo.sensor.limits.sensor-readout-limit']
         )}
         filter={editConfigurationParameters.compared_table_filter}
       />
@@ -236,9 +219,7 @@ export default function SelectColumnGrouping({
           checkIfDistinctCountIsBiggerThanLimit
         }
         dqoLimit={Number(
-          profileSettings?.properties?.[
-            'dqo.sensor.limits.sensor-readout-limit'
-          ]
+          userSettings?.['dqo.sensor.limits.sensor-readout-limit']
         )}
         filter={editConfigurationParameters.reference_table_filter}
       />
