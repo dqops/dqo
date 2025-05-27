@@ -67,6 +67,10 @@ const App = () => {
         document.title = String(
           res.data?.properties?.['dqo.ui.application-name']
         );
+        localStorage.setItem(
+          'applicationName',
+          String(res.data?.properties?.['dqo.ui.application-name'])
+        );
       }
     });
   }, []);

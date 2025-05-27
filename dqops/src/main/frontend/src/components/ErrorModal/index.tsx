@@ -12,18 +12,20 @@ interface ErrorModalProps {
 
 const ErrorModal = ({ open, onClose, message }: ErrorModalProps) => {
   const { userSettings } = useSelector((state: IRootState) => state.job || {});
+  const applicationNameFromLocalStorage =
+    localStorage.getItem('applicationName');
+
   return (
     <div>
       <Dialog open={open} handler={onClose}>
         <DialogBody className="pt-10 pb-2 px-8 flex flex-col justify-center">
           <div className="text-2xl text-gray-700 text-center whitespace-normal break-all">
-            {message
-              ? `${
-                  userSettings?.['dqo.ui.application-name'] || 'DQOps'
-                } server returned an error`
-              : `${
-                  userSettings?.['dqo.ui.application-name'] || 'DQOps'
-                } server not reachable`}
+            {message ||
+              `${
+                userSettings?.['dqo.ui.application-name'] ||
+                applicationNameFromLocalStorage ||
+                'DQOps'
+              } server not reachable`}
           </div>
           <div
             className="text-sm overflow-y-auto text-gray-700 w-full"

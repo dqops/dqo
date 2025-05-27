@@ -3,17 +3,14 @@ import {
   PopoverContent,
   PopoverHandler
 } from '@material-tailwind/react';
-import { AxiosResponse } from 'axios';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
-import { DqoSettingsModel } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { toggleSettings } from '../../redux/actions/job.actions';
 import { IRootState } from '../../redux/reducers';
-import { EnviromentApiClient } from '../../services/apiClient';
 
 function SettingsPopUp() {
-  const { areSettingsOpen } = useSelector(
+  const { areSettingsOpen, userSettings } = useSelector(
     (state: IRootState) => state.job || {}
   );
 
@@ -22,22 +19,6 @@ function SettingsPopUp() {
   const toggleOpen = () => {
     dispatch(toggleSettings(!areSettingsOpen));
   };
-
-  const [profileSettings, setProfileSettings] = useState<DqoSettingsModel>();
-
-  const fetchProfileSettings = async () => {
-    try {
-      const res: AxiosResponse<DqoSettingsModel> =
-        await EnviromentApiClient.getDqoSettings();
-      setProfileSettings(res.data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  useEffect(() => {
-    fetchProfileSettings().then();
-  }, []);
 
   const renderValue = (value: any) => {
     if (typeof value === 'boolean') {
@@ -49,14 +30,14 @@ function SettingsPopUp() {
     return value;
   };
 
-  const objectElements = Object.entries(
-    profileSettings?.properties ? profileSettings.properties : {}
-  ).map(([key, value]) => (
-    <div key={key} className="flex">
-      <div className=" w-2/5 mr-5 whitespace-normal">{key} </div>
-      <div className=" w-3/5 whitespace-normal">{renderValue(value)}</div>
-    </div>
-  ));
+  const objectElements = Object.entries(userSettings || {}).map(
+    ([key, value]) => (
+      <div key={key} className="flex">
+        <div className=" w-2/5 mr-5 whitespace-normal">{key} </div>
+        <div className=" w-3/5 whitespace-normal">{renderValue(value)}</div>
+      </div>
+    )
+  );
 
   return (
     <Popover open={areSettingsOpen} handler={toggleOpen} placement="top-start">
