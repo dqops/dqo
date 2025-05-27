@@ -52,6 +52,7 @@ export interface IJobsState {
   isCronScheduled: boolean;
   isLicenseFree: boolean;
   userProfile: DqoUserProfileModel;
+  userSettings: Record<string, string>;
   jobList: TJobList;
   isErrorModalOpen: boolean;
   notificationCount: number;
@@ -78,6 +79,7 @@ const initialState: IJobsState = {
   isCronScheduled: true,
   isLicenseFree: false,
   userProfile: {},
+  userSettings: {},
   jobList: {},
   isErrorModalOpen: false,
   notificationCount: 0,
@@ -276,9 +278,9 @@ const schemaReducer = (state = initialState, action: any) => {
       if (lastRefreshExceeded) {
         Object.keys(job_dictionary_state).forEach((key) => {
           if (
-            job_dictionary_state[key]?.statusChangedAt && 
+            job_dictionary_state[key]?.statusChangedAt &&
             nowDate.diff(job_dictionary_state[key].statusChangedAt, 'minutes') >
-            30
+              30
           ) {
             if (jobList[key]) {
               jobList[key].forEach((childId) => {
@@ -379,6 +381,12 @@ const schemaReducer = (state = initialState, action: any) => {
       return {
         ...state,
         userProfile: action.userProfile
+      };
+    }
+    case JOB_ACTION.SET_USER_SETTINGS: {
+      return {
+        ...state,
+        userSettings: action.userSettings.properties
       };
     }
     case JOB_ACTION.SET_ERRORS: {

@@ -20,6 +20,7 @@ import { AxiosResponse } from 'axios';
 import {
   DqoJobQueueIncrementalSnapshotModel,
   DqoJobQueueInitialSnapshotModel,
+  DqoSettingsModel,
   DqoUserProfileModel,
   ImportTablesQueueJobParameters
 } from '../../api';
@@ -139,6 +140,11 @@ export const setLicenseFree = (isLicenseFree: boolean) => ({
 export const setUserProfile = (userProfile: DqoUserProfileModel) => ({
   type: JOB_ACTION.SET_USER_PROFILE,
   userProfile
+});
+
+export const setUserSettings = (userSettings: DqoSettingsModel) => ({
+  type: JOB_ACTION.SET_USER_SETTINGS,
+  userSettings
 });
 
 export const setError = (error: IError) => ({
