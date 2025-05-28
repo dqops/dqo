@@ -20,10 +20,7 @@ const JobChild = ({ job }: { job: DqoJobHistoryEntryModel }) => {
   };
 
   if (!job.jobType) return null;
-  console.log(
-    'JobChild job',
-    job.parameters?.collectStatisticsOnTableParameters
-  );
+
   return (
     <Accordion open={open}>
       <AccordionHeader onClick={() => setOpen(!open)}>
