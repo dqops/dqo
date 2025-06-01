@@ -86,7 +86,7 @@ const SourceTablesView = () => {
     );
     dispatch(setAdvisorJobId(res.data?.jobId?.jobId ?? 0));
     setJobId(res.data?.jobId?.jobId);
-    dispatch(toggleAdvisor(true));
+    //dispatch(toggleAdvisor(true));
   };
 
   const importAllTables = async () => {
@@ -106,7 +106,7 @@ const SourceTablesView = () => {
     );
     setJobId(res.data?.jobId?.jobId);
     dispatch(setAdvisorJobId(res.data?.jobId?.jobId ?? 0));
-    dispatch(toggleAdvisor(true));
+    //dispatch(toggleAdvisor(true));
   };
 
   const onSelectChange = (tableName: string) => {

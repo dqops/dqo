@@ -18,6 +18,6 @@
 pushd $(dirname $0)
 
 ./mvnw.sh clean -f pom.xml
-./mvnw.sh package -DskipTests -Pbuild-with-jdk-11 -Prun-npm
+./mvnw.sh package -DskipTests -Pdisable-duckdb-extensions-download -Pbuild-with-jdk-11 -Prun-npm
 
 popd

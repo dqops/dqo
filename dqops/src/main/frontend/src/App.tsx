@@ -9,11 +9,14 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AppProvider from './contexts/AppProvider';
 import { useActionDispatch } from './hooks/useActionDispatch';
-import { getAllJobs, getJobsChanges } from './redux/actions/job.actions';
+import {
+  getAllJobs,
+  getJobsChanges,
+  setUserSettings
+} from './redux/actions/job.actions';
 import { IRootState } from './redux/reducers';
 import Routes from './Routes';
-import { LogErrorsApi } from './services/apiClient';
-import { EnviromentApiClient } from './services/apiClient';
+import { EnviromentApiClient, LogErrorsApi } from './services/apiClient';
 
 import { CategoryScale } from 'chart.js';
 import Chart from 'chart.js/auto';
@@ -59,8 +62,15 @@ const App = () => {
     };
 
     EnviromentApiClient.getDqoSettings().then((res) => {
+      dispatch(setUserSettings(res.data || {}));
       if (res.data?.properties?.['dqo.ui.application-name']) {
-        document.title = String(res.data?.properties?.['dqo.ui.application-name']);
+        document.title = String(
+          res.data?.properties?.['dqo.ui.application-name']
+        );
+        localStorage.setItem(
+          'applicationName',
+          String(res.data?.properties?.['dqo.ui.application-name'])
+        );
       }
     });
   }, []);

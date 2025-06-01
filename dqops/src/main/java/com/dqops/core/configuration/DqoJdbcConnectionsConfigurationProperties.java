@@ -27,7 +27,7 @@ import org.springframework.context.annotation.Configuration;
 @EqualsAndHashCode(callSuper = false)
 public class DqoJdbcConnectionsConfigurationProperties implements Cloneable {
     private int maxConnectionInPool = 1000;
-    private int expireAfterAccessSeconds = 1800;
+    private int expireAfterAccessSeconds = 10;
 
     /**
      * Returns the maximum number of connections in the jdbc connection pool.

@@ -26,7 +26,7 @@ if [ -e $(dirname $0)/dqops/pom.xml ]; then
 
     if [ ! -e $(dirname $0)/dqops/target/dqo-dqops-$DQO_VERSION.jar ]; then
         if [ -d $(dirname $0)/dqops ]; then
-            . "$(dirname $0)/mvnw.sh" package -DskipTests -Pbuild-with-jdk-11 -Prun-npm -f "$(dirname $0)/pom.xml"
+            . "$(dirname $0)/mvnw.sh" package -DskipTests -Pbuild-with-jdk-11 -Pdisable-duckdb-extensions-download -Prun-npm -f "$(dirname $0)/pom.xml"
 
             returnedValue=$?
             if [ $returnedValue -ne 0 ]; then

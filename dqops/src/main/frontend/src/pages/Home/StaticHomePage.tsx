@@ -1,19 +1,14 @@
-import React, { useEffect } from 'react';
-import { EnviromentApiClient } from '../../services/apiClient';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../redux/reducers';
 
 export default function StaticHomePage() {
-  const [title, setTitle] = React.useState('');
-  const [showLinks, setShowLinks] = React.useState(false);
-
-  useEffect(() => {
-    EnviromentApiClient.getDqoSettings().then((res) => {
-      setTitle(String(res.data?.properties?.['dqo.ui.application-name']));
-      setShowLinks(
-        String(res.data?.properties?.['dqo.ui.home-page.show-links']) === 'true'
-      );
-    });
-  }, []);
-
+  const { userSettings } = useSelector((state: IRootState) => state.job || {});
+  const title =
+    userSettings?.['dqo.ui.application-name'] ||
+    localStorage.getItem('applicationName') ||
+    'DQOps';
+  const showLinks = userSettings?.['dqo.ui.show-home-links'] === 'true';
   return (
     <div>
       <div className="bg-teal-500 text-white px-4 py-4 text-2xl font-bold mb-4">
