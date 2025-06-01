@@ -53,17 +53,17 @@ const CreateConnection = () => {
       case ConnectionModelProviderTypeEnum.postgresql: {
         if (
           nameOfDatabase?.toLowerCase() ===
-          PostgresqlParametersSpecPostgresqlEngineTypeEnum.postgresql
+          PostgresqlParametersSpecPostgresqlEngineTypeEnum.timescale
         ) {
           copiedDatabase.postgresql = {
             port: '5432',
-            postgresql_engine_type: PostgresqlParametersSpecPostgresqlEngineTypeEnum.postgresql,
+            postgresql_engine_type: PostgresqlParametersSpecPostgresqlEngineTypeEnum.timescale,
             properties: { '': '' }
           };
         } else {
           copiedDatabase.postgresql = {
             port: '5432',
-            postgresql_engine_type: PostgresqlParametersSpecPostgresqlEngineTypeEnum.timescale,
+            postgresql_engine_type: PostgresqlParametersSpecPostgresqlEngineTypeEnum.postgresql,
             properties: { '': '' }
           };
         }

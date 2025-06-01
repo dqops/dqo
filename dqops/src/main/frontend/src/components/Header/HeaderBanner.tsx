@@ -1,5 +1,5 @@
 import { Dialog, DialogBody, DialogFooter } from '@material-tailwind/react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { toggleMenu } from '../../redux/actions/job.actions';
@@ -15,11 +15,16 @@ type HeaderBannerProps = {
 
 export const HeaderBanner = ({ onClose }: HeaderBannerProps) => {
   const dispatch = useActionDispatch();
-  const [isCollected, setIsCollected] = useState(true);
-  const [isProfilingChecked, setIsProfilingChecked] = useState(true);
+  const [isCollected, setIsCollected] = useState(false);
+  const [isProfilingChecked, setIsProfilingChecked] = useState(false);
   const { advisorObject, isAdvisorOpen } = useSelector(
     (state: IRootState) => state.job
   );
+
+  useEffect(() => {
+    setIsCollected((advisorObject.tableNames && advisorObject.tableNames.length < 3) ?? false);
+    setIsProfilingChecked((advisorObject.tableNames && advisorObject.tableNames.length < 3) ?? false);
+  }, [isAdvisorOpen, advisorObject.tableNames]);
 
   const collectStatistics = async () => {
     setIsCollected(true);

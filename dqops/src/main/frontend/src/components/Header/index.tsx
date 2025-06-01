@@ -206,13 +206,15 @@ const Header = () => {
       job_dictionary_state[advisorJobId]?.status ===
         DqoJobChangeModelStatusEnum.finished
     ) {
-      dispatch(
-        setAdvisorObject(
-          job_dictionary_state[advisorJobId]?.parameters
-            ?.importTableParameters ?? {}
-        )
-      );
-      dispatch(toggleAdvisor(true));
+      if (job_dictionary_state[advisorJobId]?.parameters?.importTableParameters) {
+        dispatch(
+          setAdvisorObject(
+            job_dictionary_state[advisorJobId]?.parameters
+              ?.importTableParameters ?? {}
+          )
+        );
+        dispatch(toggleAdvisor(true));
+      }
     }
   }, [job_dictionary_state[advisorJobId]]);
 
