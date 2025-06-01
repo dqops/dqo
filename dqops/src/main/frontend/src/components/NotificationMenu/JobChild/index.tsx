@@ -155,17 +155,37 @@ const JobChild = ({ job }: { job: DqoJobHistoryEntryModel }) => {
                 </tr>
               </>
             )}
-            {job?.parameters?.collectStatisticsParameters
-              ?.statistics_collector_search_filters &&
-              Object.entries(
-                job?.parameters?.collectStatisticsParameters
-                  ?.statistics_collector_search_filters
-              ).map(([key, value], index) => (
-                <tr key={index}>
-                  <td className="px-2">{key}</td>
-                  <td className="px-2">{renderValue(value)}</td>
+            {job?.parameters?.collectStatisticsOnTableParameters && (
+              <>
+                <tr>
+                  <td className="px-2">Connection</td>
+                  <td className="px-2">
+                    {
+                      job?.parameters?.collectStatisticsOnTableParameters
+                        .connection
+                    }
+                  </td>
                 </tr>
-              ))}
+                <tr>
+                  <td className="px-2">Schema name</td>
+                  <td className="px-2">
+                    {
+                      job?.parameters?.collectStatisticsOnTableParameters.table
+                        ?.schema_name
+                    }
+                  </td>
+                </tr>
+                <tr>
+                  <td className="px-2">Table name</td>
+                  <td className="px-2">
+                    {
+                      job?.parameters?.collectStatisticsOnTableParameters.table
+                        ?.table_name
+                    }
+                  </td>
+                </tr>
+              </>
+            )}
             {job?.parameters?.importTableParameters && (
               <>
                 <tr>
