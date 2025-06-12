@@ -94,7 +94,9 @@ public class CheckExecutionProgressListenerStub implements CheckExecutionProgres
      */
     @Override
     public void onSensorResultsNormalized(SensorResultsNormalizedEvent event) {
-		this.events.add(event);
+        synchronized (this) {
+            this.events.add(event);
+        }
     }
 
     /**
@@ -104,7 +106,9 @@ public class CheckExecutionProgressListenerStub implements CheckExecutionProgres
      */
     @Override
     public void onRuleExecuted(RuleExecutedEvent event) {
-		this.events.add(event);
+        synchronized (this) {
+            this.events.add(event);
+        }
     }
 
     /**
@@ -114,7 +118,9 @@ public class CheckExecutionProgressListenerStub implements CheckExecutionProgres
      */
     @Override
     public void onRuleFailed(RuleFailedEvent event) {
-        this.events.add(event);
+        synchronized (this) {
+            this.events.add(event);
+        }
     }
 
     /**
@@ -124,7 +130,9 @@ public class CheckExecutionProgressListenerStub implements CheckExecutionProgres
      */
     @Override
     public void onSensorFailed(SensorFailedEvent event) {
-        this.events.add(event);
+        synchronized (this) {
+            this.events.add(event);
+        }
     }
 
     /**
@@ -134,7 +142,9 @@ public class CheckExecutionProgressListenerStub implements CheckExecutionProgres
      */
     @Override
     public void onSavingSensorResults(SavingSensorResultsEvent event) {
-		this.events.add(event);
+        synchronized (this) {
+            this.events.add(event);
+        }
     }
 
     /**
@@ -144,7 +154,9 @@ public class CheckExecutionProgressListenerStub implements CheckExecutionProgres
      */
     @Override
     public void onSavingRuleEvaluationResults(SavingRuleEvaluationResultsEvent event) {
-		this.events.add(event);
+        synchronized (this) {
+            this.events.add(event);
+        }
     }
 
     /**
@@ -154,7 +166,9 @@ public class CheckExecutionProgressListenerStub implements CheckExecutionProgres
      */
     @Override
     public void onSavingErrors(SavingErrorsEvent event) {
-        this.events.add(event);
+        synchronized (this) {
+            this.events.add(event);
+        }
     }
 
     /**
@@ -164,7 +178,9 @@ public class CheckExecutionProgressListenerStub implements CheckExecutionProgres
      */
     @Override
     public void onTableChecksProcessingFinished(TableChecksProcessingFinishedEvent event) {
-		this.events.add(event);
+        synchronized (this) {
+            this.events.add(event);
+        }
     }
 
     /**
@@ -174,7 +190,9 @@ public class CheckExecutionProgressListenerStub implements CheckExecutionProgres
      */
     @Override
     public void onBeforeSqlTemplateRender(BeforeSqlTemplateRenderEvent event) {
-		this.events.add(event);
+        synchronized (this) {
+            this.events.add(event);
+        }
     }
 
     /**
@@ -184,7 +202,9 @@ public class CheckExecutionProgressListenerStub implements CheckExecutionProgres
      */
     @Override
     public void onSqlTemplateRendered(SqlTemplateRenderedRenderedEvent event) {
-		this.events.add(event);
+        synchronized (this) {
+            this.events.add(event);
+        }
     }
 
     /**
@@ -194,7 +214,9 @@ public class CheckExecutionProgressListenerStub implements CheckExecutionProgres
      */
     @Override
     public void onExecutingSqlOnConnection(ExecutingSqlOnConnectionEvent event) {
-		this.events.add(event);
+        synchronized (this) {
+            this.events.add(event);
+        }
     }
 
     /**
@@ -204,6 +226,8 @@ public class CheckExecutionProgressListenerStub implements CheckExecutionProgres
      */
     @Override
     public void onCheckExecutionFinished(CheckExecutionFinishedEvent event) {
-        this.events.add(event);
+        synchronized (this) {
+            this.events.add(event);
+        }
     }
 }

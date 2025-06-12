@@ -129,7 +129,7 @@ public class DuckdbColumnIntegrityForeignKeyNotMatchCountSensorParametersSpecInt
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(5L, resultTable.column(0).get(0));
+        Assertions.assertEquals(5L, ValueConverter.toLong(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -145,7 +145,7 @@ public class DuckdbColumnIntegrityForeignKeyNotMatchCountSensorParametersSpecInt
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(5L, resultTable.column(0).get(0));
+        Assertions.assertEquals(5L, ValueConverter.toLong(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -161,7 +161,7 @@ public class DuckdbColumnIntegrityForeignKeyNotMatchCountSensorParametersSpecInt
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(5L, resultTable.column(0).get(0));
+        Assertions.assertEquals(5L, ValueConverter.toLong(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -177,7 +177,7 @@ public class DuckdbColumnIntegrityForeignKeyNotMatchCountSensorParametersSpecInt
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(6, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(1L, resultTable.column(0).get(0));
+        Assertions.assertEquals(1L, ValueConverter.toLong(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -193,7 +193,7 @@ public class DuckdbColumnIntegrityForeignKeyNotMatchCountSensorParametersSpecInt
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(6, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(1L, resultTable.column(0).get(0));
+        Assertions.assertEquals(1L, ValueConverter.toLong(resultTable.column(0).get(0)));
     }
 
     @Test

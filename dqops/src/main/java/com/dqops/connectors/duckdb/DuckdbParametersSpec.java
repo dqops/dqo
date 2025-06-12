@@ -83,6 +83,11 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("DuckDB database name for in-memory read mode. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     private String database;
 
+    @CommandLine.Option(names = {"--duckdb-enable-optimizer"}, description = "Enables a query optimizer that uses statistics. By default, the optimizer is disabled to enable analysis of Parquet files with invalid or outdated statistics.")
+    @JsonPropertyDescription("Enables a query optimizer that uses statistics. By default, the optimizer is disabled to enable analysis of Parquet files with invalid or outdated statistics.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private Boolean enableOptimizer;
+
     @CommandLine.Option(names = {"-Duck"}, description = "DuckDB additional properties that are added to the JDBC connection string")
     @JsonPropertyDescription("A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -215,6 +220,23 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     public void setDatabase(String database) {
         setDirtyIf(!Objects.equals(this.database, database));
         this.database = database;
+    }
+
+    /**
+     * Returns the flag to enable optimizer. By default, the optimizer is disabled.
+     * @return True when the optimizer is disabled. False or null when disabled.
+     */
+    public Boolean getEnableOptimizer() {
+        return enableOptimizer;
+    }
+
+    /**
+     * Sets the flag to enable the optimizer.
+     * @param enableOptimizer New flag value.
+     */
+    public void setEnableOptimizer(Boolean enableOptimizer) {
+        setDirtyIf(!Objects.equals(this.enableOptimizer, enableOptimizer));
+        this.enableOptimizer = enableOptimizer;
     }
 
     /**

@@ -108,7 +108,7 @@ public class PythonVirtualEnvServiceImpl implements PythonVirtualEnvService {
 
             String[] arguments = {absolutePythonPath, "-m", "venv", virtualEnvPath};
             Process envProcess = runtime.exec(arguments);
-            if (!envProcess.waitFor(30000, TimeUnit.MILLISECONDS)) {
+            if (!envProcess.waitFor(this.pythonConfigurationProperties.getPipTimeoutSeconds() * 1000L, TimeUnit.MILLISECONDS)) {
                 throw new PythonExecutionException("Command has not finished: " + String.join(" ", arguments));
             }
             if (envProcess.exitValue() != 0) {

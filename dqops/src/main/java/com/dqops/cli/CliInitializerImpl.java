@@ -241,7 +241,7 @@ public class CliInitializerImpl implements CliInitializer {
         }
 
         if (!this.pythonVirtualEnvService.isVirtualEnvInitialized()) {
-            this.terminalWriter.writeLine("Please wait, checking Python installation. This may take 30 seconds for the first time if DQOps needs to initialize a Python virtual environment in DQOps system home directory.");
+            this.terminalWriter.writeLine("Please wait, checking Python installation. This may take 60 seconds for the first time if DQOps needs to initialize a Python virtual environment in DQOps system home directory.");
             PythonVirtualEnv virtualEnv = this.pythonVirtualEnvService.getVirtualEnv();
             if (virtualEnv == null) {
                 throw new PythonExecutionException("Cannot find any python executable instance. Make sure that Python is installed and could be found on the path (defined in PATH) or the --dqo.python.interpreter parameter points to a python executable.");

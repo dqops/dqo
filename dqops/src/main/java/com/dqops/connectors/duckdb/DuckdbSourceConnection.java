@@ -230,6 +230,10 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
         }
 
         loadSecrets(secretValueLookupContext);
+
+        this.configureOptimizer(this.getConnectionSpec().getDuckdb() != null &&
+                this.getConnectionSpec().getDuckdb().getEnableOptimizer() != null &&
+                this.getConnectionSpec().getDuckdb().getEnableOptimizer().booleanValue());
     }
 
     /**
@@ -238,6 +242,15 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
     public void initializeInMemoryConfiguration() {
         configureSettings();
         registerExtensions();
+    }
+
+    /**
+     * Configures the query optimizer (enables or disables). This option is used when Parquet files are corrupted, so the optimizer should be disabled.
+     * @param enableOptimizer Enable optimizer.
+     */
+    public void configureOptimizer(boolean enableOptimizer) {
+        String optimizerPragma = "PRAGMA " + (enableOptimizer ? "enable_optimizer" : "disable_optimizer") + ";";
+        this.executeCommand(optimizerPragma, JobCancellationToken.createDummyJobCancellationToken());
     }
 
     /**

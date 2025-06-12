@@ -36,8 +36,8 @@
 		<tablesaw.version>0.43.1</tablesaw.version>
 		<license.licenseName>apache_v2</license.licenseName>
 		<npm.build.script>build</npm.build.script>
-		<duckdb.version>1.2.2.0</duckdb.version>
-		<duckdb.extensions.version>1.2.2</duckdb.extensions.version>
+		<duckdb.version>1.3.0.0</duckdb.version>
+		<duckdb.extensions.version>1.3.0</duckdb.extensions.version>
 	</properties>
 
 	<licenses>
