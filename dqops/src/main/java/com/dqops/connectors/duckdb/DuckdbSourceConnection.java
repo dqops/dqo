@@ -345,7 +345,7 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
                     AwsAuthenticationMode awsAuthenticationMode = duckdb.getAwsAuthenticationMode() == null ?
                             AwsAuthenticationMode.default_credentials : duckdb.getAwsAuthenticationMode();
 
-                    if(awsAuthenticationMode.equals(AwsAuthenticationMode.default_credentials)){
+                    if (awsAuthenticationMode.equals(AwsAuthenticationMode.default_credentials)) {
                         duckdbSpecCloned.fillSpecWithDefaultAwsCredentials(secretValueLookupContext);
                     } else if (Strings.isNullOrEmpty(duckdbSpecCloned.getRegion())){
                         duckdbSpecCloned.fillSpecWithDefaultAwsConfig(secretValueLookupContext);

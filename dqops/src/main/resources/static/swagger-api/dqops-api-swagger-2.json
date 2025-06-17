@@ -39464,6 +39464,10 @@
           "description" : "The authentication mode for AWS. Supports also a ${DUCKDB_AWS_AUTHENTICATION_MODE} configuration with a custom environment variable.",
           "enum" : [ "iam", "default_credentials" ]
         },
+        "aws_default_authentication_chain" : {
+          "type" : "string",
+          "description" : "The default authentication chain for AWS. For example: 'env;config;sts;sso;instance;process'.. Supports also a ${DUCKDB_AWS_AUTHENTICATION_MODE} configuration with a custom environment variable."
+        },
         "azure_authentication_mode" : {
           "type" : "string",
           "description" : "The authentication mode for Azure. Supports also a ${DUCKDB_AZURE_AUTHENTICATION_MODE} configuration with a custom environment variable.",
@@ -39480,6 +39484,10 @@
         "region" : {
           "type" : "string",
           "description" : "The region for the storage credentials. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
+        },
+        "profile" : {
+          "type" : "string",
+          "description" : "The AWS profile used for the default authentication. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
         },
         "tenant_id" : {
           "type" : "string",

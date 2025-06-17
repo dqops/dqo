@@ -2,9 +2,11 @@ package com.dqops.connectors.duckdb;
 
 import com.dqops.connectors.duckdb.config.DuckdbStorageType;
 import com.dqops.connectors.duckdb.fileslisting.azure.AzureStoragePath;
+import com.dqops.connectors.storage.aws.AwsAuthenticationMode;
 import com.dqops.connectors.storage.azure.AzureAuthenticationMode;
 import com.dqops.metadata.sources.ConnectionSpec;
 import org.apache.commons.codec.binary.Hex;
+import org.apache.parquet.Strings;
 
 import java.nio.charset.StandardCharsets;
 
@@ -37,9 +39,25 @@ public class DuckdbQueriesProvider {
         loadSecretsString.append(indent).append("TYPE ").append(storageType.toString().toUpperCase()).append(",\n");
         switch (storageType){
             case s3:
-                loadSecretsString.append(indent).append("KEY_ID '").append(duckdbParametersSpec.getUser()).append("',\n");
-                loadSecretsString.append(indent).append("SECRET '").append(duckdbParametersSpec.getPassword()).append("',\n");
-                loadSecretsString.append(indent).append("REGION '").append(duckdbParametersSpec.getRegion()).append("',\n");
+                if (duckdbParametersSpec.getAwsAuthenticationMode() == AwsAuthenticationMode.default_credentials &&
+                        (Strings.isNullOrEmpty(duckdbParametersSpec.getAwsAccessKeyId()) || Strings.isNullOrEmpty(duckdbParametersSpec.getAwsSecretAccessKey()))) {
+                    loadSecretsString.append(indent).append("PROVIDER credential_chain,\n");
+
+                    String defaultAuthenticationChain = "env;config;sts;sso;instance;process";
+                    if (!Strings.isNullOrEmpty(duckdbParametersSpec.getAwsDefaultAuthenticationChain())) {
+                        defaultAuthenticationChain = duckdbParametersSpec.getAwsDefaultAuthenticationChain();
+                    }
+                    loadSecretsString.append(indent).append("CHAIN '").append(defaultAuthenticationChain).append("',\n");
+                } else {
+                    loadSecretsString.append(indent).append("KEY_ID '").append(duckdbParametersSpec.getUser()).append("',\n");
+                    loadSecretsString.append(indent).append("SECRET '").append(duckdbParametersSpec.getPassword()).append("',\n");
+                }
+                if (!Strings.isNullOrEmpty(duckdbParametersSpec.getProfile())) {
+                    loadSecretsString.append(indent).append("PROFILE '").append(duckdbParametersSpec.getProfile()).append("',\n");
+                }
+                if (!Strings.isNullOrEmpty(duckdbParametersSpec.getRegion())) {
+                    loadSecretsString.append(indent).append("REGION '").append(duckdbParametersSpec.getRegion()).append("',\n");
+                }
                 break;
             case azure:
                 if(duckdbParametersSpec.getAzureAuthenticationMode().equals(AzureAuthenticationMode.connection_string)){
@@ -62,8 +80,8 @@ public class DuckdbQueriesProvider {
                 }
                 break;
             case gcs:
-                loadSecretsString.append(indent).append("KEY_ID '").append(duckdbParametersSpec.getUser()).append("',\n");
-                loadSecretsString.append(indent).append("SECRET '").append(duckdbParametersSpec.getPassword()).append("',\n");
+                loadSecretsString.append(indent).append("KEY_ID '").append(duckdbParametersSpec.getAwsAccessKeyId()).append("',\n");
+                loadSecretsString.append(indent).append("SECRET '").append(duckdbParametersSpec.getAwsSecretAccessKey()).append("',\n");
                 break;
             default:
                 throw new RuntimeException("This type of DuckdbSecretsType is not supported: " + storageType);

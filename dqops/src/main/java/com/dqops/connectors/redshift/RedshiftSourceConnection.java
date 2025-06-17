@@ -177,7 +177,7 @@ public class RedshiftSourceConnection extends AbstractJdbcSourceConnection {
                 break;
 
             case default_credentials:
-                Optional<Profile> credentialProfile = AwsDefaultCredentialProfileProvider.provideProfile(secretValueLookupContext);
+                Optional<Profile> credentialProfile = AwsDefaultCredentialProfileProvider.provideProfile(secretValueLookupContext, null);
                 if(credentialProfile.isPresent()
                         && credentialProfile.get().property(AwsCredentialProfileSettingNames.AWS_ACCESS_KEY_ID).isPresent()
                         && credentialProfile.get().property(AwsCredentialProfileSettingNames.AWS_SECRET_ACCESS_KEY).isPresent()){

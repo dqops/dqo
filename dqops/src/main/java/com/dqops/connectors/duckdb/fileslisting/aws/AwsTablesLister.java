@@ -3,9 +3,13 @@ package com.dqops.connectors.duckdb.fileslisting.aws;
 import com.dqops.connectors.SourceTableModel;
 import com.dqops.connectors.duckdb.DuckdbParametersSpec;
 import com.dqops.connectors.duckdb.fileslisting.RemoteTablesLister;
+import com.dqops.connectors.storage.aws.AwsAuthenticationMode;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.parquet.Strings;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
+import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
+import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -25,6 +29,28 @@ import java.util.List;
 public class AwsTablesLister extends RemoteTablesLister {
 
     /**
+     * Creates an AWS credentials provider. When the access key id and secret key are present, they are used in basic authentication
+     * mode. Otherwise, the default authentication provider chain is used.
+     * @param duckdb DuckDb connection parameters.
+     * @return AWS credentials provider.
+     */
+    public AwsCredentialsProvider createAwsCredentials(DuckdbParametersSpec duckdb)
+    {
+        if (duckdb.getAwsAuthenticationMode() == AwsAuthenticationMode.default_credentials &&
+                (Strings.isNullOrEmpty(duckdb.getAwsAccessKeyId()) || Strings.isNullOrEmpty(duckdb.getAwsSecretAccessKey()))) {
+            DefaultCredentialsProvider defaultCredentialsProvider = DefaultCredentialsProvider.builder()
+                    .build();
+            return defaultCredentialsProvider;
+        }
+        else {
+            AwsBasicCredentials awsBasicCredentials = AwsBasicCredentials
+                    .create(duckdb.getAwsAccessKeyId(), duckdb.getAwsSecretAccessKey());
+            StaticCredentialsProvider staticCredentialsProvider = StaticCredentialsProvider.create(awsBasicCredentials);
+            return staticCredentialsProvider;
+        }
+    }
+
+    /**
      * Returns list of SourceTableModel from remote storage - AWS s3
      * @param duckdb DuckdbParametersSpec
      * @param schemaName The name of a virtual schema.
@@ -32,11 +58,9 @@ public class AwsTablesLister extends RemoteTablesLister {
      */
     @Override
     public List<SourceTableModel> listTables(DuckdbParametersSpec duckdb, String schemaName, String tableNameContains, int limit) {
-        AwsBasicCredentials awsBasicCredentials = AwsBasicCredentials
-                .create(duckdb.getAwsAccessKeyId(), duckdb.getAwsSecretAccessKey());
-        StaticCredentialsProvider staticCredentialsProvider = StaticCredentialsProvider.create(awsBasicCredentials);
+        AwsCredentialsProvider awsCredentialsProvider = createAwsCredentials(duckdb);
         S3Client s3Client = S3Client.builder()
-                .credentialsProvider(staticCredentialsProvider)
+                .credentialsProvider(awsCredentialsProvider)
                 .region(Region.of(duckdb.getRegion()))
                 .build();
 
