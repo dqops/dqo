@@ -202,7 +202,7 @@ public class TrinoSourceConnection extends AbstractJdbcSourceConnection {
                 if (!Strings.isNullOrEmpty(region)){
                     dataSourceProperties.put(JdbcAwsProperties.REGION, region);
                 } else {
-                    Optional<Profile> configProfile = AwsDefaultConfigProfileProvider.provideProfile(secretValueLookupContext);
+                    Optional<Profile> configProfile = AwsDefaultConfigProfileProvider.provideProfile(secretValueLookupContext, null);
                     if(configProfile.isPresent() && configProfile.get().property(AwsConfigProfileSettingNames.REGION).isPresent()){
                         dataSourceProperties.put(JdbcAwsProperties.REGION, configProfile.get().property(AwsConfigProfileSettingNames.REGION).get());
                     }
@@ -211,7 +211,7 @@ public class TrinoSourceConnection extends AbstractJdbcSourceConnection {
                 break;
 
             case default_credentials:
-                Optional<Profile> credentialProfile = AwsDefaultCredentialProfileProvider.provideProfile(secretValueLookupContext);
+                Optional<Profile> credentialProfile = AwsDefaultCredentialProfileProvider.provideProfile(secretValueLookupContext, null);
                 if(credentialProfile.isPresent()
                         && credentialProfile.get().property(AwsCredentialProfileSettingNames.AWS_ACCESS_KEY_ID).isPresent()
                         && credentialProfile.get().property(AwsCredentialProfileSettingNames.AWS_SECRET_ACCESS_KEY).isPresent()){
@@ -220,7 +220,7 @@ public class TrinoSourceConnection extends AbstractJdbcSourceConnection {
                 } else {
                     dataSourceProperties.put("CredentialsProvider", "DefaultChain");    // The use of the local ~/.aws/credentials file with default profile
                 }
-                Optional<Profile> configProfile = AwsDefaultConfigProfileProvider.provideProfile(secretValueLookupContext);
+                Optional<Profile> configProfile = AwsDefaultConfigProfileProvider.provideProfile(secretValueLookupContext, null);
                 if(configProfile.isPresent() && configProfile.get().property(AwsConfigProfileSettingNames.REGION).isPresent()){
                     dataSourceProperties.put(JdbcAwsProperties.REGION, configProfile.get().property(AwsConfigProfileSettingNames.REGION).get());
                 }

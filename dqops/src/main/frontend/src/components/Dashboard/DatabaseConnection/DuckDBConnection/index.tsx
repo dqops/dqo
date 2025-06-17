@@ -198,20 +198,36 @@ const DuckdbConnection = ({
 
         {duckdb?.aws_authentication_mode ===
           DuckdbParametersSpecAwsAuthenticationModeEnum.default_credentials && (
-          <FieldTypeInput
-            data={sharedCredentials}
-            label="Region"
-            className="mb-4 text-sm"
-            maskingType="region"
-            value={duckdb?.region}
-            placeholder={
-              duckdb?.aws_authentication_mode ===
-              DuckdbParametersSpecAwsAuthenticationModeEnum.default_credentials
-                ? 'Use the value from the ".credentials/AWS_default_config" DQOps shared credential file'
-                : ''
-            }
-            onChange={(value) => handleChange({ region: value })}
-          />
+          <>  
+            <FieldTypeInput
+              data={sharedCredentials}
+              label="Region"
+              className="mb-4 text-sm"
+              maskingType="region"
+              value={duckdb?.region}
+              placeholder={
+                duckdb?.aws_authentication_mode ===
+                DuckdbParametersSpecAwsAuthenticationModeEnum.default_credentials
+                  ? 'Use the value from the ".credentials/AWS_default_config" DQOps shared credential file'
+                  : ''
+              }
+              onChange={(value) => handleChange({ region: value })}
+            />
+           <FieldTypeInput
+              data={sharedCredentials}
+              label="Profile"
+              className="mb-4 text-sm"
+              value={duckdb?.profile}
+              onChange={(value) => handleChange({ profile: value })}
+            />
+            <FieldTypeInput
+              data={sharedCredentials}
+              label="Authentication chain"
+              className="mb-4 text-sm"
+              value={duckdb?.aws_default_authentication_chain}
+              onChange={(value) => handleChange({ aws_default_authentication_chain: value })}
+            />
+          </>
         )}
       </>
     );

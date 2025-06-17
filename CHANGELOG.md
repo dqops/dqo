@@ -1,4 +1,3 @@
-# 1.11.4
+# 1.11.5
 
-* Support Python 13.5
-* Upgrade to DuckDB 1.3.0 to support caching Parquet files
+* Support the default authentication chain to access AWS S3

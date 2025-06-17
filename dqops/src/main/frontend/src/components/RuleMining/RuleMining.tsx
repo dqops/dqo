@@ -30,15 +30,16 @@ const tabs = [
 ];
 
 const getRuleMiningConfigurationLocalStorage =
-  (): CheckMiningParametersModel => {
-    const configuration = localStorage.getItem('ruleMiningConfiguration');
-    return configuration ? JSON.parse(configuration) : null;
+  (checkType: CheckTypes): CheckMiningParametersModel => {
+    const configuration = localStorage.getItem('ruleMiningConfiguration-' + checkType);
+    return configuration ? JSON.parse(configuration) : null!;
   };
 const setRuleMiningConfigurationLocalStorage = (
+  checkType: CheckTypes,
   configuration: CheckMiningParametersModel
 ) => {
   localStorage.setItem(
-    'ruleMiningConfiguration',
+    'ruleMiningConfiguration-' + checkType,
     JSON.stringify(configuration)
   );
 };
@@ -61,43 +62,45 @@ export default function RuleMining({
     table: string;
   } = useDecodedParams();
 
+  const ruleEnabledInProfilingOnly : boolean = checkTypes == CheckTypes.PROFILING ? true : false;
+
   const defaultParameters: CheckMiningParametersModel = {
     severity_level: 'error',
     fail_checks_at_percent_error_rows: 2.0,
     copy_failed_profiling_checks: true,
     copy_disabled_profiling_checks: false,
     copy_profiling_checks: true,
-    reconfigure_policy_enabled_checks: true,
-    propose_minimum_row_count: true,
-    propose_column_count: true,
-    propose_timeliness_checks: true,
-    propose_nulls_checks: true,
-    propose_not_nulls_checks: true,
-    propose_column_exists: true,
-    propose_text_values_data_type: true,
-    propose_uniqueness_checks: true,
-    propose_numeric_ranges: true,
+    reconfigure_policy_enabled_checks: ruleEnabledInProfilingOnly,
+    propose_minimum_row_count: ruleEnabledInProfilingOnly,
+    propose_column_count: ruleEnabledInProfilingOnly,
+    propose_timeliness_checks: ruleEnabledInProfilingOnly,
+    propose_nulls_checks: ruleEnabledInProfilingOnly,
+    propose_not_nulls_checks: ruleEnabledInProfilingOnly,
+    propose_column_exists: ruleEnabledInProfilingOnly,
+    propose_text_values_data_type: ruleEnabledInProfilingOnly,
+    propose_uniqueness_checks: ruleEnabledInProfilingOnly,
+    propose_numeric_ranges: ruleEnabledInProfilingOnly,
     propose_percentile_ranges: false, // intentional false
-    propose_text_length_ranges: true,
-    propose_word_count_ranges: true,
-    propose_date_checks: true,
-    propose_bool_percent_checks: true,
-    propose_values_in_set_checks: true,
+    propose_text_length_ranges: ruleEnabledInProfilingOnly,
+    propose_word_count_ranges: ruleEnabledInProfilingOnly,
+    propose_date_checks: ruleEnabledInProfilingOnly,
+    propose_bool_percent_checks: ruleEnabledInProfilingOnly,
+    propose_values_in_set_checks: ruleEnabledInProfilingOnly,
     propose_top_values_checks: false, // intentional false
-    propose_text_conversion_checks: true,
-    propose_standard_pattern_checks: true,
-    detect_regular_expressions: true,
-    propose_whitespace_checks: true,
-    apply_pii_checks: true,
-    values_in_set_treat_rare_values_as_invalid: true,
-    propose_custom_checks: true
+    propose_text_conversion_checks: ruleEnabledInProfilingOnly,
+    propose_standard_pattern_checks: ruleEnabledInProfilingOnly,
+    detect_regular_expressions: ruleEnabledInProfilingOnly,
+    propose_whitespace_checks: ruleEnabledInProfilingOnly,
+    apply_pii_checks: ruleEnabledInProfilingOnly,
+    values_in_set_treat_rare_values_as_invalid: ruleEnabledInProfilingOnly,
+    propose_custom_checks: ruleEnabledInProfilingOnly
   };
   const { runPartitionedChecks } = useTree();
 
   const [configuration, setConfiguration] =
     useState<CheckMiningParametersModel>({
       ...defaultParameters,
-      ...(getRuleMiningConfigurationLocalStorage() ?? {})
+      ...(getRuleMiningConfigurationLocalStorage(checkTypes) ?? {})
     });
   const [runChecksDialogOpened, setRunChecksDialogOpened] = useState(false);
   const [checksUI, setChecksUI] = useState<CheckMiningProposalModel>({});
@@ -113,7 +116,7 @@ export default function RuleMining({
   const onChangeConfiguration = (conf: any) => {
     const newConfiguration = { ...configuration, ...conf };
     setConfiguration(newConfiguration);
-    setRuleMiningConfigurationLocalStorage(newConfiguration);
+    setRuleMiningConfigurationLocalStorage(checkTypes, newConfiguration);
     setIsUpdatedFilters(true);
   };
 
@@ -338,6 +341,7 @@ export default function RuleMining({
       )}
       <div>
         <RuleMiningFilters
+          checkTypes={checkTypes}
           configuration={configuration}
           onChangeConfiguration={onChangeConfiguration}
           proposeChecks={proposeChecks}

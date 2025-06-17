@@ -5,6 +5,7 @@ import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.metadata.storage.localfiles.credentials.DefaultCloudCredentialFileContent;
 import com.dqops.metadata.storage.localfiles.credentials.DefaultCloudCredentialFileNames;
 import com.dqops.utils.exceptions.DqoRuntimeException;
+import org.apache.parquet.Strings;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.profiles.Profile;
 import software.amazon.awssdk.profiles.ProfileFile;
@@ -25,12 +26,13 @@ public class AwsDefaultCredentialProfileProvider {
     /**
      * Provides the AWS profile with credentials.
      * @param secretValueLookupContext Secret value lookup context used to access shared credentials.
+     * @param profileName AWS profile name (optional).
      * @return AWS default profile created from the credential files available in DQOps shared credentials.
      */
-    public static Optional<Profile> provideProfile(SecretValueLookupContext secretValueLookupContext){
+    public static Optional<Profile> provideProfile(SecretValueLookupContext secretValueLookupContext, String profileName){
 
         String sectionName = "profiles";
-        String sectionTitle = "default";
+        String sectionTitle = Strings.isNullOrEmpty(profileName) ? "default" : profileName;
 
         FileContent fileContent = CredentialsFileProvider.getCredentialFileContent(
                 DefaultCloudCredentialFileNames.AWS_DEFAULT_CREDENTIALS_NAME,
@@ -40,7 +42,8 @@ public class AwsDefaultCredentialProfileProvider {
         if (fileContent != null) {
             String keyContent = fileContent.getTextContent();
 
-            if (Objects.equals(keyContent.replace("\r\n", "\n"), DefaultCloudCredentialFileContent.AWS_DEFAULT_CREDENTIALS_INITIAL_CONTENT)) {
+            if (Objects.equals(keyContent.replace("\r\n", "\n"), DefaultCloudCredentialFileContent.AWS_DEFAULT_CREDENTIALS_INITIAL_CONTENT) &&
+               Objects.equals(sectionTitle, "default")) {
                 throw new DqoRuntimeException("The .credentials/" + DefaultCloudCredentialFileNames.AWS_DEFAULT_CREDENTIALS_NAME +
                         " file contains default (fake) credentials. Please update the file by setting valid AWS default credentials.");
             }

@@ -38149,6 +38149,11 @@ definitions:
         type: "string"
         description: "DuckDB database name for in-memory read mode. The value can\
           \ be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
+      enable_optimizer:
+        type: "boolean"
+        description: "Enables a query optimizer that uses statistics. By default,\
+          \ the optimizer is disabled to enable analysis of Parquet files with invalid\
+          \ or outdated statistics."
       properties:
         type: "object"
         description: "A dictionary of custom JDBC parameters that are added to the\
@@ -38194,6 +38199,11 @@ definitions:
         enum:
         - "iam"
         - "default_credentials"
+      aws_default_authentication_chain:
+        type: "string"
+        description: "The default authentication chain for AWS. For example: 'env;config;sts;sso;instance;process'..\
+          \ Supports also a ${DUCKDB_AWS_AUTHENTICATION_MODE} configuration with a\
+          \ custom environment variable."
       azure_authentication_mode:
         type: "string"
         description: "The authentication mode for Azure. Supports also a ${DUCKDB_AZURE_AUTHENTICATION_MODE}\
@@ -38215,6 +38225,10 @@ definitions:
         type: "string"
         description: "The region for the storage credentials. The value can be in\
           \ the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
+      profile:
+        type: "string"
+        description: "The AWS profile used for the default authentication. The value\
+          \ can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
       tenant_id:
         type: "string"
         description: "Azure Tenant ID used by DuckDB Secret Manager. The value can\

@@ -112,6 +112,7 @@ export default function TablePreview({ statistics }: tablePreviewProps) {
       sampleArray: x.statistics
         ?.filter((item) => item.collector === 'column_samples')
         .map((c) => c.result)
+        .reverse()
     };
     return newData;
   });
