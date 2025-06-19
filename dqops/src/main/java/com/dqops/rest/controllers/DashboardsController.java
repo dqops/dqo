@@ -113,7 +113,7 @@ public class DashboardsController {
 
             return ResponseEntity.ok()
                     .cacheControl(CacheControl
-                            .maxAge(Duration.ofDays(1))
+                            .maxAge(Duration.ofMinutes(10))
                             .cachePublic()
                             .mustRevalidate())
                     .lastModified(combinedDefaultAndUserDashboards.getFileLastModified())
