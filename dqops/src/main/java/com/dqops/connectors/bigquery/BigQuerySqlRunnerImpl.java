@@ -111,6 +111,8 @@ public class BigQuerySqlRunnerImpl implements BigQuerySqlRunner {
                             fieldValue = repeatedValues.get(0); // we take the first value of repeated columns
                         }
 
+                        Object fieldObjectValue = fieldValue.getValue();
+
                         switch (standardFieldType) {
                             case BOOL:
                                 row.setBoolean(colIndex, fieldValue.getBooleanValue());
@@ -138,7 +140,7 @@ public class BigQuerySqlRunnerImpl implements BigQuerySqlRunner {
                                 row.setText(colIndex, fieldValue.getRepeatedValue().toString());
                                 break;
                             case GEOGRAPHY:
-                                row.setText(colIndex, fieldValue.getValue().toString());
+                                row.setText(colIndex, fieldObjectValue.toString());
                                 break;
                             case TIMESTAMP:
                                 row.setInstant(colIndex, Instant.ofEpochMilli(fieldValue.getTimestampValue() / 1000));
@@ -147,10 +149,18 @@ public class BigQuerySqlRunnerImpl implements BigQuerySqlRunner {
                                 row.setDate(colIndex, LocalDate.parse(fieldValue.getStringValue(), DateTimeFormatter.ISO_DATE));
                                 break;
                             case TIME:
-                                row.setTime(colIndex, LocalTime.ofInstant(Instant.ofEpochMilli(fieldValue.getTimestampValue() / 1000), ZoneOffset.UTC));
+                                if (fieldObjectValue instanceof String) {
+                                    row.setTime(colIndex, LocalTime.parse((String)fieldObjectValue));
+                                } else {
+                                    row.setTime(colIndex, LocalTime.ofInstant(Instant.ofEpochMilli(fieldValue.getTimestampValue() / 1000), ZoneOffset.UTC));
+                                }
                                 break;
                             case DATETIME:
-                                row.setDateTime(colIndex, LocalDateTime.ofInstant(Instant.ofEpochMilli(fieldValue.getTimestampValue() / 1000), ZoneOffset.UTC));
+                                if (fieldObjectValue instanceof String) {
+                                    row.setDateTime(colIndex, LocalDateTime.parse((String)fieldObjectValue));
+                                } else {
+                                    row.setDateTime(colIndex, LocalDateTime.ofInstant(Instant.ofEpochMilli(fieldValue.getTimestampValue() / 1000), ZoneOffset.UTC));
+                                }
                                 break;
                             default:
                                 throw new RuntimeException("Unknown column type: " + standardFieldType.name());

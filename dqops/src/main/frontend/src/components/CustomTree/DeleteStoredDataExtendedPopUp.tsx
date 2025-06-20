@@ -416,6 +416,19 @@ const DeleteStoredDataExtendedPopUp = ({
                 })
               }
             />
+            <Input
+                  label="Table comparison name"
+                  value={params.tableComparisonName}
+                  onChange={(e) =>
+                    onChangeParams({ tableComparisonName: e.target.value })
+                  }
+                  className={
+                    params.deleteCheckResults ? 'text-black' : 'text-gray-150'
+                  }
+                  labelClassName={
+                    params.deleteCheckResults ? 'text-black' : 'text-gray-150'
+                  }
+                />
           </div>
           <div className="flex flex-col space-y-5 w-1/4">
             <Checkbox
