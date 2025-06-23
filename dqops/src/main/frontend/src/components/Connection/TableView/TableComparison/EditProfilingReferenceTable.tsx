@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import {
   CheckContainerModel,
   CheckSearchFiltersCheckTypeEnum,
+  ColumnComparisonModel,
   CompareThresholdsModel,
   DqoJobHistoryEntryModelStatusEnum,
   TableComparisonModel,
@@ -29,7 +30,8 @@ import SeverityInputBlock from './SeverityInputBlock';
 import {
   EditProfilingReferenceTableProps,
   TSeverityValues,
-  checkNames
+  checkNames,
+  itemsToRender
 } from './TableComparisonConstans';
 import TableComparisonOverwiewBody from './TableComparisonOverwiewBody';
 import { onUpdate, validate404Status } from './TableComparisonUtils';
@@ -557,7 +559,6 @@ export const EditProfilingReferenceTable = ({
       ...memoizedReference
     }));
   }, [memoizedReference]);
-
   if (loading === true) {
     return (
       <div className="flex justify-center h-100">
@@ -565,7 +566,75 @@ export const EditProfilingReferenceTable = ({
       </div>
     );
   }
-  console.log(checksUI);
+  const selectAllCheckBoxes = (columnIndex: number) => {
+    if (!reference?.columns || columnIndex >= itemsToRender.length) {
+      return;
+    }
+
+    const itemData = itemsToRender[columnIndex];
+    const propName = itemData.prop as keyof ColumnComparisonModel;
+
+    // Check if all enabled checkboxes in this column are already selected
+    const enabledColumns = reference.columns.filter(
+      (column) =>
+        column.reference_column_name !== undefined &&
+        column.reference_column_name.length > 0 &&
+        columnOptions.find((x) => x.label === column.reference_column_name)
+    );
+
+    const allSelected =
+      enabledColumns.length > 0 &&
+      enabledColumns.every((column) => !!column[propName]);
+
+    // Toggle all checkboxes in the column
+    const newColumns = reference.columns.map((column) => {
+      // Only change enabled columns (those with valid reference_column_name)
+      const isEnabled =
+        column.reference_column_name !== undefined &&
+        column.reference_column_name.length > 0 &&
+        columnOptions.find((x) => x.label === column.reference_column_name);
+
+      if (!isEnabled) {
+        return column;
+      }
+
+      return {
+        ...column,
+        [propName]: allSelected
+          ? undefined
+          : reference.default_compare_thresholds
+      };
+    });
+
+    onChange({
+      columns: newColumns
+    });
+    setIsUpdated(true);
+  };
+
+  const getSelectAllButtonText = (columnIndex: number) => {
+    if (!reference?.columns || columnIndex >= itemsToRender.length) {
+      return 'Select all';
+    }
+
+    const itemData = itemsToRender[columnIndex];
+    const propName = itemData.prop as keyof ColumnComparisonModel;
+
+    const enabledColumns = reference.columns.filter(
+      (column) =>
+        column.reference_column_name !== undefined &&
+        column.reference_column_name.length > 0 &&
+        columnOptions.find((x) => x.label === column.reference_column_name)
+    );
+
+    const allSelected =
+      enabledColumns.length > 0 &&
+      enabledColumns.every((column) => !!column[propName]);
+
+    return allSelected ? 'Unselect all' : 'Select all';
+  };
+
+  console.log(reference);
 
   return (
     <div className="text-sm">
@@ -690,6 +759,12 @@ export const EditProfilingReferenceTable = ({
                 {checkNames.map((x, index) => (
                   <th className="text-center px-4 py-1.5 pr-1 w-25" key={index}>
                     {x}
+                    <div
+                      onClick={() => selectAllCheckBoxes(index)}
+                      className=" text-xs flex items-center justify-center cursor-pointer underline text-green-500"
+                    >
+                      {getSelectAllButtonText(index)}
+                    </div>
                   </th>
                 ))}
               </tr>
