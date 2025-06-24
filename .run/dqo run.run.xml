@@ -5,7 +5,7 @@
       <option name="region" />
       <option name="useCurrentConnection" value="false" />
     </extension>
-    <option name="JAR_PATH" value="$PROJECT_DIR$/dqops/target/dqo-dqops-1.11.4.jar" />
+    <option name="JAR_PATH" value="$PROJECT_DIR$/dqops/target/dqo-dqops-1.11.7.jar" />
     <option name="VM_PARAMETERS" value="-XX:MaxRAMPercentage=60.0 --add-opens java.base/java.nio=ALL-UNNAMED --add-opens java.base/java.util.concurrent=ALL-UNNAMED" />
     <option name="PROGRAM_PARAMETERS" value="--server.port=8888 --dqo.python.debug-mode=silent" />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />

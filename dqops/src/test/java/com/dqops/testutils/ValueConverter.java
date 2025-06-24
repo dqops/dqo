@@ -16,6 +16,8 @@
 
 package com.dqops.testutils;
 
+import org.apache.parquet.Strings;
+
 /**
  * Helper method for converting any values to an expected data type.
  */
@@ -51,6 +53,9 @@ public class ValueConverter {
         }
 
         if (obj instanceof String) {
+            if (Strings.isNullOrEmpty((String)obj)) {
+                return null;
+            }
             return Integer.valueOf((String)obj);
         }
 
@@ -88,6 +93,10 @@ public class ValueConverter {
         }
 
         if (obj instanceof String) {
+            if (Strings.isNullOrEmpty((String)obj)) {
+                return null;
+            }
+
             return Long.valueOf((String)obj);
         }
 
@@ -125,6 +134,9 @@ public class ValueConverter {
         }
 
         if (obj instanceof String) {
+            if (Strings.isNullOrEmpty((String)obj)) {
+                return null;
+            }
             return Double.valueOf((String)obj);
         }
 

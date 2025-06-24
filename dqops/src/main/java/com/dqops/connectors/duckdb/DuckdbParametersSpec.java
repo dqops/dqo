@@ -83,6 +83,11 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("DuckDB database name for in-memory read mode. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     private String database;
 
+    @CommandLine.Option(names = {"--duckdb-enable-optimizer"}, description = "Enables a query optimizer that uses statistics. By default, the optimizer is disabled to enable analysis of Parquet files with invalid or outdated statistics.")
+    @JsonPropertyDescription("Enables a query optimizer that uses statistics. By default, the optimizer is disabled to enable analysis of Parquet files with invalid or outdated statistics.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private Boolean enableOptimizer;
+
     @CommandLine.Option(names = {"-Duck"}, description = "DuckDB additional properties that are added to the JDBC connection string")
     @JsonPropertyDescription("A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -134,6 +139,10 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("The authentication mode for AWS. Supports also a ${DUCKDB_AWS_AUTHENTICATION_MODE} configuration with a custom environment variable.")
     private AwsAuthenticationMode awsAuthenticationMode;
 
+    @CommandLine.Option(names = {"--duckdb-aws-default-authentication-chain"}, description = "The default authentication chain for AWS. For example: 'env;config;sts;sso;instance;process'. Supports also a ${DUCKDB_AWS_AUTHENTICATION_MODE} configuration with a custom environment variable.")
+    @JsonPropertyDescription("The default authentication chain for AWS. For example: 'env;config;sts;sso;instance;process'.. Supports also a ${DUCKDB_AWS_AUTHENTICATION_MODE} configuration with a custom environment variable.")
+    private String awsDefaultAuthenticationChain;
+
     @CommandLine.Option(names = {"--duckdb-azure-authentication-mode"}, description = "The authentication mode for Azure. Supports also a ${DUCKDB_AZURE_AUTHENTICATION_MODE} configuration with a custom environment variable.")
     @JsonPropertyDescription("The authentication mode for Azure. Supports also a ${DUCKDB_AZURE_AUTHENTICATION_MODE} configuration with a custom environment variable.")
     private AzureAuthenticationMode azureAuthenticationMode;
@@ -149,6 +158,10 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     @CommandLine.Option(names = {"--duckdb-region"}, description = "The region for the storage credentials. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     @JsonPropertyDescription("The region for the storage credentials. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     private String region;
+
+    @CommandLine.Option(names = {"--duckdb-profile"}, description = "The AWS profile used for the default authentication. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @JsonPropertyDescription("The AWS profile used for the default authentication. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    private String profile;
 
     @CommandLine.Option(names = {"--duckdb-azure-tenant-id"}, description = "Azure Tenant ID used by DuckDB Secret Manager. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     @JsonPropertyDescription("Azure Tenant ID used by DuckDB Secret Manager. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
@@ -215,6 +228,23 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     public void setDatabase(String database) {
         setDirtyIf(!Objects.equals(this.database, database));
         this.database = database;
+    }
+
+    /**
+     * Returns the flag to enable optimizer. By default, the optimizer is disabled.
+     * @return True when the optimizer is disabled. False or null when disabled.
+     */
+    public Boolean getEnableOptimizer() {
+        return enableOptimizer;
+    }
+
+    /**
+     * Sets the flag to enable the optimizer.
+     * @param enableOptimizer New flag value.
+     */
+    public void setEnableOptimizer(Boolean enableOptimizer) {
+        setDirtyIf(!Objects.equals(this.enableOptimizer, enableOptimizer));
+        this.enableOptimizer = enableOptimizer;
     }
 
     /**
@@ -412,6 +442,23 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     }
 
     /**
+     * Returns the AWS default authentication provider chain.
+     * @return Authentication provider chain for AWS.
+     */
+    public String getAwsDefaultAuthenticationChain() {
+        return awsDefaultAuthenticationChain;
+    }
+
+    /**
+     * Sets the default AWS authentication chain.
+     * @param awsDefaultAuthenticationChain Default authentication chain.
+     */
+    public void setAwsDefaultAuthenticationChain(String awsDefaultAuthenticationChain) {
+        setDirtyIf(!Objects.equals(this.awsDefaultAuthenticationChain, awsDefaultAuthenticationChain));
+        this.awsDefaultAuthenticationChain = awsDefaultAuthenticationChain;
+    }
+
+    /**
      * Returns the Azure's authentication mode.
      * @return Azure's authentication mode.
      */
@@ -477,6 +524,22 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     public void setRegion(String region) {
         setDirtyIf(!Objects.equals(this.region, region));
         this.region = region;
+    }
+
+    /**
+     * Returns the profile used for the default AWS authentication.
+     * @return AWS profile.
+     */
+    public String getProfile() {
+        return profile;
+    }
+
+    /**
+     * Sets the AWS default profile name.
+     * @param profile AWS profile name.
+     */
+    public void setProfile(String profile) {
+        this.profile = profile;
     }
 
     /**
@@ -731,14 +794,34 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
         if(cloned.avro != null){
             cloned.avro = cloned.avro.expandAndTrim(secretValueProvider, lookupContext);
         }
-        cloned.user = secretValueProvider.expandValue(cloned.user, lookupContext);
-        cloned.password = secretValueProvider.expandValue(cloned.password, lookupContext);
-        cloned.region = secretValueProvider.expandValue(cloned.region, lookupContext);
+        if (cloned.user != null) {
+            cloned.user = secretValueProvider.expandValue(cloned.user, lookupContext);
+        }
+        if (cloned.password != null) {
+            cloned.password = secretValueProvider.expandValue(cloned.password, lookupContext);
+        }
+        if (cloned.region != null) {
+            cloned.region = secretValueProvider.expandValue(cloned.region, lookupContext);
+        }
+        if (cloned.profile != null) {
+            cloned.profile = secretValueProvider.expandValue(cloned.profile, lookupContext);
+        }
 
-        cloned.tenantId = secretValueProvider.expandValue(cloned.tenantId, lookupContext);
-        cloned.clientId = secretValueProvider.expandValue(cloned.clientId, lookupContext);
-        cloned.clientSecret = secretValueProvider.expandValue(cloned.clientSecret, lookupContext);
-        cloned.accountName = secretValueProvider.expandValue(cloned.accountName, lookupContext);
+        if (cloned.tenantId != null) {
+            cloned.tenantId = secretValueProvider.expandValue(cloned.tenantId, lookupContext);
+        }
+        if (cloned.clientId != null) {
+            cloned.clientId = secretValueProvider.expandValue(cloned.clientId, lookupContext);
+        }
+        if (cloned.clientSecret != null) {
+            cloned.clientSecret = secretValueProvider.expandValue(cloned.clientSecret, lookupContext);
+        }
+        if (cloned.accountName != null) {
+            cloned.accountName = secretValueProvider.expandValue(cloned.accountName, lookupContext);
+        }
+        if (cloned.awsDefaultAuthenticationChain != null) {
+            cloned.awsDefaultAuthenticationChain = secretValueProvider.expandValue(cloned.awsDefaultAuthenticationChain, lookupContext);
+        }
 
         return cloned;
     }
@@ -749,17 +832,21 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
      * @param secretValueLookupContext Secret value lookup context used to find shared credentials that could be used in the connection names.
      */
     public void fillSpecWithDefaultAwsCredentials(SecretValueLookupContext secretValueLookupContext){
-        Optional<Profile> credentialProfile = AwsDefaultCredentialProfileProvider.provideProfile(secretValueLookupContext);
-        if(credentialProfile.isPresent()){
+        Optional<Profile> credentialProfile = AwsDefaultCredentialProfileProvider.provideProfile(secretValueLookupContext, this.getProfile());
+        if (credentialProfile.isPresent()) {
             Optional<String> accessKeyId = credentialProfile.get().property(AwsCredentialProfileSettingNames.AWS_ACCESS_KEY_ID);
-            if(accessKeyId.isPresent()){
+            if (accessKeyId.isPresent()) {
                 String awsAccessKeyId = accessKeyId.get();
-                this.setUser(awsAccessKeyId);
+                if (!Objects.equals(accessKeyId, "PLEASE_REPLACE_WITH_YOUR_AWS_ACCESS_KEY_ID")) {
+                    this.setUser(awsAccessKeyId);
+                }
             }
             Optional<String> secretAccessKey = credentialProfile.get().property(AwsCredentialProfileSettingNames.AWS_SECRET_ACCESS_KEY);
-            if(secretAccessKey.isPresent()){
+            if (secretAccessKey.isPresent()) {
                 String awsSecretAccessKey = secretAccessKey.get();
-                this.setPassword(awsSecretAccessKey);
+                if (!Objects.equals(awsSecretAccessKey, "PLEASE_REPLACE_WITH_YOUR_AWS_SECRET_ACCESS_KEY")) {
+                    this.setPassword(awsSecretAccessKey);
+                }
             }
         }
         fillSpecWithDefaultAwsConfig(secretValueLookupContext);
@@ -792,7 +879,7 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
      * @param secretValueLookupContext Secret value lookup context used to find shared credentials that could be used in the connection names.
      */
     public void fillSpecWithDefaultAwsConfig(SecretValueLookupContext secretValueLookupContext){
-        Optional<Profile> configProfile = AwsDefaultConfigProfileProvider.provideProfile(secretValueLookupContext);
+        Optional<Profile> configProfile = AwsDefaultConfigProfileProvider.provideProfile(secretValueLookupContext, this.getProfile());
         if(configProfile.isPresent()){
             Optional<String> region = configProfile.get().property(AwsConfigProfileSettingNames.REGION);
             if(region.isPresent()){

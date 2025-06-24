@@ -69,7 +69,7 @@ public class AwsDefaultConfigProfileProviderTest extends BaseTest {
 
         Files.writeString(defaultAwsCredentialsPath, credentialFileContent);
 
-        Optional<Profile> profile = this.sut.provideProfile(secretValueLookupContext);
+        Optional<Profile> profile = this.sut.provideProfile(secretValueLookupContext, null);
 
         Assertions.assertTrue(profile.isPresent());
 
@@ -85,7 +85,7 @@ public class AwsDefaultConfigProfileProviderTest extends BaseTest {
         Files.writeString(defaultAwsCredentialsPath, DefaultCloudCredentialFileContent.AWS_DEFAULT_CONFIG_INITIAL_CONTENT);
 
         Assertions.assertDoesNotThrow(() -> {
-                    Optional<Profile> profile = this.sut.provideProfile(secretValueLookupContext);
+                    Optional<Profile> profile = this.sut.provideProfile(secretValueLookupContext, null);
         });
     }
 }

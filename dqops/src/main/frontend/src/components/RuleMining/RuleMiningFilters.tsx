@@ -3,6 +3,7 @@ import {
   CheckMiningParametersModel,
   CheckMiningParametersModelSeverityLevelEnum
 } from '../../api';
+import { CheckTypes } from '../../shared/routes';
 import Button from '../Button';
 import Checkbox from '../Checkbox';
 import SectionWrapper from '../Dashboard/SectionWrapper';
@@ -11,6 +12,7 @@ import Select from '../Select';
 import SvgIcon from '../SvgIcon';
 
 export default function RuleMiningFilters({
+  checkTypes,
   configuration,
   onChangeConfiguration,
   proposeChecks,
@@ -19,6 +21,7 @@ export default function RuleMiningFilters({
   isUpdatedFilters,
   isApplyDisabled
 }: {
+  checkTypes: CheckTypes,
   configuration: CheckMiningParametersModel;
   onChangeConfiguration: (
     configuration: Partial<CheckMiningParametersModel>
@@ -98,33 +101,38 @@ export default function RuleMiningFilters({
         >
           <div className="flex flex-wrap gap-x-5 mb-4">
             <div className="flex items-center flex-wrap border-b border-b-gray-100 w-full gap-x-5 pb-2 mb-2 mt-4">
-              <Checkbox
-                className="p-2 !w-62"
-                label="Copy failed profiling checks"
-                tooltipText="Copy the configuration of profiling checks that failed during the last execution. The preferred approach is to review the profiling checks, disable false-positive checks, and enable this configuration to copy the reviewed checks to the monitoring and partitioned checks for continuous monitoring."
-                checked={configuration.copy_failed_profiling_checks}
-                onChange={(e) =>
-                  onChangeConfiguration({ copy_failed_profiling_checks: e })
-                }
-              />
-              <Checkbox
-                className="p-2 !w-62"
-                label="Copy disabled profiling checks"
-                tooltipText="Copy the configuration of disabled profiling checks. This option is effective for monitoring or partitioned checks only. By default it is disabled, leaving failed or incorrectly configured profiling checks only in the profiling section to avoid decreasing the data quality KPI."
-                checked={configuration.copy_disabled_profiling_checks}
-                onChange={(e) =>
-                  onChangeConfiguration({ copy_disabled_profiling_checks: e })
-                }
-              />
-              <Checkbox
-                className="p-2 !w-62"
-                label="Copy profiling checks"
-                tooltipText="Copy the configuration of enabled profiling checks to the monitoring or partitioned checks. This option is effective for monitoring or partitioned checks only. By default it is enabled, allowing to migrate configured profiling checks to the monitoring section to enable Data Observability of these checks."
-                checked={configuration.copy_profiling_checks}
-                onChange={(e) =>
-                  onChangeConfiguration({ copy_profiling_checks: e })
-                }
-              />
+              {checkTypes != CheckTypes.PROFILING && (
+                <>
+                  <Checkbox
+                    className="p-2 !w-62"
+                    label="Copy failed profiling checks"
+                    tooltipText="Copy the configuration of profiling checks that failed during the last execution. The preferred approach is to review the profiling checks, disable false-positive checks, and enable this configuration to copy the reviewed checks to the monitoring and partitioned checks for continuous monitoring."
+                    checked={configuration.copy_failed_profiling_checks}
+                    onChange={(e) =>
+                      onChangeConfiguration({ copy_failed_profiling_checks: e })
+                    }
+                  />
+                  <Checkbox
+                    className="p-2 !w-62"
+                    label="Copy disabled profiling checks"
+                    tooltipText="Copy the configuration of disabled profiling checks. This option is effective for monitoring or partitioned checks only. By default it is disabled, leaving failed or incorrectly configured profiling checks only in the profiling section to avoid decreasing the data quality KPI."
+                    checked={configuration.copy_disabled_profiling_checks}
+                    onChange={(e) =>
+                      onChangeConfiguration({ copy_disabled_profiling_checks: e })
+                    }
+                  />
+                  <Checkbox
+                    className="p-2 !w-62"
+                    label="Copy profiling checks"
+                    tooltipText="Copy the configuration of enabled profiling checks to the monitoring or partitioned checks. This option is effective for monitoring or partitioned checks only. By default it is enabled, allowing to migrate configured profiling checks to the monitoring section to enable Data Observability of these checks."
+                    checked={configuration.copy_profiling_checks}
+                    onChange={(e) =>
+                      onChangeConfiguration({ copy_profiling_checks: e })
+                    }
+                  />
+                  </>
+                )
+              }
               <Checkbox
                 className="p-2 !w-62"
                 label="Tune quality policy checks"
