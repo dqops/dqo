@@ -64,6 +64,8 @@ public class CopyVersionToFilesPostProcessor {
         updateVersionInWindowsDqoCmd(repositoryRootPath.resolve("dqo.cmd"), version);
         updateVersionInLinuxDqoScript(repositoryRootPath.resolve("dqo"), version);
 
+        updateVersionInApplicationYml(repositoryRootPath.resolve("dqops/src/main/resources/application.yml"), version);
+
         updateVersionInBannerTxt(repositoryRootPath.resolve("dqops/src/main/resources/banner.txt"), version);
         updateVersionInIntelliJRunConfig(repositoryRootPath.resolve(".run/dqo run.run.xml"), version);
     }
@@ -126,6 +128,28 @@ public class CopyVersionToFilesPostProcessor {
             String line = lines.get(i);
             if (line.startsWith("set DQO_VERSION=")) {
                 String correctLine = "set DQO_VERSION=" + version;
+                if (!Objects.equals(line, correctLine)) {
+                    lines.set(i, correctLine);
+                    Files.write(pathToDqoScript, lines, StandardCharsets.UTF_8);
+                }
+
+                return;
+            }
+        }
+    }
+
+    /**
+     * Replace the version number in the application.yml file
+     * @param pathToDqoScript Path to a application.yml
+     * @param version New version number.
+     * @throws Exception
+     */
+    public static void updateVersionInApplicationYml(Path pathToDqoScript, String version) throws Exception {
+        List<String> lines = Files.readAllLines(pathToDqoScript, StandardCharsets.UTF_8);
+        for (int i = 0; i < lines.size(); i++) {
+            String line = lines.get(i);
+            if (line.contains("# Application version, replaced by a version upgrade target, do not touch")) {
+                String correctLine = "  version: \"" + version + "\" # Application version, replaced by a version upgrade target, do not touch";
                 if (!Objects.equals(line, correctLine)) {
                     lines.set(i, correctLine);
                     Files.write(pathToDqoScript, lines, StandardCharsets.UTF_8);

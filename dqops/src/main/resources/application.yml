@@ -68,6 +68,7 @@ dfs:
 # when adding new parameters, remember to add them to DqoRootCliCommand, so they are listed by running "dqo --help" and they are documented
 
 dqo:
+  version: "1.11.7" # Application version, replaced by a version upgrade target, do not touch
   python:
     interpreter-name: python3,python3.exe,python,python.exe
     evaluate-templates-module: lib/evaluate_templates.py
@@ -152,7 +153,7 @@ dqo:
     limits:
       sensor-readout-limit: 1000
       sensor-readout-limit-partitioned: 100000
-      fail-on-sensor-readout-limit-exceeded: true
+      fail-on-sensor-readout-limit-exceeded: false
       max-merged-queries: 100
   statistics:
     truncated-strings-length: 50

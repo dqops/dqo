@@ -29,6 +29,7 @@ import java.util.TimeZone;
 @EqualsAndHashCode(callSuper = false)
 public class DqoConfigurationProperties implements Cloneable {
     private String home;
+    private String version = "";
     private String yamlSchemaServer = "https://cloud.dqops.com/dqo-yaml-schema/";
     private String defaultTimeZone = TimeZone.getDefault().getID();
     private String javaOpts;
@@ -49,6 +50,22 @@ public class DqoConfigurationProperties implements Cloneable {
      */
     public void setHome(String home) {
         this.home = home;
+    }
+
+    /**
+     * Returns the application version.
+     * @return Application version number.
+     */
+    public String getVersion() {
+        return version;
+    }
+
+    /**
+     * Sets the application version number.
+     * @param version Version number.
+     */
+    public void setVersion(String version) {
+        this.version = version;
     }
 
     /**
