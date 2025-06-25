@@ -647,7 +647,11 @@ export const EditProfilingReferenceTable = ({
               table,
               checkTypes,
               timePartitioned,
-              reference,
+              {
+                ...reference,
+                compared_table_filter: parameters.compared_table_filter,
+                reference_table_filter: parameters.reference_table_filter
+              },
               handleChange,
               checksUI
             )
