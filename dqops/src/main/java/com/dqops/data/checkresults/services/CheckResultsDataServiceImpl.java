@@ -1070,6 +1070,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
         StringColumn columnNameColumn = sourceTable.stringColumn(CheckResultsColumnNames.COLUMN_NAME_COLUMN_NAME);
         StringColumn checkTypeColumn = sourceTable.stringColumn(CheckResultsColumnNames.CHECK_TYPE_COLUMN_NAME);
         StringColumn timeGradientColumn = sourceTable.stringColumn(CheckResultsColumnNames.TIME_GRADIENT_COLUMN_NAME);
+        StringColumn tableComparisonNameColumn = sourceTable.stringColumn(CheckResultsColumnNames.TABLE_COMPARISON_NAME_COLUMN_NAME);
 
         int rowCount = sourceTable.rowCount();
 
@@ -1091,6 +1092,11 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
             incrementTotalIssueCount(tableStatusModel, severity);
 
             String checkName = checkNameColumn.get(i);
+            String comparisonName = tableComparisonNameColumn.get(i);
+            if (!Strings.isNullOrEmpty(comparisonName)) {
+                checkName = comparisonName + "/" + checkName;
+            }
+
             String columnName = columnNameColumn.get(i);
             if (columnName != null && columnName.isEmpty()) {
                 columnName = null;

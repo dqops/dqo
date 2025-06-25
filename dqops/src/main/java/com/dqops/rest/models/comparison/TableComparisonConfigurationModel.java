@@ -30,6 +30,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
+import org.apache.parquet.Strings;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -184,6 +185,12 @@ public class TableComparisonConfigurationModel {
         TableComparisonGroupingColumnsPairsListSpec groupingColumnsSpecList = comparisonSpec.getGroupingColumns();
         groupingColumnsSpecList.clear();
         for (TableComparisonGroupingColumnPairModel groupingColumnPairModel : this.groupingColumns) {
+            if (groupingColumnPairModel == null || (
+                    Strings.isNullOrEmpty(groupingColumnPairModel.getComparedTableColumnName()) &&
+                            Strings.isNullOrEmpty(groupingColumnPairModel.getReferenceTableColumnName()))) {
+                continue; // empty mapping
+            }
+
             if (groupingColumnsSpecList.size() >= 9) {
                 throw new DqoRuntimeException("Too many data grouping columns. DQOps supports up to 9 columns.");
             }
