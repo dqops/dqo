@@ -138,7 +138,7 @@ public class PythonCallerServiceImpl implements PythonCallerService, DisposableB
         StreamingPythonProcess streamingPythonProcess = null;
 
         synchronized (this.processDictionaryLock) {
-            for (int retry = 0; retry < 10; retry++) {
+            for (int retry = 0; retry < 10000000; retry++) {
                 if (this.pythonModuleProcesses == null) {
                     throw new PythonExecutionException("Python script cannot be called, because Python processes were already closed and the application is shutting down."); // closing
                 }
@@ -150,13 +150,10 @@ public class PythonCallerServiceImpl implements PythonCallerService, DisposableB
                 }
 
                 int maxDoP = getMaxProcessesPerScript();
-                if (availableProcesses.getRunningProcesses() >= maxDoP) {
+                if (!availableProcesses.incrementRunningProcesses(maxDoP)) {
                     try {
                         this.processDictionaryLock.wait();
-
-                        if (availableProcesses.getRunningProcesses() >= maxDoP) {
-                            continue;
-                        }
+                        continue; // try again
                     } catch (InterruptedException e) {
                         throw new DqoRuntimeException(e);
                     }
@@ -176,13 +173,18 @@ public class PythonCallerServiceImpl implements PythonCallerService, DisposableB
                     streamingPythonProcess = availableProcesses.getAvailableProcesses().pop();
                 }
 
-                if (!streamingPythonProcess.isClosed()) {
-                    availableProcesses.incrementRunningProcesses();
+                if (streamingPythonProcess.isClosed()) {
+                    availableProcesses.decrementRunningProcesses();
+                    continue; // try again, because this process has exited (killed?)
+                } else {
                     break; // we can use this process
                 }
-
-                // else, the process was taken out from the pool, but it is already closed, so we are abandoning it
             }
+        }
+
+        if (streamingPythonProcess == null) {
+            // no way to get a process, memory issues?
+            throw new PythonExecutionException("Cannot start another Python process to run " + pythonFilePathInHome + ", processes are killed or the MaxDOP is too low");
         }
 
         try {
@@ -195,13 +197,19 @@ public class PythonCallerServiceImpl implements PythonCallerService, DisposableB
             return receiveMessage;
         }
         catch (Exception ex) {
-            // when the process fails, we want to start a new process
+            // when the process fails, we want to start a new process, we do not add it back
             synchronized (this.processDictionaryLock) {
                 availableProcesses.decrementRunningProcesses();
                 this.processDictionaryLock.notify();
             }
 
-            streamingPythonProcess.close();
+            try {
+                streamingPythonProcess.close();
+            }
+            catch (Exception exc) {
+                log.error("Python process cannot be stopped: " + exc.getMessage() + " when running " + pythonFilePathInHome + " Python file", ex);
+            }
+
             log.error("Python process failed: " + ex.getMessage() + " when running " + pythonFilePathInHome + " Python file", ex);
             throw new PythonExecutionException("Python process failed: " + ex.getMessage() + " when running " + pythonFilePathInHome + " Python file", ex);
         }

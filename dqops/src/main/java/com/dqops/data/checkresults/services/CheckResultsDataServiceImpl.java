@@ -1094,7 +1094,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
             String checkName = checkNameColumn.get(i);
             String comparisonName = tableComparisonNameColumn.get(i);
             if (!Strings.isNullOrEmpty(comparisonName)) {
-                checkName = comparisonName + "/" + checkName;
+                checkName = checkName + "/" + comparisonName;
             }
 
             String columnName = columnNameColumn.get(i);

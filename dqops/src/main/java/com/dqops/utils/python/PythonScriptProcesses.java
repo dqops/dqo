@@ -43,11 +43,23 @@ public class PythonScriptProcesses {
     }
 
     /**
-     * Increments the number of running processes.
-     * @return The count of running processes after the change.
+     * Increments the number of running processes if it is below the accepted MaxDOP. Returns true if one more process was accepted because it up to the MaxDOP limit,
+     * or returns false when the counter was not increased because it is already equal or above MaxDOP.
+     * @param maxDop The maximum accepted DOP (number of parallel processes).
+     * @return True if another process is allowed to run, false when the MaxDOP was achieved.
      */
-    public int incrementRunningProcesses() {
-        return this.runningProcesses.incrementAndGet();
+    public boolean incrementRunningProcesses(int maxDop) {
+        while (true) {
+            int currentProcessCount = this.runningProcesses.get();
+
+            if (currentProcessCount < maxDop) {
+                if (this.runningProcesses.compareAndSet(currentProcessCount, currentProcessCount + 1)) {
+                    return true;
+                }
+            } else {
+                return false;
+            }
+        }
     }
 
     /**

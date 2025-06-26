@@ -387,4 +387,32 @@ public class JinjaTemplateRenderParameters {
     public void setErrorSampling(ErrorSamplingRenderParameters errorSampling) {
         this.errorSampling = errorSampling;
     }
+
+    /**
+     * Creates a text from the check name, or the  connection name, table name and column name that fully identifies the target object.
+     * It is used for debugging purposes to include in error results.
+     * @return Full path to the metadata object (table or column, or a full check if possible).
+     */
+    public String makeFullTargetName() {
+        if (this.parameters != null && this.parameters.getHierarchyId() != null) {
+            return this.parameters.getHierarchyId().toString();
+        }
+
+        StringBuilder sb = new StringBuilder();
+        if (this.connection != null) {
+            sb.append(this.connection.getConnectionName());
+            sb.append("/");
+        }
+
+        if (this.table != null) {
+            sb.append(this.table.getPhysicalTableName().toBaseFileName());
+        }
+
+        if (this.column != null) {
+            sb.append("/");
+            sb.append(this.column.getColumnName());
+        }
+
+        return sb.toString();
+    }
 }

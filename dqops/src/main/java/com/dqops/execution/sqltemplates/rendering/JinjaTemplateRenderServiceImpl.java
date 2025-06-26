@@ -107,8 +107,15 @@ public class JinjaTemplateRenderServiceImpl implements JinjaTemplateRenderServic
         String evaluateTemplatesModule = this.pythonConfigurationProperties.getEvaluateTemplatesModule();
 
         progressListener.onBeforeSqlTemplateRender(new BeforeSqlTemplateRenderEvent(inputDto));
-        JinjaTemplateRenderOutput output =
-				this.pythonCallerService.executePythonHomeScript(inputDto, evaluateTemplatesModule, JinjaTemplateRenderOutput.class);
+
+        JinjaTemplateRenderOutput output = null;
+
+        try {
+            output = this.pythonCallerService.executePythonHomeScript(inputDto, evaluateTemplatesModule, JinjaTemplateRenderOutput.class);
+        }
+        catch (Exception ex) {
+            throw new PythonExecutionException("Failed to execute a Python Jinja2 rendering process, error: " + ex.getMessage() + ", at: " + templateRenderParameters.makeFullTargetName());
+        }
 
         if (output == null) {
             return null;
@@ -116,7 +123,8 @@ public class JinjaTemplateRenderServiceImpl implements JinjaTemplateRenderServic
 
         if (output.getError() != null) {
             progressListener.onSqlTemplateRendered(new SqlTemplateRenderedRenderedEvent(inputDto, output));
-            throw new PythonExecutionException("Data quality check template failed to render, error: " + output.getError() + ", template path in the home folder: " + relativePathToTemplate);
+            throw new PythonExecutionException("Data quality check template failed to render, error: " + output.getError() + ", template path in the home folder: " +
+                    relativePathToTemplate + ", check: " + templateRenderParameters.makeFullTargetName());
         }
 
         progressListener.onSqlTemplateRendered(new SqlTemplateRenderedRenderedEvent(inputDto, output));
