@@ -20,6 +20,7 @@ import os
 import sys
 import traceback
 import types
+import warnings
 from pathlib import Path
 from datetime import datetime
 from typing import Sequence
@@ -125,6 +126,9 @@ class RuleRunner:
 
 def main():
     try:
+        # Some rules can return warnings to the console, which are considered as errors by DQOps
+        warnings.filterwarnings("ignore")
+
         rule_runner = RuleRunner()
         home_paths_configured = False
 
