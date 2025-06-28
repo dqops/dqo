@@ -165,11 +165,15 @@ public abstract class AbstractJdbcSourceConnection extends AbstractSqlSourceConn
                                      cancellationToken -> RunSilently.run(statement::cancel))) {
                     try (ResultSet results = statement.executeQuery(sqlQueryStatement)) {
                         ResultSet rowCountLimitedResultSet = new MaxRowsLimitingResultSet(results,
-                                maxRows != null ? maxRows + 1 : Integer.MAX_VALUE);
+                                maxRows != null ? maxRows + (failWhenMaxRowsExceeded ? 1 : 0) : Integer.MAX_VALUE);
 
                         Table resultTable = rawTableResultFromResultSet(rowCountLimitedResultSet, sqlQueryStatement);
                         if (maxRows != null && resultTable.rowCount() > maxRows) {
-                            throw new RowCountLimitExceededException(maxRows);
+                            if (failWhenMaxRowsExceeded) {
+                                throw new RowCountLimitExceededException(maxRows);
+                            } else {
+                                resultTable.dropRange(maxRows, resultTable.rowCount());
+                            }
                         }
 
                         for (Column<?> column : resultTable.columns()) {

@@ -87,8 +87,14 @@ public class BigQuerySqlRunnerImpl implements BigQuerySqlRunner {
             for (FieldValueList bqRow : tableResult.iterateAll()) {
                 rowCount++;
                 if (maxRows != null && rowCount > maxRows) {
-                    throw new RowCountLimitExceededException(maxRows);
+                    if (failWhenMaxRowsExceeded) {
+                        throw new RowCountLimitExceededException(maxRows);
+                    }
+                    else {
+                        break;
+                    }
                 }
+
                 Row row = table.appendRow();
 
                 for (int colIndex = 0; colIndex < bqRow.size(); colIndex++) {
