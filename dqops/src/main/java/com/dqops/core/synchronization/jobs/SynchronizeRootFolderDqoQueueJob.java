@@ -117,4 +117,9 @@ public class SynchronizeRootFolderDqoQueueJob extends DqoQueueJob<Void> {
            setSynchronizeRootFolderParameters(parameters);
         }};
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + ", parameters: " + this.parameters.toString();
+    }
 }

@@ -111,4 +111,13 @@ public class SynchronizeRootFolderParameters implements Cloneable {
             throw new RuntimeException(ex);
         }
     }
+
+    @Override
+    public String toString() {
+        return "SynchronizeRootFolderParameters{" +
+                "folder=" + folder +
+                ", direction=" + direction +
+                ", forceRefreshNativeTable=" + forceRefreshNativeTable +
+                '}';
+    }
 }

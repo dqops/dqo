@@ -258,4 +258,9 @@ public class SynchronizeMultipleFoldersDqoQueueJob extends ParentDqoQueueJob<Voi
         JobConcurrencyConstraint synchronizationLimit = new JobConcurrencyConstraint(concurrencyTarget, 1);
         return new JobConcurrencyConstraint[] { synchronizationLimit };
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + ", parameters: " + this.parameters;
+    }
 }

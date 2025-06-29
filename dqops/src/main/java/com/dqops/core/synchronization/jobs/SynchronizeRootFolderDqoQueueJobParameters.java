@@ -64,4 +64,11 @@ public class SynchronizeRootFolderDqoQueueJobParameters {
     public FileSystemSynchronizationListener getFileSystemSynchronizationListener() {
         return fileSystemSynchronizationListener;
     }
+
+    @Override
+    public String toString() {
+        return "SynchronizeRootFolderDqoQueueJobParameters{" +
+                "synchronizationParameter=" + synchronizationParameter +
+                '}';
+    }
 }

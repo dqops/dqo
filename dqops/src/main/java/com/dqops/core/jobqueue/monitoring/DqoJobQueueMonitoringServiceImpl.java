@@ -498,6 +498,8 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
      * @param jobIdToKeep Job id to keep. It's child jobs (when it is a parent job) are also preserved.
      */
     public void removeOlderSynchronizeMultipleFoldersJobs(final DqoQueueJobId jobIdToKeep) {
+        Instant oldestJobToRemove = Instant.now().minusSeconds(10 * 60);
+
         Set<DqoQueueJobId> oldJobIdsToDelete = this.allJobs.entrySet()
                 .stream()
                 .filter(e -> e.getValue().getJobType() == DqoJobType.synchronize_multiple_folders ||
@@ -505,6 +507,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
                 .filter(e -> (e.getValue().getJobType() == DqoJobType.synchronize_multiple_folders && e.getKey().getJobId() != jobIdToKeep.getJobId()) ||
                         (e.getValue().getJobType() == DqoJobType.synchronize_folder && e.getKey().getParentJobId() != null &&
                                 e.getKey().getParentJobId().getJobId() != jobIdToKeep.getJobId()))
+                .filter(e -> e.getValue().getStatusChangedAt() != null && e.getValue().getStatusChangedAt().isBefore(oldestJobToRemove))
                 .map(e -> e.getKey())
                 .collect(Collectors.toSet());
 

@@ -230,6 +230,29 @@ public class SynchronizeMultipleFoldersDqoQueueJobParameters implements Cloneabl
         }
     }
 
+    @Override
+    public String toString() {
+        return "SynchronizeMultipleFoldersDqoQueueJobParameters{" +
+                "direction=" + direction +
+                ", forceRefreshNativeTables=" + forceRefreshNativeTables +
+                ", detectCronSchedules=" + detectCronSchedules +
+                ", sources=" + sources +
+                ", sensors=" + sensors +
+                ", rules=" + rules +
+                ", checks=" + checks +
+                ", settings=" + settings +
+                ", credentials=" + credentials +
+                ", dictionaries=" + dictionaries +
+                ", patterns=" + patterns +
+                ", dataSensorReadouts=" + dataSensorReadouts +
+                ", dataCheckResults=" + dataCheckResults +
+                ", dataStatistics=" + dataStatistics +
+                ", dataErrors=" + dataErrors +
+                ", dataIncidents=" + dataIncidents +
+                ", synchronizeFolderWithLocalChanges=" + synchronizeFolderWithLocalChanges +
+                '}';
+    }
+
     public static class SynchronizeMultipleFoldersDqoQueueJobParametersSampleFactory implements SampleValueFactory<SynchronizeMultipleFoldersDqoQueueJobParameters> {
         @Override
         public SynchronizeMultipleFoldersDqoQueueJobParameters createSample() {

@@ -289,4 +289,12 @@ public abstract class DqoQueueJob<T> {
             throw new DqoQueueJobExecutionException(e);
         }
     }
+
+    @Override
+    public String toString() {
+        return "DqoQueueJob{" +
+                "type=" +  this.getClass().getName() + "," +
+                "jobId=" + (jobId != null ? jobId.toString() : "") +
+                '}';
+    }
 }

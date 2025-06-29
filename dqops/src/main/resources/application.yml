@@ -53,6 +53,9 @@ logging:
       google: OFF
       singlestore:
         jdbc: ERROR
+      dqops:
+        core:
+          jobqueue: WARN
 
 picocli:
   ansi: true
