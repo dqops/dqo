@@ -45,6 +45,11 @@ import java.util.*;
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Slf4j
 public class PythonCallerServiceImpl implements PythonCallerService, DisposableBean {
+    /**
+     * The wait timeout when a thread is waiting to acquire a lock and try to start a new Python process.
+     */
+    public static final long WAIT_FOR_AVAILABLE_PROCESS_TIMEOUT_MS = 1000;
+
     private final DqoConfigurationProperties configurationProperties;
     private final DqoPythonConfigurationProperties pythonConfigurationProperties;
     private final JsonSerializer jsonSerializer;
@@ -152,7 +157,7 @@ public class PythonCallerServiceImpl implements PythonCallerService, DisposableB
                 int maxDoP = getMaxProcessesPerScript();
                 if (!availableProcesses.incrementRunningProcesses(maxDoP)) {
                     try {
-                        this.processDictionaryLock.wait();
+                        this.processDictionaryLock.wait(WAIT_FOR_AVAILABLE_PROCESS_TIMEOUT_MS);
                         continue; // try again
                     } catch (InterruptedException e) {
                         throw new DqoRuntimeException(e);
@@ -190,8 +195,8 @@ public class PythonCallerServiceImpl implements PythonCallerService, DisposableB
         try {
             O receiveMessage = streamingPythonProcess.sendReceiveMessage(input, outputType);
             synchronized (this.processDictionaryLock) {
-                availableProcesses.getAvailableProcesses().add(streamingPythonProcess); // put it back for the next call
                 availableProcesses.decrementRunningProcesses();
+                availableProcesses.getAvailableProcesses().add(streamingPythonProcess); // put it back for the next call
                 this.processDictionaryLock.notify();
             }
             return receiveMessage;
