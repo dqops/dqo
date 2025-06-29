@@ -319,13 +319,21 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
     public Mono<DqoJobQueueInitialSnapshotModel> getInitialJobList(String dataDomain) {
         Mono<DqoJobQueueInitialSnapshotModel> jobsMono = Mono.defer(() -> {
             long changeSequence;
-            List<DqoJobHistoryEntryModel> jobs;
+            List<DqoJobHistoryEntryModel> jobs = new ArrayList<>();
 
             synchronized (this.lock) {
-                changeSequence = this.dqoJobIdGenerator.generateNextIncrementalId();
-                jobs = this.allJobs.values().stream()
-                        .filter(dqoJobHistoryEntryModel -> dqoJobHistoryEntryModel != null && Objects.equals(dqoJobHistoryEntryModel.getDataDomain(), dataDomain))
-                        .collect(Collectors.toList());
+                if (!this.jobChanges.isEmpty()) {
+                    changeSequence = this.jobChanges.firstKey() - 1L;
+
+                    //// disabled, we will let the web application just download the whole history
+//                jobs = this.allJobs.values().stream()
+//                        .filter(dqoJobHistoryEntryModel -> dqoJobHistoryEntryModel != null && Objects.equals(dqoJobHistoryEntryModel.getDataDomain(), dataDomain))
+//                        .collect(Collectors.toList());
+
+                }
+                else {
+                    changeSequence = this.dqoJobIdGenerator.generateNextIncrementalId();
+                }
             }
 
             return Mono.just(new DqoJobQueueInitialSnapshotModel(jobs, this.currentSynchronizationStatus, changeSequence));
@@ -350,9 +358,9 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
 
         synchronized (this.lock) {
             changeSequence = this.dqoJobIdGenerator.generateNextIncrementalId();
-            changesList = new ArrayList<>(this.jobChanges
+            changesList = this.jobChanges
                     .tailMap(lastChangeId, false)
-                    .values())
+                    .values()
                     .stream()
                     .filter(dqoJobChangeModel -> Objects.equals(dqoJobChangeModel.getDomainName(), domainName))
                     .collect(Collectors.toList());
@@ -373,15 +381,15 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
                     synchronized (this.lock) {
                         domainAwaitingClientsFinal.remove(changeSequence);
                     }
-                    if (result == null) {
-                        return new DqoJobQueueIncrementalSnapshotModel(null, this.currentSynchronizationStatus, changeSequence);
+                    if (result == null) { // timeout, with no results
+                        return new DqoJobQueueIncrementalSnapshotModel(new ArrayList<>(), this.currentSynchronizationStatus, changeSequence);
                     }
                     else {
                         synchronized (this.lock) {
                             long nextChangeId = this.dqoJobIdGenerator.generateNextIncrementalId();
-                            List<DqoJobChangeModel> newChangesList = new ArrayList<>(this.jobChanges
+                            List<DqoJobChangeModel> newChangesList = this.jobChanges
                                     .tailMap(lastChangeId, false)
-                                    .values())
+                                    .values()
                                     .stream()
                                     .filter(dqoJobChangeModel -> Objects.equals(dqoJobChangeModel.getDomainName(), domainName))
                                     .collect(Collectors.toList());
@@ -456,8 +464,8 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
                                 if (jobChange.getJobId().getJobBusinessKey() != null) {
                                     this.businessKeyToJobIdMap.put(jobChange.getJobId().getJobBusinessKey(), jobChange.getJobId());
                                 }
-                                DqoJobChangeModel dqoNewJobChangeModel = new DqoJobChangeModel(jobChange, changeSequence);
-                                this.jobChanges.put(changeSequence, dqoNewJobChangeModel);
+//                                DqoJobChangeModel dqoNewJobChangeModel = new DqoJobChangeModel(jobChange, changeSequence);
+//                                this.jobChanges.put(changeSequence, dqoNewJobChangeModel);
                             }
                         }
 
@@ -498,8 +506,6 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
      * @param jobIdToKeep Job id to keep. It's child jobs (when it is a parent job) are also preserved.
      */
     public void removeOlderSynchronizeMultipleFoldersJobs(final DqoQueueJobId jobIdToKeep) {
-        Instant oldestJobToRemove = Instant.now().minusSeconds(10 * 60);
-
         Set<DqoQueueJobId> oldJobIdsToDelete = this.allJobs.entrySet()
                 .stream()
                 .filter(e -> e.getValue().getJobType() == DqoJobType.synchronize_multiple_folders ||
@@ -507,7 +513,6 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
                 .filter(e -> (e.getValue().getJobType() == DqoJobType.synchronize_multiple_folders && e.getKey().getJobId() != jobIdToKeep.getJobId()) ||
                         (e.getValue().getJobType() == DqoJobType.synchronize_folder && e.getKey().getParentJobId() != null &&
                                 e.getKey().getParentJobId().getJobId() != jobIdToKeep.getJobId()))
-                .filter(e -> e.getValue().getStatusChangedAt() != null && e.getValue().getStatusChangedAt().isBefore(oldestJobToRemove))
                 .map(e -> e.getKey())
                 .collect(Collectors.toSet());
 
@@ -544,7 +549,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
         List<DqoQueueJobId> oldJobIdsToDelete = this.allJobs.entrySet()
                 .stream()
                 .filter(e -> e.getValue() != null)
-                .takeWhile(e -> e.getValue().getStatusChangedAt().compareTo(oldJobsHistoryThresholdTimestamp) < 1)
+                .takeWhile(e -> e.getValue().getStatusChangedAt().isBefore(oldJobsHistoryThresholdTimestamp))
                 .filter(e -> e.getValue().getStatus() == DqoJobStatus.finished ||
                         e.getValue().getStatus() == DqoJobStatus.failed ||
                         e.getValue().getStatus() == DqoJobStatus.cancelled)
@@ -571,7 +576,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
         List<Long> oldChangeIdsToDelete = this.jobChanges.entrySet()
                 .stream()
                 .filter(e -> e.getValue() != null)
-                .takeWhile(e -> e.getValue().getStatusChangedAt().compareTo(oldJobChangesThresholdTimestamp) < 1)
+                .takeWhile(e -> e.getValue().getStatusChangedAt().isBefore(oldJobChangesThresholdTimestamp))
                 .map(e -> e.getKey())
                 .collect(Collectors.toList());
 
