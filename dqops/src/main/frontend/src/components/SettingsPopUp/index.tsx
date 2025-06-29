@@ -42,7 +42,7 @@ function SettingsPopUp() {
   return (
     <Popover open={areSettingsOpen} handler={toggleOpen} placement="top-start">
       <PopoverHandler>
-        <div className="text-black h-6 cursor-pointer">Settings</div>
+        <div className="text-black h-6 cursor-pointer">Show settings</div>
       </PopoverHandler>
       <PopoverContent className="bg-white min-w-1/3 h-100 rounded-md border border-gray-400 flex-col justify-center items-center z-[999999] text-black overflow-y-auto">
         <div>{objectElements}</div>

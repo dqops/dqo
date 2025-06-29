@@ -80,7 +80,12 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
     /**
      * The file name of a special file that is present in an empty DQOps user home inside a docker container to tell us that the user home was not mounted.
      */
-    private String DOCKER_USER_HOME_MARKER = ".DQO_USER_HOME_NOT_MOUNTED";
+    public static final String DOCKER_USER_HOME_MARKER = ".DQO_USER_HOME_NOT_MOUNTED";
+
+    /**
+     * Base file name (prefix) of log files in the .logs folder.
+     */
+    public static final String LOG_FILES_BASE_NAME = "dqo-logs";
 
     private HomeLocationFindService homeLocationFindService;
     private UserHomeContextFactory userHomeContextFactory;
@@ -583,9 +588,8 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
             initializeEmptyFolder(logsFolderPath);
         }
 
-        final String logFileNameBase = "dqo-logs";
-        String currentLogFileName = logsFolderPath.resolve(logFileNameBase + ".log").toAbsolutePath().toString();
-        String historicLogFileName = logsFolderPath.resolve(logFileNameBase + "-%d{yyyy-MM-dd_HH}.log").toAbsolutePath().toString();
+        String currentLogFileName = logsFolderPath.resolve(LOG_FILES_BASE_NAME + ".log").toAbsolutePath().toString();
+        String historicLogFileName = logsFolderPath.resolve(LOG_FILES_BASE_NAME + "-%d{yyyy-MM-dd_HH}.log").toAbsolutePath().toString();
 
         LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
         PatternLayoutEncoder layoutEncoder = new PatternLayoutEncoder();

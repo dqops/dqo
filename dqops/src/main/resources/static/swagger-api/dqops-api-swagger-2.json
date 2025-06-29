@@ -15522,6 +15522,36 @@
         } ]
       }
     },
+    "/api/environment/logs/download" : {
+      "get" : {
+        "tags" : [ "Environment" ],
+        "summary" : "downloadLogs",
+        "description" : "Downloads logs as a zip file",
+        "operationId" : "downloadLogs",
+        "produces" : [ "application/zip" ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "type" : "string",
+                "format" : "byte"
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      }
+    },
     "/api/environment/profile" : {
       "get" : {
         "tags" : [ "Environment" ],
