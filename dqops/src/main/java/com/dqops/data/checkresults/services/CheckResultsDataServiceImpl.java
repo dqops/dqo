@@ -349,7 +349,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
             }
 
             Table sortedTable = filteredTableByDataGroup.sortDescendingOn(
-                    SensorReadoutsColumnNames.EXECUTED_AT_COLUMN_NAME, // most recent execution first
+//                    SensorReadoutsColumnNames.EXECUTED_AT_COLUMN_NAME, // most recent execution first
                     SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME, // then the most recent reading (for partitioned checks) when many partitions were captured
                     CheckResultsColumnNames.SEVERITY_COLUMN_NAME); // second on the highest severity first on that time period
             CheckResultsNormalizedResult checkResultsNormalizedResult = new CheckResultsNormalizedResult(sortedTable, false);
@@ -442,7 +442,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
             }
 
             Table sortedTable = filteredTableByDataGroup.sortDescendingOn(
-                    SensorReadoutsColumnNames.EXECUTED_AT_COLUMN_NAME, // most recent execution first
+//                    SensorReadoutsColumnNames.EXECUTED_AT_COLUMN_NAME, // most recent execution first
                     SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME, // then the most recent reading (for partitioned checks) when many partitions were captured
                     CheckResultsColumnNames.SEVERITY_COLUMN_NAME); // second on the highest severity first on that time period
             CheckResultsNormalizedResult checkResultsNormalizedResult = new CheckResultsNormalizedResult(sortedTable, false);
