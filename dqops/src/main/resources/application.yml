@@ -56,6 +56,11 @@ logging:
       dqops:
         core:
           jobqueue: WARN
+    springfox:
+      documentation:
+        swagger2:
+          mappers:
+            ReferenceModelSpecificationToPropertyConverter: FATAL
 
 picocli:
   ansi: true
