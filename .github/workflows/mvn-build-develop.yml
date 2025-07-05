@@ -45,7 +45,7 @@ jobs:
         run: git remote add closedsource https://${{ secrets.PAID_REPOSITORY_USER }}:${{ secrets.PAID_REPOSITORY_TOKEN }}@${{ secrets.PAID_REPOSITORY_HOST }}${{ secrets.PAID_REPOSITORY_PATH }}
 
       - name: Pull the closed source edition
-        run: git pull -q closedsource closedsource --allow-unrelated-histories --strategy-option=theirs
+        run: git pull -q closedsource closedsource --allow-unrelated-histories --strategy-option=ours
 
       - name: Checkout the closed source edition
         run: git checkout closedsource
