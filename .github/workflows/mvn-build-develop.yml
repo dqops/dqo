@@ -35,6 +35,18 @@ jobs:
       - name: Add SHORT_SHA env property with commit short sha
         run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
 
+      - name: Switch to the closed source edition
+        run: git remote add closedsource https://${PAID_REPOSITORY_USER}:${PAID_REPOSITORY_TOKEN}@${PAID_REPOSITORY_HOST}${PAID_REPOSITORY_PATH}
+
+      - name: Pull the closed source edition
+        run: git pull -q closedsource closedsource
+
+      - name: Checkout the closed source edition
+        run: git checkout closedsource
+
+      - name: Merge changes to the closed source edition
+        run: git merge ${{ github.ref_name }}
+
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
