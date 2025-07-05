@@ -36,7 +36,7 @@ jobs:
         run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
 
       - name: Switch to the closed source edition
-        run: git remote add closedsource https://${PAID_REPOSITORY_USER}:${PAID_REPOSITORY_TOKEN}@${PAID_REPOSITORY_HOST}${PAID_REPOSITORY_PATH}
+        run: git remote add closedsource https://${{ secrets.PAID_REPOSITORY_USER }}:${{ secrets.PAID_REPOSITORY_TOKEN }}@${{ secrets.PAID_REPOSITORY_HOST }}${{ secrets.PAID_REPOSITORY_PATH }}
 
       - name: Pull the closed source edition
         run: git pull -q closedsource closedsource
