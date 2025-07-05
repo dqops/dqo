@@ -35,6 +35,9 @@ jobs:
       - name: Add SHORT_SHA env property with commit short sha
         run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
 
+      - name: Configure Git pull behavior
+        run: git config pull.rebase false
+
       - name: Switch to the closed source edition
         run: git remote add closedsource https://${{ secrets.PAID_REPOSITORY_USER }}:${{ secrets.PAID_REPOSITORY_TOKEN }}@${{ secrets.PAID_REPOSITORY_HOST }}${{ secrets.PAID_REPOSITORY_PATH }}
 
