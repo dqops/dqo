@@ -62,6 +62,30 @@ const DataGroupingConfigurationEditView = ({
 
   const onUpdate = async () => {
     try {
+      if (name === '') {
+        return;
+      }
+
+      if (!dataGroupingConfiguration) {
+        setError('Grouping Configuration is Required');
+        return;
+      }
+      const errors: Errors = {};
+
+      Object.entries(dataGroupingConfiguration).forEach(([level, item]) => {
+        if (
+          item.source === DataGroupingDimensionSpecSourceEnum.tag &&
+          !item.tag
+        ) {
+          errors[level] = 'Tag is Required';
+        }
+      });
+
+      if (Object.values(errors).length) {
+        setLevelErrors(errors);
+        return;
+      }
+
       setIsUpdating(true);
       if (selectedGroupingConfiguration) {
         await DataGroupingConfigurationsApi.updateTableGroupingConfiguration(
@@ -75,30 +99,6 @@ const DataGroupingConfigurationEditView = ({
           }
         );
       } else {
-        if (name === '') {
-          return;
-        }
-
-        if (!dataGroupingConfiguration) {
-          setError('Grouping Configuration is Required');
-          return;
-        }
-        const errors: Errors = {};
-
-        Object.entries(dataGroupingConfiguration).forEach(([level, item]) => {
-          if (
-            item.source === DataGroupingDimensionSpecSourceEnum.tag &&
-            !item.tag
-          ) {
-            errors[level] = 'Tag is Required';
-          }
-        });
-
-        if (Object.values(errors).length) {
-          setLevelErrors(errors);
-          return;
-        }
-
         await DataGroupingConfigurationsApi.createTableGroupingConfiguration(
           connection,
           schema,
@@ -109,6 +109,7 @@ const DataGroupingConfigurationEditView = ({
           }
         );
       }
+
       setIsUpdated(false);
       getGroupingConfigurations();
       onBack();

@@ -104,7 +104,7 @@ const ColumnsRecordDialog = ({
         style={{ width: '200px !important', minWidth: '25%', maxWidth: '25%' }}
         className="pt-6"
       >
-        <div className="w-full h-full overflow-hidden">
+        <div className="w-full h-full overflow-x-hidden max-h-[50vh] overflow-y-auto" >
           <table
             className="table-fixed text-black text-sm w-full"
             style={{ tableLayout: 'fixed' }}
