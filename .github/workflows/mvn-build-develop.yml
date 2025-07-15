@@ -32,9 +32,6 @@ jobs:
 
       - uses: actions/checkout@v3
 
-      - name: Add SHORT_SHA env property with commit short sha
-        run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
-
       - name: Configure Git options
         run: |
           git config pull.rebase false
@@ -49,6 +46,9 @@ jobs:
 
       - name: Checkout the closed source edition
         run: git checkout closedsource
+
+      - name: Add SHORT_SHA env property with commit short sha
+        run: echo "SHORT_SHA=`echo ``git rev-parse --short HEAD```" >> $GITHUB_ENV
 
       - name: Merge changes to the closed source edition
         run: git merge ${{ github.ref_name }}
