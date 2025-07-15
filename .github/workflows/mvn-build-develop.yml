@@ -48,7 +48,7 @@ jobs:
         run: git checkout closedsource
 
       - name: Add SHORT_SHA env property with commit short sha
-        run: echo "SHORT_SHA=`echo ``git rev-parse --short HEAD```" >> $GITHUB_ENV
+        run: echo "SHORT_SHA=`echo ``git rev-parse --short=8 HEAD```" >> $GITHUB_ENV
 
       - name: Merge changes to the closed source edition
         run: git merge ${{ github.ref_name }}
