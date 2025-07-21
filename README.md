@@ -1,33 +1,33 @@
 # DQOps Data Quality Operations Center
 
-DQOps is an DataOps friendly data quality monitoring tool with customizable data quality checks and data quality dashboards.
-DQOps comes with around 150 predefined data quality checks which helps you monitor the quality of your data.
+DQOps is a DataOps-friendly data quality monitoring tool with customizable data quality checks and data quality dashboards.
+DQOps comes with around 150 predefined data quality checks, which help you monitor the quality of your data.
 
 ![DQOps screens](https://dqops.com/docs/images/dqo-screens.gif)
 
 ## Key features
 - Intuitive graphical interface and access via CLI
 - Support of a number of different data sources: BigQuery, Snowflake, PostgreSQL, Redshift, SQL Server and MySQL
-- ~150 build-in table and column checks with easy customization
-- Table and column-level checks which allows writing your own SQL queries
+- ~150 built-in table and column checks with easy customization
+- Table and column-level checks, which allow writing your own SQL queries
 - Daily and monthly date partition testing
 - Data grouping by up to 9 different data grouping levels
-- Build-in scheduling
+- Built-in job scheduling
 - Calculation of data quality KPIs which can be displayed on multiple built-in data quality dashboards
 - Data quality incident management and notifications
 
 ## Installation
 
-To use DQOps you need:
+To use DQOps, you need:
 
 - Python version 3.8 or greater (for details see [Python's documentation](https://www.python.org/doc/) and [download sites](https://www.python.org/downloads/)).
 - Ability to install Python packages with pip.
-- If you want to compile DQOps locally, also Java JDK (version 17 or higher), and a configured JAVA_HOME environment variable.
+- If you want to compile DQOps locally, you also need Java JDK (version 17 or higher) and a configured JAVA_HOME environment variable.
 
 
 DQOps is available on [PyPi repository](https://pypi.org/project/dqops/).
 
-1. To install DQOps via pip manager just run
+1. To install DQOps via pip manager, just run
 
     ```
     python -m pip install --user dqops
@@ -55,10 +55,10 @@ DQOps is available on [PyPi repository](https://pypi.org/project/dqops/).
    After creating a user's home folder, you will be asked whether to log in to the DQO cloud. After typing Y, you will be
    redirected to [https://cloud.dqops.com/registration](https://cloud.dqops.com/registration), where you can create a new account, use Google single sign-on (SSO) or log in if you already have an account.
 
-   During the first registration, a unique identification code (API Key) will be generated and automatically retrieved by DQOps application.
+   During the first registration, a unique identification code (API Key) will be generated and automatically retrieved by the DQOps application.
    The API Key is now stored in the configuration file.
 
-5. Open the DQOps User Interface Console in your browser by CTRL-clicking on the link displayed on the command line (for example http://localhost:8888)
+5. Open the DQOps User Interface Console in your browser by CTRL-clicking on the link displayed on the command line (for example, http://localhost:8888)
    or by copying the link.
 
 
@@ -128,7 +128,7 @@ dqops_client = client.Client(base_url="http://localhost:8888")
 
 Alternatively, if you are connecting to a production instance of DQOps that has authentication
 enabled, you have to open the user's profile screen in DQOps and generate your DQOps API Key.
-Then take the key and use it as the token, when creating an `AuthenticatedClient` instead.
+Then take the key and use it as the token when creating an `AuthenticatedClient` instead.
 
 ```python
 from dqops import client
@@ -200,7 +200,7 @@ and how to configure data quality checks.
 
 ## Contact and issues
 
-If you find any issues with the tool, just post it here:
+If you find any issues with the tool, just post them here:
 
 https://github.com/dqops/dqo/issues
 
