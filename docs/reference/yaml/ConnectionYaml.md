@@ -135,6 +135,7 @@ The structure of this object is described below
 |<span class="no-wrap-code ">`read_mode`</span>|DuckDB read mode.|*enum*|*in_memory*<br/>*files*<br/>| | |
 |<span class="no-wrap-code ">`files_format_type`</span>|Type of source files format for DuckDB.|*enum*|*csv*<br/>*json*<br/>*parquet*<br/>*avro*<br/>*iceberg*<br/>*delta_lake*<br/>| | |
 |<span class="no-wrap-code ">`database`</span>|DuckDB database name for in-memory read mode. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
+|<span class="no-wrap-code ">`enable_optimizer`</span>|Enables a query optimizer that uses statistics. By default, the optimizer is disabled to enable analysis of Parquet files with invalid or outdated statistics.|*boolean*| | | |
 |<span class="no-wrap-code ">`properties`</span>|A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.|*Dict[string, string]*| | | |
 |<span class="no-wrap-code ">[`csv`](./ConnectionYaml.md#csvfileformatspec)</span>|Csv file format specification.|*[CsvFileFormatSpec](./ConnectionYaml.md#csvfileformatspec)*| | | |
 |<span class="no-wrap-code ">[`json`](./ConnectionYaml.md#jsonfileformatspec)</span>|Json file format specification.|*[JsonFileFormatSpec](./ConnectionYaml.md#jsonfileformatspec)*| | | |
@@ -145,10 +146,12 @@ The structure of this object is described below
 |<span class="no-wrap-code ">`directories`</span>|Virtual schema name to directory mappings. The path must be an absolute path.|*Dict[string, string]*| | | |
 |<span class="no-wrap-code ">`storage_type`</span>|The storage type.|*enum*|*local*<br/>*s3*<br/>*azure*<br/>*gcs*<br/>| | |
 |<span class="no-wrap-code ">`aws_authentication_mode`</span>|The authentication mode for AWS. Supports also a ${DUCKDB_AWS_AUTHENTICATION_MODE} configuration with a custom environment variable.|*enum*|*iam*<br/>*default_credentials*<br/>| | |
+|<span class="no-wrap-code ">`aws_default_authentication_chain`</span>|The default authentication chain for AWS. For example: &#x27;env;config;sts;sso;instance;process&#x27;.. Supports also a ${DUCKDB_AWS_AUTHENTICATION_MODE} configuration with a custom environment variable.|*string*| | | |
 |<span class="no-wrap-code ">`azure_authentication_mode`</span>|The authentication mode for Azure. Supports also a ${DUCKDB_AZURE_AUTHENTICATION_MODE} configuration with a custom environment variable.|*enum*|*connection_string*<br/>*credential_chain*<br/>*service_principal*<br/>*default_credentials*<br/>| | |
 |<span class="no-wrap-code ">`user`</span>|DuckDB user name for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
 |<span class="no-wrap-code ">`password`</span>|DuckDB password for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
 |<span class="no-wrap-code ">`region`</span>|The region for the storage credentials. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
+|<span class="no-wrap-code ">`profile`</span>|The AWS profile used for the default authentication. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
 |<span class="no-wrap-code ">`tenant_id`</span>|Azure Tenant ID used by DuckDB Secret Manager. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
 |<span class="no-wrap-code ">`client_id`</span>|Azure Client ID used by DuckDB Secret Manager. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
 |<span class="no-wrap-code ">`client_secret`</span>|Azure Client Secret used by DuckDB Secret Manager. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |

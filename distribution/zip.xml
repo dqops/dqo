@@ -66,6 +66,10 @@
             <outputDirectory>/settings</outputDirectory>
         </fileSet>
         <fileSet>
+            <directory>${project.basedir}/../home/licenses</directory>
+            <outputDirectory>/licenses</outputDirectory>
+        </fileSet>
+        <fileSet>
             <directory>${project.basedir}/../dqops/target/dependencies</directory>
             <outputDirectory>/jars</outputDirectory>
         </fileSet>

@@ -381,7 +381,7 @@ This reduces the volume of data being compared and improves performance.
 
 ### What are data reconciliation tools?
 Many commercial data quality tools support data reconciliation, such as WinPure and TIBCO Clarity.
-Alternatively, data observability tools, such as an open-source DQOps, can reconcile data and monitor additional data quality metrics to further validate the data.
+Alternatively, data observability tools, such as DQOps, can reconcile data and monitor additional data quality metrics to further validate the data.
 
 
 ## What's next

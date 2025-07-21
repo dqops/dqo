@@ -6,6 +6,130 @@ DQOps environment and configuration controller, provides access to the DQOps con
 
 
 ___
+## download_logs
+Downloads logs as a zip file
+
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/environment/download_logs.py) to see the source code on GitHub.
+
+
+**GET**
+```
+http://localhost:8888/api/environment/logs/download
+```
+
+
+
+
+
+
+
+**Usage examples**
+
+
+=== "curl"
+    **Execution**
+
+    ```bash
+    curl http://localhost:8888/api/environment/logs/download^
+		-H "Accept: application/json"
+	
+    ```
+
+    
+
+
+=== "Python sync client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.environment import download_logs
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = download_logs.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+
+
+=== "Python async client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.environment import download_logs
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await download_logs.asyncio(
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+
+
+=== "Python auth sync client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.environment import download_logs
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = download_logs.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+
+
+=== "Python auth async client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.environment import download_logs
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await download_logs.asyncio(
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+
+
+
+___
 ## get_dqo_settings
 Returns all effective DQOps configuration settings.
 

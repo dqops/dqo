@@ -243,6 +243,7 @@ DQOps environment and configuration controller, provides access to the DQOps con
 
 |&nbsp;Operation&nbsp;name&nbsp;|&nbsp;HTTP&nbsp;call&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |----------------|------|---------------------------------|
+|<span class="no-wrap-code">[`download_logs`</span>](./environment.md#download_logs)|GET|Downloads logs as a zip file|
 |<span class="no-wrap-code">[`get_dqo_settings`</span>](./environment.md#get_dqo_settings)|GET|Returns all effective DQOps configuration settings.|
 |<span class="no-wrap-code">[`get_user_profile`</span>](./environment.md#get_user_profile)|GET|Returns the profile of the current user.|
 |<span class="no-wrap-code">[`issue_api_key`</span>](./environment.md#issue_api_key)|GET|Issues a local API Key for the calling user. This API Key can be used to authenticate using the DQOps REST API client. This API Key should be passed in the &quot;Authorization&quot; HTTP header in the format &quot;Authorization: Bearer &lt;api_key&gt;&quot;.|

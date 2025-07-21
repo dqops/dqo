@@ -8,7 +8,7 @@ Follow this guide to learn each concept of DQOps Data Quality Operations Center 
 
 ### **What is DQOps?**
 
-DQOps is a powerful open-source data quality and observability platform designed to address the entire data lifecycle,
+DQOps is a powerful data quality and observability platform designed to address the entire data lifecycle,
 from initial data assessment to advanced automation.
 
 * Quickly start a local data quality environment.

@@ -484,7 +484,7 @@ Here's how you can do it:
 
 * **Analyze and prioritize**: Use the scorecard to identify areas with low data quality scores. This helps data owners and data teams prioritize their improvement efforts.
 
-To make this process easier, you can use open-source tools like DQOps. DQOps has a built-in data quality metrics database and provides many ready-to-use dashboards,
+To make this process easier, you can use tools like DQOps. DQOps has a built-in data quality metrics database and provides many ready-to-use dashboards,
 including different types of data quality scorecards. This can save you time and effort in building your own solution.
 
 ### What is a data quality scorecard example?
@@ -496,7 +496,7 @@ A data quality scorecard is like a report card for your data. It gives you a qui
 * **Show data quality for different areas*(: It should show you scores for different data quality dimensions, like completeness, accuracy, and timeliness.
 
 You can find [examples of data quality scorecards](#observe-kpis-review-issues-and-fix-data)
-in an open-source tools [DQOps](https://dqops.com/). 
+in [DQOps](https://dqops.com/), a data quality platform. 
 These examples can give you ideas on how to 
 [create your own scorecards](../integrations/looker-studio/creating-custom-data-quality-dashboards.md)
 and how to present the information in a way that's useful for your team and the business sponsors.
@@ -518,7 +518,7 @@ Here are two main ways to measure data quality:
 * **Calculating KPIs**: This involves looking at the bigger picture and measuring things like the overall percentage of valid records in a dataset or database.
 
 You can check your data quality once, like taking a snapshot, or you can continuously monitor it over time. 
-Tools like an open-source [DQOps](https://dqops.com/) can help you keep track of data quality metrics and alert you to any problems.
+Tools like [DQOps](https://dqops.com/) can help you keep track of data quality metrics and alert you to any problems.
 
 ### What are the data management KPIs?
 Data management KPIs are like a health checkup for your entire data system. 

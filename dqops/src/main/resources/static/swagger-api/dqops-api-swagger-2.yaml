@@ -10,8 +10,8 @@ info:
     url: "https://dqops.com/"
     email: "support@dqops.com"
   license:
-    name: "Apache 2.0"
-    url: "https://www.apache.org/licenses/LICENSE-2.0.html"
+    name: "BUSL 1.1"
+    url: "https://spdx.org/licenses/BUSL-1.1.html"
 basePath: "/"
 tags:
 - name: "CheckResults"
@@ -16974,9 +16974,8 @@ definitions:
       use_ai:
         type: "boolean"
         description: "Use an AI model to predict anomalies. WARNING: anomaly detection\
-          \ by AI models is not supported in an open-source distribution of DQOps.\
-          \ Please contact DQOps support to upgrade your instance to a closed-source\
-          \ DQOps distribution."
+          \ by AI models is not supported in a trial distribution of DQOps. Please\
+          \ contact DQOps support to upgrade your instance to a full DQOps instance."
   AnomalyDifferencingPercentileMovingAverageRuleFatal01PctParametersSpec:
     type: "object"
     properties:
@@ -16990,9 +16989,8 @@ definitions:
       use_ai:
         type: "boolean"
         description: "Use an AI model to predict anomalies. WARNING: anomaly detection\
-          \ by AI models is not supported in an open-source distribution of DQOps.\
-          \ Please contact DQOps support to upgrade your instance to a closed-source\
-          \ DQOps distribution."
+          \ by AI models is not supported in a trial distribution of DQOps. Please\
+          \ contact DQOps support to upgrade your instance to a full DQOps instance."
   AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec:
     type: "object"
     properties:
@@ -17006,9 +17004,8 @@ definitions:
       use_ai:
         type: "boolean"
         description: "Use an AI model to predict anomalies. WARNING: anomaly detection\
-          \ by AI models is not supported in an open-source distribution of DQOps.\
-          \ Please contact DQOps support to upgrade your instance to a closed-source\
-          \ DQOps distribution."
+          \ by AI models is not supported in a trial distribution of DQOps. Please\
+          \ contact DQOps support to upgrade your instance to a full DQOps instance."
   AnomalyPartitionRowCountRuleError05PctParametersSpec:
     type: "object"
     properties:
@@ -17022,9 +17019,8 @@ definitions:
       use_ai:
         type: "boolean"
         description: "Use an AI model to predict anomalies. WARNING: anomaly detection\
-          \ by AI models is not supported in an open-source distribution of DQOps.\
-          \ Please contact DQOps support to upgrade your instance to a closed-source\
-          \ DQOps distribution."
+          \ by AI models is not supported in a trial distribution of DQOps. Please\
+          \ contact DQOps support to upgrade your instance to a full DQOps instance."
   AnomalyPartitionRowCountRuleFatal01PctParametersSpec:
     type: "object"
     properties:
@@ -17038,9 +17034,8 @@ definitions:
       use_ai:
         type: "boolean"
         description: "Use an AI model to predict anomalies. WARNING: anomaly detection\
-          \ by AI models is not supported in an open-source distribution of DQOps.\
-          \ Please contact DQOps support to upgrade your instance to a closed-source\
-          \ DQOps distribution."
+          \ by AI models is not supported in a trial distribution of DQOps. Please\
+          \ contact DQOps support to upgrade your instance to a full DQOps instance."
   AnomalyPartitionRowCountRuleWarning1PctParametersSpec:
     type: "object"
     properties:
@@ -17054,9 +17049,8 @@ definitions:
       use_ai:
         type: "boolean"
         description: "Use an AI model to predict anomalies. WARNING: anomaly detection\
-          \ by AI models is not supported in an open-source distribution of DQOps.\
-          \ Please contact DQOps support to upgrade your instance to a closed-source\
-          \ DQOps distribution."
+          \ by AI models is not supported in a trial distribution of DQOps. Please\
+          \ contact DQOps support to upgrade your instance to a full DQOps instance."
   AnomalyStationaryCountValuesRuleError05PctParametersSpec:
     type: "object"
     properties:
@@ -17070,9 +17064,8 @@ definitions:
       use_ai:
         type: "boolean"
         description: "Use an AI model to predict anomalies. WARNING: anomaly detection\
-          \ by AI models is not supported in an open-source distribution of DQOps.\
-          \ Please contact DQOps support to upgrade your instance to a closed-source\
-          \ DQOps distribution."
+          \ by AI models is not supported in a trial distribution of DQOps. Please\
+          \ contact DQOps support to upgrade your instance to a full DQOps instance."
   AnomalyStationaryCountValuesRuleFatal01PctParametersSpec:
     type: "object"
     properties:
@@ -17086,9 +17079,8 @@ definitions:
       use_ai:
         type: "boolean"
         description: "Use an AI model to predict anomalies. WARNING: anomaly detection\
-          \ by AI models is not supported in an open-source distribution of DQOps.\
-          \ Please contact DQOps support to upgrade your instance to a closed-source\
-          \ DQOps distribution."
+          \ by AI models is not supported in a trial distribution of DQOps. Please\
+          \ contact DQOps support to upgrade your instance to a full DQOps instance."
   AnomalyStationaryCountValuesRuleWarning1PctParametersSpec:
     type: "object"
     properties:
@@ -17102,9 +17094,8 @@ definitions:
       use_ai:
         type: "boolean"
         description: "Use an AI model to predict anomalies. WARNING: anomaly detection\
-          \ by AI models is not supported in an open-source distribution of DQOps.\
-          \ Please contact DQOps support to upgrade your instance to a closed-source\
-          \ DQOps distribution."
+          \ by AI models is not supported in a trial distribution of DQOps. Please\
+          \ contact DQOps support to upgrade your instance to a full DQOps instance."
   AnomalyStationaryPercentValuesRuleError05PctParametersSpec:
     type: "object"
     properties:
@@ -17118,9 +17109,8 @@ definitions:
       use_ai:
         type: "boolean"
         description: "Use an AI model to predict anomalies. WARNING: anomaly detection\
-          \ by AI models is not supported in an open-source distribution of DQOps.\
-          \ Please contact DQOps support to upgrade your instance to a closed-source\
-          \ DQOps distribution."
+          \ by AI models is not supported in a trial distribution of DQOps. Please\
+          \ contact DQOps support to upgrade your instance to a full DQOps instance."
   AnomalyStationaryPercentValuesRuleFatal01PctParametersSpec:
     type: "object"
     properties:
@@ -17134,9 +17124,8 @@ definitions:
       use_ai:
         type: "boolean"
         description: "Use an AI model to predict anomalies. WARNING: anomaly detection\
-          \ by AI models is not supported in an open-source distribution of DQOps.\
-          \ Please contact DQOps support to upgrade your instance to a closed-source\
-          \ DQOps distribution."
+          \ by AI models is not supported in a trial distribution of DQOps. Please\
+          \ contact DQOps support to upgrade your instance to a full DQOps instance."
   AnomalyStationaryPercentValuesRuleWarning1PctParametersSpec:
     type: "object"
     properties:
@@ -17150,9 +17139,8 @@ definitions:
       use_ai:
         type: "boolean"
         description: "Use an AI model to predict anomalies. WARNING: anomaly detection\
-          \ by AI models is not supported in an open-source distribution of DQOps.\
-          \ Please contact DQOps support to upgrade your instance to a closed-source\
-          \ DQOps distribution."
+          \ by AI models is not supported in a trial distribution of DQOps. Please\
+          \ contact DQOps support to upgrade your instance to a full DQOps instance."
   AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec:
     type: "object"
     properties:
@@ -17166,9 +17154,8 @@ definitions:
       use_ai:
         type: "boolean"
         description: "Use an AI model to predict anomalies. WARNING: anomaly detection\
-          \ by AI models is not supported in an open-source distribution of DQOps.\
-          \ Please contact DQOps support to upgrade your instance to a closed-source\
-          \ DQOps distribution."
+          \ by AI models is not supported in a trial distribution of DQOps. Please\
+          \ contact DQOps support to upgrade your instance to a full DQOps instance."
   AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec:
     type: "object"
     properties:
@@ -17182,9 +17169,8 @@ definitions:
       use_ai:
         type: "boolean"
         description: "Use an AI model to predict anomalies. WARNING: anomaly detection\
-          \ by AI models is not supported in an open-source distribution of DQOps.\
-          \ Please contact DQOps support to upgrade your instance to a closed-source\
-          \ DQOps distribution."
+          \ by AI models is not supported in a trial distribution of DQOps. Please\
+          \ contact DQOps support to upgrade your instance to a full DQOps instance."
   AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec:
     type: "object"
     properties:
@@ -17198,9 +17184,8 @@ definitions:
       use_ai:
         type: "boolean"
         description: "Use an AI model to predict anomalies. WARNING: anomaly detection\
-          \ by AI models is not supported in an open-source distribution of DQOps.\
-          \ Please contact DQOps support to upgrade your instance to a closed-source\
-          \ DQOps distribution."
+          \ by AI models is not supported in a trial distribution of DQOps. Please\
+          \ contact DQOps support to upgrade your instance to a full DQOps instance."
   AnomalyTimelinessDelayRuleError05PctParametersSpec:
     type: "object"
     properties:
@@ -17214,9 +17199,8 @@ definitions:
       use_ai:
         type: "boolean"
         description: "Use an AI model to predict anomalies. WARNING: anomaly detection\
-          \ by AI models is not supported in an open-source distribution of DQOps.\
-          \ Please contact DQOps support to upgrade your instance to a closed-source\
-          \ DQOps distribution."
+          \ by AI models is not supported in a trial distribution of DQOps. Please\
+          \ contact DQOps support to upgrade your instance to a full DQOps instance."
   AnomalyTimelinessDelayRuleFatal01PctParametersSpec:
     type: "object"
     properties:
@@ -17230,9 +17214,8 @@ definitions:
       use_ai:
         type: "boolean"
         description: "Use an AI model to predict anomalies. WARNING: anomaly detection\
-          \ by AI models is not supported in an open-source distribution of DQOps.\
-          \ Please contact DQOps support to upgrade your instance to a closed-source\
-          \ DQOps distribution."
+          \ by AI models is not supported in a trial distribution of DQOps. Please\
+          \ contact DQOps support to upgrade your instance to a full DQOps instance."
   AnomalyTimelinessDelayRuleWarning1PctParametersSpec:
     type: "object"
     properties:
@@ -17246,9 +17229,8 @@ definitions:
       use_ai:
         type: "boolean"
         description: "Use an AI model to predict anomalies. WARNING: anomaly detection\
-          \ by AI models is not supported in an open-source distribution of DQOps.\
-          \ Please contact DQOps support to upgrade your instance to a closed-source\
-          \ DQOps distribution."
+          \ by AI models is not supported in a trial distribution of DQOps. Please\
+          \ contact DQOps support to upgrade your instance to a full DQOps instance."
   AuthenticatedDashboardModel:
     type: "object"
     properties:

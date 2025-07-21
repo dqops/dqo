@@ -1,5 +1,5 @@
 ---
-description: DQOps is an open-source data quality platform for data quality and DataOps teams, providing customizable data quality checks and data quality dashboards.
+description: DQOps is a data quality platform for data quality and DataOps teams, providing customizable data quality checks and data quality dashboards.
 title: What is DQOps Data Quality Operations Center
 ---
 # DQOps Data Quality Operations Center overview
@@ -10,7 +10,7 @@ title: What is DQOps Data Quality Operations Center
 
     <br/>
     <span class="center-content" style="font-size: 1.2rem;font-weight: 500">
-    An open-source data quality platform for the whole data platform lifecycle
+    A data quality platform for the whole data platform lifecycle
     <br/>
     from **profiling** new data sources to automating **data quality monitoring**
     </span>
@@ -200,7 +200,7 @@ DQOps supports integration with relational databases, data lakes, data warehouse
     
         ---
     
-        DQOps is **open-source** that you can start on your computer right now. Only the complimentary Data Quality Dashboards are hosted by DQOps. 
+        DQOps can work as a standalone tool that you can start on your computer right now. Only the complimentary Data Quality Dashboards are hosted by DQOps as a SaaS solution. 
     
         [:octicons-arrow-right-24: Download from PyPI](dqops-installation/install-dqops-using-pip.md) or [Docker Hub](dqops-installation/run-dqops-as-docker-container.md)
 

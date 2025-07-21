@@ -126,7 +126,7 @@ The structure of this object is described below
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |<span class="no-wrap-code ">`anomaly_percent`</span>|The probability (in percent) that the count of values (records) is an anomaly because the value is outside the regular range of counts. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation.|*double*| | | |
-|<span class="no-wrap-code ">`use_ai`</span>|Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution.|*boolean*| | | |
+|<span class="no-wrap-code ">`use_ai`</span>|Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in a trial distribution of DQOps. Please contact DQOps support to upgrade your instance to a full DQOps instance.|*boolean*| | | |
 
 
 
@@ -143,7 +143,7 @@ The structure of this object is described below
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |<span class="no-wrap-code ">`anomaly_percent`</span>|The probability (in percent) that the count of values (records) is an anomaly because the value is outside the regular range of counts. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation.|*double*| | | |
-|<span class="no-wrap-code ">`use_ai`</span>|Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution.|*boolean*| | | |
+|<span class="no-wrap-code ">`use_ai`</span>|Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in a trial distribution of DQOps. Please contact DQOps support to upgrade your instance to a full DQOps instance.|*boolean*| | | |
 
 
 
@@ -396,7 +396,7 @@ The structure of this object is described below
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |<span class="no-wrap-code ">`anomaly_percent`</span>|The probability (in percent) that the current sensor readout (measure) is an anomaly, because the value is outside the regular range of previous readouts. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation.|*double*| | | |
-|<span class="no-wrap-code ">`use_ai`</span>|Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution.|*boolean*| | | |
+|<span class="no-wrap-code ">`use_ai`</span>|Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in a trial distribution of DQOps. Please contact DQOps support to upgrade your instance to a full DQOps instance.|*boolean*| | | |
 
 
 
@@ -414,7 +414,7 @@ The structure of this object is described below
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |<span class="no-wrap-code ">`anomaly_percent`</span>|The probability (in percent) that the current sensor readout (measure) is an anomaly, because the value is outside the regular range of previous readouts. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation.|*double*| | | |
-|<span class="no-wrap-code ">`use_ai`</span>|Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution.|*boolean*| | | |
+|<span class="no-wrap-code ">`use_ai`</span>|Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in a trial distribution of DQOps. Please contact DQOps support to upgrade your instance to a full DQOps instance.|*boolean*| | | |
 
 
 

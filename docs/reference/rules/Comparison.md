@@ -71,21 +71,13 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 ??? abstract "Rule source code"
 
     ``` { .python linenums="1" }
+    #  Copyright © 2021-Present DQOps, Documati sp. z o.o. (support@dqops.com)
     #
-    # Copyright © 2021 DQOps (support@dqops.com)
+    #  This file is licensed under the Business Source License 1.1,
+    #  which can be found in the root directory of this repository.
     #
-    # Licensed under the Apache License, Version 2.0 (the "License");
-    # you may not use this file except in compliance with the License.
-    # You may obtain a copy of the License at
-    #
-    #     http://www.apache.org/licenses/LICENSE-2.0
-    #
-    # Unless required by applicable law or agreed to in writing, software
-    # distributed under the License is distributed on an "AS IS" BASIS,
-    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    # See the License for the specific language governing permissions and
-    # limitations under the License.
-    #
+    #  Change Date: This file will be licensed under the Apache License, Version 2.0,
+    #  four (4) years from its last modification date.
     
     from datetime import datetime
     from typing import Sequence
@@ -220,21 +212,13 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 ??? abstract "Rule source code"
 
     ``` { .python linenums="1" }
+    #  Copyright © 2021-Present DQOps, Documati sp. z o.o. (support@dqops.com)
     #
-    # Copyright © 2021 DQOps (support@dqops.com)
+    #  This file is licensed under the Business Source License 1.1,
+    #  which can be found in the root directory of this repository.
     #
-    # Licensed under the Apache License, Version 2.0 (the "License");
-    # you may not use this file except in compliance with the License.
-    # You may obtain a copy of the License at
-    #
-    #     http://www.apache.org/licenses/LICENSE-2.0
-    #
-    # Unless required by applicable law or agreed to in writing, software
-    # distributed under the License is distributed on an "AS IS" BASIS,
-    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    # See the License for the specific language governing permissions and
-    # limitations under the License.
-    #
+    #  Change Date: This file will be licensed under the Apache License, Version 2.0,
+    #  four (4) years from its last modification date.
     
     from datetime import datetime
     from typing import Sequence
@@ -369,21 +353,13 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 ??? abstract "Rule source code"
 
     ``` { .python linenums="1" }
+    #  Copyright © 2021-Present DQOps, Documati sp. z o.o. (support@dqops.com)
     #
-    # Copyright © 2021 DQOps (support@dqops.com)
+    #  This file is licensed under the Business Source License 1.1,
+    #  which can be found in the root directory of this repository.
     #
-    # Licensed under the Apache License, Version 2.0 (the "License");
-    # you may not use this file except in compliance with the License.
-    # You may obtain a copy of the License at
-    #
-    #     http://www.apache.org/licenses/LICENSE-2.0
-    #
-    # Unless required by applicable law or agreed to in writing, software
-    # distributed under the License is distributed on an "AS IS" BASIS,
-    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    # See the License for the specific language governing permissions and
-    # limitations under the License.
-    #
+    #  Change Date: This file will be licensed under the Apache License, Version 2.0,
+    #  four (4) years from its last modification date.
     
     from datetime import datetime
     from typing import Sequence
@@ -518,21 +494,13 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 ??? abstract "Rule source code"
 
     ``` { .python linenums="1" }
+    #  Copyright © 2021-Present DQOps, Documati sp. z o.o. (support@dqops.com)
     #
-    # Copyright © 2021 DQOps (support@dqops.com)
+    #  This file is licensed under the Business Source License 1.1,
+    #  which can be found in the root directory of this repository.
     #
-    # Licensed under the Apache License, Version 2.0 (the "License");
-    # you may not use this file except in compliance with the License.
-    # You may obtain a copy of the License at
-    #
-    #     http://www.apache.org/licenses/LICENSE-2.0
-    #
-    # Unless required by applicable law or agreed to in writing, software
-    # distributed under the License is distributed on an "AS IS" BASIS,
-    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    # See the License for the specific language governing permissions and
-    # limitations under the License.
-    #
+    #  Change Date: This file will be licensed under the Apache License, Version 2.0,
+    #  four (4) years from its last modification date.
     
     from datetime import datetime
     from typing import Sequence
@@ -668,21 +636,13 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 ??? abstract "Rule source code"
 
     ``` { .python linenums="1" }
+    #  Copyright © 2021-Present DQOps, Documati sp. z o.o. (support@dqops.com)
     #
-    # Copyright © 2021 DQOps (support@dqops.com)
+    #  This file is licensed under the Business Source License 1.1,
+    #  which can be found in the root directory of this repository.
     #
-    # Licensed under the Apache License, Version 2.0 (the "License");
-    # you may not use this file except in compliance with the License.
-    # You may obtain a copy of the License at
-    #
-    #     http://www.apache.org/licenses/LICENSE-2.0
-    #
-    # Unless required by applicable law or agreed to in writing, software
-    # distributed under the License is distributed on an "AS IS" BASIS,
-    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    # See the License for the specific language governing permissions and
-    # limitations under the License.
-    #
+    #  Change Date: This file will be licensed under the Apache License, Version 2.0,
+    #  four (4) years from its last modification date.
     
     from datetime import datetime
     from typing import Sequence
@@ -820,21 +780,13 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 ??? abstract "Rule source code"
 
     ``` { .python linenums="1" }
+    #  Copyright © 2021-Present DQOps, Documati sp. z o.o. (support@dqops.com)
     #
-    # Copyright © 2021 DQOps (support@dqops.com)
+    #  This file is licensed under the Business Source License 1.1,
+    #  which can be found in the root directory of this repository.
     #
-    # Licensed under the Apache License, Version 2.0 (the "License");
-    # you may not use this file except in compliance with the License.
-    # You may obtain a copy of the License at
-    #
-    #     http://www.apache.org/licenses/LICENSE-2.0
-    #
-    # Unless required by applicable law or agreed to in writing, software
-    # distributed under the License is distributed on an "AS IS" BASIS,
-    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    # See the License for the specific language governing permissions and
-    # limitations under the License.
-    #
+    #  Change Date: This file will be licensed under the Apache License, Version 2.0,
+    #  four (4) years from its last modification date.
     
     from datetime import datetime
     from typing import Sequence
@@ -894,8 +846,8 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
             return RuleExecutionResult(False, None, None, None)
     
         expected_value = rule_parameters.expected_value
-        lower_bound = rule_parameters.expected_value - (rule_parameters.parameters.max_diff_percent/100 * rule_parameters.expected_value)
-        upper_bound = rule_parameters.expected_value + (rule_parameters.parameters.max_diff_percent/100 * rule_parameters.expected_value)
+        lower_bound = rule_parameters.expected_value - (rule_parameters.parameters.max_diff_percent/100 * abs(rule_parameters.expected_value))
+        upper_bound = rule_parameters.expected_value + (rule_parameters.parameters.max_diff_percent/100 * abs(rule_parameters.expected_value))
         if has_actual_value:
             passed = lower_bound <= rule_parameters.actual_value <= upper_bound
         else:
@@ -972,21 +924,13 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 ??? abstract "Rule source code"
 
     ``` { .python linenums="1" }
+    #  Copyright © 2021-Present DQOps, Documati sp. z o.o. (support@dqops.com)
     #
-    # Copyright © 2021 DQOps (support@dqops.com)
+    #  This file is licensed under the Business Source License 1.1,
+    #  which can be found in the root directory of this repository.
     #
-    # Licensed under the Apache License, Version 2.0 (the "License");
-    # you may not use this file except in compliance with the License.
-    # You may obtain a copy of the License at
-    #
-    #     http://www.apache.org/licenses/LICENSE-2.0
-    #
-    # Unless required by applicable law or agreed to in writing, software
-    # distributed under the License is distributed on an "AS IS" BASIS,
-    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    # See the License for the specific language governing permissions and
-    # limitations under the License.
-    #
+    #  Change Date: This file will be licensed under the Apache License, Version 2.0,
+    #  four (4) years from its last modification date.
     
     from datetime import datetime
     from typing import Sequence
@@ -1096,21 +1040,13 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 ??? abstract "Rule source code"
 
     ``` { .python linenums="1" }
+    #  Copyright © 2021-Present DQOps, Documati sp. z o.o. (support@dqops.com)
     #
-    # Copyright © 2021 DQOps (support@dqops.com)
+    #  This file is licensed under the Business Source License 1.1,
+    #  which can be found in the root directory of this repository.
     #
-    # Licensed under the Apache License, Version 2.0 (the "License");
-    # you may not use this file except in compliance with the License.
-    # You may obtain a copy of the License at
-    #
-    #     http://www.apache.org/licenses/LICENSE-2.0
-    #
-    # Unless required by applicable law or agreed to in writing, software
-    # distributed under the License is distributed on an "AS IS" BASIS,
-    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    # See the License for the specific language governing permissions and
-    # limitations under the License.
-    #
+    #  Change Date: This file will be licensed under the Apache License, Version 2.0,
+    #  four (4) years from its last modification date.
     
     from datetime import datetime
     from typing import Sequence
@@ -1220,21 +1156,13 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 ??? abstract "Rule source code"
 
     ``` { .python linenums="1" }
+    #  Copyright © 2021-Present DQOps, Documati sp. z o.o. (support@dqops.com)
     #
-    # Copyright © 2021 DQOps (support@dqops.com)
+    #  This file is licensed under the Business Source License 1.1,
+    #  which can be found in the root directory of this repository.
     #
-    # Licensed under the Apache License, Version 2.0 (the "License");
-    # you may not use this file except in compliance with the License.
-    # You may obtain a copy of the License at
-    #
-    #     http://www.apache.org/licenses/LICENSE-2.0
-    #
-    # Unless required by applicable law or agreed to in writing, software
-    # distributed under the License is distributed on an "AS IS" BASIS,
-    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    # See the License for the specific language governing permissions and
-    # limitations under the License.
-    #
+    #  Change Date: This file will be licensed under the Apache License, Version 2.0,
+    #  four (4) years from its last modification date.
     
     from datetime import datetime
     from typing import Sequence
@@ -1360,21 +1288,13 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 ??? abstract "Rule source code"
 
     ``` { .python linenums="1" }
+    #  Copyright © 2021-Present DQOps, Documati sp. z o.o. (support@dqops.com)
     #
-    # Copyright © 2021 DQOps (support@dqops.com)
+    #  This file is licensed under the Business Source License 1.1,
+    #  which can be found in the root directory of this repository.
     #
-    # Licensed under the Apache License, Version 2.0 (the "License");
-    # you may not use this file except in compliance with the License.
-    # You may obtain a copy of the License at
-    #
-    #     http://www.apache.org/licenses/LICENSE-2.0
-    #
-    # Unless required by applicable law or agreed to in writing, software
-    # distributed under the License is distributed on an "AS IS" BASIS,
-    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    # See the License for the specific language governing permissions and
-    # limitations under the License.
-    #
+    #  Change Date: This file will be licensed under the Apache License, Version 2.0,
+    #  four (4) years from its last modification date.
     
     from datetime import datetime
     from typing import Sequence
@@ -1484,21 +1404,13 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 ??? abstract "Rule source code"
 
     ``` { .python linenums="1" }
+    #  Copyright © 2021-Present DQOps, Documati sp. z o.o. (support@dqops.com)
     #
-    # Copyright © 2021 DQOps (support@dqops.com)
+    #  This file is licensed under the Business Source License 1.1,
+    #  which can be found in the root directory of this repository.
     #
-    # Licensed under the Apache License, Version 2.0 (the "License");
-    # you may not use this file except in compliance with the License.
-    # You may obtain a copy of the License at
-    #
-    #     http://www.apache.org/licenses/LICENSE-2.0
-    #
-    # Unless required by applicable law or agreed to in writing, software
-    # distributed under the License is distributed on an "AS IS" BASIS,
-    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    # See the License for the specific language governing permissions and
-    # limitations under the License.
-    #
+    #  Change Date: This file will be licensed under the Apache License, Version 2.0,
+    #  four (4) years from its last modification date.
     
     from datetime import datetime
     from typing import Sequence
@@ -1618,21 +1530,13 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 ??? abstract "Rule source code"
 
     ``` { .python linenums="1" }
+    #  Copyright © 2021-Present DQOps, Documati sp. z o.o. (support@dqops.com)
     #
-    # Copyright © 2021 DQOps (support@dqops.com)
+    #  This file is licensed under the Business Source License 1.1,
+    #  which can be found in the root directory of this repository.
     #
-    # Licensed under the Apache License, Version 2.0 (the "License");
-    # you may not use this file except in compliance with the License.
-    # You may obtain a copy of the License at
-    #
-    #     http://www.apache.org/licenses/LICENSE-2.0
-    #
-    # Unless required by applicable law or agreed to in writing, software
-    # distributed under the License is distributed on an "AS IS" BASIS,
-    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    # See the License for the specific language governing permissions and
-    # limitations under the License.
-    #
+    #  Change Date: This file will be licensed under the Apache License, Version 2.0,
+    #  four (4) years from its last modification date.
     
     from datetime import datetime
     from typing import Sequence
@@ -1758,21 +1662,13 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 ??? abstract "Rule source code"
 
     ``` { .python linenums="1" }
+    #  Copyright © 2021-Present DQOps, Documati sp. z o.o. (support@dqops.com)
     #
-    # Copyright © 2021 DQOps (support@dqops.com)
+    #  This file is licensed under the Business Source License 1.1,
+    #  which can be found in the root directory of this repository.
     #
-    # Licensed under the Apache License, Version 2.0 (the "License");
-    # you may not use this file except in compliance with the License.
-    # You may obtain a copy of the License at
-    #
-    #     http://www.apache.org/licenses/LICENSE-2.0
-    #
-    # Unless required by applicable law or agreed to in writing, software
-    # distributed under the License is distributed on an "AS IS" BASIS,
-    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    # See the License for the specific language governing permissions and
-    # limitations under the License.
-    #
+    #  Change Date: This file will be licensed under the Apache License, Version 2.0,
+    #  four (4) years from its last modification date.
     
     from datetime import datetime
     from typing import Sequence
@@ -1898,21 +1794,13 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 ??? abstract "Rule source code"
 
     ``` { .python linenums="1" }
+    #  Copyright © 2021-Present DQOps, Documati sp. z o.o. (support@dqops.com)
     #
-    # Copyright © 2021 DQOps (support@dqops.com)
+    #  This file is licensed under the Business Source License 1.1,
+    #  which can be found in the root directory of this repository.
     #
-    # Licensed under the Apache License, Version 2.0 (the "License");
-    # you may not use this file except in compliance with the License.
-    # You may obtain a copy of the License at
-    #
-    #     http://www.apache.org/licenses/LICENSE-2.0
-    #
-    # Unless required by applicable law or agreed to in writing, software
-    # distributed under the License is distributed on an "AS IS" BASIS,
-    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    # See the License for the specific language governing permissions and
-    # limitations under the License.
-    #
+    #  Change Date: This file will be licensed under the Apache License, Version 2.0,
+    #  four (4) years from its last modification date.
     
     from datetime import datetime
     from typing import Sequence
@@ -2043,21 +1931,13 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 ??? abstract "Rule source code"
 
     ``` { .python linenums="1" }
+    #  Copyright © 2021-Present DQOps, Documati sp. z o.o. (support@dqops.com)
     #
-    # Copyright © 2021 DQOps (support@dqops.com)
+    #  This file is licensed under the Business Source License 1.1,
+    #  which can be found in the root directory of this repository.
     #
-    # Licensed under the Apache License, Version 2.0 (the "License");
-    # you may not use this file except in compliance with the License.
-    # You may obtain a copy of the License at
-    #
-    #     http://www.apache.org/licenses/LICENSE-2.0
-    #
-    # Unless required by applicable law or agreed to in writing, software
-    # distributed under the License is distributed on an "AS IS" BASIS,
-    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    # See the License for the specific language governing permissions and
-    # limitations under the License.
-    #
+    #  Change Date: This file will be licensed under the Apache License, Version 2.0,
+    #  four (4) years from its last modification date.
     
     from datetime import datetime
     from typing import Sequence
@@ -2204,21 +2084,13 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 ??? abstract "Rule source code"
 
     ``` { .python linenums="1" }
+    #  Copyright © 2021-Present DQOps, Documati sp. z o.o. (support@dqops.com)
     #
-    # Copyright © 2021 DQOps (support@dqops.com)
+    #  This file is licensed under the Business Source License 1.1,
+    #  which can be found in the root directory of this repository.
     #
-    # Licensed under the Apache License, Version 2.0 (the "License");
-    # you may not use this file except in compliance with the License.
-    # You may obtain a copy of the License at
-    #
-    #     http://www.apache.org/licenses/LICENSE-2.0
-    #
-    # Unless required by applicable law or agreed to in writing, software
-    # distributed under the License is distributed on an "AS IS" BASIS,
-    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    # See the License for the specific language governing permissions and
-    # limitations under the License.
-    #
+    #  Change Date: This file will be licensed under the Apache License, Version 2.0,
+    #  four (4) years from its last modification date.
     
     from datetime import datetime
     from typing import Sequence
@@ -2348,21 +2220,13 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 ??? abstract "Rule source code"
 
     ``` { .python linenums="1" }
+    #  Copyright © 2021-Present DQOps, Documati sp. z o.o. (support@dqops.com)
     #
-    # Copyright © 2021 DQOps (support@dqops.com)
+    #  This file is licensed under the Business Source License 1.1,
+    #  which can be found in the root directory of this repository.
     #
-    # Licensed under the Apache License, Version 2.0 (the "License");
-    # you may not use this file except in compliance with the License.
-    # You may obtain a copy of the License at
-    #
-    #     http://www.apache.org/licenses/LICENSE-2.0
-    #
-    # Unless required by applicable law or agreed to in writing, software
-    # distributed under the License is distributed on an "AS IS" BASIS,
-    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    # See the License for the specific language governing permissions and
-    # limitations under the License.
-    #
+    #  Change Date: This file will be licensed under the Apache License, Version 2.0,
+    #  four (4) years from its last modification date.
     
     from datetime import datetime
     from typing import Sequence
@@ -2487,21 +2351,13 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 ??? abstract "Rule source code"
 
     ``` { .python linenums="1" }
+    #  Copyright © 2021-Present DQOps, Documati sp. z o.o. (support@dqops.com)
     #
-    # Copyright © 2021 DQOps (support@dqops.com)
+    #  This file is licensed under the Business Source License 1.1,
+    #  which can be found in the root directory of this repository.
     #
-    # Licensed under the Apache License, Version 2.0 (the "License");
-    # you may not use this file except in compliance with the License.
-    # You may obtain a copy of the License at
-    #
-    #     http://www.apache.org/licenses/LICENSE-2.0
-    #
-    # Unless required by applicable law or agreed to in writing, software
-    # distributed under the License is distributed on an "AS IS" BASIS,
-    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    # See the License for the specific language governing permissions and
-    # limitations under the License.
-    #
+    #  Change Date: This file will be licensed under the Apache License, Version 2.0,
+    #  four (4) years from its last modification date.
     
     from datetime import datetime
     from typing import Sequence
@@ -2626,21 +2482,13 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 ??? abstract "Rule source code"
 
     ``` { .python linenums="1" }
+    #  Copyright © 2021-Present DQOps, Documati sp. z o.o. (support@dqops.com)
     #
-    # Copyright © 2021 DQOps (support@dqops.com)
+    #  This file is licensed under the Business Source License 1.1,
+    #  which can be found in the root directory of this repository.
     #
-    # Licensed under the Apache License, Version 2.0 (the "License");
-    # you may not use this file except in compliance with the License.
-    # You may obtain a copy of the License at
-    #
-    #     http://www.apache.org/licenses/LICENSE-2.0
-    #
-    # Unless required by applicable law or agreed to in writing, software
-    # distributed under the License is distributed on an "AS IS" BASIS,
-    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    # See the License for the specific language governing permissions and
-    # limitations under the License.
-    #
+    #  Change Date: This file will be licensed under the Apache License, Version 2.0,
+    #  four (4) years from its last modification date.
     
     from datetime import datetime
     from typing import Sequence
@@ -2766,21 +2614,13 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 ??? abstract "Rule source code"
 
     ``` { .python linenums="1" }
+    #  Copyright © 2021-Present DQOps, Documati sp. z o.o. (support@dqops.com)
     #
-    # Copyright © 2021 DQOps (support@dqops.com)
+    #  This file is licensed under the Business Source License 1.1,
+    #  which can be found in the root directory of this repository.
     #
-    # Licensed under the Apache License, Version 2.0 (the "License");
-    # you may not use this file except in compliance with the License.
-    # You may obtain a copy of the License at
-    #
-    #     http://www.apache.org/licenses/LICENSE-2.0
-    #
-    # Unless required by applicable law or agreed to in writing, software
-    # distributed under the License is distributed on an "AS IS" BASIS,
-    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    # See the License for the specific language governing permissions and
-    # limitations under the License.
-    #
+    #  Change Date: This file will be licensed under the Apache License, Version 2.0,
+    #  four (4) years from its last modification date.
     
     from datetime import datetime
     from typing import Sequence
@@ -2890,21 +2730,13 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 ??? abstract "Rule source code"
 
     ``` { .python linenums="1" }
+    #  Copyright © 2021-Present DQOps, Documati sp. z o.o. (support@dqops.com)
     #
-    # Copyright © 2021 DQOps (support@dqops.com)
+    #  This file is licensed under the Business Source License 1.1,
+    #  which can be found in the root directory of this repository.
     #
-    # Licensed under the Apache License, Version 2.0 (the "License");
-    # you may not use this file except in compliance with the License.
-    # You may obtain a copy of the License at
-    #
-    #     http://www.apache.org/licenses/LICENSE-2.0
-    #
-    # Unless required by applicable law or agreed to in writing, software
-    # distributed under the License is distributed on an "AS IS" BASIS,
-    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    # See the License for the specific language governing permissions and
-    # limitations under the License.
-    #
+    #  Change Date: This file will be licensed under the Apache License, Version 2.0,
+    #  four (4) years from its last modification date.
     
     from datetime import datetime
     from typing import Sequence
@@ -3030,21 +2862,13 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 ??? abstract "Rule source code"
 
     ``` { .python linenums="1" }
+    #  Copyright © 2021-Present DQOps, Documati sp. z o.o. (support@dqops.com)
     #
-    # Copyright © 2021 DQOps (support@dqops.com)
+    #  This file is licensed under the Business Source License 1.1,
+    #  which can be found in the root directory of this repository.
     #
-    # Licensed under the Apache License, Version 2.0 (the "License");
-    # you may not use this file except in compliance with the License.
-    # You may obtain a copy of the License at
-    #
-    #     http://www.apache.org/licenses/LICENSE-2.0
-    #
-    # Unless required by applicable law or agreed to in writing, software
-    # distributed under the License is distributed on an "AS IS" BASIS,
-    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    # See the License for the specific language governing permissions and
-    # limitations under the License.
-    #
+    #  Change Date: This file will be licensed under the Apache License, Version 2.0,
+    #  four (4) years from its last modification date.
     
     from datetime import datetime
     from typing import Sequence
@@ -3169,21 +2993,13 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 ??? abstract "Rule source code"
 
     ``` { .python linenums="1" }
+    #  Copyright © 2021-Present DQOps, Documati sp. z o.o. (support@dqops.com)
     #
-    # Copyright © 2021 DQOps (support@dqops.com)
+    #  This file is licensed under the Business Source License 1.1,
+    #  which can be found in the root directory of this repository.
     #
-    # Licensed under the Apache License, Version 2.0 (the "License");
-    # you may not use this file except in compliance with the License.
-    # You may obtain a copy of the License at
-    #
-    #     http://www.apache.org/licenses/LICENSE-2.0
-    #
-    # Unless required by applicable law or agreed to in writing, software
-    # distributed under the License is distributed on an "AS IS" BASIS,
-    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    # See the License for the specific language governing permissions and
-    # limitations under the License.
-    #
+    #  Change Date: This file will be licensed under the Apache License, Version 2.0,
+    #  four (4) years from its last modification date.
     
     from datetime import datetime
     from typing import Sequence
@@ -3293,21 +3109,13 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 ??? abstract "Rule source code"
 
     ``` { .python linenums="1" }
+    #  Copyright © 2021-Present DQOps, Documati sp. z o.o. (support@dqops.com)
     #
-    # Copyright © 2021 DQOps (support@dqops.com)
+    #  This file is licensed under the Business Source License 1.1,
+    #  which can be found in the root directory of this repository.
     #
-    # Licensed under the Apache License, Version 2.0 (the "License");
-    # you may not use this file except in compliance with the License.
-    # You may obtain a copy of the License at
-    #
-    #     http://www.apache.org/licenses/LICENSE-2.0
-    #
-    # Unless required by applicable law or agreed to in writing, software
-    # distributed under the License is distributed on an "AS IS" BASIS,
-    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    # See the License for the specific language governing permissions and
-    # limitations under the License.
-    #
+    #  Change Date: This file will be licensed under the Apache License, Version 2.0,
+    #  four (4) years from its last modification date.
     
     from datetime import datetime
     from typing import Sequence
@@ -3416,21 +3224,13 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 ??? abstract "Rule source code"
 
     ``` { .python linenums="1" }
+    #  Copyright © 2021-Present DQOps, Documati sp. z o.o. (support@dqops.com)
     #
-    # Copyright © 2021 DQOps (support@dqops.com)
+    #  This file is licensed under the Business Source License 1.1,
+    #  which can be found in the root directory of this repository.
     #
-    # Licensed under the Apache License, Version 2.0 (the "License");
-    # you may not use this file except in compliance with the License.
-    # You may obtain a copy of the License at
-    #
-    #     http://www.apache.org/licenses/LICENSE-2.0
-    #
-    # Unless required by applicable law or agreed to in writing, software
-    # distributed under the License is distributed on an "AS IS" BASIS,
-    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    # See the License for the specific language governing permissions and
-    # limitations under the License.
-    #
+    #  Change Date: This file will be licensed under the Apache License, Version 2.0,
+    #  four (4) years from its last modification date.
     
     from datetime import datetime
     from typing import Sequence
