@@ -8,8 +8,8 @@
 # four (4) years from its last modification date.
 
 # WARNING: the next two lines with the version numbers (VERSION =, PIP_VERSION =) should not be modified manually. They are changed by a maven profile at compile time.
-VERSION = "1.12.0"
-PIP_VERSION = "1.12.0"
+VERSION = "1.12.1"
+PIP_VERSION = "1.12.1"
 GITHUB_RELEASE = "v" + VERSION + ""
 JAVA_VERSION = "17"
 
