@@ -109,9 +109,9 @@ must create a DQOps Cloud account.
     You can skip this step and start DQOps without registering a DQOps Cloud account.
     However, having a DQOps Cloud is required to use [data quality dashboards](../dqo-concepts/types-of-data-quality-dashboards.md) and activate SSO login. 
     
-    All other DQOps features will work fine because DQOps is an open-source data quality solution.
+    All other DQOps features will work fine if you activate the product with a valid license key.
 
-    The open-source version supports the following features for free:
+    The offline instance supports the following features:
 
      - Data quality checks for all supported [data sources](../data-sources/index.md). There is no paywall to limit access to data sources for enterprise data sources.
 
@@ -161,7 +161,7 @@ Now that you have installed and opened DQOps, it is time to
 If you have any questions, here are a few of the most common questions we answered.
 
 ### What happens after the trial period?
-You can always use almost all the features of our open-source platform as a free user. 
+You can always use almost all the features of our platform as a free user. 
 However, we sponsor your [data quality data warehouse](../dqo-concepts/architecture/dqops-architecture.md#data-quality-data-warehouse), 
 which powers the [data quality dashboards](../dqo-concepts/types-of-data-quality-dashboards.md).
 After 15 days, your trial of a PROFESSIONAL account will end, and you will be downgraded to a FREE license.

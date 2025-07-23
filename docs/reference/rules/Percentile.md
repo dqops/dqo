@@ -31,7 +31,7 @@ The parameters passed to the rule are shown below.
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |<span class="no-wrap-code">`anomaly_percent`</span>|The probability (in percent) that the current sensor readout (measure) is an anomaly, because the value is outside the regular range of previous readouts. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation.|*double*|:material-check-bold:||
-|<span class="no-wrap-code">`use_ai`</span>|Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution.|*boolean*| ||
+|<span class="no-wrap-code">`use_ai`</span>|Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in a trial distribution of DQOps. Please contact DQOps support to upgrade your instance to a full DQOps instance.|*boolean*| ||
 
 
 
@@ -96,21 +96,13 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 ??? abstract "Rule source code"
 
     ``` { .python linenums="1" }
+    #  Copyright © 2021-Present DQOps, Documati sp. z o.o. (support@dqops.com)
     #
-    # Copyright © 2024 DQOps (support@dqops.com)
+    #  This file is licensed under the Business Source License 1.1,
+    #  which can be found in the root directory of this repository.
     #
-    # Licensed under the Apache License, Version 2.0 (the "License");
-    # you may not use this file except in compliance with the License.
-    # You may obtain a copy of the License at
-    #
-    #     http://www.apache.org/licenses/LICENSE-2.0
-    #
-    # Unless required by applicable law or agreed to in writing, software
-    # distributed under the License is distributed on an "AS IS" BASIS,
-    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    # See the License for the specific language governing permissions and
-    # limitations under the License.
-    #
+    #  Change Date: This file will be licensed under the Apache License, Version 2.0,
+    #  four (4) years from its last modification date.
     
     from datetime import datetime
     from typing import Sequence, Dict
@@ -315,7 +307,7 @@ The parameters passed to the rule are shown below.
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |<span class="no-wrap-code">`anomaly_percent`</span>|The probability (in percent) that the current sensor readout (measure) is an anomaly, because the value is outside the regular range of previous readouts. The default time window of 30 periods (days, etc.) is required, but at least 10 readouts must exist to run the calculation.|*double*|:material-check-bold:||
-|<span class="no-wrap-code">`use_ai`</span>|Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution.|*boolean*| ||
+|<span class="no-wrap-code">`use_ai`</span>|Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in a trial distribution of DQOps. Please contact DQOps support to upgrade your instance to a full DQOps instance.|*boolean*| ||
 
 
 
@@ -380,21 +372,13 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 ??? abstract "Rule source code"
 
     ``` { .python linenums="1" }
+    #  Copyright © 2021-Present DQOps, Documati sp. z o.o. (support@dqops.com)
     #
-    # Copyright © 2024 DQOps (support@dqops.com)
+    #  This file is licensed under the Business Source License 1.1,
+    #  which can be found in the root directory of this repository.
     #
-    # Licensed under the Apache License, Version 2.0 (the "License");
-    # you may not use this file except in compliance with the License.
-    # You may obtain a copy of the License at
-    #
-    #     http://www.apache.org/licenses/LICENSE-2.0
-    #
-    # Unless required by applicable law or agreed to in writing, software
-    # distributed under the License is distributed on an "AS IS" BASIS,
-    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    # See the License for the specific language governing permissions and
-    # limitations under the License.
-    #
+    #  Change Date: This file will be licensed under the Apache License, Version 2.0,
+    #  four (4) years from its last modification date.
     
     from datetime import datetime
     from typing import Sequence, Dict
@@ -596,7 +580,7 @@ The parameters passed to the rule are shown below.
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |<span class="no-wrap-code">`anomaly_percent`</span>|The probability (in percent) that the current daily row count is an anomaly because the value is outside the regular range of previous partition volume measures. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation.|*double*|:material-check-bold:||
-|<span class="no-wrap-code">`use_ai`</span>|Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution.|*boolean*| ||
+|<span class="no-wrap-code">`use_ai`</span>|Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in a trial distribution of DQOps. Please contact DQOps support to upgrade your instance to a full DQOps instance.|*boolean*| ||
 
 
 
@@ -661,21 +645,13 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 ??? abstract "Rule source code"
 
     ``` { .python linenums="1" }
+    #  Copyright © 2021-Present DQOps, Documati sp. z o.o. (support@dqops.com)
     #
-    # Copyright © 2024 DQOps (support@dqops.com)
+    #  This file is licensed under the Business Source License 1.1,
+    #  which can be found in the root directory of this repository.
     #
-    # Licensed under the Apache License, Version 2.0 (the "License");
-    # you may not use this file except in compliance with the License.
-    # You may obtain a copy of the License at
-    #
-    #     http://www.apache.org/licenses/LICENSE-2.0
-    #
-    # Unless required by applicable law or agreed to in writing, software
-    # distributed under the License is distributed on an "AS IS" BASIS,
-    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    # See the License for the specific language governing permissions and
-    # limitations under the License.
-    #
+    #  Change Date: This file will be licensed under the Apache License, Version 2.0,
+    #  four (4) years from its last modification date.
     
     from datetime import datetime
     from typing import Sequence
@@ -824,7 +800,7 @@ The parameters passed to the rule are shown below.
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |<span class="no-wrap-code">`anomaly_percent`</span>|The probability (in percent) that the count of values (records) is an anomaly because the value is outside the regular range of counts. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation.|*double*|:material-check-bold:||
-|<span class="no-wrap-code">`use_ai`</span>|Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution.|*boolean*| ||
+|<span class="no-wrap-code">`use_ai`</span>|Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in a trial distribution of DQOps. Please contact DQOps support to upgrade your instance to a full DQOps instance.|*boolean*| ||
 
 
 
@@ -889,21 +865,13 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 ??? abstract "Rule source code"
 
     ``` { .python linenums="1" }
+    #  Copyright © 2021-Present DQOps, Documati sp. z o.o. (support@dqops.com)
     #
-    # Copyright © 2024 DQOps (support@dqops.com)
+    #  This file is licensed under the Business Source License 1.1,
+    #  which can be found in the root directory of this repository.
     #
-    # Licensed under the Apache License, Version 2.0 (the "License");
-    # you may not use this file except in compliance with the License.
-    # You may obtain a copy of the License at
-    #
-    #     http://www.apache.org/licenses/LICENSE-2.0
-    #
-    # Unless required by applicable law or agreed to in writing, software
-    # distributed under the License is distributed on an "AS IS" BASIS,
-    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    # See the License for the specific language governing permissions and
-    # limitations under the License.
-    #
+    #  Change Date: This file will be licensed under the Apache License, Version 2.0,
+    #  four (4) years from its last modification date.
     
     from datetime import datetime
     from typing import Sequence
@@ -1055,7 +1023,7 @@ The parameters passed to the rule are shown below.
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |<span class="no-wrap-code">`anomaly_percent`</span>|The probability (in percent) that the current percentage value is an anomaly because the value is outside the regular range of captured percentage measures. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation.|*double*|:material-check-bold:||
-|<span class="no-wrap-code">`use_ai`</span>|Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution.|*boolean*| ||
+|<span class="no-wrap-code">`use_ai`</span>|Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in a trial distribution of DQOps. Please contact DQOps support to upgrade your instance to a full DQOps instance.|*boolean*| ||
 
 
 
@@ -1120,21 +1088,13 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 ??? abstract "Rule source code"
 
     ``` { .python linenums="1" }
+    #  Copyright © 2021-Present DQOps, Documati sp. z o.o. (support@dqops.com)
     #
-    # Copyright © 2023 DQOps (support@dqops.com)
+    #  This file is licensed under the Business Source License 1.1,
+    #  which can be found in the root directory of this repository.
     #
-    # Licensed under the Apache License, Version 2.0 (the "License");
-    # you may not use this file except in compliance with the License.
-    # You may obtain a copy of the License at
-    #
-    #     http://www.apache.org/licenses/LICENSE-2.0
-    #
-    # Unless required by applicable law or agreed to in writing, software
-    # distributed under the License is distributed on an "AS IS" BASIS,
-    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    # See the License for the specific language governing permissions and
-    # limitations under the License.
-    #
+    #  Change Date: This file will be licensed under the Apache License, Version 2.0,
+    #  four (4) years from its last modification date.
     
     from datetime import datetime
     from typing import Sequence
@@ -1299,7 +1259,7 @@ The parameters passed to the rule are shown below.
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |<span class="no-wrap-code">`anomaly_percent`</span>|The probability (in percent) that the current sensor readout (measure) is an anomaly, because the value is outside the regular range of previous readouts. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation.|*double*|:material-check-bold:||
-|<span class="no-wrap-code">`use_ai`</span>|Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution.|*boolean*| ||
+|<span class="no-wrap-code">`use_ai`</span>|Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in a trial distribution of DQOps. Please contact DQOps support to upgrade your instance to a full DQOps instance.|*boolean*| ||
 
 
 
@@ -1364,21 +1324,13 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 ??? abstract "Rule source code"
 
     ``` { .python linenums="1" }
+    #  Copyright © 2021-Present DQOps, Documati sp. z o.o. (support@dqops.com)
     #
-    # Copyright © 2024 DQOps (support@dqops.com)
+    #  This file is licensed under the Business Source License 1.1,
+    #  which can be found in the root directory of this repository.
     #
-    # Licensed under the Apache License, Version 2.0 (the "License");
-    # you may not use this file except in compliance with the License.
-    # You may obtain a copy of the License at
-    #
-    #     http://www.apache.org/licenses/LICENSE-2.0
-    #
-    # Unless required by applicable law or agreed to in writing, software
-    # distributed under the License is distributed on an "AS IS" BASIS,
-    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    # See the License for the specific language governing permissions and
-    # limitations under the License.
-    #
+    #  Change Date: This file will be licensed under the Apache License, Version 2.0,
+    #  four (4) years from its last modification date.
     
     from datetime import datetime
     from typing import Sequence
@@ -1554,7 +1506,7 @@ The parameters passed to the rule are shown below.
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |<span class="no-wrap-code">`anomaly_percent`</span>|The probability (in percent) that the current sensor readout (measure) is an anomaly, because the value is outside the regular range of previous readouts. The default time window of 30 periods (days, etc.) is required, but at least 10 readouts must exist to run the calculation.|*double*|:material-check-bold:||
-|<span class="no-wrap-code">`use_ai`</span>|Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution.|*boolean*| ||
+|<span class="no-wrap-code">`use_ai`</span>|Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in a trial distribution of DQOps. Please contact DQOps support to upgrade your instance to a full DQOps instance.|*boolean*| ||
 
 
 
@@ -1619,21 +1571,13 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 ??? abstract "Rule source code"
 
     ``` { .python linenums="1" }
+    #  Copyright © 2021-Present DQOps, Documati sp. z o.o. (support@dqops.com)
     #
-    # Copyright © 2024 DQOps (support@dqops.com)
+    #  This file is licensed under the Business Source License 1.1,
+    #  which can be found in the root directory of this repository.
     #
-    # Licensed under the Apache License, Version 2.0 (the "License");
-    # you may not use this file except in compliance with the License.
-    # You may obtain a copy of the License at
-    #
-    #     http://www.apache.org/licenses/LICENSE-2.0
-    #
-    # Unless required by applicable law or agreed to in writing, software
-    # distributed under the License is distributed on an "AS IS" BASIS,
-    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    # See the License for the specific language governing permissions and
-    # limitations under the License.
-    #
+    #  Change Date: This file will be licensed under the Apache License, Version 2.0,
+    #  four (4) years from its last modification date.
     
     from datetime import datetime
     from typing import Sequence
@@ -1808,7 +1752,7 @@ The parameters passed to the rule are shown below.
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |<span class="no-wrap-code">`anomaly_percent`</span>|The probability (in percent) that the current data delay is an anomaly because the value is outside the regular range of previous delays. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation.|*double*|:material-check-bold:||
-|<span class="no-wrap-code">`use_ai`</span>|Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution.|*boolean*| ||
+|<span class="no-wrap-code">`use_ai`</span>|Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in a trial distribution of DQOps. Please contact DQOps support to upgrade your instance to a full DQOps instance.|*boolean*| ||
 
 
 
@@ -1873,21 +1817,13 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 ??? abstract "Rule source code"
 
     ``` { .python linenums="1" }
+    #  Copyright © 2021-Present DQOps, Documati sp. z o.o. (support@dqops.com)
     #
-    # Copyright © 2024 DQOps (support@dqops.com)
+    #  This file is licensed under the Business Source License 1.1,
+    #  which can be found in the root directory of this repository.
     #
-    # Licensed under the Apache License, Version 2.0 (the "License");
-    # you may not use this file except in compliance with the License.
-    # You may obtain a copy of the License at
-    #
-    #     http://www.apache.org/licenses/LICENSE-2.0
-    #
-    # Unless required by applicable law or agreed to in writing, software
-    # distributed under the License is distributed on an "AS IS" BASIS,
-    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    # See the License for the specific language governing permissions and
-    # limitations under the License.
-    #
+    #  Change Date: This file will be licensed under the Apache License, Version 2.0,
+    #  four (4) years from its last modification date.
     
     from datetime import datetime
     from typing import Sequence
@@ -2080,21 +2016,13 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 ??? abstract "Rule source code"
 
     ``` { .python linenums="1" }
+    #  Copyright © 2021-Present DQOps, Documati sp. z o.o. (support@dqops.com)
     #
-    # Copyright © 2023 DQOps (support@dqops.com)
+    #  This file is licensed under the Business Source License 1.1,
+    #  which can be found in the root directory of this repository.
     #
-    # Licensed under the Apache License, Version 2.0 (the "License");
-    # you may not use this file except in compliance with the License.
-    # You may obtain a copy of the License at
-    #
-    #     http://www.apache.org/licenses/LICENSE-2.0
-    #
-    # Unless required by applicable law or agreed to in writing, software
-    # distributed under the License is distributed on an "AS IS" BASIS,
-    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    # See the License for the specific language governing permissions and
-    # limitations under the License.
-    #
+    #  Change Date: This file will be licensed under the Apache License, Version 2.0,
+    #  four (4) years from its last modification date.
     
     from datetime import datetime
     from typing import Sequence
@@ -2276,21 +2204,13 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 ??? abstract "Rule source code"
 
     ``` { .python linenums="1" }
+    #  Copyright © 2021-Present DQOps, Documati sp. z o.o. (support@dqops.com)
     #
-    # Copyright © 2023 DQOps (support@dqops.com)
+    #  This file is licensed under the Business Source License 1.1,
+    #  which can be found in the root directory of this repository.
     #
-    # Licensed under the Apache License, Version 2.0 (the "License");
-    # you may not use this file except in compliance with the License.
-    # You may obtain a copy of the License at
-    #
-    #     http://www.apache.org/licenses/LICENSE-2.0
-    #
-    # Unless required by applicable law or agreed to in writing, software
-    # distributed under the License is distributed on an "AS IS" BASIS,
-    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    # See the License for the specific language governing permissions and
-    # limitations under the License.
-    #
+    #  Change Date: This file will be licensed under the Apache License, Version 2.0,
+    #  four (4) years from its last modification date.
     
     from datetime import datetime
     from typing import Sequence
@@ -2472,21 +2392,13 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 ??? abstract "Rule source code"
 
     ``` { .python linenums="1" }
+    #  Copyright © 2021-Present DQOps, Documati sp. z o.o. (support@dqops.com)
     #
-    # Copyright © 2023 DQOps (support@dqops.com)
+    #  This file is licensed under the Business Source License 1.1,
+    #  which can be found in the root directory of this repository.
     #
-    # Licensed under the Apache License, Version 2.0 (the "License");
-    # you may not use this file except in compliance with the License.
-    # You may obtain a copy of the License at
-    #
-    #     http://www.apache.org/licenses/LICENSE-2.0
-    #
-    # Unless required by applicable law or agreed to in writing, software
-    # distributed under the License is distributed on an "AS IS" BASIS,
-    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    # See the License for the specific language governing permissions and
-    # limitations under the License.
-    #
+    #  Change Date: This file will be licensed under the Apache License, Version 2.0,
+    #  four (4) years from its last modification date.
     
     from datetime import datetime
     from typing import Sequence
@@ -2668,21 +2580,13 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 ??? abstract "Rule source code"
 
     ``` { .python linenums="1" }
+    #  Copyright © 2021-Present DQOps, Documati sp. z o.o. (support@dqops.com)
     #
-    # Copyright © 2023 DQOps (support@dqops.com)
+    #  This file is licensed under the Business Source License 1.1,
+    #  which can be found in the root directory of this repository.
     #
-    # Licensed under the Apache License, Version 2.0 (the "License");
-    # you may not use this file except in compliance with the License.
-    # You may obtain a copy of the License at
-    #
-    #     http://www.apache.org/licenses/LICENSE-2.0
-    #
-    # Unless required by applicable law or agreed to in writing, software
-    # distributed under the License is distributed on an "AS IS" BASIS,
-    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    # See the License for the specific language governing permissions and
-    # limitations under the License.
-    #
+    #  Change Date: This file will be licensed under the Apache License, Version 2.0,
+    #  four (4) years from its last modification date.
     
     from datetime import datetime
     from typing import Sequence
@@ -2860,21 +2764,13 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 ??? abstract "Rule source code"
 
     ``` { .python linenums="1" }
+    #  Copyright © 2021-Present DQOps, Documati sp. z o.o. (support@dqops.com)
     #
-    # Copyright © 2023 DQOps (support@dqops.com)
+    #  This file is licensed under the Business Source License 1.1,
+    #  which can be found in the root directory of this repository.
     #
-    # Licensed under the Apache License, Version 2.0 (the "License");
-    # you may not use this file except in compliance with the License.
-    # You may obtain a copy of the License at
-    #
-    #     http://www.apache.org/licenses/LICENSE-2.0
-    #
-    # Unless required by applicable law or agreed to in writing, software
-    # distributed under the License is distributed on an "AS IS" BASIS,
-    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    # See the License for the specific language governing permissions and
-    # limitations under the License.
-    #
+    #  Change Date: This file will be licensed under the Apache License, Version 2.0,
+    #  four (4) years from its last modification date.
     
     from datetime import datetime
     from typing import Sequence
@@ -3052,21 +2948,13 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 ??? abstract "Rule source code"
 
     ``` { .python linenums="1" }
+    #  Copyright © 2021-Present DQOps, Documati sp. z o.o. (support@dqops.com)
     #
-    # Copyright © 2023 DQOps (support@dqops.com)
+    #  This file is licensed under the Business Source License 1.1,
+    #  which can be found in the root directory of this repository.
     #
-    # Licensed under the Apache License, Version 2.0 (the "License");
-    # you may not use this file except in compliance with the License.
-    # You may obtain a copy of the License at
-    #
-    #     http://www.apache.org/licenses/LICENSE-2.0
-    #
-    # Unless required by applicable law or agreed to in writing, software
-    # distributed under the License is distributed on an "AS IS" BASIS,
-    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    # See the License for the specific language governing permissions and
-    # limitations under the License.
-    #
+    #  Change Date: This file will be licensed under the Apache License, Version 2.0,
+    #  four (4) years from its last modification date.
     
     from datetime import datetime
     from typing import Sequence

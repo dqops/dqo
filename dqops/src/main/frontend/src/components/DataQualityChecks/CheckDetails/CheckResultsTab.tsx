@@ -92,6 +92,7 @@ const CheckResultsTab = ({
     {
       label: 'Actual value',
       value: 'actualValue',
+      alwaysVisible: true,
       className:
         'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right',
       render: (value: number | string) => (
@@ -101,6 +102,7 @@ const CheckResultsTab = ({
     {
       label: 'Expected value',
       value: 'expectedValue',
+      alwaysVisible: true,
       className:
         'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right',
       render: (value: number | string) => (

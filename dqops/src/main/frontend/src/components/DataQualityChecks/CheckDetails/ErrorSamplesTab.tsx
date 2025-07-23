@@ -70,6 +70,7 @@ const ErrorSamplesTab = ({
     {
       label: 'Result',
       value: 'result',
+      alwaysVisible: true,
       className: 'text-sm !py-2 whitespace-nowrap text-gray-700 w-50 text-right'
     },
     ...getRowIds(),

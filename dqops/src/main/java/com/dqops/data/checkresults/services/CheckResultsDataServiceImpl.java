@@ -1,17 +1,11 @@
 /*
- * Copyright © 2021 DQOps (support@dqops.com)
+ * Copyright © 2021-Present DQOps, Documati sp. z o.o. (support@dqops.com)
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * This file is licensed under the Business Source License 1.1,
+ * which can be found in the root directory of this repository.
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Change Date: This file will be licensed under the Apache License, Version 2.0,
+ * four (4) years from its last modification date.
  */
 package com.dqops.data.checkresults.services;
 
@@ -349,7 +343,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
             }
 
             Table sortedTable = filteredTableByDataGroup.sortDescendingOn(
-                    SensorReadoutsColumnNames.EXECUTED_AT_COLUMN_NAME, // most recent execution first
+//                    SensorReadoutsColumnNames.EXECUTED_AT_COLUMN_NAME, // most recent execution first
                     SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME, // then the most recent reading (for partitioned checks) when many partitions were captured
                     CheckResultsColumnNames.SEVERITY_COLUMN_NAME); // second on the highest severity first on that time period
             CheckResultsNormalizedResult checkResultsNormalizedResult = new CheckResultsNormalizedResult(sortedTable, false);
@@ -442,7 +436,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
             }
 
             Table sortedTable = filteredTableByDataGroup.sortDescendingOn(
-                    SensorReadoutsColumnNames.EXECUTED_AT_COLUMN_NAME, // most recent execution first
+//                    SensorReadoutsColumnNames.EXECUTED_AT_COLUMN_NAME, // most recent execution first
                     SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME, // then the most recent reading (for partitioned checks) when many partitions were captured
                     CheckResultsColumnNames.SEVERITY_COLUMN_NAME); // second on the highest severity first on that time period
             CheckResultsNormalizedResult checkResultsNormalizedResult = new CheckResultsNormalizedResult(sortedTable, false);
@@ -1070,6 +1064,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
         StringColumn columnNameColumn = sourceTable.stringColumn(CheckResultsColumnNames.COLUMN_NAME_COLUMN_NAME);
         StringColumn checkTypeColumn = sourceTable.stringColumn(CheckResultsColumnNames.CHECK_TYPE_COLUMN_NAME);
         StringColumn timeGradientColumn = sourceTable.stringColumn(CheckResultsColumnNames.TIME_GRADIENT_COLUMN_NAME);
+        StringColumn tableComparisonNameColumn = sourceTable.stringColumn(CheckResultsColumnNames.TABLE_COMPARISON_NAME_COLUMN_NAME);
 
         int rowCount = sourceTable.rowCount();
 
@@ -1091,6 +1086,11 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
             incrementTotalIssueCount(tableStatusModel, severity);
 
             String checkName = checkNameColumn.get(i);
+            String comparisonName = tableComparisonNameColumn.get(i);
+            if (!Strings.isNullOrEmpty(comparisonName)) {
+                checkName = checkName + "/" + comparisonName;
+            }
+
             String columnName = columnNameColumn.get(i);
             if (columnName != null && columnName.isEmpty()) {
                 columnName = null;

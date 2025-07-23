@@ -1,17 +1,11 @@
 /*
- * Copyright © 2021 DQOps (support@dqops.com)
+ * Copyright © 2021-Present DQOps, Documati sp. z o.o. (support@dqops.com)
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * This file is licensed under the Business Source License 1.1,
+ * which can be found in the root directory of this repository.
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Change Date: This file will be licensed under the Apache License, Version 2.0,
+ * four (4) years from its last modification date.
  */
 package com.dqops.core.jobqueue;
 
@@ -131,6 +125,8 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
         for (DqoJobQueueEntry jobQueueEntry : preStartQueuedJobs) {
             this.pushJobCore(jobQueueEntry.getJob(), jobQueueEntry.getJobId().getParentJobId(), jobQueueEntry.getJob().getPrincipal());
         }
+
+        log.debug("Job queue " + this.getClass().getName() + " started");
     }
 
     /**
@@ -176,6 +172,9 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
                         if (dqoJobQueueEntry.getJobConcurrencyConstraints() != null) {
                             DqoJobQueueEntry unparkedDqoJobToRun = this.jobConcurrencyLimiter.parkOrRegisterStartedJob(dqoJobQueueEntry);
                             if (unparkedDqoJobToRun == null) {
+                                if (log.isDebugEnabled()) {
+                                    log.debug("Job parked due to concurrency constraints: " + dqoJobQueueEntry.getJob());
+                                }
                                 this.queueMonitoringService.publishJobParkedEvent(dqoJobQueueEntry);
                                 continue; // the job was parked
                             }
@@ -197,6 +196,9 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
                     }
 
                     this.queueMonitoringService.publishJobRunningEvent(dqoJobQueueEntry);
+                    if (log.isDebugEnabled()) {
+                        log.debug("Job execution starting: " + dqoJobQueueEntry.getJob());
+                    }
 
                     this.runningJobsCount.incrementAndGet();
                     try {
@@ -205,12 +207,15 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
                         job.execute(jobExecutionContext);
 
                         this.queueMonitoringService.publishJobSucceededEvent(dqoJobQueueEntry);
+                        if (log.isDebugEnabled()) {
+                            log.debug("Job execution finished: " + dqoJobQueueEntry.getJob());
+                        }
                     }
                     catch (DqoQueueJobCancelledException cex) {
                         this.queueMonitoringService.publishJobFullyCancelledEvent(dqoJobQueueEntry);
                     }
-                    catch (Exception ex) {
-                        log.error("Failed to execute a job: " + ex.getMessage(), ex);
+                    catch (Throwable ex) {
+                        log.error("Failed to execute a job: " + job + ", message: " + ex.getMessage(), ex);
                         this.queueMonitoringService.publishJobFailedEvent(dqoJobQueueEntry, ex.getMessage());
                     }
                     finally {
@@ -236,7 +241,7 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
                     }
                 } catch (InterruptedException ex) {
                     break;
-                } catch (Exception ex) {
+                } catch (Throwable ex) {
                     log.error("Job failed to execute: " + ex.getMessage(), ex);
                 }
             }
@@ -360,19 +365,23 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
             return new PushJobResult<>(job.getFinishedFuture(), job.getJobId());
         }
 
-        if (!this.started) {
-            if (job.getJobId() == null) {
-                DqoQueueJobId newJobId = this.dqoJobIdGenerator.createNewJobId();
-                newJobId.setParentJobId(parentJobId);
-                newJobId.setJobBusinessKey(job.getJobBusinessKey());
-                job.setJobId(newJobId);
-            }
-            DqoJobQueueEntry jobQueueEntry = new DqoJobQueueEntry(job, job.getJobId(), principal.getDataDomainIdentity().getDataDomainCloud());
-            job.setPrincipal(principal);
-            synchronized (this) {
+        synchronized (this) {
+            if (!this.started) {
+                if (job.getJobId() == null) {
+                    DqoQueueJobId newJobId = this.dqoJobIdGenerator.createNewJobId();
+                    newJobId.setParentJobId(parentJobId);
+                    newJobId.setJobBusinessKey(job.getJobBusinessKey());
+                    job.setJobId(newJobId);
+                }
+                DqoJobQueueEntry jobQueueEntry = new DqoJobQueueEntry(job, job.getJobId(), principal.getDataDomainIdentity().getDataDomainCloud());
+                job.setPrincipal(principal);
                 this.jobsQueuedBeforeStart.add(jobQueueEntry);
+                if (log.isDebugEnabled()) {
+                    log.debug("Queuing a job to be started when the job queue starts: " + job);
+                }
+
+                return new PushJobResult<>(job.getFinishedFuture(), job.getJobId());
             }
-            return new PushJobResult<>(job.getFinishedFuture(), job.getJobId());
         }
 
         boolean newThreadStarted = this.startNewThreadWhenRequired();
@@ -395,6 +404,10 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
             }
 
             this.queueMonitoringService.publishJobAddedEvent(jobQueueEntry);
+
+            if (log.isDebugEnabled()) {
+                log.debug("Adding a new job to the queue: " + job);
+            }
             this.jobsBlockingQueue.put(jobQueueEntry);
 
             return new PushJobResult<>(job.getFinishedFuture(), job.getJobId());

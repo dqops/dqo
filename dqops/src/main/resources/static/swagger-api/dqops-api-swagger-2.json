@@ -11,8 +11,8 @@
       "email" : "support@dqops.com"
     },
     "license" : {
-      "name" : "Apache 2.0",
-      "url" : "https://www.apache.org/licenses/LICENSE-2.0.html"
+      "name" : "BUSL 1.1",
+      "url" : "https://spdx.org/licenses/BUSL-1.1.html"
     }
   },
   "basePath" : "/",
@@ -15522,6 +15522,36 @@
         } ]
       }
     },
+    "/api/environment/logs/download" : {
+      "get" : {
+        "tags" : [ "Environment" ],
+        "summary" : "downloadLogs",
+        "description" : "Downloads logs as a zip file",
+        "operationId" : "downloadLogs",
+        "produces" : [ "application/zip" ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "type" : "string",
+                "format" : "byte"
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      }
+    },
     "/api/environment/profile" : {
       "get" : {
         "tags" : [ "Environment" ],
@@ -20093,7 +20123,7 @@
         },
         "use_ai" : {
           "type" : "boolean",
-          "description" : "Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution."
+          "description" : "Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in a trial distribution of DQOps. Please contact DQOps support to upgrade your instance to a full DQOps instance."
         }
       }
     },
@@ -20107,7 +20137,7 @@
         },
         "use_ai" : {
           "type" : "boolean",
-          "description" : "Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution."
+          "description" : "Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in a trial distribution of DQOps. Please contact DQOps support to upgrade your instance to a full DQOps instance."
         }
       }
     },
@@ -20121,7 +20151,7 @@
         },
         "use_ai" : {
           "type" : "boolean",
-          "description" : "Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution."
+          "description" : "Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in a trial distribution of DQOps. Please contact DQOps support to upgrade your instance to a full DQOps instance."
         }
       }
     },
@@ -20135,7 +20165,7 @@
         },
         "use_ai" : {
           "type" : "boolean",
-          "description" : "Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution."
+          "description" : "Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in a trial distribution of DQOps. Please contact DQOps support to upgrade your instance to a full DQOps instance."
         }
       }
     },
@@ -20149,7 +20179,7 @@
         },
         "use_ai" : {
           "type" : "boolean",
-          "description" : "Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution."
+          "description" : "Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in a trial distribution of DQOps. Please contact DQOps support to upgrade your instance to a full DQOps instance."
         }
       }
     },
@@ -20163,7 +20193,7 @@
         },
         "use_ai" : {
           "type" : "boolean",
-          "description" : "Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution."
+          "description" : "Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in a trial distribution of DQOps. Please contact DQOps support to upgrade your instance to a full DQOps instance."
         }
       }
     },
@@ -20177,7 +20207,7 @@
         },
         "use_ai" : {
           "type" : "boolean",
-          "description" : "Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution."
+          "description" : "Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in a trial distribution of DQOps. Please contact DQOps support to upgrade your instance to a full DQOps instance."
         }
       }
     },
@@ -20191,7 +20221,7 @@
         },
         "use_ai" : {
           "type" : "boolean",
-          "description" : "Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution."
+          "description" : "Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in a trial distribution of DQOps. Please contact DQOps support to upgrade your instance to a full DQOps instance."
         }
       }
     },
@@ -20205,7 +20235,7 @@
         },
         "use_ai" : {
           "type" : "boolean",
-          "description" : "Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution."
+          "description" : "Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in a trial distribution of DQOps. Please contact DQOps support to upgrade your instance to a full DQOps instance."
         }
       }
     },
@@ -20219,7 +20249,7 @@
         },
         "use_ai" : {
           "type" : "boolean",
-          "description" : "Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution."
+          "description" : "Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in a trial distribution of DQOps. Please contact DQOps support to upgrade your instance to a full DQOps instance."
         }
       }
     },
@@ -20233,7 +20263,7 @@
         },
         "use_ai" : {
           "type" : "boolean",
-          "description" : "Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution."
+          "description" : "Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in a trial distribution of DQOps. Please contact DQOps support to upgrade your instance to a full DQOps instance."
         }
       }
     },
@@ -20247,7 +20277,7 @@
         },
         "use_ai" : {
           "type" : "boolean",
-          "description" : "Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution."
+          "description" : "Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in a trial distribution of DQOps. Please contact DQOps support to upgrade your instance to a full DQOps instance."
         }
       }
     },
@@ -20261,7 +20291,7 @@
         },
         "use_ai" : {
           "type" : "boolean",
-          "description" : "Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution."
+          "description" : "Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in a trial distribution of DQOps. Please contact DQOps support to upgrade your instance to a full DQOps instance."
         }
       }
     },
@@ -20275,7 +20305,7 @@
         },
         "use_ai" : {
           "type" : "boolean",
-          "description" : "Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution."
+          "description" : "Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in a trial distribution of DQOps. Please contact DQOps support to upgrade your instance to a full DQOps instance."
         }
       }
     },
@@ -20289,7 +20319,7 @@
         },
         "use_ai" : {
           "type" : "boolean",
-          "description" : "Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution."
+          "description" : "Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in a trial distribution of DQOps. Please contact DQOps support to upgrade your instance to a full DQOps instance."
         }
       }
     },
@@ -20303,7 +20333,7 @@
         },
         "use_ai" : {
           "type" : "boolean",
-          "description" : "Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution."
+          "description" : "Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in a trial distribution of DQOps. Please contact DQOps support to upgrade your instance to a full DQOps instance."
         }
       }
     },
@@ -20317,7 +20347,7 @@
         },
         "use_ai" : {
           "type" : "boolean",
-          "description" : "Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution."
+          "description" : "Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in a trial distribution of DQOps. Please contact DQOps support to upgrade your instance to a full DQOps instance."
         }
       }
     },
@@ -20331,7 +20361,7 @@
         },
         "use_ai" : {
           "type" : "boolean",
-          "description" : "Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in an open-source distribution of DQOps. Please contact DQOps support to upgrade your instance to a closed-source DQOps distribution."
+          "description" : "Use an AI model to predict anomalies. WARNING: anomaly detection by AI models is not supported in a trial distribution of DQOps. Please contact DQOps support to upgrade your instance to a full DQOps instance."
         }
       }
     },

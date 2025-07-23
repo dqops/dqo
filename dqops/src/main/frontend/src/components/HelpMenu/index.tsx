@@ -54,6 +54,14 @@ const HelpMenu = () => {
           >
             Manage cloud account
           </a>
+          <a
+            href="/api/environment/logs/download"
+            target="_blank"
+            rel="noreferrer"
+            className="block text-gray-700 mb-3"
+          >
+            Download log files
+          </a>
           <SettingsPopUp />
         </div>
         <div className="px-4 pt-3 border-t border-gray-300">

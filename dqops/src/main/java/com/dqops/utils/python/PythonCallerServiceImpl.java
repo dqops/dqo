@@ -1,17 +1,11 @@
 /*
- * Copyright © 2021 DQOps (support@dqops.com)
+ * Copyright © 2021-Present DQOps, Documati sp. z o.o. (support@dqops.com)
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * This file is licensed under the Business Source License 1.1,
+ * which can be found in the root directory of this repository.
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Change Date: This file will be licensed under the Apache License, Version 2.0,
+ * four (4) years from its last modification date.
  */
 package com.dqops.utils.python;
 
@@ -45,6 +39,11 @@ import java.util.*;
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Slf4j
 public class PythonCallerServiceImpl implements PythonCallerService, DisposableBean {
+    /**
+     * The wait timeout when a thread is waiting to acquire a lock and try to start a new Python process.
+     */
+    public static final long WAIT_FOR_AVAILABLE_PROCESS_TIMEOUT_MS = 1000;
+
     private final DqoConfigurationProperties configurationProperties;
     private final DqoPythonConfigurationProperties pythonConfigurationProperties;
     private final JsonSerializer jsonSerializer;
@@ -138,7 +137,7 @@ public class PythonCallerServiceImpl implements PythonCallerService, DisposableB
         StreamingPythonProcess streamingPythonProcess = null;
 
         synchronized (this.processDictionaryLock) {
-            for (int retry = 0; retry < 10; retry++) {
+            for (int retry = 0; retry < 10000000; retry++) {
                 if (this.pythonModuleProcesses == null) {
                     throw new PythonExecutionException("Python script cannot be called, because Python processes were already closed and the application is shutting down."); // closing
                 }
@@ -150,13 +149,10 @@ public class PythonCallerServiceImpl implements PythonCallerService, DisposableB
                 }
 
                 int maxDoP = getMaxProcessesPerScript();
-                if (availableProcesses.getRunningProcesses() >= maxDoP) {
+                if (!availableProcesses.incrementRunningProcesses(maxDoP)) {
                     try {
-                        this.processDictionaryLock.wait();
-
-                        if (availableProcesses.getRunningProcesses() >= maxDoP) {
-                            continue;
-                        }
+                        this.processDictionaryLock.wait(WAIT_FOR_AVAILABLE_PROCESS_TIMEOUT_MS);
+                        continue; // try again
                     } catch (InterruptedException e) {
                         throw new DqoRuntimeException(e);
                     }
@@ -176,32 +172,43 @@ public class PythonCallerServiceImpl implements PythonCallerService, DisposableB
                     streamingPythonProcess = availableProcesses.getAvailableProcesses().pop();
                 }
 
-                if (!streamingPythonProcess.isClosed()) {
-                    availableProcesses.incrementRunningProcesses();
+                if (streamingPythonProcess.isClosed()) {
+                    availableProcesses.decrementRunningProcesses();
+                    continue; // try again, because this process has exited (killed?)
+                } else {
                     break; // we can use this process
                 }
-
-                // else, the process was taken out from the pool, but it is already closed, so we are abandoning it
             }
+        }
+
+        if (streamingPythonProcess == null) {
+            // no way to get a process, memory issues?
+            throw new PythonExecutionException("Cannot start another Python process to run " + pythonFilePathInHome + ", processes are killed or the MaxDOP is too low");
         }
 
         try {
             O receiveMessage = streamingPythonProcess.sendReceiveMessage(input, outputType);
             synchronized (this.processDictionaryLock) {
-                availableProcesses.getAvailableProcesses().add(streamingPythonProcess); // put it back for the next call
                 availableProcesses.decrementRunningProcesses();
+                availableProcesses.getAvailableProcesses().add(streamingPythonProcess); // put it back for the next call
                 this.processDictionaryLock.notify();
             }
             return receiveMessage;
         }
         catch (Exception ex) {
-            // when the process fails, we want to start a new process
+            // when the process fails, we want to start a new process, we do not add it back
             synchronized (this.processDictionaryLock) {
                 availableProcesses.decrementRunningProcesses();
                 this.processDictionaryLock.notify();
             }
 
-            streamingPythonProcess.close();
+            try {
+                streamingPythonProcess.close();
+            }
+            catch (Exception exc) {
+                log.error("Python process cannot be stopped: " + exc.getMessage() + " when running " + pythonFilePathInHome + " Python file", ex);
+            }
+
             log.error("Python process failed: " + ex.getMessage() + " when running " + pythonFilePathInHome + " Python file", ex);
             throw new PythonExecutionException("Python process failed: " + ex.getMessage() + " when running " + pythonFilePathInHome + " Python file", ex);
         }

@@ -58,6 +58,7 @@ const SensorReadoutsTab = ({
     {
       label: 'Actual value',
       value: 'actualValue',
+      alwaysVisible: true,
       className: 'text-sm !py-2 whitespace-nowrap text-gray-700 text-right',
       render: (value: number | string) => (
         <div>{typeof value === 'number' ? value : ''}</div>

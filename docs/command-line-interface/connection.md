@@ -76,7 +76,8 @@ Creates a new connection to the database with the specified details such as conn
 **Command-line synopsis**
 
 ```
-$ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
+$ dqo [dqo options...] connection add [-h] [--duckdb-enable-optimizer] [-fw] [-hl]
+                [--sqlserver-disable-encryption]
                 [--athena-aws-authentication-mode=<awsAuthenticationMode>]
                 [--athena-output-location=<athenaOutputLocation>]
                 [--athena-region=<athenaRegion>]
@@ -101,7 +102,8 @@ $ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--sqlserver-disable-encr
                 [--db2-platform=<db2PlatformType>] [--db2-port=<port>]
                 [--db2-user=<user>]
                 [--duckdb-aws-authentication-mode=<awsAuthenticationMode>]
-                [--duckdb-azure-account-name=<accountName>]
+                [--duckdb-aws-default-authentication-chain=<awsDefaultAuthentica
+                tionChain>] [--duckdb-azure-account-name=<accountName>]
                 [--duckdb-azure-authentication-mode=<azureAuthenticationMode>]
                 [--duckdb-azure-client-id=<clientId>]
                 [--duckdb-azure-client-secret=<clientSecret>]
@@ -109,8 +111,8 @@ $ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--sqlserver-disable-encr
                 [--duckdb-database=<database>]
                 [--duckdb-directories=<directoriesString>]
                 [--duckdb-files-format-type=<filesFormatType>]
-                [--duckdb-password=<password>] [--duckdb-read-mode=<readMode>]
-                [--duckdb-region=<region>]
+                [--duckdb-password=<password>] [--duckdb-profile=<profile>]
+                [--duckdb-read-mode=<readMode>] [--duckdb-region=<region>]
                 [--duckdb-storage-type=<storageType>] [--duckdb-user=<user>]
                 [--hana-host=<host>] [--hana-instance-number=<instanceNumber>]
                 [--hana-password=<password>] [--hana-port=<port>]
@@ -170,7 +172,8 @@ $ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--sqlserver-disable-encr
 **DQOps shell synopsis**
 
 ```
-dqo> connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
+dqo> connection add [-h] [--duckdb-enable-optimizer] [-fw] [-hl]
+                [--sqlserver-disable-encryption]
                 [--athena-aws-authentication-mode=<awsAuthenticationMode>]
                 [--athena-output-location=<athenaOutputLocation>]
                 [--athena-region=<athenaRegion>]
@@ -195,7 +198,8 @@ dqo> connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                 [--db2-platform=<db2PlatformType>] [--db2-port=<port>]
                 [--db2-user=<user>]
                 [--duckdb-aws-authentication-mode=<awsAuthenticationMode>]
-                [--duckdb-azure-account-name=<accountName>]
+                [--duckdb-aws-default-authentication-chain=<awsDefaultAuthentica
+                tionChain>] [--duckdb-azure-account-name=<accountName>]
                 [--duckdb-azure-authentication-mode=<azureAuthenticationMode>]
                 [--duckdb-azure-client-id=<clientId>]
                 [--duckdb-azure-client-secret=<clientSecret>]
@@ -203,8 +207,8 @@ dqo> connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                 [--duckdb-database=<database>]
                 [--duckdb-directories=<directoriesString>]
                 [--duckdb-files-format-type=<filesFormatType>]
-                [--duckdb-password=<password>] [--duckdb-read-mode=<readMode>]
-                [--duckdb-region=<region>]
+                [--duckdb-password=<password>] [--duckdb-profile=<profile>]
+                [--duckdb-read-mode=<readMode>] [--duckdb-region=<region>]
                 [--duckdb-storage-type=<storageType>] [--duckdb-user=<user>]
                 [--hana-host=<host>] [--hana-instance-number=<instanceNumber>]
                 [--hana-password=<password>] [--hana-port=<port>]
@@ -300,6 +304,7 @@ All parameters supported by the command are listed below.
 |<div id="connection add--db2-port" class="no-wrap-code">`--db2-port`</div>|DB2 port number| ||
 |<div id="connection add--db2-user" class="no-wrap-code">`--db2-user`</div>|DB2 user name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--duckdb-aws-authentication-mode" class="no-wrap-code">`--duckdb-aws-authentication-mode`</div>|The authentication mode for AWS. Supports also a null configuration with a custom environment variable.| |*iam*<br/>*default_credentials*<br/>|
+|<div id="connection add--duckdb-aws-default-authentication-chain" class="no-wrap-code">`--duckdb-aws-default-authentication-chain`</div>|The default authentication chain for AWS. For example: 'env;config;sts;sso;instance;process'. Supports also a null configuration with a custom environment variable.| ||
 |<div id="connection add--duckdb-azure-account-name" class="no-wrap-code">`--duckdb-azure-account-name`</div>|Azure Storage Account Name used by DuckDB Secret Manager. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--duckdb-azure-authentication-mode" class="no-wrap-code">`--duckdb-azure-authentication-mode`</div>|The authentication mode for Azure. Supports also a null configuration with a custom environment variable.| |*connection_string*<br/>*credential_chain*<br/>*service_principal*<br/>*default_credentials*<br/>|
 |<div id="connection add--duckdb-azure-client-id" class="no-wrap-code">`--duckdb-azure-client-id`</div>|Azure Client ID used by DuckDB Secret Manager. The value can be in the null format to use dynamic substitution.| ||
@@ -307,8 +312,10 @@ All parameters supported by the command are listed below.
 |<div id="connection add--duckdb-azure-tenant-id" class="no-wrap-code">`--duckdb-azure-tenant-id`</div>|Azure Tenant ID used by DuckDB Secret Manager. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--duckdb-database" class="no-wrap-code">`--duckdb-database`</div>|DuckDB database name for in-memory read mode. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--duckdb-directories" class="no-wrap-code">`--duckdb-directories`</div>|Virtual schema name to directory mappings. The path must be an absolute path.| ||
+|<div id="connection add--duckdb-enable-optimizer" class="no-wrap-code">`--duckdb-enable-optimizer`</div>|Enables a query optimizer that uses statistics. By default, the optimizer is disabled to enable analysis of Parquet files with invalid or outdated statistics.| ||
 |<div id="connection add--duckdb-files-format-type" class="no-wrap-code">`--duckdb-files-format-type`</div>|Type of source files format for DuckDB.| |*csv*<br/>*json*<br/>*parquet*<br/>*avro*<br/>*iceberg*<br/>*delta_lake*<br/>|
 |<div id="connection add--duckdb-password" class="no-wrap-code">`--duckdb-password`</div>|DuckDB password for a remote storage type. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection add--duckdb-profile" class="no-wrap-code">`--duckdb-profile`</div>|The AWS profile used for the default authentication. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--duckdb-read-mode" class="no-wrap-code">`--duckdb-read-mode`</div>|DuckDB read mode.| |*in_memory*<br/>*files*<br/>|
 |<div id="connection add--duckdb-region" class="no-wrap-code">`--duckdb-region`</div>|The region for the storage credentials. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--duckdb-storage-type" class="no-wrap-code">`--duckdb-storage-type`</div>|The storage type.| |*local*<br/>*s3*<br/>*azure*<br/>*gcs*<br/>|
@@ -483,7 +490,8 @@ Update the connection or connections that match the conditions specified in the 
 **Command-line synopsis**
 
 ```
-$ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
+$ dqo [dqo options...] connection update [-h] [--duckdb-enable-optimizer] [-fw] [-hl]
+                   [--sqlserver-disable-encryption]
                    [--athena-aws-authentication-mode=<awsAuthenticationMode>]
                    [--athena-output-location=<athenaOutputLocation>]
                    [--athena-region=<athenaRegion>]
@@ -510,7 +518,8 @@ $ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--sqlserver-disable-e
                    [--db2-platform=<db2PlatformType>] [--db2-port=<port>]
                    [--db2-user=<user>]
                    [--duckdb-aws-authentication-mode=<awsAuthenticationMode>]
-                   [--duckdb-azure-account-name=<accountName>]
+                   [--duckdb-aws-default-authentication-chain=<awsDefaultAuthent
+                   icationChain>] [--duckdb-azure-account-name=<accountName>]
                    [--duckdb-azure-authentication-mode=<azureAuthenticationMode>
                    ] [--duckdb-azure-client-id=<clientId>]
                    [--duckdb-azure-client-secret=<clientSecret>]
@@ -518,7 +527,7 @@ $ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--sqlserver-disable-e
                    [--duckdb-database=<database>]
                    [--duckdb-directories=<directoriesString>]
                    [--duckdb-files-format-type=<filesFormatType>]
-                   [--duckdb-password=<password>]
+                   [--duckdb-password=<password>] [--duckdb-profile=<profile>]
                    [--duckdb-read-mode=<readMode>] [--duckdb-region=<region>]
                    [--duckdb-storage-type=<storageType>] [--duckdb-user=<user>]
                    [--hana-host=<host>]
@@ -581,7 +590,8 @@ $ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--sqlserver-disable-e
 **DQOps shell synopsis**
 
 ```
-dqo> connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
+dqo> connection update [-h] [--duckdb-enable-optimizer] [-fw] [-hl]
+                   [--sqlserver-disable-encryption]
                    [--athena-aws-authentication-mode=<awsAuthenticationMode>]
                    [--athena-output-location=<athenaOutputLocation>]
                    [--athena-region=<athenaRegion>]
@@ -608,7 +618,8 @@ dqo> connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                    [--db2-platform=<db2PlatformType>] [--db2-port=<port>]
                    [--db2-user=<user>]
                    [--duckdb-aws-authentication-mode=<awsAuthenticationMode>]
-                   [--duckdb-azure-account-name=<accountName>]
+                   [--duckdb-aws-default-authentication-chain=<awsDefaultAuthent
+                   icationChain>] [--duckdb-azure-account-name=<accountName>]
                    [--duckdb-azure-authentication-mode=<azureAuthenticationMode>
                    ] [--duckdb-azure-client-id=<clientId>]
                    [--duckdb-azure-client-secret=<clientSecret>]
@@ -616,7 +627,7 @@ dqo> connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                    [--duckdb-database=<database>]
                    [--duckdb-directories=<directoriesString>]
                    [--duckdb-files-format-type=<filesFormatType>]
-                   [--duckdb-password=<password>]
+                   [--duckdb-password=<password>] [--duckdb-profile=<profile>]
                    [--duckdb-read-mode=<readMode>] [--duckdb-region=<region>]
                    [--duckdb-storage-type=<storageType>] [--duckdb-user=<user>]
                    [--hana-host=<host>]
@@ -715,6 +726,7 @@ All parameters supported by the command are listed below.
 |<div id="connection update--db2-port" class="no-wrap-code">`--db2-port`</div>|DB2 port number| ||
 |<div id="connection update--db2-user" class="no-wrap-code">`--db2-user`</div>|DB2 user name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update--duckdb-aws-authentication-mode" class="no-wrap-code">`--duckdb-aws-authentication-mode`</div>|The authentication mode for AWS. Supports also a null configuration with a custom environment variable.| |*iam*<br/>*default_credentials*<br/>|
+|<div id="connection update--duckdb-aws-default-authentication-chain" class="no-wrap-code">`--duckdb-aws-default-authentication-chain`</div>|The default authentication chain for AWS. For example: 'env;config;sts;sso;instance;process'. Supports also a null configuration with a custom environment variable.| ||
 |<div id="connection update--duckdb-azure-account-name" class="no-wrap-code">`--duckdb-azure-account-name`</div>|Azure Storage Account Name used by DuckDB Secret Manager. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update--duckdb-azure-authentication-mode" class="no-wrap-code">`--duckdb-azure-authentication-mode`</div>|The authentication mode for Azure. Supports also a null configuration with a custom environment variable.| |*connection_string*<br/>*credential_chain*<br/>*service_principal*<br/>*default_credentials*<br/>|
 |<div id="connection update--duckdb-azure-client-id" class="no-wrap-code">`--duckdb-azure-client-id`</div>|Azure Client ID used by DuckDB Secret Manager. The value can be in the null format to use dynamic substitution.| ||
@@ -722,8 +734,10 @@ All parameters supported by the command are listed below.
 |<div id="connection update--duckdb-azure-tenant-id" class="no-wrap-code">`--duckdb-azure-tenant-id`</div>|Azure Tenant ID used by DuckDB Secret Manager. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update--duckdb-database" class="no-wrap-code">`--duckdb-database`</div>|DuckDB database name for in-memory read mode. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update--duckdb-directories" class="no-wrap-code">`--duckdb-directories`</div>|Virtual schema name to directory mappings. The path must be an absolute path.| ||
+|<div id="connection update--duckdb-enable-optimizer" class="no-wrap-code">`--duckdb-enable-optimizer`</div>|Enables a query optimizer that uses statistics. By default, the optimizer is disabled to enable analysis of Parquet files with invalid or outdated statistics.| ||
 |<div id="connection update--duckdb-files-format-type" class="no-wrap-code">`--duckdb-files-format-type`</div>|Type of source files format for DuckDB.| |*csv*<br/>*json*<br/>*parquet*<br/>*avro*<br/>*iceberg*<br/>*delta_lake*<br/>|
 |<div id="connection update--duckdb-password" class="no-wrap-code">`--duckdb-password`</div>|DuckDB password for a remote storage type. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update--duckdb-profile" class="no-wrap-code">`--duckdb-profile`</div>|The AWS profile used for the default authentication. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update--duckdb-read-mode" class="no-wrap-code">`--duckdb-read-mode`</div>|DuckDB read mode.| |*in_memory*<br/>*files*<br/>|
 |<div id="connection update--duckdb-region" class="no-wrap-code">`--duckdb-region`</div>|The region for the storage credentials. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update--duckdb-storage-type" class="no-wrap-code">`--duckdb-storage-type`</div>|The storage type.| |*local*<br/>*s3*<br/>*azure*<br/>*gcs*<br/>|

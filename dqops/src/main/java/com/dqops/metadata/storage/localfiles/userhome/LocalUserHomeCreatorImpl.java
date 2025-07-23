@@ -1,17 +1,11 @@
 /*
- * Copyright © 2021 DQOps (support@dqops.com)
+ * Copyright © 2021-Present DQOps, Documati sp. z o.o. (support@dqops.com)
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * This file is licensed under the Business Source License 1.1,
+ * which can be found in the root directory of this repository.
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Change Date: This file will be licensed under the Apache License, Version 2.0,
+ * four (4) years from its last modification date.
  */
 package com.dqops.metadata.storage.localfiles.userhome;
 
@@ -80,7 +74,12 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
     /**
      * The file name of a special file that is present in an empty DQOps user home inside a docker container to tell us that the user home was not mounted.
      */
-    private String DOCKER_USER_HOME_MARKER = ".DQO_USER_HOME_NOT_MOUNTED";
+    public static final String DOCKER_USER_HOME_MARKER = ".DQO_USER_HOME_NOT_MOUNTED";
+
+    /**
+     * Base file name (prefix) of log files in the .logs folder.
+     */
+    public static final String LOG_FILES_BASE_NAME = "dqo-logs";
 
     private HomeLocationFindService homeLocationFindService;
     private UserHomeContextFactory userHomeContextFactory;
@@ -583,9 +582,8 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
             initializeEmptyFolder(logsFolderPath);
         }
 
-        final String logFileNameBase = "dqo-logs";
-        String currentLogFileName = logsFolderPath.resolve(logFileNameBase + ".log").toAbsolutePath().toString();
-        String historicLogFileName = logsFolderPath.resolve(logFileNameBase + "-%d{yyyy-MM-dd_HH}.log").toAbsolutePath().toString();
+        String currentLogFileName = logsFolderPath.resolve(LOG_FILES_BASE_NAME + ".log").toAbsolutePath().toString();
+        String historicLogFileName = logsFolderPath.resolve(LOG_FILES_BASE_NAME + "-%d{yyyy-MM-dd_HH}.log").toAbsolutePath().toString();
 
         LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
         PatternLayoutEncoder layoutEncoder = new PatternLayoutEncoder();

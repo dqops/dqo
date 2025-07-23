@@ -275,7 +275,7 @@ There are many types of data quality checks, but here are some of the most commo
 * **Dictionary checks** ensure data conforms to a predefined set of valid values. For example, a "state" column should contain a valid US state name.
 
 You can [find more data quality checks](../../categories-of-data-quality-checks/index.md) in the DQOps documentation.
-It is an open-source data quality tool that supports over 150 checks.
+It is a data quality tool that supports over 150 checks.
 
 ### What are data quality tests?
 "Data quality tests" is just another way of saying "data quality checks." 
@@ -310,7 +310,7 @@ These allow you to simply select the parameters you want to validate, like the f
 Alternatively, for more complex checks, you can write custom SQL queries that specifically target potential errors in your data.
 This method offers greater flexibility.
 
-If you're looking for an open-source option, DQOps is a tool that lets you create your own libraries of custom data quality checks without needing to write any code.
+If you're looking for an extensible platform, DQOps is a tool that lets you create your own libraries of custom data quality checks without needing to write any code.
 You can then use these checks directly from the tool's user interface.
 
 ### What is data quality control?
@@ -374,7 +374,7 @@ This helps you stay on top of your data quality and fix issues before they impac
 A data quality center is a complete data quality management platform that combines data profiling, data quality assessment, 
 and continuous data quality testing with data quality checks. 
 It also supports data observability to detect unknown issues by using machine learning and anomaly detection.
-For example, the open-source DQOps Data Quality Operations Center is an example of such an end-to-end data quality management tool.
+For example, DQOps Data Quality Operations Center is an example of such an end-to-end data quality management tool.
 
 ### What are data quality errors?
 Data quality errors are flaws in your data that indicate it's inaccurate, incomplete, or invalid. 
@@ -422,7 +422,7 @@ These checks can:
 * They can identify values that are unusually large or small compared to the rest of your data (data outliers).
 
 Data observability tools often use these types of checks. They continuously monitor your data and store historical values to make it easier to spot these anomalies.
-You can use an open-source data observability tool DQOps, which supports those type of checks out of the box.
+You can use a data observability tool DQOps, which supports those type of checks out of the box.
 
 Data cleaning fixes errors automatically, like typos or missing values. Data cleansing goes deeper, ensuring data is correct, often with manual checks.
 

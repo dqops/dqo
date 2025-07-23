@@ -272,7 +272,7 @@ The following commands are supported.
 | &gt; [`cloud sync settings`](../command-line-interface/cloud.md#dqo-cloud-sync-settings)       | Synchronizes only the configuration (setting) files between the local `DQOps user home`*/settings* folder and the DQOps Cloud Data Lake.                                  |
 | &gt; [`cloud sync credentials`](../command-line-interface/cloud.md#dqo-cloud-sync-credentials) | Synchronizes only the shared credential files between the local `DQOps user home`*/credentials* folder and the DQOps Cloud Data Lake.                                     |
 
-If you are planning to use an open-source version of DQOps, without synchronizing the data with DQOps, you can
+If you are planning to use a trial version of DQOps, without synchronizing the data with DQOps, you can
 disable synchronization using the following commands. However, you will not have access
 to the [data quality data warehouse](architecture/dqops-architecture.md#data-quality-data-warehouse),
 and the [data quality dashboards](types-of-data-quality-dashboards.md) will not work.

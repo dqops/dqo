@@ -1,22 +1,15 @@
 /*
- * Copyright © 2021 DQOps (support@dqops.com)
+ * Copyright © 2021-Present DQOps, Documati sp. z o.o. (support@dqops.com)
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * This file is licensed under the Business Source License 1.1,
+ * which can be found in the root directory of this repository.
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Change Date: This file will be licensed under the Apache License, Version 2.0,
+ * four (4) years from its last modification date.
  */
 package com.dqops.rest.controllers;
 
 import com.dqops.core.catalogsync.DataCatalogHealthSendService;
-import com.dqops.core.configuration.DqoIntegrationsConfigurationProperties;
 import com.dqops.core.domains.LocalDataDomainRegistry;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKey;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyProvider;
@@ -28,6 +21,7 @@ import com.dqops.core.secrets.signature.SignedObject;
 import com.dqops.rest.models.platform.DqoSettingsModel;
 import com.dqops.rest.models.platform.DqoUserProfileModel;
 import com.dqops.rest.models.platform.SpringErrorPayload;
+import com.dqops.utils.logging.DownloadLogsService;
 import com.dqops.utils.threading.CompletableFutureRunner;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
@@ -36,19 +30,17 @@ import org.springframework.core.env.AbstractEnvironment;
 import org.springframework.core.env.EnumerablePropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.MutablePropertySources;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.*;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
+import java.io.InputStream;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Locale;
-import java.util.concurrent.CompletableFuture;
 import java.util.stream.StreamSupport;
 
 /**
@@ -66,6 +58,7 @@ public class EnvironmentController {
     private InstanceCloudLoginService instanceCloudLoginService;
     private LocalDataDomainRegistry dataDomainRegistry;
     private DataCatalogHealthSendService dataCatalogHealthSendService;
+    private DownloadLogsService downloadLogsService;
 
 
     /**
@@ -75,19 +68,21 @@ public class EnvironmentController {
      * @param instanceCloudLoginService Local instance authentication token service, used to issue a local API key.
      * @param dataDomainRegistry Data domain registry - to detect if there are any data domains, so data domains are supported.
      * @param dataCatalogHealthSendService Data catalog notification send service - to see if data catalog synchronization is possible.
+     * @param downloadLogsService Service that generates a ZIP file with all logs.
      */
     @Autowired
     public EnvironmentController(DqoCloudApiKeyProvider dqoCloudApiKeyProvider,
                                  Environment springEnvironment,
                                  InstanceCloudLoginService instanceCloudLoginService,
                                  LocalDataDomainRegistry dataDomainRegistry,
-                                 DataCatalogHealthSendService dataCatalogHealthSendService) {
+                                 DataCatalogHealthSendService dataCatalogHealthSendService,
+                                 DownloadLogsService downloadLogsService) {
         this.dqoCloudApiKeyProvider = dqoCloudApiKeyProvider;
         this.springEnvironment = springEnvironment;
         this.instanceCloudLoginService = instanceCloudLoginService;
         this.dataDomainRegistry = dataDomainRegistry;
-
         this.dataCatalogHealthSendService = dataCatalogHealthSendService;
+        this.downloadLogsService = downloadLogsService;
     }
 
     /**
@@ -199,5 +194,36 @@ public class EnvironmentController {
 
                     return new ResponseEntity<>(Mono.just(signedLocalApiKey.getSignedHex()), HttpStatus.OK);
                 }));
+    }
+
+    /**
+     * Downloads a ZIP file with the log files.
+     * @return ZIP file with all the log files.
+     */
+    @GetMapping(value = "/logs/download", produces = "application/zip")
+    @ApiOperation(value = "downloadLogs", notes = "Downloads logs as a zip file", response = byte[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = byte[].class),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    @Secured({DqoPermissionNames.EDIT})
+    public Mono<ResponseEntity<Mono<InputStreamResource>>> downloadLogs(
+            @AuthenticationPrincipal DqoUserPrincipal principal) {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
+
+            HttpHeaders headers = new HttpHeaders();
+            String zipFileName ="dqops-logs-" + LocalDateTime.now().toString().replace(':', '-') + ".zip";
+            headers.setContentDisposition(ContentDisposition.attachment().filename(zipFileName).build());
+
+
+            InputStream zipLogsInputStream = this.downloadLogsService.zipLogsOnTheFly();
+            InputStreamResource inputStreamResource = new InputStreamResource(zipLogsInputStream);
+
+            return new ResponseEntity<>(Mono.just(inputStreamResource), headers, HttpStatus.OK);
+        }));
     }
 }

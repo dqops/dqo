@@ -11,23 +11,23 @@
 
 	<groupId>com.dqops</groupId>
 	<artifactId>dqo-distribution</artifactId>
-    <version>1.11.6</version>  <!-- DQOps Version, do not touch (changed automatically) -->
+    <version>1.12.0</version>  <!-- DQOps Version, do not touch (changed automatically) -->
 	<name>dqo-distribution</name>
 	<description>DQOps Data Quality Operations Center final assembly</description>
 	<packaging>pom</packaging>
 
 	<properties>
 		<java.version>11</java.version>
-		<license.licenseName>apache_v2</license.licenseName>
+		<license.licenseName>busl_v1_1</license.licenseName>
 		<compressZip>false</compressZip>
 	</properties>
 
 	<licenses>
 		<license>
-			<name>Apache 2.0</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<name>BUSL-1.1</name>
+			<url>https://spdx.org/licenses/BUSL-1.1.html</url>
 			<distribution>repo</distribution>
-			<comments>A business-friendly OSS license</comments>
+			<comments>Business Source License 1.1</comments>
 		</license>
 	</licenses>
 
