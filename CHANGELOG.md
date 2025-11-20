@@ -5,6 +5,7 @@
 * Parquet loading locks only during a file read, not when parsing a Parquet file.
 * Incident notification filtering fixed.
 * Messages related to OSS renamed.
+* Table comparisons by in-memory merge.
 
 
 
