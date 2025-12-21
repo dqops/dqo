@@ -6,6 +6,7 @@
 * Incident notification filtering fixed.
 * Messages related to OSS renamed.
 * Table comparisons by in-memory merge.
+* Use BigQuery Streaming API for merge comparison.
 
 
 
