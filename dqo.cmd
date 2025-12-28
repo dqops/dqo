@@ -9,7 +9,7 @@
 @REM four (4) years from its last modification date.
 @REM
 
-set DQO_VERSION=1.12.1
+set DQO_VERSION=1.13.0
 
 rem Configure local development environment overrides
 if exist "%~dp0set-dqo-envs.cmd" (

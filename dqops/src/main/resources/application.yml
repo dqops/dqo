@@ -71,7 +71,7 @@ dfs:
 # when adding new parameters, remember to add them to DqoRootCliCommand, so they are listed by running "dqo --help" and they are documented
 
 dqo:
-  version: "1.12.1" # Application version, replaced by a version upgrade target, do not touch
+  version: "1.13.0" # Application version, replaced by a version upgrade target, do not touch
   edition: "GitHub"
   python:
     interpreter-name: python3,python3.exe,python,python.exe
