@@ -1,7 +1,17 @@
-# 1.12.0
+# 1.13.0
 
-* Fixes for working on a machine with a low CPU count (better MaxDOP management for Python processes)
-* Current DQ status calculated across different table comparisons.
-* Compare the first 1000 records, dropping the rest
-* Apply closed source code (2025-07-23)
-* Change the license to BUSL 1.1
+* Fixed some UT (notifications)
+* Different limits for parallel file synchronization jobs.
+* Parquet loading locks only during a file read, not when parsing a Parquet file.
+* Incident notification filtering fixed.
+* Messages related to OSS renamed.
+* Table comparisons by in-memory merge.
+* Use BigQuery Streaming API for merge comparison.
+* Rule miner can detect numeric outliers.
+* Improvements in the rule miner - detect longitude/latitude by a column name.
+* Job queue is persistent, jobs are resumed after a restart.
+* Incorrectly configured checks are disabled after three execution failures.
+
+
+
+

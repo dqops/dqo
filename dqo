@@ -9,7 +9,7 @@
 # four (4) years from its last modification date.
 #
 
-export DQO_VERSION=1.12.0
+export DQO_VERSION=1.13.0
 
 # Configure local development environment overrides
 if [ -f $(dirname $0)/set-dqo-envs.sh ]; then
