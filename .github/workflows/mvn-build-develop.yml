@@ -102,3 +102,17 @@ jobs:
           registry: docker.io
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: ${{ secrets.RELEASES_SERVICE_ACCOUNT_JSON }}
+
+      - id: 'upload-jars'
+        uses: 'google-github-actions/upload-cloud-storage@v2'
+        with:
+          path: './lib/target/output/dqo-lib-${{steps.read_version.outputs.content}}'
+          destination: '${{ secrets.DQOPS_LICENSED_JARS_BUCKET }}/${{ steps.read_version.outputs.content }}'
+          gzip: false
+          process_gcloudignore: false
+          headers: |-
+            content-type: application/java-archive
