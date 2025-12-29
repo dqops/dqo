@@ -103,6 +103,12 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
+      - uses: juliangruber/read-file-action@v1
+        name: Read VERSION
+        id: read_version
+        with:
+          path: ./VERSION
+          
       - uses: 'google-github-actions/auth@v2'
         with:
           credentials_json: ${{ secrets.RELEASES_SERVICE_ACCOUNT_JSON }}
