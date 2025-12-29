@@ -116,9 +116,11 @@ jobs:
       - id: 'upload-jars'
         uses: 'google-github-actions/upload-cloud-storage@v2'
         with:
-          path: './lib/target/output/dqo-lib-${{steps.read_version.outputs.content}}'
+          path: './lib/target/output/dqo-lib-${{steps.read_version.outputs.content}}/jars'
           destination: '${{ secrets.DQOPS_LICENSED_JARS_BUCKET }}/${{ steps.read_version.outputs.content }}'
           gzip: false
+          parent: false
+          glob: '*.jar'
           process_gcloudignore: false
           headers: |-
             content-type: application/java-archive
