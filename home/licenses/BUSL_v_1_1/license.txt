@@ -2,7 +2,7 @@ DQOPS BUSINESS SOURCE LICENSE AGREEMENT
 
 Business Source License 1.1
 Licensor: Documati sp. z o.o.
-Licensed Work: DQOps Data Quality Operations Center 1.13.0
+Licensed Work: DQOps Data Quality Operations Center 1.13.1
 The Licensed Work is © 2021-Present Documati sp. z o.o.
 
 Additional Use Grant: You may make production use of the Licensed Work, provided
