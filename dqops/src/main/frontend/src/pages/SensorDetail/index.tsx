@@ -56,6 +56,10 @@ const tabs = [
     value: ProviderSensorModelProviderTypeEnum.hana
   },
   {
+    label: 'MariaDB',
+    value: ProviderSensorModelProviderTypeEnum.mariadb
+  },
+  {
     label: 'MySQL',
     value: ProviderSensorModelProviderTypeEnum.mysql
   },
