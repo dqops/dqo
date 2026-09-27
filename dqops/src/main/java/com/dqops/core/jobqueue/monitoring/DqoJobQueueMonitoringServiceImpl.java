@@ -540,15 +540,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
                 this.queueConfigurationProperties.getKeepFinishedJobsHistorySeconds(), ChronoUnit.SECONDS);
 
         // clean up old jobs
-        List<DqoQueueJobId> oldJobIdsToDelete = this.allJobs.entrySet()
-                .stream()
-                .filter(e -> e.getValue() != null)
-                .takeWhile(e -> e.getValue().getStatusChangedAt().isBefore(oldJobsHistoryThresholdTimestamp))
-                .filter(e -> e.getValue().getStatus() == DqoJobStatus.finished ||
-                        e.getValue().getStatus() == DqoJobStatus.failed ||
-                        e.getValue().getStatus() == DqoJobStatus.cancelled)
-                .map(e -> e.getKey())
-                .collect(Collectors.toList());
+        List<DqoQueueJobId> oldJobIdsToDelete = findFinishedJobsOlderThan(this.allJobs, oldJobsHistoryThresholdTimestamp);
 
         if (oldJobIdsToDelete.size() > 0) {
             for (DqoQueueJobId jobId : oldJobIdsToDelete) {
@@ -558,6 +550,27 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
                 }
             }
         }
+    }
+
+    /**
+     * Finds finished (finished, failed or cancelled) jobs whose status was changed before the given threshold.
+     * The map of jobs is sorted by the job id, not by the status change timestamp: a long-running job with a lower id can finish
+     * after jobs with higher ids, so the whole map must be scanned instead of stopping at the first job that is not old enough.
+     * @param allJobs All tracked jobs, sorted by the job id.
+     * @param oldJobsHistoryThresholdTimestamp Threshold timestamp, only jobs finished before this timestamp are returned.
+     * @return List of ids of old finished jobs that can be removed from the history.
+     */
+    static List<DqoQueueJobId> findFinishedJobsOlderThan(Map<DqoQueueJobId, DqoJobHistoryEntryModel> allJobs,
+                                                         Instant oldJobsHistoryThresholdTimestamp) {
+        return allJobs.entrySet()
+                .stream()
+                .filter(e -> e.getValue() != null)
+                .filter(e -> e.getValue().getStatusChangedAt().isBefore(oldJobsHistoryThresholdTimestamp))
+                .filter(e -> e.getValue().getStatus() == DqoJobStatus.finished ||
+                        e.getValue().getStatus() == DqoJobStatus.failed ||
+                        e.getValue().getStatus() == DqoJobStatus.cancelled)
+                .map(e -> e.getKey())
+                .collect(Collectors.toList());
     }
 
     /**
