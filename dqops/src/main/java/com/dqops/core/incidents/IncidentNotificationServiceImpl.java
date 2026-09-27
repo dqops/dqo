@@ -123,14 +123,13 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
     protected Mono<Void> sendAllNotifications(List<IncidentNotificationMessage> newMessages,
                                               IncidentNotificationConfigurations incidentNotificationConfigurations) {
         Mono<Void> allNotificationsSent = Flux.fromIterable(newMessages)
-                .map(message -> filterNotifications(message, incidentNotificationConfigurations))
+                .map(message -> mergeEmailRecipients(filterNotifications(message, incidentNotificationConfigurations)))
                 .flatMap(Flux::fromIterable)
                 .filter(incidentNotificationMessageAddressPair -> !Strings.isNullOrEmpty(incidentNotificationMessageAddressPair.getNotificationAddress()))
                 .flatMap(incidentNotificationMessageAddressPair -> {
                     String notificationAddress = incidentNotificationMessageAddressPair.getNotificationAddress();
 
-                    if (!notificationAddress.startsWith("http://") && !notificationAddress.startsWith("https://") &&
-                            notificationAddress.contains("@")) {
+                    if (isEmailAddress(notificationAddress)) {
                         String incidentText = incidentNotificationHtmlMessageFormatter.prepareText(incidentNotificationMessageAddressPair.getIncidentNotificationMessage());
                         incidentNotificationMessageAddressPair.getIncidentNotificationMessage().setText(incidentText);
 
@@ -219,6 +218,51 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
     }
 
     /**
+     * Merges the address pairs of email recipients that will receive the same notification message into a single address pair
+     * with a comma separated list of email addresses. One email message with multiple recipients is then sent in a single SMTP session,
+     * instead of opening a separate SMTP session for every recipient. Webhook urls are not merged.
+     * @param addressPairs Address pairs returned by the notification filtering, one pair per address.
+     * @return Address pairs with the email recipients of the same message merged into one pair.
+     */
+    protected List<IncidentNotificationMessageAddressPair> mergeEmailRecipients(List<IncidentNotificationMessageAddressPair> addressPairs) {
+        List<IncidentNotificationMessageAddressPair> mergedAddressPairs = new ArrayList<>();
+        Map<IncidentNotificationMessage, Integer> emailPairIndexesByMessage = new HashMap<>();
+
+        for (IncidentNotificationMessageAddressPair addressPair : addressPairs) {
+            String notificationAddress = addressPair.getNotificationAddress();
+            if (!isEmailAddress(notificationAddress)) {
+                mergedAddressPairs.add(addressPair);
+                continue;
+            }
+
+            Integer existingPairIndex = emailPairIndexesByMessage.get(addressPair.getIncidentNotificationMessage());
+            if (existingPairIndex == null) {
+                emailPairIndexesByMessage.put(addressPair.getIncidentNotificationMessage(), mergedAddressPairs.size());
+                mergedAddressPairs.add(addressPair);
+            }
+            else {
+                IncidentNotificationMessageAddressPair existingPair = mergedAddressPairs.get(existingPairIndex);
+                mergedAddressPairs.set(existingPairIndex, new IncidentNotificationMessageAddressPair(
+                        existingPair.getIncidentNotificationMessage(),
+                        existingPair.getNotificationAddress() + "," + notificationAddress));
+            }
+        }
+
+        return mergedAddressPairs;
+    }
+
+    /**
+     * Checks if the notification address is an email address (not a webhook url).
+     * @param notificationAddress Notification address.
+     * @return True when the address is an email address.
+     */
+    private static boolean isEmailAddress(String notificationAddress) {
+        return notificationAddress != null &&
+                !notificationAddress.startsWith("http://") && !notificationAddress.startsWith("https://") &&
+                notificationAddress.contains("@");
+    }
+
+    /**
      * Sets a single notification with one incident.
      * @param incidentNotificationMessageAddressPair Incident notification payload and webhook url pair.
      * @return Mono that returns the target webhook url.
@@ -235,7 +279,7 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
     }
 
     /**
-     * Sets a single notification with one incident.
+     * Sends a single notification with one incident as one email message to one or more recipients (a comma separated list of email addresses).
      * @param incidentNotificationMessageAddressPair Incident notification payload and email address pair.
      * @return Mono that returns the target email address.
      */
@@ -257,8 +301,16 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
                         simpleMailMessage.setSubject(subjectMessage);
                         MimeMessageHelper helper;
                         helper = new MimeMessageHelper(simpleMailMessage, true);
-                        helper.setFrom(String.valueOf(new InternetAddress(EmailSender.EMAIL_SENDER_FROM_EMAIL, EmailSender.EMAIL_SENDER_FROM_NAME)));
-                        helper.setTo(incidentNotificationMessageAddressPair.getNotificationAddress());
+                        String fromEmail = firstNonEmpty(smtpServerConfigurationSpec.getFromEmail(),
+                                this.smtpServerConfigurationProperties.getFromEmail(), EmailSender.EMAIL_SENDER_FROM_EMAIL);
+                        String fromName = firstNonEmpty(smtpServerConfigurationSpec.getFromName(),
+                                this.smtpServerConfigurationProperties.getFromName(), EmailSender.EMAIL_SENDER_FROM_NAME);
+                        helper.setFrom(new InternetAddress(fromEmail, fromName));
+                        String[] recipients = Arrays.stream(incidentNotificationMessageAddressPair.getNotificationAddress().split(","))
+                                .map(String::trim)
+                                .filter(recipient -> !recipient.isEmpty())
+                                .toArray(String[]::new);
+                        helper.setTo(recipients);
                         helper.setText(incidentNotificationMessage.getText(), true);
                         javaMailSender.send(simpleMailMessage);
                         return simpleMailMessage;
@@ -270,6 +322,20 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
         ).then();
         return responseSent.retry(3).onErrorComplete()
                 .thenReturn(incidentNotificationMessageAddressPair);
+    }
+
+    /**
+     * Returns the first value that is not null and not empty.
+     * @param values Values to check, in the order of precedence.
+     * @return The first non-empty value or null when all values are empty.
+     */
+    private static String firstNonEmpty(String... values) {
+        for (String value : values) {
+            if (!Strings.isNullOrEmpty(value)) {
+                return value;
+            }
+        }
+        return null;
     }
 
     /**
@@ -308,6 +374,14 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
         String password = smtpServerConfigurationProperties.getPassword();
         if(password != null && !password.isEmpty()){
             serverConfiguration.setPassword(password);
+        }
+        String fromEmail = smtpServerConfigurationProperties.getFromEmail();
+        if(fromEmail != null && !fromEmail.isEmpty()){
+            serverConfiguration.setFromEmail(fromEmail);
+        }
+        String fromName = smtpServerConfigurationProperties.getFromName();
+        if(fromName != null && !fromName.isEmpty()){
+            serverConfiguration.setFromName(fromName);
         }
 
         return serverConfiguration;
