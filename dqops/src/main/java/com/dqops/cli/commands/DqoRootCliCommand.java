@@ -340,9 +340,17 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
             description = "Sets the username of the SMTP server that is used to send email notifications.")
     private String dqoSmtpServerUsername;
 
-    @CommandLine.Option(names = {"--dqo.smtp-server.password"},
+     @CommandLine.Option(names = {"--dqo.smtp-server.password"},
             description = "Sets the password of the SMTP server that is used to send email notifications.")
     private String dqoSmtpServerPassword;
+
+    @CommandLine.Option(names = {"--dqo.smtp-server.from-email"},
+            description = "Sets the email address used in the From header of the email notifications, the default is dqops_noreply@dqops.com.")
+    private String dqoSmtpServerFromEmail;
+
+    @CommandLine.Option(names = {"--dqo.smtp-server.from-name"},
+            description = "Sets the sender name used in the From header of the email notifications, the default is 'DQOps Incident Notification'.")
+    private String dqoSmtpServerFromName;
 
     @CommandLine.Option(names = {"--dqo.integrations.table-health-webhook-urls"},
             description = "A comma separated list of webhook URLs where DQOps sends updates of the table data quality status changes.")

@@ -54,6 +54,12 @@ public class SmtpServerConfigurationSpec extends AbstractSpec implements Invalid
     @JsonPropertyDescription("SMTP server password")
     private String password;
 
+    @JsonPropertyDescription("Email address used in the From header of the notification emails. The default is dqops_noreply@dqops.com")
+    private String fromEmail;
+
+    @JsonPropertyDescription("Sender name used in the From header of the notification emails. The default is DQOps Incident Notification")
+    private String fromName;
+
     @JsonIgnore
     private String yamlParsingError;
 
@@ -143,6 +149,40 @@ public class SmtpServerConfigurationSpec extends AbstractSpec implements Invalid
     }
 
     /**
+     * Returns the email address used in the From header of the notification emails.
+     * @return Sender email address.
+     */
+    public String getFromEmail() {
+        return fromEmail;
+    }
+
+    /**
+     * Sets the email address used in the From header of the notification emails.
+     * @param fromEmail Sender email address.
+     */
+    public void setFromEmail(String fromEmail) {
+        setDirtyIf(!Objects.equals(this.fromEmail, fromEmail));
+        this.fromEmail = fromEmail;
+    }
+
+    /**
+     * Returns the sender name used in the From header of the notification emails.
+     * @return Sender name.
+     */
+    public String getFromName() {
+        return fromName;
+    }
+
+    /**
+     * Sets the sender name used in the From header of the notification emails.
+     * @param fromName Sender name.
+     */
+    public void setFromName(String fromName) {
+        setDirtyIf(!Objects.equals(this.fromName, fromName));
+        this.fromName = fromName;
+    }
+
+    /**
      * Sets a value that indicates that the YAML file deserialized into this object has a parsing error.
      *
      * @param yamlParsingError YAML parsing error.
@@ -192,6 +232,8 @@ public class SmtpServerConfigurationSpec extends AbstractSpec implements Invalid
         cloned.port = secretValueProvider.expandValue(this.port, lookupContext);
         cloned.username = secretValueProvider.expandValue(this.username, lookupContext);
         cloned.password = secretValueProvider.expandValue(this.password, lookupContext);
+        cloned.fromEmail = secretValueProvider.expandValue(this.fromEmail, lookupContext);
+        cloned.fromName = secretValueProvider.expandValue(this.fromName, lookupContext);
         return cloned;
     }
 

@@ -76,13 +76,17 @@ public interface SettingsCliService {
 	 * @param useSSL SMTP server useSSL.
 	 * @param username SMTP server username.
 	 * @param password SMTP server password.
+	 * @param fromEmail Email address used in the From header of the notification emails.
+	 * @param fromName Sender name used in the From header of the notification emails.
 	 * @return Cli operation status.
 	 */
 	CliOperationStatus setSmtpServerConfiguration(String host,
 												  String port,
 												  Boolean useSSL,
 												  String username,
-												  String password);
+												  String password,
+												  String fromEmail,
+												  String fromName);
 
 	/**
 	 * Removes a new SMTP server configuration.

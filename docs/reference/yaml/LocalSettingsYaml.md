@@ -59,6 +59,8 @@ The structure of this object is described below
 |<span class="no-wrap-code ">`use_ssl`</span>|SMTP server use SSL option|*boolean*| | | |
 |<span class="no-wrap-code ">`username`</span>|SMTP server username|*string*| | | |
 |<span class="no-wrap-code ">`password`</span>|SMTP server password|*string*| | | |
+|<span class="no-wrap-code ">`from_email`</span>|Email address used in the From header of the notification emails. The default is dqops_noreply@dqops.com|*string*| | | |
+|<span class="no-wrap-code ">`from_name`</span>|Sender name used in the From header of the notification emails. The default is DQOps Incident Notification|*string*| | | |
 
 
 

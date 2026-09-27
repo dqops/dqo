@@ -16,8 +16,12 @@ package com.dqops.core.incidents.email;
 public class EmailSender {
 
     /**
-     * The from field value of the received notification email.
+     * The default email address used in the From header of the notification emails, used when the dqo.smtp-server.from-email parameter is not configured.
      */
     public static final String EMAIL_SENDER_FROM_EMAIL = "dqops_noreply@dqops.com";
+
+    /**
+     * The default sender name used in the From header of the notification emails, used when the dqo.smtp-server.from-name parameter is not configured.
+     */
     public static final String EMAIL_SENDER_FROM_NAME = "DQOps Incident Notification";
 }

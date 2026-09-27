@@ -73,6 +73,26 @@ public class SmtpServerConfigurationProperties implements Cloneable {
     private String password;
 
     /**
+     * Email address used in the "From" header of the notification emails, the default is dqops_noreply@dqops.com
+     *
+     * @param fromEmail Sets the sender email address
+     * @return The sender email address
+     */
+    @Getter
+    @Setter
+    private String fromEmail;
+
+    /**
+     * Sender name used in the "From" header of the notification emails, the default is "DQOps Incident Notification"
+     *
+     * @param fromName Sets the sender name
+     * @return The sender name
+     */
+    @Getter
+    @Setter
+    private String fromName;
+
+    /**
      * Clones the current object.
      * @return Deeply cloned instance.
      */

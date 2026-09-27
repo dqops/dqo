@@ -89,7 +89,7 @@ public class SettingsSmtpSetCliCommand extends BaseCommand implements ICommand {
 	 */
 	@Getter
 	@Setter
-	@CommandLine.Option(names = {"-u", "--username"}, description = "SMTP server user name", required = true)
+	@CommandLine.Option(names = {"-u", "--username"}, description = "SMTP server user name, optional when the SMTP server does not require authentication")
 	String username;
 
 	/**
@@ -100,8 +100,24 @@ public class SettingsSmtpSetCliCommand extends BaseCommand implements ICommand {
 	 */
 	@Getter
 	@Setter
-	@CommandLine.Option(names = {"-ps", "--password"}, description = "SMTP server password", required = true)
+	@CommandLine.Option(names = {"-ps", "--password"}, description = "SMTP server password, optional when the SMTP server does not require authentication")
 	String password;
+
+	/**
+	 * Email address used in the From header of the notification emails.
+	 */
+	@Getter
+	@Setter
+	@CommandLine.Option(names = {"-fe", "--from-email"}, description = "Email address used in the From header of the notification emails, the default is dqops_noreply@dqops.com")
+	String fromEmail;
+
+	/**
+	 * Sender name used in the From header of the notification emails.
+	 */
+	@Getter
+	@Setter
+	@CommandLine.Option(names = {"-fn", "--from-name"}, description = "Sender name used in the From header of the notification emails, the default is 'DQOps Incident Notification'")
+	String fromName;
 
 	/**
 	 * Computes a result, or throws an exception if unable to do so.
@@ -136,7 +152,7 @@ public class SettingsSmtpSetCliCommand extends BaseCommand implements ICommand {
 		}
 
 		CliOperationStatus cliOperationStatus = this.settingsCliService.setSmtpServerConfiguration(
-				host, port, useSSL, username, password);
+				host, port, useSSL, username, password, fromEmail, fromName);
 		this.terminalWriter.writeLine(cliOperationStatus.getMessage());
 		return cliOperationStatus.isSuccess() ? 0 : -1;
 	}

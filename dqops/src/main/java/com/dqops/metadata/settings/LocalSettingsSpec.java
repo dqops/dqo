@@ -256,7 +256,7 @@ public class LocalSettingsSpec extends AbstractSpec implements InvalidYamlStatus
 	public void setSmtpServerConfiguration(SmtpServerConfigurationSpec smtpServerConfiguration) {
 		setDirtyIf(!Objects.equals(this.smtpServerConfiguration, smtpServerConfiguration));
 		this.smtpServerConfiguration = smtpServerConfiguration;
-		propagateHierarchyIdToField(dataDomains, "smtp_server_configuration");
+		propagateHierarchyIdToField(smtpServerConfiguration, "smtp_server_configuration");
 	}
 
 	/**

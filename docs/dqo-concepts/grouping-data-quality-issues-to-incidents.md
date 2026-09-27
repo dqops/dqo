@@ -408,6 +408,10 @@ The required environment variables are the following:
 | **DQO_SMTP_SERVER_USESSL**   | Use SSL flag (true / false)  |
 | **DQO_SMTP_SERVER_USERNAME** | User name                    |
 | **DQO_SMTP_SERVER_PASSWORD** | Password                     |
+| **DQO_SMTP_SERVER_FROM_EMAIL** | Email address used in the *From* header of the notification emails (optional, the default is *dqops_noreply@dqops.com*) |
+| **DQO_SMTP_SERVER_FROM_NAME** | Sender name used in the *From* header of the notification emails (optional, the default is *DQOps Incident Notification*) |
+
+The user name and the password are optional. When both are empty, DQOps connects to the SMTP server without authentication, which is the usual configuration of internal mail relays that listen on port 25 and accept connections only from trusted networks.
 
 
 The example of the SMTP Server configuration from the **.localsettings.dqopsettings.yaml** file
@@ -420,7 +424,10 @@ spec:
     use_ssl: <true/false>
     username: <user_name_here>
     password: <password_here>
+    from_email: <sender_email_address_here>
+    from_name: <sender_name_here>
 ```
+
 
 ### Webhooks
 

@@ -257,7 +257,11 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
                         simpleMailMessage.setSubject(subjectMessage);
                         MimeMessageHelper helper;
                         helper = new MimeMessageHelper(simpleMailMessage, true);
-                        helper.setFrom(String.valueOf(new InternetAddress(EmailSender.EMAIL_SENDER_FROM_EMAIL, EmailSender.EMAIL_SENDER_FROM_NAME)));
+                        String fromEmail = firstNonEmpty(smtpServerConfigurationSpec.getFromEmail(),
+                                this.smtpServerConfigurationProperties.getFromEmail(), EmailSender.EMAIL_SENDER_FROM_EMAIL);
+                        String fromName = firstNonEmpty(smtpServerConfigurationSpec.getFromName(),
+                                this.smtpServerConfigurationProperties.getFromName(), EmailSender.EMAIL_SENDER_FROM_NAME);
+                        helper.setFrom(new InternetAddress(fromEmail, fromName));
                         helper.setTo(incidentNotificationMessageAddressPair.getNotificationAddress());
                         helper.setText(incidentNotificationMessage.getText(), true);
                         javaMailSender.send(simpleMailMessage);
@@ -270,6 +274,20 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
         ).then();
         return responseSent.retry(3).onErrorComplete()
                 .thenReturn(incidentNotificationMessageAddressPair);
+    }
+
+    /**
+     * Returns the first value that is not null and not empty.
+     * @param values Values to check, in the order of precedence.
+     * @return The first non-empty value or null when all values are empty.
+     */
+    private static String firstNonEmpty(String... values) {
+        for (String value : values) {
+            if (!Strings.isNullOrEmpty(value)) {
+                return value;
+            }
+        }
+        return null;
     }
 
     /**
@@ -308,6 +326,14 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
         String password = smtpServerConfigurationProperties.getPassword();
         if(password != null && !password.isEmpty()){
             serverConfiguration.setPassword(password);
+        }
+        String fromEmail = smtpServerConfigurationProperties.getFromEmail();
+        if(fromEmail != null && !fromEmail.isEmpty()){
+            serverConfiguration.setFromEmail(fromEmail);
+        }
+        String fromName = smtpServerConfigurationProperties.getFromName();
+        if(fromName != null && !fromName.isEmpty()){
+            serverConfiguration.setFromName(fromName);
         }
 
         return serverConfiguration;

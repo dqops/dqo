@@ -466,7 +466,9 @@ public class SettingsCliServiceImpl implements SettingsCliService {
 														 String port,
 														 Boolean useSsl,
 														 String username,
-														 String password){
+														 String password,
+														 String fromEmail,
+														 String fromName){
 		CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
 		DqoUserPrincipal userPrincipal = this.principalProvider.getLocalUserPrincipal();
@@ -486,6 +488,8 @@ public class SettingsCliServiceImpl implements SettingsCliService {
 				setUseSsl(useSsl);
 				setUsername(username);
 				setPassword(password);
+				setFromEmail(fromEmail);
+				setFromName(fromName);
 		}};
 		settings.setSmtpServerConfiguration(smtpServerConfigurationSpec);
 
@@ -536,7 +540,7 @@ public class SettingsCliServiceImpl implements SettingsCliService {
 	 * @return Cli operation status.
 	 */
 	@Override
-	public CliOperationStatus showSmtpServerConfiguration(){
+		public CliOperationStatus showSmtpServerConfiguration(){
 		CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
 		DqoUserPrincipal userPrincipal = this.principalProvider.getLocalUserPrincipal();
@@ -558,10 +562,12 @@ public class SettingsCliServiceImpl implements SettingsCliService {
 
 		StringBuilder textBuilder = new StringBuilder();
 		textBuilder.append(String.format("SMTP server host: %s\n", smtpServerConfiguration.getHost()));
-		textBuilder.append(String.format("SMTP server port: %s/%d\n", smtpServerConfiguration.getPort()));
+		textBuilder.append(String.format("SMTP server port: %s\n", smtpServerConfiguration.getPort()));
 		textBuilder.append(String.format("SMTP server use SSL: %s\n", smtpServerConfiguration.getUseSsl()));
 		textBuilder.append(String.format("SMTP server user name: %s\n", smtpServerConfiguration.getUsername()));
 		textBuilder.append(String.format("SMTP server password: %s\n", smtpServerConfiguration.getPassword()));
+		textBuilder.append(String.format("SMTP server from email: %s\n", smtpServerConfiguration.getFromEmail()));
+		textBuilder.append(String.format("SMTP server from name: %s\n", smtpServerConfiguration.getFromName()));
 
 		cliOperationStatus.setSuccessMessage(textBuilder.toString());
 		return cliOperationStatus;
