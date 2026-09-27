@@ -546,7 +546,7 @@ Set SMTP server configuration for incident notifications.
 
 ```
 $ dqo [dqo options...] settings smtp set -s [-h] [-fw] [-hl] -ho=<host> [-of=<outputFormat>]
-                   -p=<port> -ps=<password> -u=<username>
+                   -p=<port> [-ps=<password>] [-u=<username>]
 
 ```
 
@@ -554,7 +554,7 @@ $ dqo [dqo options...] settings smtp set -s [-h] [-fw] [-hl] -ho=<host> [-of=<ou
 
 ```
 dqo> settings smtp set -s [-h] [-fw] [-hl] -ho=<host> [-of=<outputFormat>]
-                   -p=<port> -ps=<password> -u=<username>
+                   -p=<port> [-ps=<password>] [-u=<username>]
 
 ```
 
@@ -571,10 +571,10 @@ All parameters supported by the command are listed below.
 |<div id="settings smtp set-h" class="no-wrap-code">`-h`</div><div id="settings smtp set--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
 |<div id="settings smtp set-ho" class="no-wrap-code">`-ho`</div><div id="settings smtp set--host" class="no-wrap-code">`--host`</div>|SMTP server host|:material-check-bold:||
 |<div id="settings smtp set-of" class="no-wrap-code">`-of`</div><div id="settings smtp set--output-format" class="no-wrap-code">`--output-format`</div>|Output format for tabular responses| |*TABLE*<br/>*CSV*<br/>*JSON*<br/>|
-|<div id="settings smtp set-ps" class="no-wrap-code">`-ps`</div><div id="settings smtp set--password" class="no-wrap-code">`--password`</div>|SMTP server password|:material-check-bold:||
+|<div id="settings smtp set-ps" class="no-wrap-code">`-ps`</div><div id="settings smtp set--password" class="no-wrap-code">`--password`</div>|SMTP server password, optional when the SMTP server does not require authentication| ||
 |<div id="settings smtp set-p" class="no-wrap-code">`-p`</div><div id="settings smtp set--port" class="no-wrap-code">`--port`</div>|SMTP server port|:material-check-bold:||
 |<div id="settings smtp set-s" class="no-wrap-code">`-s`</div><div id="settings smtp set--use-ssl" class="no-wrap-code">`--use-ssl`</div>|SMTP server use SSL|:material-check-bold:||
-|<div id="settings smtp set-u" class="no-wrap-code">`-u`</div><div id="settings smtp set--username" class="no-wrap-code">`--username`</div>|SMTP server user name|:material-check-bold:||
+|<div id="settings smtp set-u" class="no-wrap-code">`-u`</div><div id="settings smtp set--username" class="no-wrap-code">`--username`</div>|SMTP server user name, optional when the SMTP server does not require authentication| ||
 
 
 

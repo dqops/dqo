@@ -11,6 +11,7 @@
 package com.dqops.core.incidents.email;
 
 import com.dqops.metadata.settings.SmtpServerConfigurationSpec;
+import com.google.common.base.Strings;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Component;
@@ -32,14 +33,20 @@ public class EmailSenderProviderImpl implements EmailSenderProvider {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         mailSender.setHost(smtpServerConfiguration.getHost());
         mailSender.setPort(Integer.parseInt(smtpServerConfiguration.getPort()));
-        mailSender.setUsername(smtpServerConfiguration.getUsername());
-        mailSender.setPassword(smtpServerConfiguration.getPassword());
+
+        // SMTP authentication is used only when both the user name and the password are configured, otherwise the messages are sent without authentication (for example to an internal mail relay listening on port 25)
+        boolean useAuthentication = !Strings.isNullOrEmpty(smtpServerConfiguration.getUsername()) &&
+                !Strings.isNullOrEmpty(smtpServerConfiguration.getPassword());
+        if (useAuthentication) {
+            mailSender.setUsername(smtpServerConfiguration.getUsername());
+            mailSender.setPassword(smtpServerConfiguration.getPassword());
+        }
 
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");
-        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.auth", String.valueOf(useAuthentication));
 
-        if(smtpServerConfiguration.getUseSsl()){
+        if (Boolean.TRUE.equals(smtpServerConfiguration.getUseSsl())) {
             props.put("mail.smtp.ssl.enable", "true");
         } else {
             props.put("mail.smtp.starttls.enable", "true");

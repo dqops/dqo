@@ -89,7 +89,7 @@ public class SettingsSmtpSetCliCommand extends BaseCommand implements ICommand {
 	 */
 	@Getter
 	@Setter
-	@CommandLine.Option(names = {"-u", "--username"}, description = "SMTP server user name", required = true)
+	@CommandLine.Option(names = {"-u", "--username"}, description = "SMTP server user name, optional when the SMTP server does not require authentication")
 	String username;
 
 	/**
@@ -100,7 +100,7 @@ public class SettingsSmtpSetCliCommand extends BaseCommand implements ICommand {
 	 */
 	@Getter
 	@Setter
-	@CommandLine.Option(names = {"-ps", "--password"}, description = "SMTP server password", required = true)
+	@CommandLine.Option(names = {"-ps", "--password"}, description = "SMTP server password, optional when the SMTP server does not require authentication")
 	String password;
 
 	/**
